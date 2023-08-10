@@ -1,0 +1,47 @@
+/* correccion de el fondo claro de los inputs cuando esta en modo oscuro */
+.dark-mode input:-webkit-autofill,
+.dark-mode input:-webkit-autofill:hover,
+.dark-mode input:-webkit-autofill:focus,
+.dark-mode input:-webkit-autofill:active,
+.dark-mode input:-internal-autofill-selected,
+.dark-mode input:-internal-autofill-previewed {
+  background-color: None !important;
+  -webkit-box-shadow: 0 0 0 30px #343a40 inset !important;
+}
+
+input:-internal-autofill-selected {
+  box-shadow: none !important;
+}
+
+.dark-mode .form-control:focus {
+  background-color: #343a40 !important;
+}
+
+.dark-mode .dropdown-item {
+  color: black
+}
+
+/*popovers*/
+.popover,
+.popover-arrow,
+.popover-content,
+.popover-title {
+  background: #454d55;
+}
+
+.carousel-image {
+  /* Ajusta el tamaño de las imagenes del carousel para mostrarlas cuadradas */
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+}
+
+
+.callout.callout-danger {
+  color: #ed7669;
+}
+
+.badge-alertas {
+  color: #fff;
+  background-color: #ed7669;
+}
