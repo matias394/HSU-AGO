@@ -59,6 +59,10 @@ urlpatterns = [
     path('plantilla/programas/admisiones_detail_inactiva', login_required(TemplateView.as_view(template_name='Ejemplos/admisiones_detail_inactiva.html')), name='admisiones_detail_inactiva'),
     # Plantilla Programas de asistencia
     path('plantilla/programas/programas_asistencia', login_required(TemplateView.as_view(template_name='Ejemplos/programas_asistencia.html')), name='programas_asistencia'),
+    # Plantilla Intervenciones de Salud
+    path('plantilla/programas/intervenciones_salud', login_required(TemplateView.as_view(template_name='Ejemplos/intervenciones_salud.html')), name='intervenciones_salud'),
+    # Plantilla Acciones sociales
+    path('plantilla/programas/acciones_sociales', login_required(TemplateView.as_view(template_name='Ejemplos/acciones_sociales.html')), name='acciones_sociales'),
     # Intervenciones
     path('plantilla/programas/intervenciones_legajolist', login_required(TemplateView.as_view(template_name='Ejemplos/intervenciones_legajolist.html')), name='intervenciones_legajolist'),
     path('plantilla/programas/intervenciones_list', login_required(TemplateView.as_view(template_name='Ejemplos/intervenciones_list.html')), name='intervenciones_list'),

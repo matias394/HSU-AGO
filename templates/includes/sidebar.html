@@ -577,7 +577,21 @@
 			<a href="{% url 'programas_asistencia' %}"
 				class="nav-link {% if 'programas_asistencia' in pagina_actual %}active{% endif %}">
 				<i class="fas fa-arrow-alt-circle-right nav-icon"></i>
-				<p>Programas asistencia</p>
+				<p>Intervenciones de salud</p>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="{% url 'acciones_sociales' %}"
+				class="nav-link {% if 'acciones_sociales' in pagina_actual %}active{% endif %}">
+				<i class="fas fa-arrow-alt-circle-right nav-icon"></i>
+				<p>Acciones sociales</p>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="{% url 'intervenciones_salud' %}"
+				class="nav-link {% if 'intervenciones_salud' in pagina_actual %}active{% endif %}">
+				<i class="fas fa-arrow-alt-circle-right nav-icon"></i>
+				<p>Intervenciones asistencia</p>
 			</a>
 		</li>
 		<li class="nav-item">
