@@ -1,4 +1,5 @@
 {% load static %}
+{% with pagina_actual=request.resolver_match.route %}
 <nav class="main-header navbar navbar-expand navbar-dark border-bottom-0">
 	<!-- Left navbar links -->
 	<ul class="navbar-nav">
@@ -14,6 +15,9 @@
 	<ul class="navbar-nav ml-auto">
 
 		<!-- Navbar Search -->
+		{% if 'administracion/' in pagina_actual%}
+
+		{% else %}
 		<li class="nav-item">
 			<a class="nav-link" data-widget="navbar-search" href="#" role="button">
 				<i class="fas fa-search"></i>
@@ -35,6 +39,7 @@
 				</form>
 			</div>
 		</li>
+		{% endif %}
 
 		<!-- Navbar Fullscreen -->
 		<li class="nav-item">
@@ -66,3 +71,4 @@
 
 	</ul>
 </nav>
+{% endwith %}

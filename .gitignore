@@ -33,6 +33,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
+venv/
 build/
 develop-eggs/
 downloads/
@@ -83,6 +84,7 @@ __pycache__/
 local_settings.py
 
 .env
+.venv
 .sqlite3
 media/
 migrations/
@@ -90,3 +92,4 @@ db.sqlite3
 hsu_db.sqlite3
 .vscode/
 logs/
+.venv/
