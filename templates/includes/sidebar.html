@@ -588,6 +588,13 @@
 			</a>
 		</li>
 		<li class="nav-item">
+			<a href="{% url 'indices' %}"
+				class="nav-link {% if 'indices' in pagina_actual %}active{% endif %}">
+				<i class="fas fa-arrow-alt-circle-right nav-icon"></i>
+				<p>Indices</p>
+			</a>
+		</li>
+		<li class="nav-item">
 			<a href="{% url 'intervenciones_salud' %}"
 				class="nav-link {% if 'intervenciones_salud' in pagina_actual %}active{% endif %}">
 				<i class="fas fa-arrow-alt-circle-right nav-icon"></i>
