@@ -264,9 +264,6 @@
                             </span>
                         </div>
                     </li>
-                    <div class="card-footer text-center">
-                        <a href="{% url 'indices'  %}" class="uppercase">Ver detalles</a>  
-                    </div>
                     <li class="item">
                         <div class="product-img h4">
                             <span class="badge badge-danger float-center p-3">6</span>
@@ -283,7 +280,7 @@
             </div>
            
             <div class="card-footer text-center">
-                <a href="{% url 'indices_egreso'  %}" class="uppercase">Ver detalles</a>
+                <a href="{% url 'indices'  %}" class="uppercase">Ver detalles</a>
             </div>
 
         </div>
@@ -590,7 +587,7 @@
 
                         </ul>
                         <div class="card-tools">
-                            <a href="{% url 'legajosdimensiones_editar' object.dimensionfamilia.id  %}"
+                            <a href="{% url 'legajosdimensiones_ver' object.dimensionfamilia.id  %}"
                                 class="ml-3 mr-2">Ver
                                 detalles</a>
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
