@@ -65,6 +65,15 @@ urlpatterns = [
     path('plantilla/programas/acciones_sociales', login_required(TemplateView.as_view(template_name='Ejemplos/acciones_sociales.html')), name='acciones_sociales'),
      # Plantilla Indices
     path('plantilla/programas/indices', login_required(TemplateView.as_view(template_name='Ejemplos/indices.html')), name='indices'),
+    path('plantilla/programas/indices_egreso', login_required(TemplateView.as_view(template_name='Ejemplos/indices_egreso.html')), name='indices_egreso'),
+     # Plantilla Intervenciones
+    path('plantilla/programas/intervenciones', login_required(TemplateView.as_view(template_name='Ejemplos/intervenciones.html')), name='intervenciones'),
+    path('plantilla/programas/intervenciones_new_detail', login_required(TemplateView.as_view(template_name='Ejemplos/intervenciones_new_detail.html')), name='intervenciones_new_detail'),
+     # Plantilla Historial de admisiones
+    path('plantilla/programas/historial_admisiones', login_required(TemplateView.as_view(template_name='Ejemplos/historial_admisiones.html')), name='historial_admisiones'),
+    # Plantilla Derivaciones
+    path('plantilla/programas/historial_derivaciones', login_required(TemplateView.as_view(template_name='Ejemplos/historial_derivaciones.html')), name='historial_derivaciones'),
+    path('plantilla/programas/derivaciones_new_detail', login_required(TemplateView.as_view(template_name='Ejemplos/derivaciones_new_detail.html')), name='derivaciones_new_detail'),
     # Intervenciones
     path('plantilla/programas/intervenciones_legajolist', login_required(TemplateView.as_view(template_name='Ejemplos/intervenciones_legajolist.html')), name='intervenciones_legajolist'),
     path('plantilla/programas/intervenciones_list', login_required(TemplateView.as_view(template_name='Ejemplos/intervenciones_list.html')), name='intervenciones_list'),
