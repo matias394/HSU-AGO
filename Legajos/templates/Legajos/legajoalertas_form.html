@@ -69,8 +69,32 @@ Legajos
                             </a>
                         </div>
                     </div>
-
-                    <div class="row mt-5">
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title font-weight-bold ">
+                                        Agregar alerta
+                                    </h3>
+                                </div>
+                                <div class="card-body bg-light">
+                                    <form id="agregarAlerta" name="agregarAlerta" method="POST" autocomplete="off" novalidate>
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div hidden>{{form.fk_legajo| as_crispy_field}}</div>
+                                            <div hidden>{{form.creada_por| as_crispy_field}}</div>
+                                            <div class="form-group col-auto">{{form.fk_categoria| as_crispy_field}}</div>
+                                            <div class="form-group col-auto">{{form.fk_alerta| as_crispy_field}}</div>
+                                            <div class="form-group col-auto mt-2">
+                                                <button class="btn btn-primary mt-sm-4 mt-0" type="submit">Agregar</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
@@ -85,7 +109,7 @@ Legajos
                                             <button type="button" class="close pr-1 eliminar-alerta-btn"
                                                 title="Eliminar alerta" data-alerta-id="{{ a.pk }}">×</button>
 
-                                            <div class="callout callout-danger ">
+                                            <div class="callout callout-{{a.fk_alerta.riesgo}} ">
                                                 <h6 class="font-weight-bold"><i class="fas fa-exclamation-triangle px-1"></i>
                                                     {{a.fk_alerta}}
                                                 </h6>
@@ -103,32 +127,7 @@ Legajos
                     </div>
                 </div>
 
-                <div class="row mt-3">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title font-weight-bold ">
-                                    Agregar alerta
-                                </h3>
-                            </div>
-                            <div class="card-body bg-light">
-                                <form id="agregarAlerta" name="agregarAlerta" method="POST" autocomplete="off" novalidate>
-                                    {% csrf_token %}
-                                    <div class="form-row ">
-                                        <div class="form-group col-sm-6 d-none" hidden>{{form.fk_legajo| as_crispy_field}}</div>
-                                        <div class="form-group col-sm-6 d-none" hidden>{{form.creada_por| as_crispy_field}}</div>
-                                        <div class="form-group col-sm-3">{{form.fk_categoria| as_crispy_field}}</div>
-                                        <div class="form-group col-sm-3">{{form.fk_alerta| as_crispy_field}}</div>
-                                        <div class="form-group col-sm-5">{{form.observaciones| as_crispy_field}}</div>
-                                        <div class="form-group col-sm-1 mt-2">
-                                            <button class="btn btn-primary mt-sm-4 mt-0" type="submit">Agregar</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
 
 
                 <!-- botones del pie -->
