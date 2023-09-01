@@ -65,6 +65,7 @@ urlpatterns = [
     path('plantilla/programas/acciones_sociales', login_required(TemplateView.as_view(template_name='Ejemplos/acciones_sociales.html')), name='acciones_sociales'),
      # Plantilla Indices
     path('plantilla/programas/indices', login_required(TemplateView.as_view(template_name='Ejemplos/indices.html')), name='indices'),
+    path('plantilla/programas/indices_detalles', login_required(TemplateView.as_view(template_name='Ejemplos/indice_ivi_detail.html')), name='indices_detalles'),
     path('plantilla/programas/indices_egreso', login_required(TemplateView.as_view(template_name='Ejemplos/indices_egreso.html')), name='indices_egreso'),
      # Plantilla Intervenciones
     path('plantilla/programas/intervenciones', login_required(TemplateView.as_view(template_name='Ejemplos/intervenciones.html')), name='intervenciones'),

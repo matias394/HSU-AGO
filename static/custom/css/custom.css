@@ -45,3 +45,50 @@ input:-internal-autofill-selected {
   color: #fff;
   background-color: #ed7669;
 }
+
+.badge-alta {
+  color: #fff;
+  background-color: #ed7669;
+}
+.badge-media {
+  color: #000000;
+  background-color: #eca20f;
+}
+.badge-baja {
+  color: #000000;
+  background-color: #eee246;
+}
+
+.callout.callout-medio {
+  color: #eca20f;
+  border-left-color: #eca20f;
+}
+.callout.callout-bajo {
+  border-left-color: #eee246;
+  color: #eee246;
+}
+
+.badge-Alto {
+  color: #fff;
+  background-color: #ed7669;
+}
+.badge-Medio {
+  color: #000000;
+  background-color: #eca20f;
+}
+.badge-Bajo {
+  color: #000000;
+  background-color: #eee246;
+}
+.callout.callout-Alto {
+  color: #ed7669;
+  border-left-color: #ed7669;
+}
+.callout.callout-Medio {
+  color: #eca20f;
+  border-left-color: #eca20f;
+}
+.callout.callout-Bajo {
+  border-left-color: #eee246;
+  color: #eee246;
+}
