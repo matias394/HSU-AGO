@@ -74,6 +74,9 @@ urlpatterns = [
     # Plantilla Derivaciones
     path('plantilla/programas/historial_derivaciones', login_required(TemplateView.as_view(template_name='Ejemplos/historial_derivaciones.html')), name='historial_derivaciones'),
     path('plantilla/programas/derivaciones_new_detail', login_required(TemplateView.as_view(template_name='Ejemplos/derivaciones_new_detail.html')), name='derivaciones_new_detail'),
+    # Plantilla Programas Indice
+    path('plantilla/programas/indice_ivi_legajo', login_required(TemplateView.as_view(template_name='Ejemplos/indice_ivi_legajo.html')), name='indice_ivi_legajo'),
+    path('plantilla/programas/indice_ivi_form_legajo', login_required(TemplateView.as_view(template_name='Ejemplos/indice_ivi_form_legajo.html')), name='indice_ivi_form_legajo'),
     # Intervenciones
     path('plantilla/programas/intervenciones_legajolist', login_required(TemplateView.as_view(template_name='Ejemplos/intervenciones_legajolist.html')), name='intervenciones_legajolist'),
     path('plantilla/programas/intervenciones_list', login_required(TemplateView.as_view(template_name='Ejemplos/intervenciones_list.html')), name='intervenciones_list'),
