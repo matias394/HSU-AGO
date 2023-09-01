@@ -497,6 +497,20 @@
 			</a>
 		</li>
 		<li class="nav-item">
+			<a href="{% url 'historial_derivaciones' %}"
+				class="nav-link {% if 'historial_derivaciones' in pagina_actual %}active{% endif %}">
+				<i class="fas fa-arrow-alt-circle-right nav-icon"></i>
+				<p>Historial derivaciones</p>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="{% url 'derivaciones_new_detail' %}"
+				class="nav-link {% if 'derivaciones_new_detail' in pagina_actual %}active{% endif %}">
+				<i class="fas fa-arrow-alt-circle-right nav-icon"></i>
+				<p>Derivaciones detalle</p>
+			</a>
+		</li>
+		<li class="nav-item">
 			<a href="{% url 'derivaciones_form'  %}"
 				class="nav-link {% if 'derivaciones_form' in pagina_actual %}active{% endif %}">
 				<i class="fas fa-arrow-alt-circle-right nav-icon"></i>
@@ -574,6 +588,13 @@
 			</a>
 		</li>
 		<li class="nav-item">
+			<a href="{% url 'historial_admisiones' %}"
+				class="nav-link {% if 'historial_admisiones' in pagina_actual %}active{% endif %}">
+				<i class="fas fa-arrow-alt-circle-right nav-icon"></i>
+				<p>Historial admisiones</p>
+			</a>
+		</li>
+		<li class="nav-item">
 			<a href="{% url 'programas_asistencia' %}"
 				class="nav-link {% if 'programas_asistencia' in pagina_actual %}active{% endif %}">
 				<i class="fas fa-arrow-alt-circle-right nav-icon"></i>
@@ -592,6 +613,28 @@
 				class="nav-link {% if 'indices' in pagina_actual %}active{% endif %}">
 				<i class="fas fa-arrow-alt-circle-right nav-icon"></i>
 				<p>Indices</p>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="{% url 'indices_egreso' %}"
+				class="nav-link {% if 'indices_egreso' in pagina_actual %}active{% endif %}">
+				<i class="fas fa-arrow-alt-circle-right nav-icon"></i>
+				<p>Indices egreso</p>
+			</a>
+		</li>
+
+		<li class="nav-item">
+			<a href="{% url 'intervenciones' %}"
+				class="nav-link {% if 'intervenciones' in pagina_actual %}active{% endif %}">
+				<i class="fas fa-arrow-alt-circle-right nav-icon"></i>
+				<p>Intervenciones</p>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="{% url 'intervenciones_new_detail' %}"
+				class="nav-link {% if 'intervenciones_new_detail' in pagina_actual %}active{% endif %}">
+				<i class="fas fa-arrow-alt-circle-right nav-icon"></i>
+				<p>Intervenciones nuevo detalle</p>
 			</a>
 		</li>
 		<li class="nav-item">
