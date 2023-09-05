@@ -48,6 +48,12 @@
                 {{form.fk_categoria| as_crispy_field}}
               </div>
             </div>
+
+            <div class="col-12">
+              <div class="form-group">
+                {{form.gravedad| as_crispy_field}}
+              </div>
+            </div>
             
             <div class="col-12
             {%if request.resolver_match.url_name != 'alertas_editar' %}

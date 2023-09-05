@@ -42,7 +42,7 @@ Historial de alertas
                             <th>Alerta</th>
                             <th>Categoría</th>
                             <th>Dimensión</th>
-                            <th>Observaciones</th>
+                            <th>Gravedad</th>
                             <th>Creada por</th>
                             <th>Fecha Inicio</th>
                             <th>Eliminada por</th>
@@ -63,7 +63,9 @@ Historial de alertas
                             <td>{{a.fk_alerta}}</td>
                             <td>{{a.fk_alerta.fk_categoria}}</td>
                             <td>{{a.fk_alerta.fk_categoria.dimension}}</td>
-                            <td>{{a.observaciones|default_if_none:"-"}}</td>
+                            <td>
+                            <span class="badge badge-{{a.fk_alerta.gravedad}} p-2">{{a.fk_alerta.gravedad}}</span>
+                            </td>
                             <td>{{a.creada_por}}</td>
                             <td>{{a.fecha_inicio|date:"d/m/Y" }}</td>
                             <td>{{a.eliminada_por|default_if_none:"-"}}</td>

@@ -4,8 +4,8 @@
 {% block head %}
 {% endblock %}
 
-{% block title %}Alertas{% endblock %};
-{% block titulo-pagina %}Alertas{% endblock %};
+{% block title %}Alarmas e Indicadores de Riesgo{% endblock %};
+{% block titulo-pagina %}Alarmas e Indicadores de Riesgo{% endblock %};
 
 {% block menu-adicional %}
 {% endblock %};
@@ -42,6 +42,7 @@
               <th>Nombre</th>
               <th >Categoría</th>
               <th>Dimensión</th>
+              <th>Gravedad</th>
               <th>Estado</th>
               <th style="width: 15%" class="notexport">
               </th>
@@ -53,6 +54,9 @@
               <td><a href="{% url 'alertas_ver' o.id %}" class="font-weight-bold">{{o.nombre}}</a></td>
               <td > {{o.fk_categoria }}</td>
               <td>{{o.fk_categoria.dimension}}</td>
+              <td>
+                <span class="badge badge-{{o.gravedad}} p-2">{{o.gravedad}}</span>
+              </td>
               <td>
                 {% if o.estado  %}
                 <span class="text-success font-weight-bold">Activo</span>

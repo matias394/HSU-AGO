@@ -151,6 +151,7 @@ class AlertasForm(forms.ModelForm):
         exclude = ()
         widgets = {
             'estado': forms.Select(choices=[(True, 'Activo'), (False, 'Inactivo')]),
+            'gravedad': forms.Select(choices=CHOICE_CRITERIO_ALERTA),
         }
         labels = {'fk_categoria': 'Categoría'}
 

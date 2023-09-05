@@ -96,10 +96,3 @@ CHOICE_TIPO_DE_FORMULARIO=[
     ('Intervención', 'Intervención'),
     ('Otro', 'Otro'),
 ]
-
-CHOICE_CRITERIO_ALERTA=[
-    (None, ''),
-    ('Critica', 'Critica'),
-    ('Importante', 'Importante'),
-    ('Precaución', 'Precaución'),
-]
