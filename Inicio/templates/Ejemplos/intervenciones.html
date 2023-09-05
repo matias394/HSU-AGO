@@ -2,18 +2,18 @@
 {% load static %};
 
 {% block title %}
-Intervenciones
+Historia de intervenciones
 {%endblock %};
 
 {% block titulo-pagina %}
-Intervenciones
+Historia de intervenciones
 {% endblock %};
 
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right">
-  <li class="breadcrumb-item">Intervenciones</li>
+  <li class="breadcrumb-item">Legajos</li>
   <li class="breadcrumb-item "><a href="#" title="Ver legajo">Baez, Jessica</a></li>
-  <li class="breadcrumb-item active">Intervenciones</li>
+  <li class="breadcrumb-item active">Historia de intervenciones</li>
 </ol>
 {% endblock %};
 
@@ -32,30 +32,32 @@ Intervenciones
     <!-- <a href="" class="btn btn-danger mr-1 mt-2 mt-sm-0">Eliminar</a> -->
   <!--</div> -->
   <!-- ./botones -->
-
+  <div class="row">
+    <!-- botones -->
+    <div class="col-12 my-3 mx-2">
+      <a href="#" class="btn btn-primary mr-1">Agregar intervenciones</a>
+    </div>
+  </div>
   <div class="row p-0 m-0 " id="seleccion">
 
     <!-- Datos de legajo -->
     <div class="col-sm-8 pb-3">
-      <div class="card  card-primary card-outline h-100 mb-0">
+      <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
           <h3 class="card-title">Datos personales</h3>
-          <div class="card-tools">
-            <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
-              <i class="fas fa-minus"></i>
-            </button>
-          </div>
         </div>
         <div class="card-body">
           <dl class="row mb-0">
-            <dd class="col-sm-5 mb-2">Nombre</dd>
-            <dt class="col-sm-7 mb-2"> Baez, Jessica</dt>
-            <dd class="col-sm-5 mb-2">DNI</dd>
-            <dt class="col-sm-7 mb-2">54321012</dt>
-            <dd class="col-sm-5 mb-2">Fecha de nacimiento</dd>
-            <dt class="col-sm-7 mb-2">15/04/2005</dt>
-            <dd class="col-sm-5 mb-2">Sexo</dd>
-            <dt class="col-sm-7 mb-2">Femenino</dt>
+            <dd class="col-sm-3 mb-2">Nombre</dd>
+            <dt class="col-sm-9 mb-2"><a href="#" title="Ver legajo">Baez, Jessica
+              </a>
+            </dt>
+            <dd class="col-sm-3 mb-2">DNI</dd>
+            <dt class="col-sm-9 mb-2">54321012</dt>
+            <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
+            <dt class="col-sm-9 mb-2">15/04/2005</dt>
+            <dd class="col-sm-3 mb-2">Sexo</dd>
+            <dt class="col-sm-9">Femenino</dt>
           </dl>
         </div>
       </div>
@@ -105,7 +107,7 @@ Intervenciones
           </div>
         <div class="col-12">
           <div class="info-box mb-2">
-            <span class="info-box-icon bg-danger">11</span>
+            <span class="info-box-icon bg-danger">40</span>
             <div class="info-box-content">
               <span class="info-box-text">IVI de ingreso</span>
               <span class="info-box-number h6">10/07/2020</span>
@@ -114,7 +116,7 @@ Intervenciones
         </div>
         <div class="col-12">
           <div class="info-box">
-            <span class="info-box-icon bg-danger">6</span>
+            <span class="info-box-icon bg-danger">16</span>
             <div class="info-box-content">
               <span class="info-box-text">IVI de egreso</span>
               <span class="info-box-number h6">11/06/2023</span>

@@ -20,67 +20,296 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-lg-3 col-6">
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-address-card"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text text-center h6">Legajos Activos</span>
+                <span class="info-box-number text-center h4">862</span>
+            </div>
 
-        <div class="small-box bg-info">
-            <div class="inner">
-                <h3>150</h3>
-                <p>Indicador 1</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-bag"></i>
-            </div>
-            <a href="#" class="small-box-footer">Mas info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
+
     </div>
 
-    <div class="col-lg-3 col-6">
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-bell"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text text-center h6">Alarmas Activas</span>
+                <span class="info-box-number text-center h4">278</span>
+            </div>
 
-        <div class="small-box bg-success">
-            <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
-                <p>Indicador 2</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-            </div>
-            <a href="#" class="small-box-footer">Mas info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
+
     </div>
 
-    <div class="col-lg-3 col-6">
 
-        <div class="small-box bg-warning">
-            <div class="inner">
-                <h3>44</h3>
-                <p>Indicador 3</p>
+
+    <div class="clearfix hidden-md-up"></div>
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-share-square"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text text-center h6">Derivaciones Pendientes</span>
+                <span class="info-box-number text-center h4">138</span>
             </div>
-            <div class="icon">
-                <i class="ion ion-person-add"></i>
-            </div>
-            <a href="#" class="small-box-footer">Mas info <i class="fas fa-arrow-circle-right"></i></a>
+
         </div>
+
     </div>
 
-    <div class="col-lg-3 col-6">
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-handshake"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text text-center h6 text-nowrap">Benef. de Acciones Sociales</span>
+                <span class="info-box-number text-center h4">329</span>
+            </div>
 
-        <div class="small-box bg-danger">
-            <div class="inner">
-                <h3>65</h3>
-                <p>Indicador 4</p>
-            </div>
-            <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-            </div>
-            <a href="#" class="small-box-footer">Mas info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
+
     </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="card card-primary">
+
+    <div class="col-md-8">
+
+        <div class="card">
             <div class="card-header">
-                <h5 class="card-title">Algun titulo</h5>
+                <h3 class="card-title">Mapa San Miguel por Barrio</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <div class="row">
+                    <div class="col-9 mr-0 pr-1">
+                        <div class="embed-responsive embed-responsive-4by3">
+                            <iframe
+                                src="https://www.google.com/maps/d/embed?mid=15CqmhYaH679MR6fWKTYTiKkuZjI&ehbc=2E312F"></iframe>
+                        </div>
+                    </div>
+                    <div class="col-3 ml-0 pl-0">
+                        <div class="card-body card-comments mt-2 ml-0 px-1">
+                            <ul class="nav nav-pills flex-column">
+                                <li class="nav-item">
+                                    <div class="comment-text ml-1  pt-5">
+                                        <h6 class="text-dark">Población total SM (censo)</h6>
+                                        <span class="username text-right mr-3 h5">326.215 hab</span>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <div class="comment-text ml-1  pt-3">
+                                        <h6 class="text-dark">Población total 018 (censo)</h6>
+                                        <span class="username text-right mr-3 h5">444.444 hab</span>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <div class="comment-text ml-1 pt-3">
+                                        <h6 class="text-dark">Población total con NBI (censo)</h6>
+                                        <span class="username text-right mr-3 h5">123.456 hab - 35%</span>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <div class="comment-text ml-1 pt-3">
+                                        <h6 class="text-dark">Población 018 con NBI (censo)</h6>
+                                        <span class="username text-right mr-3 h5">111.111 hab - 28%</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+    <!--
+    <div class="col-lg-8">
+        <iframe src="https://www.google.com/maps/d/embed?mid=15CqmhYaH679MR6fWKTYTiKkuZjI&ehbc=2E312F" width="1000"
+            height="380"></iframe>
+
+    </div>
+    -->
+
+
+
+    <div class="col-md-4 pt-5">
+
+        <div class="info-box mb-3 bg-warning">
+            <span class="info-box-icon"><i class="fas fa-users"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text text-bold h6">Población total registrada en HSU</span>
+                <span class="info-box-number h4">924 (17%)</span>
+            </div>
+
+        </div>
+
+        <div class="info-box mb-3 bg-success">
+            <span class="info-box-icon"><i class="fas fa-child"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text text-bold h6">Población de 018 en HSU</span>
+                <span class="info-box-number h4"> 236 (37%)</span>
+            </div>
+
+        </div>
+
+        <div class="info-box mb-3 bg-danger">
+            <span class="info-box-icon"><i class="fas fa-user-check"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text text-bold h6">Población registrada en HC</span>
+                <span class="info-box-number h4">4.798 (41%)</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4 mt-3 ">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    Nacimientos
+                </h3>
+            </div>
+
+            <div class="card-body">
+                <div class="small-box bg-green mb-2">
+                    <div class="inner">
+                        <h3>46</h3>
+                        <p>Nuevos</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fas fa-baby"></i>
+                    </div>
+                </div>
+                <div class="small-box bg-green mb-2">
+                    <div class="inner">
+                        <h3>12</h3>
+                        <p>En Riesgo</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                </div>
+                <div class="small-box bg-green mb-2">
+                    <div class="inner">
+                        <h3>13</h3>
+                        <p>Sin Derivación</p>
+                    </div>
+                    <div class="icon">
+                        <i class="far fa-share-square"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4 mt-3">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    Niños de 0 a 18
+                </h3>
+            </div>
+
+            <div class="card-body">
+                <div class="small-box bg-primary mb-2">
+                    <div class="inner">
+                        <h3>350</h3>
+                        <p>Total</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fas fa-child"></i>
+                    </div>
+                </div>
+                <div class="small-box bg-primary mb-2">
+                    <div class="inner">
+                        <h3>46</h3>
+                        <p>En Riesgo</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                </div>
+                <div class="small-box bg-primary mb-2">
+                    <div class="inner">
+                        <h3>78</h3>
+                        <p>Sin Derivación</p>
+                    </div>
+                    <div class="icon">
+                        <i class="far fa-share-square"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4 mt-3">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    Embarazadas
+                </h3>
+            </div>
+
+            <div class="card-body">
+                <div class="small-box bg-danger mb-2">
+                    <div class="inner">
+                        <h3>38</h3>
+                        <p>Total</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-female"></i>
+                    </div>
+                </div>
+                <div class="small-box bg-danger mb-2">
+                    <div class="inner">
+                        <h3>8</h3>
+                        <p>En Riesgo / Sin Control </p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                </div>
+                <div class="small-box bg-danger mb-2">
+                    <div class="inner">
+                        <h3>12</h3>
+                        <p>Sin adherencia</p>
+                    </div>
+                    <div class="icon">
+                        <i class="far fa-share-square"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h5 class="card-title text-center">Familias en Riesgo Social</h5>
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
                         <i class="fas fa-minus"></i>
@@ -95,7 +324,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <p class="text-center">
-                            <strong>Algun titulo para el grafico</strong>
+                            <strong>Familias en Riesgo Social vs Familias intervenidas <br>01/01/2023 - 06/09/2023</strong>
                         </p>
                         <div class="chart">
                             <div class="chartjs-size-monitor">
@@ -116,10 +345,10 @@
 
                     <div class="col-md-4">
                         <p class="text-center">
-                            <strong>Algun titulo</strong>
+                            <strong>Indicadores</strong>
                         </p>
                         <div class="progress-group">
-                            Marcador 1
+                            1 progenitor en Riesgo Social
                             <span class="float-right"><b>160</b>/200</span>
                             <div class="progress progress-sm">
                                 <div class="progress-bar bg-primary" style="width: 80%"></div>
@@ -127,26 +356,10 @@
                         </div>
 
                         <div class="progress-group">
-                            Marcador 2
+                            2 progenitor en Riesgo Social
                             <span class="float-right"><b>310</b>/400</span>
                             <div class="progress progress-sm">
-                                <div class="progress-bar bg-danger" style="width: 75%"></div>
-                            </div>
-                        </div>
-
-                        <div class="progress-group">
-                            <span class="progress-text">Marcador 3</span>
-                            <span class="float-right"><b>480</b>/800</span>
-                            <div class="progress progress-sm">
-                                <div class="progress-bar bg-success" style="width: 60%"></div>
-                            </div>
-                        </div>
-
-                        <div class="progress-group">
-                            Marcador 4
-                            <span class="float-right"><b>250</b>/500</span>
-                            <div class="progress progress-sm">
-                                <div class="progress-bar bg-warning" style="width: 50%"></div>
+                                <div class="progress-bar bg-gray" style="width: 75%"></div>
                             </div>
                         </div>
 
@@ -155,55 +368,12 @@
                 </div>
 
             </div>
-
-            <div class="card-footer">
-                <div class="row">
-                    <div class="col-sm-3 col-6">
-                        <div class="description-block border-right">
-                            <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 17%</span>
-                            <h5 class="description-header">32.300</h5>
-                            <span class="description-text">TOTAL 1</span>
-                        </div>
-
-                    </div>
-
-                    <div class="col-sm-3 col-6">
-                        <div class="description-block border-right">
-                            <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i>
-                                0%</span>
-                            <h5 class="description-header">22.692</h5>
-                            <span class="description-text">TOTAL 2</span>
-                        </div>
-
-                    </div>
-
-                    <div class="col-sm-3 col-6">
-                        <div class="description-block border-right">
-                            <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 20%</span>
-                            <h5 class="description-header">30.456</h5>
-                            <span class="description-text">TOTAL 3</span>
-                        </div>
-
-                    </div>
-
-                    <div class="col-sm-3 col-6">
-                        <div class="description-block">
-                            <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i>
-                                18%</span>
-                            <h5 class="description-header">1200</h5>
-                            <span class="description-text">TOTAL 4</span>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-
         </div>
 
     </div>
 
 </div>
+
 {% endblock %}
 {% block customJS %}
 
@@ -224,35 +394,21 @@
         // Get context with jQuery - using jQuery's .get() method.
 
         var areaChartData = {
-            labels: ['2019', '2020', '2021', '2022', '2023'],
+            labels: ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO'],
             datasets: [
                 {
                     label: 'Riesgo Hogar',
-                    //backgroundColor: 'rgba(60,141,188,0.9)',
-                    fill: false,
+                    backgroundColor: 'rgba(60,141,188,0.5)',
+                    fill: true,
                     borderColor: '#14afe4 ',
-                    data: [28, 32, 36, 24, 31]
+                    data: [28, 32, 36, 24, 31, 30, 25, 18]
                 },
                 {
                     label: 'Riesgo Educacion',
-                    //backgroundColor: 'rgba(210, 214, 222, 1)',
-                    fill: false,
+                    backgroundColor: 'rgba(210, 214, 222, 0.5)',
+                    fill: true,
                     borderColor: '#5d5d5d ',
-                    data: [32, 28, 30, 29, 25]
-                },
-                {
-                    label: 'Riesgo Salud',
-                    //backgroundColor: 'rgba(210, 214, 222, 1)',
-                    fill: false,
-                    borderColor: '#ffc107',
-                    data: [30, 31, 26, 35, 28]
-                },
-                {
-                    label: 'Riesgo Habitacional',
-                    //backgroundColor: 'rgba(210, 214, 222, 1)',
-                    fill: false,
-                    borderColor: 'red',
-                    data: [34, 32, 37, 29, 22]
+                    data: [32, 28, 30, 29, 25, 22, 28, 12]
                 },
             ]
         }
@@ -283,9 +439,9 @@
         var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
         var lineChartOptions = $.extend(true, {}, areaChartOptions)
         var lineChartData = $.extend(true, {}, areaChartData)
-        lineChartData.datasets[0].fill = false;
-        lineChartData.datasets[1].fill = false;
-        lineChartOptions.datasetFill = false
+        lineChartData.datasets[0].fill = true;
+        lineChartData.datasets[1].fill = true;
+        lineChartOptions.datasetFill = true
 
         var lineChart = new Chart(lineChartCanvas, {
             type: 'line',

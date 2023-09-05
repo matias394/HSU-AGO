@@ -255,7 +255,7 @@ class Alertas(models.Model):
     nombre = models.CharField(max_length=100, unique=True)
     fk_categoria = models.ForeignKey(CategoriaAlertas, on_delete=models.PROTECT)
     estado = models.BooleanField(default=True)
-    riesgo = models.CharField(max_length=500, null=False, blank=False)
+    gravedad = models.CharField(max_length=500, null=False, blank=False)
 
     def __str__(self):
         return self.nombre

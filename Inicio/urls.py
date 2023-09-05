@@ -65,7 +65,6 @@ urlpatterns = [
     path('plantilla/programas/acciones_sociales', login_required(TemplateView.as_view(template_name='Ejemplos/acciones_sociales.html')), name='acciones_sociales'),
      # Plantilla Indices
     path('plantilla/programas/indices', login_required(TemplateView.as_view(template_name='Ejemplos/indices.html')), name='indices'),
-    path('plantilla/programas/indices_detalles', login_required(TemplateView.as_view(template_name='Ejemplos/indice_ivi_detail.html')), name='indices_detalles'),
     path('plantilla/programas/indices_egreso', login_required(TemplateView.as_view(template_name='Ejemplos/indices_egreso.html')), name='indices_egreso'),
      # Plantilla Intervenciones
     path('plantilla/programas/intervenciones', login_required(TemplateView.as_view(template_name='Ejemplos/intervenciones.html')), name='intervenciones'),
@@ -75,6 +74,9 @@ urlpatterns = [
     # Plantilla Derivaciones
     path('plantilla/programas/historial_derivaciones', login_required(TemplateView.as_view(template_name='Ejemplos/historial_derivaciones.html')), name='historial_derivaciones'),
     path('plantilla/programas/derivaciones_new_detail', login_required(TemplateView.as_view(template_name='Ejemplos/derivaciones_new_detail.html')), name='derivaciones_new_detail'),
+    # Plantilla Programas Indice
+    path('plantilla/programas/indice_ivi_legajo', login_required(TemplateView.as_view(template_name='Ejemplos/indice_ivi_legajo.html')), name='indice_ivi_legajo'),
+    path('plantilla/programas/indice_ivi_form_legajo', login_required(TemplateView.as_view(template_name='Ejemplos/indice_ivi_form_legajo.html')), name='indice_ivi_form_legajo'),
     # Intervenciones
     path('plantilla/programas/intervenciones_legajolist', login_required(TemplateView.as_view(template_name='Ejemplos/intervenciones_legajolist.html')), name='intervenciones_legajolist'),
     path('plantilla/programas/intervenciones_list', login_required(TemplateView.as_view(template_name='Ejemplos/intervenciones_list.html')), name='intervenciones_list'),
