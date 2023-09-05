@@ -169,7 +169,7 @@
                     </li>
                     <li class="nav-item">
                         <a href="80" class="nav-link">
-                            Catalina Perez
+                            Catalina Villalba
                             <span class="float-right text-warning"> 11
                             </span>
                         </a>
@@ -232,7 +232,7 @@
                     </li>
                     <li class="nav-item">
                         <a href="71" class="nav-link">
-                            Lázaro Baez
+                            Martín Baez
                             <span class="float-right text-pink">4
                             </span>
                         </a>
@@ -266,7 +266,7 @@
                     </li>
                     <li class="item">
                         <div class="product-img h4">
-                            <span class="badge badge-danger float-center p-3">16</span>
+                            <span class="badge badge-danger float-center p-3">36</span>
                         </div>
                         <div class="product-info">
                             <a href="javascript:void(0)" class="product-title">IVI</a> <span class="badge badge-secondary">Egreso</span><br>
@@ -437,11 +437,6 @@
                             {% endfor %}
                         </div>
                     </div>
-                    {% if count_alta > 4 %}
-                    <div class="card-footer text-center p-0 m-0">
-                        <a href="{% url 'legajoalertas_listar' object.id %}">Ver todas las alarmas </a>
-                    </div>
-                    {% endif %}
                 </div>
             </div>
         </div>
@@ -842,12 +837,12 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title font-weight-bold mr-3 pt-1"> Indicadores de Riesgo</h3>
+                        <h3 class="card-title font-weight-bold mr-3 pt-1"> Indicadores de riesgo</h3>
                         {% if count_media or count_baja %}
-                        <span title="{{ count_media }} alertas" class="badge badge-media p-2">
+                        <span title="{{ count_media }} alertas" class="badge badge-Importante p-2">
                             {{count_media}}
                         </span>
-                        <span title="{{ count_baja }} alertas" class="badge badge-baja p-2">
+                        <span title="{{ count_baja }} alertas" class="badge badge-Precaución p-2">
                             {{count_baja}}
                         </span>
                         {%endif%}
@@ -855,7 +850,7 @@
                             {% if count_media or count_baja %}
                             <a href="{% url 'legajoalertas_listar' object.id %}" class="ml-3 mr-2">Ver detalles </a>
                             {%else%}
-                            <a href="{% url 'legajoalertas_crear' object.id %}" class="ml-3 mr-2">Agregar Indicador de Riesgo </a>
+                            <a href="{% url 'legajoalertas_crear' object.id %}" class="ml-3 mr-2">Agregar indicador de riesgo </a>
                             {%endif%}
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
@@ -865,17 +860,17 @@
                     <div class="card-body bg-light">
                         <div class="row">
                             {% if count_media or count_baja %}
-                            {% for a in alertas_media %}
+                            {% for a in alertas_media|slice:":4" %}
                             <div class="col-md-3 col-sm-6 col-12 mb-3">
-                                <div class="callout callout-medio h-100 pb-0">
+                                <div class="callout callout-{{a.fk_alerta.gravedad}} h-100 pb-0">
                                     <h6 class="font-weight-bold"><i class="fas fa-exclamation-triangle px-1"></i> {{a.fk_alerta}}
                                     </h6>
                                 </div>
                             </div>
                             {% endfor %}
-                            {% for a in alertas_baja %}
+                            {% for a in alertas_baja|slice:":4" %}
                             <div class="col-md-3 col-sm-6 col-12 mb-3">
-                                <div class="callout callout-bajo h-100 pb-0">
+                                <div class="callout callout-{{a.fk_alerta.gravedad}} h-100 pb-0">
                                     <h6 class="font-weight-bold"><i class="fas fa-exclamation-triangle  px-1"></i> {{a.fk_alerta}}
                                     </h6>
                                 </div>
@@ -883,7 +878,7 @@
                             {% endfor %}
                             {% else %}
                             <div class="col-12 text-center">
-                                <h6 class="text-center text-muted py-3">Sin Indicadores de Riesgo</h6>
+                                <h6 class="text-center text-muted py-3">Sin indicadores de riesgo</h6>
                             </div>
                             {% endif %}
                         </div>
@@ -1164,7 +1159,7 @@
             labels: [
                 'Santiago Baez',
                 'Jessica Baez',
-                'Catalina Perez',
+                'Catalina Villalba',
                 'Morena Baez',
                 'Rocio Baez',
                 'Ricardo Baez',
@@ -1173,7 +1168,7 @@
                 'Zoe Rivera',
                 'Hermindo Baez',
                 'Bautista Rivera',
-                'Lázaro Baez',
+                'Martín Baez',
             ],
             datasets: [
                 {

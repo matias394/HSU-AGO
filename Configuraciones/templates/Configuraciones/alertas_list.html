@@ -42,7 +42,7 @@
               <th>Nombre</th>
               <th >Categoría</th>
               <th>Dimensión</th>
-              <th>Riesgo</th>
+              <th>Gravedad</th>
               <th>Estado</th>
               <th style="width: 15%" class="notexport">
               </th>
@@ -55,7 +55,7 @@
               <td > {{o.fk_categoria }}</td>
               <td>{{o.fk_categoria.dimension}}</td>
               <td>
-                <span class="badge badge-{{o.riesgo}} p-2">{{o.riesgo}}</span>
+                <span class="badge badge-{{o.gravedad}} p-2">{{o.gravedad}}</span>
               </td>
               <td>
                 {% if o.estado  %}
