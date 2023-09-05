@@ -57,6 +57,7 @@ var/
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+Pipfile
 
 # Unit test / coverage reports
 htmlcov/
@@ -95,3 +96,4 @@ hsu_db.sqlite3
 .vscode/
 logs/
 .venv/
+Pipfile
