@@ -200,12 +200,12 @@ class LegajosDetailView(DetailView):
         context["nombres_categorias"] = nombres_categorias
         context["resto_alertas"] = resto_alertas
         context["count_alertas"] = legajo_alertas.count()
-        context["alertas_alta"] = LegajoAlertas.objects.filter(fk_legajo=pk, fk_alerta__riesgo="Alto")
-        context["alertas_media"] = LegajoAlertas.objects.filter(fk_legajo=pk, fk_alerta__riesgo="Medio")
-        context["alertas_baja"] = LegajoAlertas.objects.filter(fk_legajo=pk, fk_alerta__riesgo="Bajo")
-        context["count_alta"] = LegajoAlertas.objects.filter(fk_legajo=pk, fk_alerta__riesgo="Alto").count()
-        context["count_media"] = LegajoAlertas.objects.filter(fk_legajo=pk, fk_alerta__riesgo="Medio").count()
-        context["count_baja"] = LegajoAlertas.objects.filter(fk_legajo=pk, fk_alerta__riesgo="Bajo").count()
+        context["alertas_alta"] = LegajoAlertas.objects.filter(fk_legajo=pk, fk_alerta__gravedad="Critica")
+        context["alertas_media"] = LegajoAlertas.objects.filter(fk_legajo=pk, fk_alerta__gravedad="Importante")
+        context["alertas_baja"] = LegajoAlertas.objects.filter(fk_legajo=pk, fk_alerta__gravedad="Precaución")
+        context["count_alta"] = LegajoAlertas.objects.filter(fk_legajo=pk, fk_alerta__gravedad="Critica").count()
+        context["count_media"] = LegajoAlertas.objects.filter(fk_legajo=pk, fk_alerta__gravedad="Importante").count()
+        context["count_baja"] = LegajoAlertas.objects.filter(fk_legajo=pk, fk_alerta__gravedad="Precaución").count()
         context["historial_alertas"] = True if HistorialLegajoAlertas.objects.filter(fk_legajo=pk).exists() else False
         context["datos_json"] = datos_json
 

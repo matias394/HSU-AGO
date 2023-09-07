@@ -99,7 +99,7 @@ CHOICE_TIPO_DE_FORMULARIO=[
 
 CHOICE_CRITERIO_ALERTA=[
     (None, ''),
-    ('Alto', 'Alto'),
-    ('Medio', 'Medio'),
-    ('Bajo', 'Bajo'),
+    ('Critica', 'Critica'),
+    ('Importante', 'Importante'),
+    ('Precaución', 'Precaución'),
 ]

@@ -42,6 +42,8 @@
                     <dd class="col-sm-9 font-weight-bold">{{ object.fk_categoria }} </dd>
                     <dt class="col-sm-3 font-weight-normal">Dimensión</dt>
                     <dd class="col-sm-9 font-weight-bold">{{ object.fk_categoria.dimension }} </dd>
+                    <dt class="col-sm-3 font-weight-normal">Gravedad</dt>
+                    <dd class="col-sm-9 font-weight-bold"><span class="badge badge-{{object.gravedad}} p-2">{{object.gravedad}}</span></dd>
                     <dt class="col-sm-3 font-weight-normal">Estado</dt>
                     <dd class="col-sm-9 font-weight-bold">
                         {% if object.estado %}
