@@ -104,6 +104,13 @@
 			</a>
 		</li>
 		<li class="nav-item">
+			<a href="{% url 'vacantes_listar' %}"
+				class="nav-link {% if 'configuracion/vacantes' in pagina_actual%}active{% endif %}">
+				<i class="fas fa-arrow-alt-circle-right nav-icon"></i>
+				<p>Vacantes</p>
+			</a>
+		</li>
+		<li class="nav-item">
 			<a href="{% url 'categoriaalertas_listar' %}"
 				class="nav-link {% if 'configuracion/categoriaalertas' in pagina_actual%}active{% endif %}">
 				<i class="fas fa-arrow-alt-circle-right nav-icon"></i>

@@ -810,3 +810,45 @@ class IndicesUpdateView(PermisosMixin, IndiceInline, UpdateView):
 
 
 # endregion
+
+
+# region ############################################################### Vacantes
+
+
+class VacantesListView(PermisosMixin, ListView):
+    permission_required = ['Usuarios.rol_admin', 'Usuarios.rol_observador', 'Usuarios.rol_consultante']
+    model = Vacantes
+
+    def get_queryset(self):
+        query = self.request.GET.get('busqueda')
+
+        if query:
+            object_list = self.model.objects.filter(
+                Q(nombre__icontains=query) | Q(sala__icontains=query) | Q(turno__icontains=query)).distinct()
+        else:
+            object_list = self.model.objects.all()
+
+        return object_list
+
+class VacantesDetailView(PermisosMixin, DetailView):
+    permission_required = ['Usuarios.rol_admin', 'Usuarios.rol_observador', 'Usuarios.rol_consultante']
+    model = Vacantes
+
+class VacantesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'Usuarios.rol_admin'
+    model = Vacantes
+    success_url = reverse_lazy("vacantes_listar")
+    success_message = "El registro fue eliminado correctamente"
+
+class VacantesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'Usuarios.rol_admin'
+    model = Vacantes
+    form_class = VacantesForm
+    success_message = "%(nombre)s fue registrado correctamente"
+
+
+class VacantesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'Usuarios.rol_admin'
+    model = Vacantes
+    form_class = VacantesForm
+    success_message = "%(nombre)s fue editado correctamente"

@@ -225,6 +225,25 @@ class CriteriosForm(forms.ModelForm):
         }
 
 
+class VacantesForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['fk_programa'].label = "Programa"
+    
+    class Meta:
+        model = Vacantes
+        exclude = ()
+        widgets = {
+            'observaciones': forms.Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'rows': 3,
+                }
+            ),
+            'estado': forms.Select(choices=[(True, 'Activo'), (False, 'Inactivo')]),
+        }
+
+        
 class IndicesForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
