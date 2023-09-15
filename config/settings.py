@@ -4,6 +4,7 @@ from logging.handlers import TimedRotatingFileHandler
 from datetime import datetime
 from pathlib import Path
 from django.contrib.messages import constants as messages
+from .validators import UppercaseValidator
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -136,6 +137,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
 
+    },
+    {
+        'NAME': 'config.validators.UppercaseValidator',
     },
 ]
 
