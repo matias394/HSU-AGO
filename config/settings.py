@@ -4,6 +4,8 @@ from logging.handlers import TimedRotatingFileHandler
 from datetime import datetime
 from pathlib import Path
 from django.contrib.messages import constants as messages
+from .validators import UppercaseValidator
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -123,12 +125,21 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+             'min_length': 8,
+        }
     },
+    
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
+    
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+
+    },
+    {
+        'NAME': 'config.validators.UppercaseValidator',
     },
 ]
 

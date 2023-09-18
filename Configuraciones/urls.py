@@ -84,4 +84,11 @@ urlpatterns = [
     path('configuracion/indices/editar/<pk>', login_required(IndicesUpdateView.as_view()), name='indices_editar'),
     path('configuracion/indices/eliminar/<pk>', login_required(IndicesDeleteView.as_view()), name='indices_eliminar'),
     path('delete-variant/<int:pk>/', delete_variant, name='delete_variant'),
+    # vacantes
+    path('configuracion/vacantes/crear', login_required(VacantesCreateView.as_view()), name='vacantes_crear'),
+    path('configuracion/vacantes/listar', login_required(VacantesListView.as_view()), name='vacantes_listar'),
+    path('configuracion/vacantes/ver/<pk>', login_required(VacantesDetailView.as_view()), name='vacantes_ver'),
+    path('configuracion/vacantes/editar/<pk>', login_required(VacantesUpdateView.as_view()), name='vacantes_editar'),
+    path('configuracion/vacantes/eliminar/<pk>', login_required(VacantesDeleteView.as_view()), name='vacantes_eliminar'),
+    path('delete-variant/<int:pk>/', delete_variant, name='delete_variant'),
 ]

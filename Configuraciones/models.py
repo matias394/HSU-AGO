@@ -394,6 +394,32 @@ class IndiceCriterios(models.Model):
 
     def get_absolute_url(self):
         return reverse('indicecriterios_ver', kwargs={'pk': self.pk})
+    
+class Vacantes(models.Model):
+    nombre = models.CharField(max_length=100)
+    observaciones = models.CharField(max_length=300, null=True, blank=True)
+    fk_programa = models.ForeignKey(Programas, on_delete=models.PROTECT)
+    sala = models.CharField(max_length=100)
+    turno = models.CharField(max_length=100)
+    cantidad = models.PositiveIntegerField(
+        validators=[MinValueValidator(0)],
+        default=0,
+    )
+    estado = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.nombre
+
+    def clean(self):
+        self.nombre = self.nombre.capitalize()
+
+    class Meta:
+        ordering = ['nombre']
+        verbose_name = 'Vacante'
+        verbose_name_plural = "Vacantes"
+
+    def get_absolute_url(self):
+        return reverse('vacantes_ver', kwargs={'pk': self.pk})
 
 
 # endregion ---------------------FIN INDICES DE VULNERABILIDAD---------------------------------------------------
