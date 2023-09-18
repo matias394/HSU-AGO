@@ -78,6 +78,14 @@ class UsuariosUpdateForm(UserChangeForm):
         self.fields['telefono'].label = "Teléfono"  
         self.fields['dni'].label = "DNI"
 
+    def clean(self):
+        cleaned_data = super(UsuariosUpdateForm, self).clean()
+        dni = cleaned_data.get('dni')
+        # validacion de dni unico para la tabla
+        if dni and Usuarios.objects.filter(dni=dni).exists():
+            self.add_error('dni', 'ya existe un usuario con ese DNI.')
+        return cleaned_data
+
     class Meta:
         model = User
         fields = UserCreationForm.Meta.fields + ('first_name', 'last_name', 'email','is_active','groups',)

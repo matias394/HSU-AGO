@@ -354,9 +354,13 @@ class GruposCreateView(PermisosMixin,SuccessMessageMixin,CreateView):
             return redirect('grupos_ver', pk=grupo.id)
         
     def form_invalid(self, form):
+        print("selfie",form.cleaned_data);
+        if  'programa' not in form.cleaned_data or 'permiso' not in form.cleaned_data :
+            messages.error(self.request,"Complete los campos")
+            return self.render_to_response(self.get_context_data(form=form))
+
         messages.error(self.request,"Ya existe un grupo con esos permisos")
         return self.render_to_response(self.get_context_data(form=form))
-
 
 
 class GruposUpdateView(PermisosMixin,SuccessMessageMixin,UpdateView):
@@ -379,6 +383,7 @@ class GruposUpdateView(PermisosMixin,SuccessMessageMixin,UpdateView):
             return redirect('grupos_ver', pk=grupo.id)
         
     def form_invalid(self, form):
-        messages.error(self.request,"Ya existe un grupo con esos permisos")
-        return self.render_to_response(self.get_context_data(form=form))
+        if  'programa' not in form.cleaned_data or 'permiso' not in form.cleaned_data :
+            messages.error(self.request,"Complete los campos")
+            return self.render_to_response(self.get_context_data(form=form))
 #endregion------------------------------------------------------------------------------------------
