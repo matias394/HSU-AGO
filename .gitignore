@@ -97,3 +97,5 @@ hsu_db.sqlite3
 logs/
 .venv/
 Pipfile
+Virtuales/
+

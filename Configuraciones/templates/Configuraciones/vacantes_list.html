@@ -43,14 +43,12 @@
         <table  class="table table-bordered table-striped projects {%if perms.Usuarios.rol_admin or perms.Usuarios.rol_consultante%} tabladt {%endif%}">
           <thead>
             <tr>
-              <th>Nombre</th>
-              <th >Programa</th>
-              <th >Sala</th>
-              <th>Turno</th>
-              <th >Cantidad</th>
-              <th >Estado</th>
-              
-
+            <th>Nombre</th>
+            <th >Programa</th>
+            <th >Turno</th>
+            <th >Cantidad</th>
+            <th >Sala</th>
+            <th >Estado</th>
               <th style="width: 15%" class="notexport">
               </th>
             </tr>
@@ -59,7 +57,10 @@
             {% for o in object_list %}
             <tr  >
               <td><a href="{% url 'vacantes_ver' o.id %}" class ="font-weight-bold" >{{o.nombre}}</a> </td>
-              <td > {{o.observaciones |default_if_none:"-"|truncatechars:100 }}</td>
+              <td > {{o.fk_programa |default_if_none:"-" }}</td>
+              <td> {{o.turno}}</td>
+              <td> {{o.cantidad}}</td>
+              <td> {{o.sala}}</td>
               <td>
                 {% if o.estado  %}
                 <span class="text-success font-weight-bold">Activo</span>
