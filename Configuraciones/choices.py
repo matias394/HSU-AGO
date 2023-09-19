@@ -11,6 +11,19 @@ CHOICE_TIPO_ORGANISMO = [
     ('Organismo Nacional', 'Organismo Nacional'),
 ]
 
+CHOICE_SALA_VACANTE = [
+    (None, ''),
+    ('Bebes', 'Bebes'),
+    ('2 años', '2 años'),
+    ('3 años', '3 años'),
+]
+
+CHOICE_TURNO_VACANTE = [
+    (None, ''),
+    ('Mañana', 'Mañana'),
+    ('Tarde', 'Tarde'),
+]
+
 CHOICE_JURISDICCION = [
     (None, ''),
     ('Nacional', 'Nacional'),

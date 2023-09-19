@@ -399,8 +399,8 @@ class Vacantes(models.Model):
     nombre = models.CharField(max_length=100)
     observaciones = models.CharField(max_length=300, null=True, blank=True)
     fk_programa = models.ForeignKey(Programas, on_delete=models.PROTECT)
-    sala = models.CharField(max_length=100)
-    turno = models.CharField(max_length=100)
+    sala = models.CharField(max_length=100, choices=CHOICE_SALA_VACANTE)
+    turno = models.CharField(max_length=100, choices=CHOICE_TURNO_VACANTE)
     cantidad = models.PositiveIntegerField(
         validators=[MinValueValidator(0)],
         default=0,
