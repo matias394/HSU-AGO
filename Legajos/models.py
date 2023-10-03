@@ -81,7 +81,7 @@ class Legajos(models.Model):
                     days = (today - self.fecha_nacimiento).days
                     return f"{days} días"
                 return f"{months} meses"
-            return f"{age} años"
+            return f"{age}"
 
         return '-'
 
