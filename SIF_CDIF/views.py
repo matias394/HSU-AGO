@@ -38,7 +38,7 @@ class CDIFDerivacionesDetailView(PermisosMixin, DetailView):
 class CDIFPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_CDIF/preadmisiones_form.html"
-    model = CDIF_PreAdmisiones
+    model = CDIF_Derivaciones
     form_class = CDIF_PreadmisionesForm
     success_message = "Preadmisión creada correctamente"
 
@@ -64,20 +64,20 @@ class CDIFPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
 class CDIFPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_CDIF/preadmisiones_form.html"
-    model = CDIF_PreAdmisiones
+    model = CDIF_Derivaciones
     form_class = CDIF_PreadmisionesForm
     success_message = "Preadmisión creada correctamente"
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        pk = CDIF_PreAdmisiones.objects.filter(pk=self.kwargs["pk"]).first()
+        pk = CDIF_Derivaciones.objects.filter(pk=self.kwargs["pk"]).first()
         legajo = LegajosDerivaciones.objects.filter(pk=pk.fk_derivacion_id).first()
         filtro = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         form.fields['fk_legajo_1'].queryset = filtro
         return form
 
     def get_context_data(self, **kwargs):
-        pk = CDIF_PreAdmisiones.objects.filter(pk=self.kwargs["pk"]).first()
+        pk = CDIF_Derivaciones.objects.filter(pk=self.kwargs["pk"]).first()
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(pk=pk.fk_derivacion_id).first()
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
@@ -102,10 +102,10 @@ class CDIFPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin)
 class CDIFPreAdmisionesDetailView(PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_CDIF/preadmisiones_detail.html"
-    model = CDIF_PreAdmisiones
+    model = CDIF_Derivaciones
 
     def get_context_data(self, **kwargs):
-        pk = CDIF_PreAdmisiones.objects.filter(pk=self.kwargs["pk"]).first()
+        pk = CDIF_Derivaciones.objects.filter(pk=self.kwargs["pk"]).first()
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(pk=pk.fk_derivacion_id).first()
         context["legajo"] = legajo
@@ -124,11 +124,11 @@ class CDIFPreAdmisionesDetailView(PermisosMixin, DetailView):
 class CDIFPreAdmisionesListView(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_CDIF/preadmisiones_list.html"
-    model = CDIF_PreAdmisiones
+    model = CDIF_Derivaciones
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        pre_admi = CDIF_PreAdmisiones.objects.all()
+        pre_admi = CDIF_Derivaciones.objects.all()
         context["object"] = pre_admi
         return context
 
@@ -152,7 +152,7 @@ class CDIFIndiceIviCreateView (PermisosMixin, CreateView):
     def get_context_data(self, **kwargs):
         pk=self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
-        object = CDIF_PreAdmisiones.objects.filter(pk=pk).first()
+        object = CDIF_Derivaciones.objects.filter(pk=pk).first()
         criterio = Criterios_IVI.objects.all()
         context["object"] = object
         context["criterio"] = criterio
@@ -162,7 +162,7 @@ class CDIFIndiceIviCreateView (PermisosMixin, CreateView):
     def post(self, request, *args, **kwargs):
         # Realiza la actualización del campo aquí
         pk=self.kwargs["pk"]
-        preadm = CDIF_PreAdmisiones.objects.filter(pk=pk).first()
+        preadm = CDIF_Derivaciones.objects.filter(pk=pk).first()
         form = self.request.POST
         for f in form:
             if f != 'observaciones':
@@ -188,14 +188,14 @@ class CDIFIndiceIviCreateView (PermisosMixin, CreateView):
 
 class CDIFIndiceIviUpdateView (PermisosMixin, UpdateView):
     permission_required = "Usuarios.rol_admin"
-    model = CDIF_PreAdmisiones
+    model = CDIF_Derivaciones
     template_name = "SIF_CDIF/indiceivi_form.html"
     form_class = CDIF_IndiceIviForm
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
-        context["object"] = CDIF_PreAdmisiones.objects.filter(pk=pk).first()
+        context["object"] = CDIF_Derivaciones.objects.filter(pk=pk).first()
         context["criterio"] = Criterios_IVI.objects.all()
         context['form2'] = CDIF_IndiceIviObservForm()
         return context
@@ -213,7 +213,7 @@ class CDIFIndiceIviUpdateView (PermisosMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         # Realiza la actualización del campo aquí
         pk=self.kwargs["pk"]
-        preadm = CDIF_PreAdmisiones.objects.filter(pk=pk).first()
+        preadm = CDIF_Derivaciones.objects.filter(pk=pk).first()
         form = self.request.POST
         for f in form:
             if f != 'observaciones':
@@ -241,12 +241,12 @@ class CDIFIndiceIviUpdateView (PermisosMixin, UpdateView):
 class CDIFIndiceIviDetailView(PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_CDIF/indiceivi_detail.html"
-    model = CDIF_PreAdmisiones
+    model = CDIF_Derivaciones
 
     def get_context_data(self, **kwargs):
         pk=self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
-        object = CDIF_PreAdmisiones.objects.filter(pk=pk).first()
+        object = CDIF_Derivaciones.objects.filter(pk=pk).first()
         criterio = CDIF_IndiceIVI.objects.filter(fk_preadmicion_id=object.id)
         observaciones = CDIF_IndiceIVI_Observ.objects.filter(fk_preadmicion_id=object.id).first()
         context["object"] = object
