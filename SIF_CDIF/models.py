@@ -7,48 +7,48 @@ from django.urls import *
 
 # Create your models here.
 
-class legajo_CDIF (models.Model):
-    fk_programa = models.ForeignKey(Programas, on_delete=models.PROTECT)
-    fk_legajo = models.ForeignKey(Legajos, on_delete=models.PROTECT)
-    nombre = models.CharField(max_length=100, unique=True)
-    estado = models.BooleanField(default=True)
-    observaciones = models.CharField(max_length=300, null=True, blank=True)
-    #creado_por = models.ForeignKey(Usuarios, related_name='creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    #modificado_por = models.ForeignKey(Usuarios, related_name='modificado_por', on_delete=models.PROTECT, blank=True, null=True)
-    creado = models.DateField(auto_now_add=True)
-    modificado = models.DateField(auto_now=True)
-
-    def __str__(self):
-        return self.nombre
-
-    def clean(self):
-        self.nombre = self.nombre.capitalize()
-
-    class Meta:
-        ordering = ['nombre']
-        verbose_name = 'Programa'
-        verbose_name_plural = "Programas"
-
-    def get_absolute_url(self):
-        return reverse('programas_ver', kwargs={'pk': self.pk})
+#class legajo_CDIF (models.Model):
+#    fk_programa = models.ForeignKey(Programas, on_delete=models.PROTECT)
+#    fk_legajo = models.ForeignKey(Legajos, on_delete=models.PROTECT)
+#    nombre = models.CharField(max_length=100, unique=True)
+#    estado = models.BooleanField(default=True)
+#    observaciones = models.CharField(max_length=300, null=True, blank=True)
+#    #creado_por = models.ForeignKey(Usuarios, related_name='creado_por', on_delete=models.PROTECT, blank=True, null=True)
+#    #modificado_por = models.ForeignKey(Usuarios, related_name='modificado_por', on_delete=models.PROTECT, blank=True, null=True)
+#    creado = models.DateField(auto_now_add=True)
+#    modificado = models.DateField(auto_now=True)
+#
+#    def __str__(self):
+#        return self.nombre
+#
+#    def clean(self):
+#        self.nombre = self.nombre.capitalize()
+#
+#    class Meta:
+#        ordering = ['nombre']
+#        verbose_name = 'Programa'
+#        verbose_name_plural = "Programas"
+#
+#    def get_absolute_url(self):
+#        return reverse('programas_ver', kwargs={'pk': self.pk})
     
-class Centros (models.Model):
-    nombre = models.CharField(max_length=250, null=False, blank=False)
-    sala = models.CharField(max_length=250, null=False, blank=False)
-    disponibles = models.IntegerField(null=False, blank=False)
+#class Centros (models.Model):
+#    nombre = models.CharField(max_length=250, null=False, blank=False)
+#    sala = models.CharField(max_length=250, null=False, blank=False)
+#    disponibles = models.IntegerField(null=False, blank=False)
+#
+#    def __str__(self):
+#        return self.nombre
+#
+#    def clean(self):
+#        self.nombre = self.nombre.capitalize()
+#
+#    class Meta:
+#        ordering = ['nombre']
+#        verbose_name = 'Centro'
+#        verbose_name_plural = "Centros"
 
-    def __str__(self):
-        return self.nombre
-
-    def clean(self):
-        self.nombre = self.nombre.capitalize()
-
-    class Meta:
-        ordering = ['nombre']
-        verbose_name = 'Centro'
-        verbose_name_plural = "Centros"
-
-class CDIF_PreAdmisiones (models.Model):
+class CDIF_Derivaciones (models.Model):
     fk_derivacion = models.ForeignKey(LegajosDerivaciones, on_delete=models.PROTECT)
     fk_legajo = models.ForeignKey(Legajos, related_name='fk_legajo', on_delete=models.CASCADE, null=True, blank=True)
     fk_legajo_1 = models.ForeignKey(Legajos, related_name='fk_legajo_1', on_delete=models.CASCADE, null=True, blank=True)
@@ -137,6 +137,7 @@ class CDIF_PreAdmisiones (models.Model):
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
     estado = models.CharField(max_length=100, null=True, blank=True)
+    tipo = models.CharField(max_length=100, null=True, blank=True)
 
 class Criterios_IVI(models.Model):
     criterio =  models.CharField(max_length=250, null=False, blank=False)
@@ -146,7 +147,7 @@ class Criterios_IVI(models.Model):
 
 class CDIF_IndiceIVI(models.Model):
     fk_criterios_ivi = models.ForeignKey(Criterios_IVI, on_delete=models.CASCADE)
-    fk_preadmicion = models.ForeignKey(CDIF_PreAdmisiones, on_delete=models.CASCADE)
+    fk_preadmicion = models.ForeignKey(CDIF_Derivaciones, on_delete=models.CASCADE)
     presencia = models.BooleanField (default=False, null=True, blank=True)
     creado_por = models.ForeignKey(Usuarios, related_name='IVI_creado_por', on_delete=models.PROTECT, blank=True, null=True)
     modificado_por = models.ForeignKey(Usuarios, related_name='IVI_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
@@ -154,5 +155,5 @@ class CDIF_IndiceIVI(models.Model):
     modificado = models.DateField(auto_now=True, null=True, blank=True)
 
 class CDIF_IndiceIVI_Observ(models.Model):
-    fk_preadmicion = models.ForeignKey(CDIF_PreAdmisiones, on_delete=models.CASCADE)
+    fk_indiceIVI = models.ForeignKey(CDIF_IndiceIVI, on_delete=models.CASCADE)
     observaciones = models.CharField(max_length=350, null=False, blank=False)

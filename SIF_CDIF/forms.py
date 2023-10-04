@@ -6,7 +6,7 @@ from .models import *
 
 class CDIF_PreadmisionesForm (forms.ModelForm):
     class Meta:
-        model = CDIF_PreAdmisiones
+        model = CDIF_Derivaciones
         fields = '__all__'
         widgets = {
             'emb_no_control_1': forms.CheckboxInput(),
