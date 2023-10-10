@@ -5,12 +5,8 @@
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right ">
     <li class="breadcrumb-item">Índices</li>
-    <li class="breadcrumb-item"><a href="{% url 'legajos_ver' object.id %}" title="Ver legajo">{{object}}</a></li>
-        {%if request.resolver_match.url_name == "CDIF_indiceivi_editar" %}
+    <li class="breadcrumb-item"><a href="{% url 'legajos_ver' object.fk_legajo_id %}" title="Ver legajo">{{object.fk_legajo}}</a></li>
         <li class="breadcrumb-item active">Editar</li>
-        {% else %}
-        <li class="breadcrumb-item active">Agregar</li>
-        {% endif %}
 </ol>
 {% endblock %};
 {% load crispy_forms_tags %}
@@ -27,13 +23,13 @@
             <div class="card-body">
                 <dl class="row mb-0">
                     <dd class="col-sm-2 mb-2">Nombre</dd>
-                    <dt class="col-sm-10 mb-2"><a href="{% url 'legajos_ver' object.id %}" title="Ver legajo">{{object}}</a></dt>
+                    <dt class="col-sm-10 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_id %}" title="Ver legajo">{{object.fk_legajo}}</a></dt>
                     <dd class="col-sm-2 mb-2">DNI</dd>
-                    <dt class="col-sm-10 mb-2">{{object.documento}}</dt>
+                    <dt class="col-sm-10 mb-2">{{object.fk_legajo.documento}}</dt>
                     <dd class="col-sm-2 mb-2">Fecha de nacimiento</dd>
-                    <dt class="col-sm-10 mb-2">{{object.fecha_nacimiento|date:'d/m/Y'}}</dt>
+                    <dt class="col-sm-10 mb-2">{{object.fk_legajo.fecha_nacimiento|date:'d/m/Y'}}</dt>
                     <dd class="col-sm-2 mb-2">Sexo</dd>
-                    <dt class="col-sm-10 mb-2">{{object.sexo}}</dt>
+                    <dt class="col-sm-10 mb-2">{{object.fk_legajo.sexo}}</dt>
                 </dl>
             </div>
         </div>
@@ -44,6 +40,7 @@
 <div class="row">
     <div class="col">
         <form class="needs-validation" novalidate method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="clave" id="clave" value="{{clave}}"> 
             <!-- Security token -->
             {% csrf_token %}
             <div class="card card-primary card-outline">
@@ -77,7 +74,7 @@
                                 <td class="text-center"><span class=" badge badge-primary px-2">{{c.modificable}}</span></td>
                                 <td class="text-center px-0">
                                     <div class="icheck-primary d-inline">
-                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}">
+                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}" {% for a in activos %}{% if a.fk_criterios_ivi_id == c.id %} checked {% endif %}{% endfor %}>
                                         <label for="{{c.id}}"></label>
                                     </div>
                                 </td>
@@ -95,7 +92,7 @@
                                 <td class="text-center"><span class=" badge badge-primary px-2">{{c.modificable}}</span></td>
                                 <td class="text-center px-0">
                                     <div class="icheck-primary d-inline">
-                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}">
+                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}" {% for a in activos %}{% if a.fk_criterios_ivi_id == c.id %} checked {% endif %}{% endfor %}>
                                         <label for="{{c.id}}"></label>
                                     </div>
                                 </td>
@@ -113,7 +110,7 @@
                                 <td class="text-center"><span class=" badge badge-primary px-2">{{c.modificable}}</span></td>
                                 <td class="text-center px-0">
                                     <div class="icheck-primary d-inline">
-                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}">
+                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}" {% for a in activos %}{% if a.fk_criterios_ivi_id == c.id %} checked {% endif %}{% endfor %}>
                                         <label for="{{c.id}}"></label>
                                     </div>
                                 </td>
@@ -131,7 +128,7 @@
                                 <td class="text-center"><span class=" badge badge-primary px-2">{{c.modificable}}</span></td>
                                 <td class="text-center px-0">
                                     <div class="icheck-primary d-inline">
-                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}">
+                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}" {% for a in activos %}{% if a.fk_criterios_ivi_id == c.id %} checked {% endif %}{% endfor %}>
                                         <label for="{{c.id}}"></label>
                                     </div>
                                 </td>
@@ -145,7 +142,7 @@
                 <div class="col-12 mt-5 mb-3">
                     <div class="form-group">
                         <label>Observaciones</label>
-                        <textarea class="form-control" rows="3" placeholder="" id="observaciones_id" name="observaciones"></textarea>
+                        <textarea class="form-control" rows="3" placeholder="" id="observaciones_id" name="observaciones">{{observaciones}}</textarea>
                     </div>
                 </div>
             </div>

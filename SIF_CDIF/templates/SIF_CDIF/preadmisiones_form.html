@@ -67,11 +67,12 @@
                     <form novalidate method="POST" enctype="multipart/form-data">
                         <!-- Security token -->
                         {% csrf_token %}
-                        <input type="hidden" id="fk_derivacion_id" name="fk_derivacion" value={{pk}}>
+                        <input type="hidden" id="id_fk_derivacion" name="fk_derivacion" value={{pk}}>
+                        <input type="hidden" id="id_fk_legajo" name="fk_legajo" value={{legajo.fk_legajo.id}}>
                         {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                        <input type="hidden" id="modificado_pod_id" name="modificado_por" value={{ user.id }}>
+                        <input type="hidden" id="id_modificado_por" name="modificado_por" value={{ user.id }}>
                         {% else %}
-                        <input type="hidden" id="creado_por_id" name="creado_por" value={{ user.id }}>
+                        <input type="hidden" id="id_creado_por" name="creado_por" value={{ user.id }}>
                         {% endif %}
                     <div class="bs-stepper-content">
 
@@ -94,24 +95,23 @@
                                                     <div class="col-sm-3 form-group">
                                                         <label>Madre o cuidador principal</label>
                                                         <select name="fk_legajo_1" class="form-control custom-select" id="id_fk_legajo_1">
-                                                            <option value="" selected=""></option>
+                                                            <option value=""></option>
                                                             {% for f in familia %}
                                                             <option value="{{f.fk_legajo_1.id}}">{{f.fk_legajo_1}}</option>
                                                             {% endfor %}
                                                           </select>
-                                                          {{form.fk_legajo_1| as_crispy_field}}
                                                     </div>
                                                     <div class="col-sm-3 form-group">
-                                                        <label>Vínculo con el niño, niña o bebé</label>
-                                                        {{form.vinculo_1| as_crispy_field}}
+                                                        <label>Vínculo</label>
+                                                        <input type="text" class="form-control" id="vinculo" readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
-                                                        <label>Tipo</label>
-                                                        {{form.tipo_doc_1| as_crispy_field}}
+                                                        <label>Tipo de documento</label>
+                                                        <input type="text" class="form-control" id="tipo_doc" readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
-                                                        <label>Número documento</label>
-                                                        {{form.documento_1| as_crispy_field}}
+                                                        <label>Numero documento</label>
+                                                        <input type="text" class="form-control" id="documento" readonly>
                                                     </div>
 
                                                 </div>
@@ -315,16 +315,16 @@
                                                           </select>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
-                                                        <label>Vínculo con el niño, niña o bebé</label>
-                                                        {{form.vinculo_2| as_crispy_field}}
+                                                        <label>Vínculo</label>
+                                                        <input type="text" class="form-control" id="vinculo2" readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
-                                                        <label>Tipo documento</label>
-                                                        {{form.tipo_doc_2| as_crispy_field}}
+                                                        <label>Tipo de documento</label>
+                                                        <input type="text" class="form-control" id="tipo_doc2" readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
-                                                        <label>Número documento</label>
-                                                        {{form.documento_2| as_crispy_field}}
+                                                        <label>Numero documento</label>
+                                                        <input type="text" class="form-control" id="documento2" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -442,16 +442,16 @@
                                                           </select>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
-                                                        <label>Vínculo con el niño, niña o bebé</label>
-                                                        {{form.vinculo_3| as_crispy_field}}
+                                                        <label>Vínculo</label>
+                                                        <input type="text" class="form-control" id="vinculo3" readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
-                                                        <label>Tipo documento</label>
-                                                        {{form.tipo_doc_3| as_crispy_field}}
+                                                        <label>Tipo de documento</label>
+                                                        <input type="text" class="form-control" id="tipo_doc3" readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
-                                                        <label>Número documento</label>
-                                                        {{form.documento_3| as_crispy_field}}
+                                                        <label>Numero documento</label>
+                                                        <input type="text" class="form-control" id="documento3" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -530,16 +530,16 @@
                                                           </select>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
-                                                        <label>Vínculo con el niño, niña o bebé</label>
-                                                        {{form.vinculo_4| as_crispy_field}}
+                                                        <label>Vínculo</label>
+                                                        <input type="text" class="form-control" id="vinculo4" readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
-                                                        <label>Tipo documento</label>
-                                                        {{form.tipo_doc_4| as_crispy_field}}
+                                                        <label>Tipo de documento</label>
+                                                        <input type="text" class="form-control" id="tipo_doc4" readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
-                                                        <label>Número documento</label>
-                                                        {{form.documento_4| as_crispy_field}}
+                                                        <label>Numero documento</label>
+                                                        <input type="text" class="form-control" id="documento4" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -618,16 +618,16 @@
                                                           </select>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
-                                                        <label>Vínculo con el niño, niña o bebé</label>
-                                                        {{form.vinculo_5| as_crispy_field}}
+                                                        <label>Vínculo</label>
+                                                        <input type="text" class="form-control" id="vinculo5" readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
-                                                        <label>Tipo documento</label>
-                                                        {{form.tipo_doc_5| as_crispy_field}}
+                                                        <label>Tipo de documento</label>
+                                                        <input type="text" class="form-control" id="tipo_doc5" readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
-                                                        <label>Número documento</label>
-                                                        {{form.documento_5| as_crispy_field}}
+                                                        <label>Numero documento</label>
+                                                        <input type="text" class="form-control" id="documento5" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -728,6 +728,101 @@
     //Date picker
     $('#reservationdate').datetimepicker({
         format: 'L'
+    });
+</script>
+<script>
+    // Asocia un evento change al SELECT
+    $('#id_fk_legajo_1').change(function() {
+        // Obtiene el valor seleccionado
+        var seleccion = $(this).val();
+        var tipo_doc = document.getElementById("tipo_doc");
+        var documento = document.getElementById("documento");
+        var vinculo = document.getElementById("vinculo");
+
+        // Lógica para determinar el contenido del div basado en la selección
+        {% for f in familia %}
+        if (seleccion === '{{f.fk_legajo_1.id}}') {
+            tipo_doc.value = '{{f.fk_legajo_1.tipo_doc}}';
+            documento.value = '{{f.fk_legajo_1.documento}}';
+            vinculo.value = '{{f.vinculo_inverso}}';
+        }
+        {% endfor %}
+    });
+</script>
+<script>
+    // Asocia un evento change al SELECT
+    $('#id_fk_legajo_2').change(function() {
+        // Obtiene el valor seleccionado
+        var seleccion = $(this).val();
+        var tipo_doc = document.getElementById("tipo_doc2");
+        var documento = document.getElementById("documento2");
+        var vinculo = document.getElementById("vinculo2");
+
+        // Lógica para determinar el contenido del div basado en la selección
+        {% for f in familia %}
+        if (seleccion === '{{f.fk_legajo_1.id}}') {
+            tipo_doc.value = '{{f.fk_legajo_1.tipo_doc}}';
+            documento.value = '{{f.fk_legajo_1.documento}}';
+            vinculo.value = '{{f.vinculo_inverso}}';
+        }
+        {% endfor %}
+    });
+</script>
+<script>
+    // Asocia un evento change al SELECT
+    $('#id_fk_legajo_3').change(function() {
+        // Obtiene el valor seleccionado
+        var seleccion = $(this).val();
+        var tipo_doc = document.getElementById("tipo_doc3");
+        var documento = document.getElementById("documento3");
+        var vinculo = document.getElementById("vinculo3");
+
+        // Lógica para determinar el contenido del div basado en la selección
+        {% for f in familia %}
+        if (seleccion === '{{f.fk_legajo_1.id}}') {
+            tipo_doc.value = '{{f.fk_legajo_1.tipo_doc}}';
+            documento.value = '{{f.fk_legajo_1.documento}}';
+            vinculo.value = '{{f.vinculo_inverso}}';
+        }
+        {% endfor %}
+    });
+</script>
+<script>
+    // Asocia un evento change al SELECT
+    $('#id_fk_legajo_4').change(function() {
+        // Obtiene el valor seleccionado
+        var seleccion = $(this).val();
+        var tipo_doc = document.getElementById("tipo_doc4");
+        var documento = document.getElementById("documento4");
+        var vinculo = document.getElementById("vinculo4");
+
+        // Lógica para determinar el contenido del div basado en la selección
+        {% for f in familia %}
+        if (seleccion === '{{f.fk_legajo_1.id}}') {
+            tipo_doc.value = '{{f.fk_legajo_1.tipo_doc}}';
+            documento.value = '{{f.fk_legajo_1.documento}}';
+            vinculo.value = '{{f.vinculo_inverso}}';
+        }
+        {% endfor %}
+    });
+</script>
+<script>
+    // Asocia un evento change al SELECT
+    $('#id_fk_legajo_5').change(function() {
+        // Obtiene el valor seleccionado
+        var seleccion = $(this).val();
+        var tipo_doc = document.getElementById("tipo_doc5");
+        var documento = document.getElementById("documento5");
+        var vinculo = document.getElementById("vinculo5");
+
+        // Lógica para determinar el contenido del div basado en la selección
+        {% for f in familia %}
+        if (seleccion === '{{f.fk_legajo_1.id}}') {
+            tipo_doc.value = '{{f.fk_legajo_1.tipo_doc}}';
+            documento.value = '{{f.fk_legajo_1.documento}}';
+            vinculo.value = '{{f.vinculo_inverso}}';
+        }
+        {% endfor %}
     });
 </script>
 {% endblock %}

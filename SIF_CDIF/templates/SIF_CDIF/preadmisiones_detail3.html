@@ -2,18 +2,17 @@
 {% load static %};
 
 {% block title %}
-CDIF Pre-admisiones detalle
+Pre-admisiones formulario
 {%endblock %};
 
 {% block titulo-pagina %}
-CDIF Pre-admisiones
+Pre-admisiones
 {% endblock %};
 
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right">
-  <li class="breadcrumb-item"><a href="{% url 'preadmisiones_list'%}"
-      title="Ver historial de Pre-admisiones">CDIF Pre-admisiones</a></li>
-  <li class="breadcrumb-item "><a href="{% url 'legajos_ver' object.fk_derivacion.fk_legajo_id %}" title="Ver legajo">{{object.fk_derivacion}}</a></li>
+  <li class="breadcrumb-item"><a href="" title="Ver listado de admisiones">Admisiones</a></li>
+  <li class="breadcrumb-item "><a href={% url 'legajos_ver' object.fk_legajo_id %} title="Ver legajo">{{object.fk_legajo}}</a></li>
   <li class="breadcrumb-item active">Detalle</li>
 </ol>
 {% endblock %};
@@ -25,35 +24,27 @@ CDIF Pre-admisiones
 <!-- card-info -->
 <div class="row">
   <!-- botones -->
-  <div class="col-12 my-3 d-print-none">
+  <div class="col-12 my-3 mx-2 d-print-none">
     <div class="btn-toolbar" role="toolbar">
-    {% if object.estado == 'En proceso' %}
     <form method="post">
-        {% csrf_token %}
-        <button type="submit" name="finalizar_preadm" class="btn btn-primary mr-1" >Finalizar</button>
-    </form>
-    <a href="{% url 'CDIF_preadmisiones_editar' object.pk %}" class="btn btn-secondary mr-1">Editar</a>
+      {% csrf_token %}
+      <button type="submit" name="admitir" class="btn btn-primary mr-1" >Admitir</button>
+  </form>
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
-    <a href="" class="btn btn-danger mr-1 mt-2 mt-sm-0">Eliminar</a>
-    {% endif %}
-    {% if object.estado == 'Finalizada' %}
-    <a href="{% url 'CDIF_indiceivi_crear' object.fk_derivacion.fk_legajo_id %}" class="btn btn-primary mr-1">Generar IVI</a>
-    <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
-    {% endif %}
-    </div>
   </div>
+</div>
   <!-- ./botones -->
 
   <div class="row p-0 m-0 " id="seleccion">
 
 
-    <!-- Datos de Admisión -->
+    <!-- Datos de pre-admisión -->
     <div class="col-sm-4 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
-          <h3 class="card-title">Detalle pre-admisión</h3>
-          <div class="card-tools">
-            <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
+          <h3 class="card-title">Detalle Pre-admisión</h3>
+          <div class="card-tools d-inline">
+            <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
               <i class="fas fa-minus"></i>
             </button>
           </div>
@@ -61,7 +52,7 @@ CDIF Pre-admisiones
         <div class="card-body pb-1">
           <dl class="row mb-0">
             <dd class="col-sm-5 mb-2">Estado</dd>
-            <dt class="col-sm-7 mb-2"><span class="badge {% if object.estado == 'Finalizada' %}badge-success{% else %}badge-warning{% endif %}">{{ object.estado }}</span></dt>
+            <dt class="col-sm-7 mb-2"><span class=" badge badge-success">{{object.estado}}</span></dt>
             <dd class="col-sm-5 mb-2">Fecha de solicitud</dd>
             <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
             <dd class="col-sm-5 mb-2">Solicitud creada por</dd>
@@ -73,8 +64,10 @@ CDIF Pre-admisiones
             <dd class="col-sm-5 mb-2">Turno solicitado</dd>
             <dt class="col-sm-7 mb-2">{{object.turno_postula}}</dt>
             {% if object.modificado_por %}
-            <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Modificado por {{object.modificado_por}} - {{object.modificado|date:'d/m/Y'}}</dd>
-            {% endif %}
+            <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Modificado por {{object.modificado_por}} -
+              {{object.modificado|date:'d/m/Y'}}
+              {% endif %}
+            </dd>
           </dl>
         </div>
       </div>
@@ -95,13 +88,13 @@ CDIF Pre-admisiones
         <div class="card-body">
           <dl class="row mb-0">
             <dd class="col-sm-5 mb-2">Nombre</dd>
-            <dt class="col-sm-7 mb-2"><a href="{% url 'legajos_ver' legajo.fk_legajo.id %}" title="Ver legajo"> {{legajo}}</a> </dt>
+            <dt class="col-sm-7 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_id %}" title="Ver legajo">{{legajo}}</a> </dt>
             <dd class="col-sm-5 mb-2">DNI</dd>
-            <dt class="col-sm-7 mb-2">{{legajo.fk_legajo.documento}}</dt>
+            <dt class="col-sm-7 mb-2">{{object.fk_legajo.documento}}</dt>
             <dd class="col-sm-5 mb-2">Fecha de nacimiento</dd>
-            <dt class="col-sm-7 mb-2">{{legajo.fk_legajo.fecha_nacimiento|date:'d/m/Y'}}</dt>
+            <dt class="col-sm-7 mb-2">{{object.fk_legajo.fecha_nacimiento|date:'d/m/Y'}}</dt>
             <dd class="col-sm-5 mb-2">Sexo</dd>
-            <dt class="col-sm-7 mb-2">{{legajo.fk_legajo.sexo}}</dt>
+            <dt class="col-sm-7 mb-2">{{object.fk_legajo.sexo}}</dt>
           </dl>
         </div>
       </div>
@@ -114,42 +107,38 @@ CDIF Pre-admisiones
         <div class="card-header">
           <h3 class="card-title">Detalle IVI de ingreso</h3>
           <div class="card-tools d-inline">
-            <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
+            <a href="{% url 'CDIF_indiceivi_ver' object.id %}" class="ml-3 mr-2">Ver detalles</a>
+            <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
               <i class="fas fa-minus"></i>
             </button>
           </div>
         </div>
-        <div class="card-body p-2">
-          <ul class="products-list product-list-in-card pl-2 pr-2">
-            {% if resultado %}
-            {% for r in resultado %}
-            <li class="item p-1">
-              <a href="javascript:void(0)">
-                <div class="product-img h4 p-0">
-                  <span class="badge badge-success float-center p-3">{{r.total}}</span>
-                </div>
-                <div class="product-info">
-                  <span class="product-title">IVI</span>
-                  <span class="product-description">
-                    {{r.programa}} | {{ r.creado|date:"d/m/Y" }}
-                  </span>
-                </div>
-              </a>
-            </li>
-            {% endfor %}
-            {% else %}
-            <h6>Sin índices.</h6>
-            {% endif %}
-          </ul>          
+        <div class="card-body pb-1">
+          <dl class="row mb-0">
+            <dd class="col-sm-7 mb-2">Puntaje</dd>
+            <dt class="col-sm-5 mb-2"><span class=" badge badge-warning">{{puntaje.total}}</span></dt>
+            <dd class="col-sm-7 mb-2">Fecha del índice</dd>
+            <dt class="col-sm-5 mb-2">{{observaciones.creado|date:'d/m/Y'}}</dt>
+            <dd class="col-sm-7 mb-2">Puntaje máximo posible</dd>
+            <dt class="col-sm-5 mb-2">{{maximo}}</dt>
+            <dd class="col-sm-7 mb-2">Criterios presentes</dd>
+            <dt class="col-sm-5 mb-2">{{cantidad}}</dt>
+            <dd class="col-sm-7 mb-2">Criterios modificables</dd>
+            <dt class="col-sm-5 mb-2">{{modificables}}</dt>
+            <dd class="col-sm-7 mb-2">Puntaje modificable</dd>
+            <dt class="col-sm-5 mb-2">{{mod_puntaje.total}}</dt>
+            <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Generado por {{observaciones.creado_por}}</dd>
+          </dl>
         </div>
 
       </div>
     </div>
+    <!-- /  -->
   </div>
   <!-- /  -->
 
-  <!-- Datos grupo familiar -->
-  <div class="col-12">
+ <!-- Datos grupo familiar -->
+ <div class="col-12">
     <div class="card card-outline card-primary">
       <div class="card-header">
         <h3 class="card-title">Detalle grupo familiar conviviente</h3>
@@ -270,9 +259,12 @@ CDIF Pre-admisiones
 <div class="row mt-4 d-print-none">
   <div class="col-12 mx-2">
     <div class="form-group  d-flex justify-content-between">
-      <a href="{% url 'CDIF_preadmisiones_listar' %}" class="btn btn-secondary">Volver</a>
+      <a href="{% url 'preadmisiones_list' %}" class="btn btn-secondary">Volver</a>
     </div>
   </div>
 </div>
 
 {% endblock %};
+
+{% block customJS %}
+{% endblock %}

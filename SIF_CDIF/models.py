@@ -48,26 +48,11 @@ from django.urls import *
 #        verbose_name = 'Centro'
 #        verbose_name_plural = "Centros"
 
-class CDIF_Derivaciones (models.Model):
+class CDIF_PreAdmision (models.Model):
     fk_derivacion = models.ForeignKey(LegajosDerivaciones, on_delete=models.PROTECT)
     fk_legajo = models.ForeignKey(Legajos, related_name='fk_legajo', on_delete=models.CASCADE, null=True, blank=True)
     fk_legajo_1 = models.ForeignKey(Legajos, related_name='fk_legajo_1', on_delete=models.CASCADE, null=True, blank=True)
     fk_legajo_2 = models.ForeignKey(Legajos, related_name='fk_legajo_2', on_delete=models.CASCADE, null=True, blank=True)
-    vinculo_1 = models.CharField(max_length=50, choices=CHOICE_VINCULO_FAMILIAR, null=True, blank=True)
-    vinculo_2 = models.CharField(max_length=50, choices=CHOICE_VINCULO_FAMILIAR, null=True, blank=True)
-    vinculo_3 = models.CharField(max_length=50, choices=CHOICE_VINCULO_FAMILIAR, null=True, blank=True)
-    vinculo_4 = models.CharField(max_length=50, choices=CHOICE_VINCULO_FAMILIAR, null=True, blank=True)
-    vinculo_5 = models.CharField(max_length=50, choices=CHOICE_VINCULO_FAMILIAR, null=True, blank=True)
-    tipo_doc_1 = models.CharField(max_length=50, choices=CHOICE_TIPO_DOC, null=True, blank=True)
-    documento_1 = models.PositiveIntegerField(validators=[MinValueValidator(3000000), MaxValueValidator(100000000)], null=True, blank=True)
-    tipo_doc_2 = models.CharField(max_length=50, choices=CHOICE_TIPO_DOC, null=True, blank=True)
-    documento_2 = models.PositiveIntegerField(validators=[MinValueValidator(3000000), MaxValueValidator(100000000)], null=True, blank=True)
-    tipo_doc_3 = models.CharField(max_length=50, choices=CHOICE_TIPO_DOC, null=True, blank=True)
-    documento_3 = models.PositiveIntegerField(validators=[MinValueValidator(3000000), MaxValueValidator(100000000)], null=True, blank=True)
-    tipo_doc_4 = models.CharField(max_length=50, choices=CHOICE_TIPO_DOC, null=True, blank=True)
-    documento_4 = models.PositiveIntegerField(validators=[MinValueValidator(3000000), MaxValueValidator(100000000)], null=True, blank=True)
-    tipo_doc_5 = models.CharField(max_length=50, choices=CHOICE_TIPO_DOC, null=True, blank=True)
-    documento_5 = models.PositiveIntegerField(validators=[MinValueValidator(3000000), MaxValueValidator(100000000)], null=True, blank=True)
     menores_a_cargo_1 = models.CharField(max_length=50, choices=CHOICE_1A5, null=True, blank=True)
     control_gine_1 =  models.CharField(max_length=50, choices=CHOICE_SINO, null=True, blank=True)
     hijos_1 = models.CharField(max_length=50, choices=CHOICE_1A5, null=True, blank=True)
@@ -129,7 +114,7 @@ class CDIF_Derivaciones (models.Model):
     retomar_estudios_5 = models.BooleanField(verbose_name='Quiere retomar estudios', null=True, blank=True)
     aprender_oficio_5 = models.BooleanField(verbose_name='Quiere aprender un oficio', null=True, blank=True)
     programa_Pilares_5 = models.BooleanField(verbose_name='Quiere participar del Programa Pilares', null=True, blank=True)
-    centro_postula = models.ForeignKey(Organismos, on_delete=models.CASCADE, null=True, blank=True)
+    centro_postula = models.ForeignKey(Vacantes, on_delete=models.CASCADE, null=True, blank=True)
     sala_postula =  models.CharField(max_length=150, choices=CHOICE_SALA_POSTULA, null=True, blank=True)
     turno_postula =  models.CharField(max_length=150, choices=CHOICE_TURNO_POSTULA, null=True, blank=True)
     creado_por = models.ForeignKey(Usuarios, related_name='PreAdm_creado_por', on_delete=models.PROTECT, blank=True, null=True)
@@ -144,16 +129,94 @@ class Criterios_IVI(models.Model):
     tipo =  models.CharField(max_length=250, choices=CHOICE_TIPO_IVI, null=False, blank=False)
     puntaje =  models.SmallIntegerField(null=False, blank=False)
     modificable =  models.CharField(max_length=50, choices=CHOICE_NOSI, null=False, blank=False)
+    
+    def __str__(self):
+        return self.criterio
 
 class CDIF_IndiceIVI(models.Model):
     fk_criterios_ivi = models.ForeignKey(Criterios_IVI, on_delete=models.CASCADE)
-    fk_preadmicion = models.ForeignKey(CDIF_Derivaciones, on_delete=models.CASCADE)
+    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, null=True, blank=True)
+    fk_derivacion = models.ForeignKey(CDIF_PreAdmision, on_delete=models.CASCADE, null=True, blank=True)
     presencia = models.BooleanField (default=False, null=True, blank=True)
+    programa = models.CharField(max_length=150, choices=CHOICE_NOSI, null=True, blank=True)
+    clave = models.CharField (max_length=350, null=True, blank=True)
+    creado = models.DateField(auto_now_add=True, null=True, blank=True)
+    modificado = models.DateField(auto_now=True, null=True, blank=True)
+
+class CDIF_Historial_IVI(models.Model):
+    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, null=True, blank=True)
+    observaciones = models.CharField(max_length=350, null=True, blank=True)
+    programa = models.CharField(max_length=150, choices=CHOICE_NOSI, null=True, blank=True)
+    puntaje_max = models.SmallIntegerField(null=True, blank=True)
+    crit_modificables = models.SmallIntegerField(null=True, blank=True)
+    crit_presentes = models.SmallIntegerField(null=True, blank=True)
+    clave = models.CharField (max_length=350, null=True, blank=True)
     creado_por = models.ForeignKey(Usuarios, related_name='IVI_creado_por', on_delete=models.PROTECT, blank=True, null=True)
     modificado_por = models.ForeignKey(Usuarios, related_name='IVI_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
+ 
+class CDIF_Vacantes(models.Model):
+    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, null=True, blank=True)
+    fk_derivacion = models.ForeignKey(CDIF_PreAdmision, on_delete=models.CASCADE, null=True, blank=True)
+    fk_vacantes = models.ForeignKey(Vacantes, on_delete=models.CASCADE, null=True, blank=True)
+    organizacion = models.CharField(max_length=100)
+    sala = models.CharField(max_length=100)
+    estado = models.CharField(max_length=100)
+    creado = models.DateField(auto_now_add=True, null=True, blank=True)
+    modificado = models.DateField(auto_now=True, null=True, blank=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='Vacante_creado_por', on_delete=models.PROTECT, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='Vacante_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
 
-class CDIF_IndiceIVI_Observ(models.Model):
-    fk_indiceIVI = models.ForeignKey(CDIF_IndiceIVI, on_delete=models.CASCADE)
-    observaciones = models.CharField(max_length=350, null=False, blank=False)
+    def __str__(self):
+        return f'{self.organizacion} - Sala {self.sala}'
+
+
+class CDIF_Admision(models.Model):
+    fk_preadmi = models.ForeignKey(CDIF_PreAdmision, on_delete=models.CASCADE)
+    estado_vacante = models.CharField(max_length=150, null=True, blank=True)
+    estado = models.CharField(max_length=150, null=True, blank=True, default="Activa")
+    creado = models.DateField(auto_now_add=True, null=True, blank=True)
+    modificado = models.DateField(auto_now=True, null=True, blank=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='Admision_creado_por', on_delete=models.PROTECT, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='Admision_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
+
+class CDIF_VacantesOtorgadas (models.Model):
+    fk_admision = models.ForeignKey(CDIF_Admision, on_delete=models.CASCADE)
+    fk_organismo = models.ForeignKey(Vacantes, on_delete=models.CASCADE)
+    sala = models.CharField(max_length=150, null=False, blank=False)
+    turno = models.CharField(max_length=150, null=False, blank=False)
+    educador = models.CharField(max_length=150, null=True, blank=True)
+    estado_vacante = models.CharField(max_length=150, null=True, blank=True, default="Asignada")
+    fecha_ingreso = models.DateField(null=False, blank=False)
+    fecha_egreso = models.DateField(null=True, blank=True)
+    motivo = models.CharField(max_length=100, null=True, blank=True)
+    detalles = models.CharField(max_length=350, null=True, blank=True)
+    evento = models.CharField(max_length=100, null=True, blank=True)
+    creado = models.DateField(auto_now_add=True, null=True, blank=True)
+    modificado = models.DateField(auto_now=True, null=True, blank=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='VacanteOtorgada_creado_por', on_delete=models.PROTECT, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='VacanteOtorgada_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
+
+class CDIF_Intervenciones(models.Model):
+    fk_admision = models.ForeignKey(CDIF_Admision, on_delete=models.CASCADE, null=True, blank=True)
+    criterio_modificable = models.ForeignKey(Criterios_IVI, on_delete=models.CASCADE)
+    accion = models.CharField(max_length=250, choices=CHOICE_ACCION_DESARROLLADA, null=False, blank=False)
+    responsables = models.CharField(max_length=250, choices=CHOICE_RESPONSABLES, null=False, blank=False)
+    impacto = models.CharField(max_length=250, choices=[('Trabajado','Trabajado'),('Revertido','Revertido')], null=False, blank=False)
+    detalle = models.CharField(max_length=350, null=True, blank=True)
+    creado = models.DateField(auto_now_add=True, null=True, blank=True)
+    modificado = models.DateField(auto_now=True, null=True, blank=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='Intervenciones_creado_por', on_delete=models.PROTECT, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='Intervenciones_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
+
+
+class CDIF_Historial(models.Model):
+    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, null=True, blank=True)
+    fk_legajo_derivacion = models.ForeignKey(LegajosDerivaciones, on_delete=models.CASCADE, null=True, blank=True)
+    fk_preadmi = models.ForeignKey(CDIF_PreAdmision, on_delete=models.CASCADE, null=True, blank=True)
+    fk_admision = models.ForeignKey(CDIF_Admision, on_delete=models.CASCADE, null=True, blank=True)
+    movimiento = models.CharField(max_length=150, null=True, blank=True)
+    creado = models.DateField(auto_now_add=True, null=True, blank=True)
+    creado_por = models.ForeignKey(Usuarios, on_delete=models.CASCADE, null=True, blank=True)
+

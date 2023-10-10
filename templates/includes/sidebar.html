@@ -231,17 +231,17 @@
 			</a>
 		</li>
 		<li class="nav-item">
-			<a href="{% url 'vacantesxcentro' %}"
-				class="nav-link {% if 'vacantes' in pagina_actual %}active{% endif %}">
-				<i class="nav-icon fas fa-sign-in-alt"></i>
-				<p>Vacantes</p>
-			</a>
-		</li>
-		<li class="nav-item">
 			<a href="{% url 'admisiones_list' %}"
 				class="nav-link  {% if '/admisiones' in pagina_actual %}active{% endif %}">
 				<i class="nav-icon fas fa-id-badge"></i>
 				<p>Admisiones</p>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="{% url 'CDIF_vacantes_listar' %}"
+				class="nav-link {% if 'vacantes' in pagina_actual %}active{% endif %}">
+				<i class="nav-icon fas fa-sign-in-alt"></i>
+				<p>Vacantes</p>
 			</a>
 		</li>
 		<li class="nav-item">
