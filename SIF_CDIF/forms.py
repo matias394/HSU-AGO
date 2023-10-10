@@ -128,7 +128,7 @@ class CDIF_IntervencionesForm (forms.ModelForm):
         fields = '__all__'
         widgets = {
             'detalle': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
-            'responsables' : forms.SelectMultiple(attrs={'class': 'select2 w-100', 'multiple': True}),
+            'responsable' : forms.SelectMultiple(attrs={'class': 'select2 w-100', 'multiple': True}),
         }
         labels = {
             'criterio_modificable': 'Criterio modificable trabajado',
@@ -142,3 +142,10 @@ class CDIF_IntervencionesForm (forms.ModelForm):
         
         # Filtra las opciones del campo criterio_modificable aquí
         self.fields['criterio_modificable'].queryset = Criterios_IVI.objects.filter(modificable = "Si")
+
+class CDIF_OpcionesResponsablesForm (forms.ModelForm):
+    class Meta:
+        model = OpcionesResponsables
+        fields = '__all__'
+        widgets = {}
+        labels = {}

@@ -104,28 +104,28 @@ Intervenciones
       <div class="row h-100">
         <div class="col-12">
           <div class="info-box mb-2">
-            <span class="info-box-icon bg-warning">17</span>
+            <span class="info-box-icon bg-warning">{{puntaje.total}}</span>
             <div class="info-box-content">
               <span class="info-box-text">IVI de ingreso</span>
-              <span class="info-box-number h6">15/05/2023</span>
+              <span class="info-box-number h6">{{observaciones.creado|date:'d/m/Y'}}</span>
             </div>
           </div>
         </div>
         <div class="col-12">
           <div class="info-box mb-2 ">
-            <span class="info-box-icon bg-secondary">5</span>
+            <span class="info-box-icon bg-secondary">{{intervenciones_count}}</span>
             <div class="info-box-content">
               <span class="info-box-text">Intervenciones</span>
-              <span class="info-box-number h6"> Última 12/06/2023</span>
+              <span class="info-box-number h6"> {{intervenciones_last|date:'d/m/Y'|default:'-'}}</span>
             </div>
           </div>
         </div>
         <div class="col-12">
           <div class="info-box">
-            <span class="info-box-icon bg-success">12</span>
+            <span class="info-box-icon bg-success">{{puntaje2.total}}</span>
             <div class="info-box-content">
               <span class="info-box-text">IVI actual</span>
-              <span class="info-box-number h6">11/06/2023</span>
+              <span class="info-box-number h6">{{observaciones2.creado|date:'d/m/Y'}}</span>
             </div>
           </div>
         </div>
@@ -151,63 +151,19 @@ Intervenciones
               </tr>
             </thead>
             <tbody>
+                {% for i in intervenciones %}
               <tr>
-                <td> 12/06/2023 </td>
-                <td> Azcurra Maria Luz </td>
-                <td> Bebé, niño o niña con bajo peso o sobrepeso</td>
-                <td> Revertido</td>
-                <td> Se realizo un control del niño sano</td>
+                <td> {{i.creado|date:'d/m/Y' }} </td>
+                <td> {{i.creado_por}} </td>
+                <td> {{i.criterio_modificable}}</td>
+                <td> {{i.impacto}}</td>
+                <td> {{i.accion}}</td>
                 <td class="text-right">
-                  <a href="{% url 'intervenciones_detail' %}" class="btn btn-secondary btn-sm ver"
+                  <a href="{% url 'CDIF_intervencion_ver' i.id %}" class="btn btn-secondary btn-sm ver"
                     title="Ver detalle">Ver</a>
                 </td>
               </tr>
-              <tr>
-                <td> 15/05/2023 </td>
-                <td> Azcurra Maria Luz </td>
-                <td> Niño o niña sin DNI</td>
-                <td> Trabajado</td>
-                <td> Se la acompaño a realizar el tramite </td>
-                <td class="text-right">
-                  <a href="{% url 'intervenciones_detail' %}" class="btn btn-secondary btn-sm ver"
-                    title="Ver detalle">Ver</a>
-                </td>
-              </tr>
-              <tr>
-                <td> 15/05/2023 </td>
-                <td> Azcurra Maria Luz </td>
-                <td> Bebé, niño o niña con bajo peso o sobrepeso</td>
-                <td> Trabajado </td>
-                <td> Se brindo información </td>
-                <td class="text-right">
-                  <a href="{% url 'intervenciones_detail' %}" class="btn btn-secondary btn-sm ver"
-                    title="Ver detalle">Ver</a>
-                </td>
-              </tr>
-              <tr>
-                <td> 15/05/2023 </td>
-                <td> Azcurra Maria Luz </td>
-                <td> Niño o niña sin controles pediátricos o calendario de vacunación incompleto</td>
-                <td> Trabajado</td>
-                <td> Se articulo con una institución no municipal</td>
-                <td class="text-right">
-                  <a href="{% url 'intervenciones_detail' %}" class="btn btn-secondary btn-sm ver"
-                    title="Ver detalle">Ver</a>
-                </td>
-              </tr>
-              <tr>
-                <td> 15/05/2023 </td>
-                <td> Azcurra Maria Luz </td>
-                <td> Familia atravesando situación habitacional crítica <span
-                    class="badge badge-success mx-2">Nuevo</span></td>
-                <td> Trabajado</td>
-                <td> Se articulo con una institución no municipal</td>
-                <td class="text-right">
-                  <a href="{% url 'intervenciones_detail' %}" class="btn btn-secondary btn-sm ver"
-                    title="Ver detalle">Ver</a>
-                </td>
-              </tr>
-
+              {% endfor %}
             </tbody>
           </table>
         </div>
