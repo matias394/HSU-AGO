@@ -452,20 +452,24 @@ class LegajosDerivaciones(models.Model):
 
     fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE)
     fk_programa = models.ForeignKey(Programas, on_delete=models.PROTECT)
+    fk_organismo = models.ForeignKey(Organismos, on_delete=models.PROTECT, null=True, blank=True)
     detalles = models.CharField(max_length=500)
     fk_usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     importancia = models.CharField(max_length=15, choices=CHOICE_IMPORTANCIA, default="Alta")
     estado = models.CharField(max_length=15, choices=CHOICE_ESTADO_DERIVACION, default="Pendiente")
     m2m_alertas = models.ManyToManyField(CategoriaAlertas, blank=True)
-    fk_organismo = models.ForeignKey(Organismos, on_delete=models.PROTECT, null=True, blank=True)
     archivos = models.FileField(upload_to='legajos/archivos', null=True, blank=True)
-    fecha = models.DateField(auto_now=True)
+    motivo_rechazo = models.CharField(max_length=150, choices=CHOICE_RECHAZO)
+    obs_rechazo = models.CharField(max_length=350, null=False, blank=False)
+    fecha_rechazo = models.DateField(null=True, blank=True)
+    fecha_creado = models.DateField(auto_now_add=True, null=True, blank=True)
+    fecha_modificado = models.DateField(auto_now=True)
 
     def __str__(self):
         return self.fk_legajo.apellido + ', ' + self.fk_legajo.nombre
 
     class Meta:
-        ordering = ['-fecha']
+        ordering = ['-fecha_creado']
         verbose_name = 'LegajoDerivacion'
         verbose_name_plural = 'LegajosDerivaciones'
 

@@ -6,7 +6,7 @@ from .models import *
 
 class CDIF_PreadmisionesForm (forms.ModelForm):
     class Meta:
-        model = CDIF_Derivaciones
+        model = CDIF_PreAdmision
         fields = '__all__'
         widgets = {
             'emb_no_control_1': forms.CheckboxInput(),
@@ -43,9 +43,6 @@ class CDIF_PreadmisionesForm (forms.ModelForm):
         }
         labels = {
             'fk_legajo_1':'',
-            'vinculo_1':'',
-            'tipo_doc_1':'',
-            'documento_1':'',
             'menores_a_cargo_1':'',
             'control_gine_1':'',
             'embarazos_1':'',
@@ -57,30 +54,26 @@ class CDIF_PreadmisionesForm (forms.ModelForm):
             'emb_actual_1':'',
             'educ_maximo_1':'',
             'educ_estado_1':'',
+            'educ_maximo_2':'',
+            'educ_estado_2':'',
+            'educ_maximo_3':'',
+            'educ_estado_3':'',
+            'educ_maximo_4':'',
+            'educ_estado_4':'',
+            'educ_maximo_5':'',
+            'educ_estado_5':'',
             'planes_sociales_1':'',
             'trabajo_actual_1':'',
             'ocupacion_1':'',
             'modo_contrat_1':'',
             'fk_legajo_2':'',
-            'vinculo_2':'',
-            'tipo_doc_2':'',
-            'documento_2':'',
             'planes_sociales_2':'',
             'trabajo_actual_2':'',
             'modo_contrat_2':'',
             'ocupacion_2':'',
             'fk_legajo_3':'',
-            'vinculo_3':'',
-            'tipo_doc_3':'',
-            'documento_3':'',
             'fk_legajo_4':'',
-            'vinculo_4':'',
-            'tipo_doc_4':'',
-            'documento_4':'',
             'fk_legajo_5':'',
-            'vinculo_5':'',
-            'tipo_doc_5':'',
-            'documento_5':'',
             'centro_postula':'',
             'sala_postula':'',
             'turno_postula':'',
@@ -100,9 +93,52 @@ class CDIF_IndiceIviForm (forms.ModelForm):
         widgets = {}
         labels = {}
 
-class CDIF_IndiceIviObservForm (forms.ModelForm):
+class CDIF_IndiceIviHistorialForm (forms.ModelForm):
     class Meta:
-        model = CDIF_IndiceIVI_Observ
+        model = CDIF_Historial_IVI
         fields = '__all__'
         widgets = {}
         labels = {}
+
+class CDIF_VacantesOtorgadasForm (forms.ModelForm):
+    class Meta:
+        model = CDIF_VacantesOtorgadas
+        fields = '__all__'
+        widgets = {
+            'fecha_ingreso': forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
+            'sala': forms.Select(choices=[('', ''),('Bebes', 'Bebés'), ('2', '2'), ('3', '3')]),
+            'turno': forms.Select(choices=[('', ''), ('Mañana', 'Mañana'), ('Tarde', 'Tarde')]),
+            'fecha_egreso': forms.DateInput(attrs={'type': 'date','required':'required'}, format="%Y-%m-%d"),
+            'motivo': forms.Select(choices=[('', ''),('Cambio de ciclo', 'Cambio de ciclo'), ('Cambio de turno', 'Cambio de turno'), ('Cambio de centro', 'Cambio de centro')]),
+            'detalles': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
+        }
+        labels = {
+            'fk_organismo':'Centro al que ingresa',
+            'sala':'Sala a la que ingresa',
+            'turno':'Turno al que ingresa',
+            'educador':'Educador/a',
+            'fecha_egreso':'Fecha de egreso*',
+            'motivo':'Motivo principal',
+            'detalles':'Detalles',
+        }
+
+class CDIF_IntervencionesForm (forms.ModelForm):
+    class Meta:
+        model = CDIF_Intervenciones
+        fields = '__all__'
+        widgets = {
+            'detalle': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
+            'responsables' : forms.SelectMultiple(attrs={'class': 'select2 w-100', 'multiple': True}),
+        }
+        labels = {
+            'criterio_modificable': 'Criterio modificable trabajado',
+            'impacto': 'Impacto en el criterio',
+            'accion': 'Acción desarrollada',
+            'detalle':'Detalles',
+        }
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Filtra las opciones del campo criterio_modificable aquí
+        self.fields['criterio_modificable'].queryset = Criterios_IVI.objects.filter(modificable = "Si")

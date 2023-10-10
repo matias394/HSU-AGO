@@ -26,8 +26,10 @@ Derivaciones
 <div class="row">
   <!-- botones -->
   <div class="col-12 my-3 mx-2 d-print-none">
+    {% if object.estado == "Pendiente" %}
     <a href="{% url 'CDIF_preadmisiones_crear' object.pk %}" class="btn btn-primary mr-1 ">Aceptar</a>
-    <a href="{% url 'derivaciones_con_motivo' %}" class="btn btn-secondary mr-1 ">Rechazar</a>
+    <a href="{% url 'CDIF_derivaciones_rechazo'  object.pk %}" class="btn btn-secondary mr-1 ">Rechazar</a>
+    {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
   </div>
   <!-- ./botones -->
@@ -109,52 +111,34 @@ Derivaciones
         <div class="card-header">
           <h3 class="card-title">Detalle Índices</h3>
           <div class="card-tools">
-            <a href="{% url 'indice_ivi_form'%}" class="btn btn-sm btn-primary">Generar nuevo</a>
+            <!--SACANDO EL BOTON DE AGREGAR IVI POR AHORA-->
+            {% if object.estado == "Finalizada" %}
+            <a href="{% url 'CDIF_indiceivi_crear' object.fk_legajo.id %}" class="btn btn-sm btn-primary">Generar nuevo</a>
+            {% endif %}
           </div>
         </div>
         <div class="card-body p-2">
           <ul class="products-list product-list-in-card pl-2 pr-2">
+            {% if resultado %}
+            {% for r in resultado %}
             <li class="item p-1">
               <a href="javascript:void(0)">
                 <div class="product-img h4 p-0">
-                  <span class="badge badge-success float-center p-3">75</span>
+                  <span class="badge badge-success float-center p-3">{{r.total}}</span>
                 </div>
                 <div class="product-info">
                   <span class="product-title">IVI</span>
                   <span class="product-description">
-                    CDIF | 01/06/2023
+                    {{r.programa}} | {{ r.creado|date:"d/m/Y" }}
                   </span>
                 </div>
               </a>
             </li>
-            <li class="item p-1">
-              <a href="javascript:void(0)">
-                <div class="product-img h4 p-0">
-                  <span class="badge badge-warning float-center p-3">60</span>
-                </div>
-                <div class="product-info">
-                  <span class="product-title">IVI</span>
-                  <span class="product-description">
-                    CDIF | 11/05/2023
-                  </span>
-                </div>
-              </a>
-            </li>
-            <li class="item p-1">
-              <a href="javascript:void(0)">
-                <div class="product-img h4 p-0">
-                  <span class="badge badge-danger float-center p-3">43</span>
-                </div>
-                <div class="product-info">
-                  <span class="product-title">IVI</span>
-                  <span class="product-description">
-                    CDIF | 02/02/2023
-                  </span>
-                </div>
-              </a>
-            </li>
-
-          </ul>
+            {% endfor %}
+            {% else %}
+            <h6>Sin índices.</h6>
+            {% endif %}
+          </ul>          
         </div>
       </div>
       <!-- /  -->
@@ -165,7 +149,7 @@ Derivaciones
   <div class="row mt-4 d-print-none">
     <div class="col-12 mx-2">
       <div class="form-group  d-flex justify-content-between">
-        <a href="{% url 'derivaciones_historial' %}" class="btn btn-secondary">Volver</a>
+        <a href="{% url 'CDIF_derivaciones_listar' %}" class="btn btn-secondary">Volver</a>
       </div>
     </div>
   </div>

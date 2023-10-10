@@ -180,6 +180,7 @@ class LegajosDerivacionesForm(forms.ModelForm):
     class Meta:
         model = LegajosDerivaciones
         fields = '__all__'
+        exclude = ['motivo_rechazo', 'obs_rechazo', 'fecha_rechazo']
         widgets = {
             'detalles': forms.Textarea(
                 attrs={
@@ -298,4 +299,21 @@ class DimensionTrabajoForm(forms.ModelForm):
             ),
             'tiene_trabajo': forms.CheckboxInput(),
             'conviviente_trabaja': forms.CheckboxInput(),
+        }
+
+class DerivacionesRechazoForm(forms.ModelForm):
+    class Meta:
+        model = LegajosDerivaciones
+        fields = ['motivo_rechazo', 'obs_rechazo', 'fecha_rechazo']
+        widgets = {
+            'obs_rechazo': forms.Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'rows': 3,
+                }
+            ),
+        }
+        labels = {
+            'motivo_rechazo': 'Motivo de rechazo',
+            'obs_rechazo': 'Observaciones',
         }
