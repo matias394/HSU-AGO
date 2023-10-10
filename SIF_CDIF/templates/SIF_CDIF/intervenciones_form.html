@@ -94,7 +94,7 @@
                         </div>
                         <div class="col-sm-9">
                             <div class="form-group">
-                                {{form.responsables| as_crispy_field}}
+                                {{form.responsable| as_crispy_field}}
                             </div>
                         </div>
 
@@ -114,8 +114,8 @@
             </div>
 
             <div class="mt-4 mx-2">
-                <a href="{% url 'intervenciones_detail' %}" class="btn btn-primary mr-1">Confirmar</a>
-                <a href="{% url 'intervenciones_legajolist' %}" class="btn btn-secondary">Cancelar</a>
+                <button class="btn btn-primary mr-1">Confirmar</button>
+                <a href="{% url 'CDIF_intervenciones_legajos_listar' object.id %}" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>
     </div>

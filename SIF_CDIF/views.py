@@ -102,6 +102,10 @@ class CDIFPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
         form.instance.estado = 'En proceso'
         form.instance.creado_por_id = self.request.user.id
         self.object = form.save()
+
+        base = LegajosDerivaciones.objects.get(pk=pk)
+        base.estado = "Aceptada"
+        base.save() 
         
         #---- Historial--------------
         legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
@@ -382,7 +386,20 @@ class CDIFPreAdmisiones3DetailView(PermisosMixin, DetailView):
 
             # Redirige de nuevo a la vista de detalle actualizada
             return redirect('CDIF_admisiones_ver', redirigir)
-    
+
+class CDIFAdmisionesListView(PermisosMixin, ListView):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_CDIF/adminsiones_list.html"
+    model = CDIF_Admision
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        criterio = CDIF_IndiceIVI.objects.all()
+        admi = CDIF_Admision.objects.all()
+        context["admi"] = admi
+        context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        return context
+
 class CDIFAdmisionesDetailView(PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
     model = CDIF_Admision
@@ -391,7 +408,6 @@ class CDIFAdmisionesDetailView(PermisosMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         pk = CDIF_Admision.objects.filter(pk=self.kwargs["pk"]).first()
-
         preadmi = CDIF_PreAdmision.objects.filter(pk=pk.fk_preadmi_id).first()
         criterio = CDIF_IndiceIVI.objects.filter(fk_derivacion_id=preadmi)
         observaciones = CDIF_Historial_IVI.objects.filter(clave=criterio.first().clave).first()
@@ -517,12 +533,11 @@ class CDIFVacantesAdmisionCambio(PermisosMixin, CreateView):
 class CDIFAsignadoAdmisionDetail(PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_CDIF/asignado_admisiones_detail.html"
-    model = CDIF_VacantesOtorgadas
+    model = CDIF_Admision
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        pk = CDIF_VacantesOtorgadas.objects.filter(pk=self.kwargs["pk"]).first()
-        admi = CDIF_Admision.objects.filter(pk=pk.fk_admision_id).first()
+        admi = CDIF_Admision.objects.filter(pk=self.kwargs["pk"]).first()
 
         preadmi = CDIF_PreAdmision.objects.filter(pk=admi.fk_preadmi_id).first()
         criterio = CDIF_IndiceIVI.objects.filter(fk_derivacion_id=preadmi)
@@ -531,6 +546,8 @@ class CDIFAsignadoAdmisionDetail(PermisosMixin, DetailView):
         observaciones2 = CDIF_Historial_IVI.objects.filter(clave=criterio2.last().clave).first()
         lastVO = CDIF_VacantesOtorgadas.objects.filter(fk_admision_id=admi.id).last()
         movimientosVO =  CDIF_VacantesOtorgadas.objects.filter(fk_admision_id=admi.id).all()
+        intervenciones = CDIF_Intervenciones.objects.filter(fk_admision_id=admi.id).all()
+        intervenciones_last = CDIF_Intervenciones.objects.filter(fk_admision_id=admi.id).last()
 
 
         context["observaciones"] = observaciones
@@ -542,6 +559,8 @@ class CDIFAsignadoAdmisionDetail(PermisosMixin, DetailView):
         context["vo"] = self.object
         context["lastvo"] = lastVO
         context["movimientosVO"] = movimientosVO
+        context["intervenciones_count"] = intervenciones.count()
+        context["intervenciones_last"] = intervenciones_last
         
         return context
     
@@ -603,21 +622,73 @@ class CDIFVacantesDetailView (PermisosMixin, DetailView):
 
 class CDIFIntervencionesCreateView(PermisosMixin, CreateView):
     permission_required = "Usuarios.rol_admin"
-    model = CDIF_Admision
+    model = CDIF_Intervenciones
     template_name = "SIF_CDIF/intervenciones_form.html"
     form_class = CDIF_IntervencionesForm
 
+    def form_valid(self, form):
+            form.instance.fk_admision_id = self.kwargs["pk"]
+            form.instance.creado_por_id = self.request.user.id
+            self.object = form.save()
+        
+            # --------- HISTORIAL ---------------------------------
+            pk = self.kwargs["pk"]
+            legajo = CDIF_Admision.objects.filter(pk=pk).first()
+            base = CDIF_Historial()
+            base.fk_legajo_id = legajo.fk_preadmi.fk_legajo.id
+            base.fk_legajo_derivacion_id = legajo.fk_preadmi.fk_derivacion_id
+            base.fk_preadmi_id = legajo.fk_preadmi.pk
+            base.fk_admision_id = pk
+            base.movimiento = "INTERVENCION CREADA"
+            base.creado_por_id = self.request.user.id
+            base.save()
+
+            return redirect('CDIF_intervencion_ver', self.object.id)
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        admi = CDIF_Admision.objects.filter(pk=self.kwargs["pk"]).first()
-        lastVO = CDIF_VacantesOtorgadas.objects.filter(fk_admision_id=admi.id).last()
+        pk = CDIF_Intervenciones.objects.filter(pk=self.kwargs["pk"]).first()
+
+        context["object"] = pk
+    
+class CDIFIntervencionesUpdateView(PermisosMixin, UpdateView):
+    permission_required = "Usuarios.rol_admin"
+    model = CDIF_Intervenciones
+    template_name = "SIF_CDIF/intervenciones_form.html"
+    form_class = CDIF_IntervencionesForm
+
+    def form_valid(self, form):
+            pk = CDIF_Intervenciones.objects.filter(pk=self.kwargs["pk"]).first()
+            admi = CDIF_Admision.objects.filter(id=pk.fk_admision.id).first()
+            form.instance.fk_admision_id = admi.id
+            form.instance.modificado_por_id = self.request.user.id
+            self.object = form.save()
+        
+            # --------- HISTORIAL ---------------------------------
+            pk = self.kwargs["pk"]
+            pk = CDIF_Intervenciones.objects.filter(pk=pk).first()
+            legajo = CDIF_Admision.objects.filter(pk=pk.fk_admision_id).first()
+            base = CDIF_Historial()
+            base.fk_legajo_id = legajo.fk_preadmi.fk_legajo.id
+            base.fk_legajo_derivacion_id = legajo.fk_preadmi.fk_derivacion_id
+            base.fk_preadmi_id = legajo.fk_preadmi.pk
+            base.fk_admision_id = legajo.pk
+            base.movimiento = "INTERVENCION MODIFICADA"
+            base.creado_por_id = self.request.user.id
+            base.save()
+
+            return redirect('CDIF_intervencion_ver', self.object.id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = CDIF_Intervenciones.objects.filter(pk=self.kwargs["pk"]).first()
+        admi = CDIF_Admision.objects.filter(id=pk.fk_admision.id).first()
 
         context["object"] = admi
-        context["lastvo"] = lastVO
 
         return context
 
-class CDIFIntervencionesListView(PermisosMixin, DetailView):
+class CDIFIntervencionesLegajosListView(PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_CDIF/intervenciones_legajo_list.html"
     model = CDIF_Admision
@@ -626,8 +697,49 @@ class CDIFIntervencionesListView(PermisosMixin, DetailView):
         context = super().get_context_data(**kwargs)
         admi = CDIF_Admision.objects.filter(pk=self.kwargs["pk"]).first()
         lastVO = CDIF_VacantesOtorgadas.objects.filter(fk_admision_id=admi.id).last()
+        intervenciones = CDIF_Intervenciones.objects.filter(fk_admision_id=admi.id).all()
+        intervenciones_last = CDIF_Intervenciones.objects.filter(fk_admision_id=admi.id).last()
+        preadmi = CDIF_PreAdmision.objects.filter(pk=admi.fk_preadmi_id).first()
+        criterio = CDIF_IndiceIVI.objects.filter(fk_derivacion_id=preadmi)
+        observaciones = CDIF_Historial_IVI.objects.filter(clave=criterio.first().clave).first()
+        criterio2 = CDIF_IndiceIVI.objects.filter(fk_derivacion_id=preadmi)
+        observaciones2 = CDIF_Historial_IVI.objects.filter(clave=criterio2.last().clave).first()
 
         context["object"] = admi
         context["lastvo"] = lastVO
+        context["intervenciones"] = intervenciones
+        context["intervenciones_count"] = intervenciones.count()
+        context["intervenciones_last"] = intervenciones_last
+
+        context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["observaciones"] = observaciones
+        context["observaciones2"] = observaciones2
+        context["puntaje2"] = criterio2.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
 
         return context
+    
+class CDIFIntervencionesListView(PermisosMixin, ListView):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_CDIF/intervenciones_list.html"
+    model = CDIF_Intervenciones
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        intervenciones = CDIF_Intervenciones.objects.all()
+        context["intervenciones"] = intervenciones
+        return context
+
+class CDIFIntervencionesDetail (PermisosMixin, DetailView):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_CDIF/intervencion_detail.html"
+    model = CDIF_Intervenciones
+
+class CDIFOpcionesResponsablesCreateView(PermisosMixin, CreateView):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_CDIF/intervenciones_resposables.html"
+    model = OpcionesResponsables
+    form_class = CDIF_OpcionesResponsablesForm
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return HttpResponseRedirect(reverse('CDIF_OpcionesResponsables'))

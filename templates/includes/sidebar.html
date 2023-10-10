@@ -218,7 +218,7 @@
 	<ul class="nav nav-treeview">
 		<li class="nav-item">
 			<a href="{% url 'CDIF_derivaciones_listar' %}"
-				class="nav-link {% if 'CDIF_derivaciones_listar' in pagina_actual %}active{% endif %}">
+				class="nav-link {% if 'derivaciones' in pagina_actual %}active{% endif %}">
 				<i class="nav-icon fas fa-inbox"></i>
 				<p>Derivaciones</p>
 			</a>
@@ -231,7 +231,7 @@
 			</a>
 		</li>
 		<li class="nav-item">
-			<a href="{% url 'admisiones_list' %}"
+			<a href="{% url 'CDIF_admisiones_listar' %}"
 				class="nav-link  {% if '/admisiones' in pagina_actual %}active{% endif %}">
 				<i class="nav-icon fas fa-id-badge"></i>
 				<p>Admisiones</p>
@@ -245,7 +245,7 @@
 			</a>
 		</li>
 		<li class="nav-item">
-			<a href="{%url 'intervenciones_list' %}"
+			<a href="{%url 'CDIF_intervenciones_listar' %}"
 				class="nav-link {% if 'intervenciones' in pagina_actual %}active{% endif %}">
 				<i class="nav-icon fas fa-people-arrows"></i>
 				<p>Intervenciones</p>

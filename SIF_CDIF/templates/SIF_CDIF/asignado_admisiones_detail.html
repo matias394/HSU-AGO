@@ -25,7 +25,7 @@ Admisiones
 <div class="row">
   <!-- botones -->
   <div class="col-12 my-3 mx-2 d-print-none">
-    <a href="{% url 'CDIF_intervenciones_listar' object.id %}" class="btn btn-primary mr-1">Ver intervenciones</a>
+    <a href="{% url 'CDIF_intervenciones_legajos_listar' object.id %}" class="btn btn-primary mr-1">Ver intervenciones</a>
     <a href="{% url 'CDIF_vacantes_form_cambio' object.id %}" class="btn btn-secondary mr-1">Cambiar vacante</a>
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     <a href="{% url 'indice_ivi_formegreso' %}" class="btn btn-danger mr-1">Inactivar</a>
@@ -113,10 +113,10 @@ Admisiones
       </div>
       <div class="col-12">
         <div class="info-box py-3 ">
-          <span class="info-box-icon bg-secondary">5</span>
+          <span class="info-box-icon bg-secondary">{{intervenciones_count}}</span>
           <div class="info-box-content">
             <span class="info-box-text">Intervenciones</span>
-            <span class="info-box-number h6"> Última 12/06/2023</span>
+            <span class="info-box-number h6"> {{intervenciones_last|date:'d/m/Y'|default:'-'}}</span>
           </div>
         </div>
       </div>

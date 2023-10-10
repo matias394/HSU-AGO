@@ -198,11 +198,28 @@ class CDIF_VacantesOtorgadas (models.Model):
     creado_por = models.ForeignKey(Usuarios, related_name='VacanteOtorgada_creado_por', on_delete=models.PROTECT, blank=True, null=True)
     modificado_por = models.ForeignKey(Usuarios, related_name='VacanteOtorgada_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
 
+
+class CDIF_HistorialVacantes (models.Model):
+    fk_admision = models.ForeignKey(CDIF_Admision, on_delete=models.CASCADE)
+    fk_organismo = models.ForeignKey(Vacantes, on_delete=models.CASCADE)
+    estado = models.CharField(max_length=150, null=True, blank=True)
+    sala = models.CharField(max_length=150, null=True, blank=True)
+    creado = models.DateField(auto_now_add=True, null=True, blank=True)
+    modificado = models.DateField(auto_now=True, null=True, blank=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='HistorialVacantes_creado_por', on_delete=models.PROTECT, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='HistorialVacantes_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
+
+class OpcionesResponsables(models.Model):
+    nombre = models.CharField(max_length=250, unique=True)
+
+    def __str__(self):
+        return self.nombre
+
 class CDIF_Intervenciones(models.Model):
     fk_admision = models.ForeignKey(CDIF_Admision, on_delete=models.CASCADE, null=True, blank=True)
     criterio_modificable = models.ForeignKey(Criterios_IVI, on_delete=models.CASCADE)
     accion = models.CharField(max_length=250, choices=CHOICE_ACCION_DESARROLLADA, null=False, blank=False)
-    responsables = models.CharField(max_length=250, choices=CHOICE_RESPONSABLES, null=False, blank=False)
+    responsable = models.ManyToManyField(OpcionesResponsables)
     impacto = models.CharField(max_length=250, choices=[('Trabajado','Trabajado'),('Revertido','Revertido')], null=False, blank=False)
     detalle = models.CharField(max_length=350, null=True, blank=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
