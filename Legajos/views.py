@@ -1107,4 +1107,9 @@ class DeleteArchivo(PermisosMixin, View):
                 "mensaje" : "No fue posible eliminar el archivo."}  
 
         return JsonResponse(data)
+    
+
+  
+
+
 # endregion ###########################################################
