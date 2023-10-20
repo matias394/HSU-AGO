@@ -11,7 +11,7 @@ Derivaciones
 
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right">
-  <li class="breadcrumb-item"><a href="{% url 'legajosderivaciones_listar' %}">Derivaciones</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'legajosderivaciones_historial'  object.fk_legajo.id %}">Historial derivaciones</a></li>
   <li class="breadcrumb-item"><a href="{% url 'legajos_ver' object.fk_legajo.id %}">{{object.fk_legajo}}</a></li>
   <li class="breadcrumb-item active"> Detalle</li>
 
@@ -50,9 +50,9 @@ Derivaciones
         <div class="card-body">
           <dl class="row mb-0">
             <dt class="col-sm-3 font-weight-normal">Fecha de solicitud</dt>
-            <dd class="col-sm-9 font-weight-bold">{{object.fecha|date:"d/m/Y"}}</dd>
+            <dd class="col-sm-9 font-weight-bold">{{object.fecha_creado|date:"d/m/Y"}}</dd>
             <dt class="col-sm-3 font-weight-normal">Estado</dt>
-            <dd class="col-sm-9 font-weight-bold "><span class="badge badge-light">{{object.estado}}</span></dd>
+            <dd class="col-sm-9 font-weight-bold "><span class="badge badge-{% if object.estado == "Pendiente"%}warning{% endif %}{% if object.estado == "Aceptada"%}success{% endif %}{% if object.estado == "Rechazada"%}danger{% endif %}"> {{object.estado}} </span></dd>
             <dt class="col-sm-3 font-weight-normal">Importancia</dt>
             <dd class="col-sm-9 font-weight-bold"><span class="badge badge-gb-color">{{object.importancia}}</span></dd>
             {% if object.m2m_alertas.all.count%}
@@ -75,6 +75,14 @@ Derivaciones
             <dt class="col-sm-3 font-weight-normal">Archivos adjuntos</dt>
             <dd class="col-sm-9 font-weight-bold"><a href="{{ object.archivos.url}}" target="_blank">
                 {{object.archivos|cut:'legajos/archivos/'}}</a></dd>
+            {% endif %}
+            {% if object.estado == "Rechazada" %}
+            <dt class="col-sm-3 font-weight-normal">Fecha de rechazo</dt>
+            <dd class="col-sm-9 font-weight-bold">{{object.fecha_rechazo|date:"d/m/Y"}}</dd>
+            <dt class="col-sm-3 font-weight-normal">Motivo de rechazo</dt>
+            <dd class="col-sm-9 font-weight-bold">{{object.motivo_rechazo}}</dd>
+            <dt class="col-sm-3 font-weight-normal">Observaciones de rechazo</dt>
+            <dd class="col-sm-9 font-weight-bold">{{object.obs_rechazo}}</dd>
             {% endif %}
           </dl>
 
@@ -120,7 +128,7 @@ Derivaciones
 <!-- /card-info  -->
 <div class="row mt-4 d-print-none">
   <div class="col-12 mx-2">
-    <a href="{% url 'legajosderivaciones_listar' %}" class="btn btn-secondary">Volver</a>
+    <a href="{% url 'legajosderivaciones_historial'  object.fk_legajo.id %}" class="btn btn-secondary">Volver</a>
   </div>
 </div>
 

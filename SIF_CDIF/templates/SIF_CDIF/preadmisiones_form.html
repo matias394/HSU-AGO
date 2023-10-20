@@ -10,7 +10,7 @@
 
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"><a href="{% url 'preadmisiones_list'%}"
+    <li class="breadcrumb-item"><a href="{% url 'CDIF_derivaciones_listar'%}"
             title="Ver listado de Pre-admisiones">Pre-admisiones</a></li>
     <li class="breadcrumb-item "><a href="{% url 'legajos_ver' legajo.fk_legajo.id %}"
             title="Ver legajo">{{legajo.fk_legajo}}</a></li>
@@ -98,6 +98,9 @@
                                                             <option value=""></option>
                                                             {% for f in familia %}
                                                             <option value="{{f.fk_legajo_1.id}}">{{f.fk_legajo_1}}</option>
+                                                            {% endfor %}
+                                                            {% for f in familia_inversa %}
+                                                            <option value="{{f.fk_legajo_2.id}}">{{f.fk_legajo_2}}</option>
                                                             {% endfor %}
                                                           </select>
                                                     </div>
@@ -284,7 +287,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="{% url 'preadmisiones_list' %}"
+                            <a href="{% url 'CDIF_derivaciones_listar' %}"
                                 class="btn btn-secondary float-left mb-3 mt-5">Cancelar</a>
                                 <a class="btn btn-primary float-right mb-3 mt-5 " onclick="stepper.next()">Continuar</a>
                         </div>
@@ -311,6 +314,9 @@
                                                             <option value="" selected=""></option>
                                                             {% for f in familia %}
                                                             <option value="{{f.fk_legajo_1.id}}">{{f.fk_legajo_1}}</option>
+                                                            {% endfor %}
+                                                            {% for f in familia_inversa %}
+                                                            <option value="{{f.fk_legajo_2.id}}">{{f.fk_legajo_2}}</option>
                                                             {% endfor %}
                                                           </select>
                                                     </div>
@@ -439,6 +445,9 @@
                                                             {% for f in familia %}
                                                             <option value="{{f.fk_legajo_1.id}}">{{f.fk_legajo_1}}</option>
                                                             {% endfor %}
+                                                            {% for f in familia_inversa %}
+                                                            <option value="{{f.fk_legajo_2.id}}">{{f.fk_legajo_2}}</option>
+                                                            {% endfor %}
                                                           </select>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
@@ -527,6 +536,9 @@
                                                             {% for f in familia %}
                                                             <option value="{{f.fk_legajo_1.id}}">{{f.fk_legajo_1}}</option>
                                                             {% endfor %}
+                                                            {% for f in familia_inversa %}
+                                                            <option value="{{f.fk_legajo_2.id}}">{{f.fk_legajo_2}}</option>
+                                                            {% endfor %}
                                                           </select>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
@@ -614,6 +626,9 @@
                                                             <option value="" selected=""></option>
                                                             {% for f in familia %}
                                                             <option value="{{f.fk_legajo_1.id}}">{{f.fk_legajo_1}}</option>
+                                                            {% endfor %}
+                                                            {% for f in familia_inversa %}
+                                                            <option value="{{f.fk_legajo_2.id}}">{{f.fk_legajo_2}}</option>
                                                             {% endfor %}
                                                           </select>
                                                     </div>
@@ -747,6 +762,13 @@
             vinculo.value = '{{f.vinculo_inverso}}';
         }
         {% endfor %}
+        {% for f in familia_inversa %}
+        if (seleccion === '{{f.fk_legajo_2.id}}') {
+            tipo_doc.value = '{{f.fk_legajo_2.tipo_doc}}';
+            documento.value = '{{f.fk_legajo_2.documento}}';
+            vinculo.value = '{{f.vinculo}}';
+        }
+        {% endfor %}
     });
 </script>
 <script>
@@ -764,6 +786,13 @@
             tipo_doc.value = '{{f.fk_legajo_1.tipo_doc}}';
             documento.value = '{{f.fk_legajo_1.documento}}';
             vinculo.value = '{{f.vinculo_inverso}}';
+        }
+        {% endfor %}
+        {% for f in familia_inversa %}
+        if (seleccion === '{{f.fk_legajo_2.id}}') {
+            tipo_doc.value = '{{f.fk_legajo_2.tipo_doc}}';
+            documento.value = '{{f.fk_legajo_2.documento}}';
+            vinculo.value = '{{f.vinculo}}';
         }
         {% endfor %}
     });
@@ -785,6 +814,13 @@
             vinculo.value = '{{f.vinculo_inverso}}';
         }
         {% endfor %}
+        {% for f in familia_inversa %}
+        if (seleccion === '{{f.fk_legajo_2.id}}') {
+            tipo_doc.value = '{{f.fk_legajo_2.tipo_doc}}';
+            documento.value = '{{f.fk_legajo_2.documento}}';
+            vinculo.value = '{{f.vinculo}}';
+        }
+        {% endfor %}
     });
 </script>
 <script>
@@ -804,6 +840,13 @@
             vinculo.value = '{{f.vinculo_inverso}}';
         }
         {% endfor %}
+        {% for f in familia_inversa %}
+        if (seleccion === '{{f.fk_legajo_2.id}}') {
+            tipo_doc.value = '{{f.fk_legajo_2.tipo_doc}}';
+            documento.value = '{{f.fk_legajo_2.documento}}';
+            vinculo.value = '{{f.vinculo}}';
+        }
+        {% endfor %}
     });
 </script>
 <script>
@@ -821,6 +864,13 @@
             tipo_doc.value = '{{f.fk_legajo_1.tipo_doc}}';
             documento.value = '{{f.fk_legajo_1.documento}}';
             vinculo.value = '{{f.vinculo_inverso}}';
+        }
+        {% endfor %}
+        {% for f in familia_inversa %}
+        if (seleccion === '{{f.fk_legajo_2.id}}') {
+            tipo_doc.value = '{{f.fk_legajo_2.tipo_doc}}';
+            documento.value = '{{f.fk_legajo_2.documento}}';
+            vinculo.value = '{{f.vinculo}}';
         }
         {% endfor %}
     });

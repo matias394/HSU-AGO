@@ -16,6 +16,37 @@ from django.contrib import messages
 #derivaciones = LegajosDerivaciones.objects.filter(m2m_programas__nombr__iexact="CDIF")
 #print(derivaciones)
 
+class CDIFDerivacionesBuscarListView(TemplateView, PermisosMixin):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_CDIF/derivaciones_buscar.html"
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        object_list = Legajos.objects.none()
+        mostrar_resultados = False
+        mostrar_btn_resetear = False
+        query = self.request.GET.get("busqueda")
+        if query:
+            object_list = Legajos.objects.filter(Q(apellido__iexact=query) | Q(documento__iexact=query)).distinct()
+            if object_list and object_list.count() == 1:
+                id = None
+                for o in object_list:
+                    pk = o.id
+                return redirect("legajos_ver", pk)
+
+            if not object_list:
+                messages.warning(self.request, ("La búsqueda no arrojó resultados."))
+
+            mostrar_btn_resetear = True
+            mostrar_resultados = True
+
+        context["mostrar_resultados"] = mostrar_resultados
+        context["mostrar_btn_resetear"] = mostrar_btn_resetear
+        context["object_list"] = object_list
+
+        return self.render_to_response(context)
+
+
 class CDIFDerivacionesListView(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_CDIF/derivaciones_bandeja_list.html"
@@ -29,7 +60,6 @@ class CDIFDerivacionesListView(PermisosMixin, ListView):
         context["todas"] = model
         context["pendientes"] = model.filter(estado="Pendiente")
         context["aceptadas"] = model.filter(estado="Aceptada")
-        context["analisis"] = model.filter(estado="En análisis")
         context["rechazadas"] = model.filter(estado="Rechazada")
         context["enviadas"] = model.filter(fk_usuario=self.request.user)
         return context
@@ -90,10 +120,12 @@ class CDIFPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
+        familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
         centros = Vacantes.objects.filter(fk_programa_id=23)
         context["pk"] = pk
         context["legajo"] = legajo
         context["familia"] = familia
+        context["familia_inversa"] = familia_inversa
         context["centros"] = centros
         return context
 
@@ -101,6 +133,20 @@ class CDIFPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
         pk = self.kwargs["pk"]
         form.instance.estado = 'En proceso'
         form.instance.creado_por_id = self.request.user.id
+        sala = form.cleaned_data['sala_postula']
+        turno = form.cleaned_data['turno_postula']
+        if sala == 'Bebe' and turno == 'Mañana':
+            form.instance.sala_short = 'manianabb'
+        elif sala == 'Bebe' and turno == 'Tarde':
+            form.instance.sala_short = 'tardebb'
+        elif sala == '2' and turno == 'Mañana':
+            form.instance.sala_short = 'maniana2'
+        elif sala == '2' and turno == 'Tarde':
+            form.instance.sala_short = 'tarde2'
+        elif sala == '3' and turno == 'Mañana':
+            form.instance.sala_short = 'maniana3'
+        elif sala == '3' and turno == 'Tarde':
+            form.instance.sala_short = 'tarde3'
         self.object = form.save()
 
         base = LegajosDerivaciones.objects.get(pk=pk)
@@ -131,10 +177,13 @@ class CDIFPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin)
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(pk=pk.fk_derivacion_id).first()
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
+        familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
         centros = Vacantes.objects.filter(fk_programa_id=23)
+
         context["pk"] = pk.fk_derivacion_id
         context["legajo"] = legajo
         context["familia"] = familia
+        context["familia_inversa"] = familia_inversa
         context["centros"] = centros
         return context
 
@@ -195,6 +244,59 @@ class CDIFPreAdmisionesListView(PermisosMixin, ListView):
         pre_admi = CDIF_PreAdmision.objects.all()
         context["object"] = pre_admi
         return context
+
+class CDIFPreAdmisionesBuscarListView(PermisosMixin, TemplateView):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_CDIF/preadmisiones_buscar.html"
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        object_list = LegajosDerivaciones.objects.none()
+        mostrar_resultados = False
+        mostrar_btn_resetear = False
+        query = self.request.GET.get("busqueda")
+        if query:
+            object_list = LegajosDerivaciones.objects.filter(Q(fk_legajo__apellido__iexact=query) | Q(fk_legajo__documento__iexact=query), fk_programa_id=23).exclude(estado__in=['Rechazada','Aceptada']).distinct()
+            if not object_list:
+                messages.warning(self.request, ("La búsqueda no arrojó resultados."))
+
+            mostrar_btn_resetear = True
+            mostrar_resultados = True
+
+        context["mostrar_resultados"] = mostrar_resultados
+        context["mostrar_btn_resetear"] = mostrar_btn_resetear
+        context["object_list"] = object_list
+
+        return self.render_to_response(context)
+
+class CDIFPreAdmisionesDeleteView(PermisosMixin, DeleteView):
+    permission_required = "Usuarios.rol_admin"
+    model = CDIF_PreAdmision
+    template_name = "SIF_CDIF/preadmisiones_confirm_delete.html"
+    success_url = reverse_lazy("CDIF_preadmisiones_listar")
+
+    def form_valid(self, form):
+        if self.object.estado != "En proceso":
+            messages.error(
+                self.request,
+                "No es posible eliminar una solicitud en estado " + self.object.estado,
+            )
+
+            return redirect("CDIF_preadmisiones_ver", pk=int(self.object.id))
+
+        if self.request.user.id != self.object.creado_por.id:
+            print(self.request.user)
+            print(self.object.creado_por)
+            messages.error(
+                self.request,
+                "Solo el usuario que generó esta derivación puede eliminarla.",
+            )
+
+            return redirect("CDIF_preadmisiones_ver", pk=int(self.object.id))
+
+        else:
+            self.object.delete()
+            return redirect(self.success_url)
 
 class CDIFCriteriosIVICreateView(PermisosMixin, CreateView):
     permission_required = "Usuarios.rol_admin"
@@ -296,9 +398,6 @@ class CDIFIndiceIviUpdateView (PermisosMixin, UpdateView):
         for f in nombres_campos:
             if f.isdigit():
                 base = CDIF_IndiceIVI.objects.filter(clave=clave,fk_criterios_ivi_id = f)
-                print('-----------------------------------------')
-                print(clave)
-                print(base)
                 base.presencia = True
                 #base.save()
             if f == 'observaciones':
@@ -429,6 +528,20 @@ class CDIFVacantesAdmision(PermisosMixin, CreateView):
     form_class = CDIF_VacantesOtorgadasForm
 
     def form_valid(self, form):
+        sala = form.cleaned_data['sala']
+        turno = form.cleaned_data['turno']
+        if sala == 'Bebe' and turno == 'Mañana':
+            form.instance.salashort = 'manianabb'
+        elif sala == 'Bebe' and turno == 'Tarde':
+            form.instance.salashort = 'tardebb'
+        elif sala == '2' and turno == 'Mañana':
+            form.instance.salashort = 'maniana2'
+        elif sala == '2' and turno == 'Tarde':
+            form.instance.salashort = 'tarde2'
+        elif sala == '3' and turno == 'Mañana':
+            form.instance.salashort = 'maniana3'
+        elif sala == '3' and turno == 'Tarde':
+            form.instance.salashort = 'tarde3'
         self.object = form.save()
 
         base1 = CDIF_Admision.objects.filter(pk=self.kwargs["pk"]).first()
@@ -447,7 +560,7 @@ class CDIFVacantesAdmision(PermisosMixin, CreateView):
         base.creado_por_id = self.request.user.id
         base.save()
         
-        return redirect('CDIF_asignado_admisiones_ver', self.object.pk)
+        return redirect('CDIF_asignado_admisiones_ver', legajo.pk)
 
     def form_invalid(self, form):
         errors = form.errors
@@ -486,6 +599,20 @@ class CDIFVacantesAdmisionCambio(PermisosMixin, CreateView):
             return super().form_invalid(form) 
         else:
             form.evento = "CambioVacante"
+            sala = form.cleaned_data['sala']
+            turno = form.cleaned_data['turno']
+            if sala == 'Bebe' and turno == 'Mañana':
+                form.instance.salashort = 'manianabb'
+            elif sala == 'Bebe' and turno == 'Tarde':
+                form.instance.salashort = 'tardebb'
+            elif sala == '2' and turno == 'Mañana':
+                form.instance.salashort = 'maniana2'
+            elif sala == '2' and turno == 'Tarde':
+                form.instance.salashort = 'tarde2'
+            elif sala == '3' and turno == 'Mañana':
+                form.instance.salashort = 'maniana3'
+            elif sala == '3' and turno == 'Tarde':
+                form.instance.salashort = 'tarde3'
             self.object = form.save()
 
         
@@ -501,7 +628,7 @@ class CDIFVacantesAdmisionCambio(PermisosMixin, CreateView):
             base.creado_por_id = self.request.user.id
             base.save()
 
-        return redirect('CDIF_asignado_admisiones_ver', self.object.id)
+        return redirect('CDIF_asignado_admisiones_ver', legajo.id)
     
     #def form_invalid(self, form):
     #    errors = form.errors
@@ -585,12 +712,16 @@ class CDIFVacantesListView(PermisosMixin, ListView):
                     total=Sum(F(sala_group[0]) + F(sala_group[1]))
                 )['total'] or 0
 
-                asignadas = CDIF_Vacantes.objects.filter(
-                    organizacion=organizacion,
-                    fk_vacantes__nombre__in=sala_group
+                asignadas = CDIF_VacantesOtorgadas.objects.filter(
+                    fk_organismo__nombre=organizacion,
+                    salashort__in=sala_group
                 ).count()
 
-                disponibles = total_vacantes - asignadas
+                disponibles = CDIF_Admision.objects.filter(
+                    fk_preadmi__centro_postula__nombre=organizacion,
+                    fk_preadmi__sala_short__in=sala_group,
+                    estado_vacante='Lista de espera'
+                ).count()
 
                 organizacion_data['_'.join(sala_group) + '_total'] = total_vacantes
                 organizacion_data['_'.join(sala_group) + '_asignadas'] = asignadas
@@ -622,34 +753,35 @@ class CDIFVacantesDetailView (PermisosMixin, DetailView):
 
 class CDIFIntervencionesCreateView(PermisosMixin, CreateView):
     permission_required = "Usuarios.rol_admin"
-    model = CDIF_Intervenciones
+    model = CDIF_Intervenciones  # Debería ser el modelo CDIF_Intervenciones
     template_name = "SIF_CDIF/intervenciones_form.html"
     form_class = CDIF_IntervencionesForm
 
     def form_valid(self, form):
-            form.instance.fk_admision_id = self.kwargs["pk"]
-            form.instance.creado_por_id = self.request.user.id
-            self.object = form.save()
+        form.instance.fk_admision_id = self.kwargs["pk"]
+        form.instance.creado_por_id = self.request.user.id
+        self.object = form.save()
         
-            # --------- HISTORIAL ---------------------------------
-            pk = self.kwargs["pk"]
-            legajo = CDIF_Admision.objects.filter(pk=pk).first()
-            base = CDIF_Historial()
-            base.fk_legajo_id = legajo.fk_preadmi.fk_legajo.id
-            base.fk_legajo_derivacion_id = legajo.fk_preadmi.fk_derivacion_id
-            base.fk_preadmi_id = legajo.fk_preadmi.pk
-            base.fk_admision_id = pk
-            base.movimiento = "INTERVENCION CREADA"
-            base.creado_por_id = self.request.user.id
-            base.save()
+        # --------- HISTORIAL ---------------------------------
+        pk = self.kwargs["pk"]
+        legajo = CDIF_Admision.objects.filter(pk=pk).first()
+        base = CDIF_Historial()
+        base.fk_legajo_id = legajo.fk_preadmi.fk_legajo.id
+        base.fk_legajo_derivacion_id = legajo.fk_preadmi.fk_derivacion_id
+        base.fk_preadmi_id = legajo.fk_preadmi.pk
+        base.fk_admision_id = legajo.id  # Cambia a self.object.id
+        base.movimiento = "INTERVENCION CREADA"
+        base.creado_por_id = self.request.user.id
+        base.save()
 
-            return redirect('CDIF_intervencion_ver', self.object.id)
-    
+        return redirect('CDIF_intervencion_ver', pk=self.object.id)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        pk = CDIF_Intervenciones.objects.filter(pk=self.kwargs["pk"]).first()
+        context["object"] = CDIF_Admision.objects.get(pk=self.kwargs["pk"])  # Obtén el objeto directamente
+        context["form"] = self.get_form()  # Obtiene una instancia del formulario
 
-        context["object"] = pk
+        return context
     
 class CDIFIntervencionesUpdateView(PermisosMixin, UpdateView):
     permission_required = "Usuarios.rol_admin"
@@ -743,3 +875,25 @@ class CDIFOpcionesResponsablesCreateView(PermisosMixin, CreateView):
     def form_valid(self, form):
         self.object = form.save()
         return HttpResponseRedirect(reverse('CDIF_OpcionesResponsables'))
+
+class CDIFIntervencionesDeleteView(PermisosMixin, DeleteView):
+    permission_required = "Usuarios.rol_admin"
+    model = CDIF_Intervenciones
+    template_name = "SIF_CDIF/intervenciones_confirm_delete.html"
+    success_url = reverse_lazy("CDIF_intervenciones_listar")
+
+    def form_valid(self, form):
+
+        if self.request.user.id != self.object.creado_por.id:
+            print(self.request.user)
+            print(self.object.creado_por)
+            messages.error(
+                self.request,
+                "Solo el usuario que generó esta derivación puede eliminarla.",
+            )
+
+            return redirect("CDIF_preadmisiones_ver", pk=int(self.object.id))
+
+        else:
+            self.object.delete()
+            return redirect(self.success_url)

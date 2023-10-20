@@ -44,4 +44,5 @@ urlpatterns = [
     path('legajos/derivaciones/ver/<pk>', login_required(LegajosDerivacionesDetailView.as_view()), name='legajosderivaciones_ver'),
     path('legajos/derivaciones/editar/<pk>', login_required(LegajosDerivacionesUpdateView.as_view()), name='legajosderivaciones_editar'),
     path('legajos/derivaciones/eliminar/<pk>', login_required(LegajosDerivacionesDeleteView.as_view()), name='legajosderivaciones_eliminar'),
+    path('legajos/derivaciones/historial/<pk>', login_required(LegajosDerivacionesHistorial.as_view()), name='legajosderivaciones_historial'),
 ]
