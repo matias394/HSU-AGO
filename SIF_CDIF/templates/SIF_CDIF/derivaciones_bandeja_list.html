@@ -11,12 +11,18 @@
 
 {% block menu-adicional %}
 {% endblock %};
-
+{% block breadcrumb %}
+<ol class="breadcrumb float-sm-right">
+  <li class="breadcrumb-item"><a href="{% url 'CDIF_derivaciones_listar'%}"
+      title="Ver historial de derivaciones">CDIF Derivaciones</a></li>
+  <li class="breadcrumb-item active">Listado</li>
+</ol>
+{% endblock %};
 {% block content %}
 
 <div class="row">
   <div class="col-md-2">
-    <a href="{% url 'derivaciones_buscar' %}" class="btn btn-primary btn-block mb-3">Derivar</a>
+    <a href="{% url 'CDIF_derivaciones_buscar' %}" class="btn btn-primary btn-block mb-3">Derivar</a>
     <div class="card">
       <div class="card-header">
         <h3 class="card-title">Carpetas</h3>
@@ -33,12 +39,6 @@
             <a href="#" class="nav-link">
               <i class="fas fa-filter pr-2"></i> Pendientes
               <span class="badge bg-secondary float-right">{{pendientes.count}}</span>
-            </a>
-          </li>
-          <li class="nav-item filtro" data-filtro="En análisis" title="Filtrar sólo derivaciones en análisis">
-            <a href="#" class="nav-link">
-              <i class="fas fa-filter pr-2"></i> En análisis
-              <span class="badge bg-secondary float-right">{{analisis.all.count}}</span>
             </a>
           </li>
           <li class="nav-item filtro" data-filtro="Aceptada" title="Filtrar sólo derivaciones aceptadas">
@@ -89,20 +89,25 @@
                 <td>Legajo</td>
                 <td>Alertas</td>
                 <td>Adjuntos</td>
+                <td></td>
               </tr>
             </thead>
             <tbody>
               {% for o in object_list %}
               <tr>
-                <td class="mailbox-date">{{o.fecha|date:'d/m/Y'}}</td>
+                <td class="mailbox-date">{{o.fecha_creado|date:'d/m/Y'}}</td>
                 <td>{{o.fk_programa }}</td>
-                <td> <span class="badge font-weight-bold badge-gb-color">{{o.estado}}</span>
+                <td> <span class="badge badge-{% if o.estado == "Aceptada" %}success{% endif %}{% if o.estado == "Pendiente" %}warning{% endif %}{% if o.estado == "Rechazada" %}danger{% endif %}">{{o.estado}}</span>
                 <td class="text-center"><span class="badge {% if o.importancia == "Muy urgente" %}badge-Muyurgente{% else %}badge-{{o.importancia}} {% endif %}">{{o.importancia}}</span></td>
                 <td> <span class="font-weight-bold">{{o.fk_usuario}}</span>
                 <td class=""><a href="{% url 'CDIF_derivaciones_ver' o.id %}" title="Ver detalle">{{o.fk_legajo}}</a></td>
                 <td class="">{{o.m2m_alertas.all.count}} alerta{% if o.m2m_alertas.all.count > 1 %}s{% endif %}</td>
                 <td class="text-center ">{% if o.archivos %}<a href="{{ o.archivos.url}}" target="_blank"><i
-                      class="fas fa-paperclip text-white"></i></a>{% endif %}</td>
+                      class="fas fa-paperclip text-white"></i></a>{% else %}-{% endif %}</td>
+                <td class="text-right">
+                        <a href="{% url 'CDIF_derivaciones_ver' o.id %}" class="btn btn-primary btn-sm ver"
+                          title="Ver detalle">Ver</a>
+                </td>
               </tr>
               {% endfor %}
 

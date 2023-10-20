@@ -16,7 +16,7 @@
 <div class="row">
   <!-- botones -->
   <div class="col-12 my-3 mx-2 d-print-none">
-    <a href="{% url 'preadmisiones_buscar' %}" class="btn btn-primary mr-1">Agregar pre-admisión</a>
+    <a href="{% url 'CDIF_preadmisiones_buscar' %}" class="btn btn-primary mr-1">Agregar pre-admisión</a>
     <!-- <a href="{% url 'preadmisiones_form' %}" class="btn btn-secondary mr-1">Editar</a> -->
     <!-- <a href="" class="btn btn-secondary mr-1 print">Imprimir</a> -->
     <!-- <a href="" class="btn btn-secondary mr-1 ">Finalizar admisión</a> -->
@@ -46,7 +46,7 @@
                     <td class="mailbox-date">{{ o.creado|date:'d/m/Y' }}</td>
                     <td> <span class="badge {% if o.estado == 'Finalizada' %}badge-success{% else %}badge-warning{% endif %}">{{ o.estado }}</span></td>
                     {% if o.estado == 'Finalizada' %}
-                    <td class=""><a href="{% url 'vacantes_form'%}" title="Ver detalle de admisión">{{o.fk_derivacion}}</a></td>
+                    <td class=""><a href="{% url 'CDIF_preadmisiones_ver' o.id%}" title="Ver detalle de admisión">{{o.fk_derivacion}}</a></td>
                     {% endif %}
                     {% if o.estado == 'En proceso' %}
                     <td class=""><a href="{% url 'CDIF_preadmisiones_ver' o.id %}" title="Ver detalle de admisión">{{o.fk_derivacion}}</a></td>
