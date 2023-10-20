@@ -114,6 +114,18 @@ def contar_legajos_con_planes_sociales():
     cantidad = Legajos.objects.filter(dimensioneconomia__m2m_planes__isnull=False).distinct().count()
     return cantidad
 
+def calcular_porcentaje_respecto_a_poblacion(cantidad_legajos):
+    poblacion_san_miguel = 327000  # Total de población de San Miguel (dato del censo)
+    
+    # Calcula el porcentaje de legajos en comparación con la población total
+    if poblacion_san_miguel > 0:
+        porcentaje = (cantidad_legajos / poblacion_san_miguel) * 100
+    else:
+        porcentaje = 0  # Evita la división por cero si no hay población registrada
+    
+    return porcentaje
+
+
 
     
         
@@ -145,6 +157,12 @@ class DashboardView(TemplateView):
 
         # Agrega la cantidad al contexto
         context['cantidad_legajos_con_planes_sociales'] = cantidad_legajos_con_planes_sociales
+
+        # Calcular el porcentaje de legajos en comparación con la población total
+        porcentaje_legajos = calcular_porcentaje_respecto_a_poblacion(cantidad_total_legajos)
+        
+        # Agrega el porcentaje al contexto
+        context['porcentaje_legajos'] = porcentaje_legajos
 
         return context
     
