@@ -25,7 +25,7 @@
             <span class="info-box-icon bg-info elevation-1"><i class="fas fa-address-card"></i></span>
             <div class="info-box-content">
                 <span class="info-box-text text-center h6">Legajos Activos</span>
-                <span class="info-box-number text-center h4">862</span>
+                <span class="info-box-number text-center h4">{{ cantidad_legajos_activos }}</span>
             </div>
 
         </div>
@@ -37,7 +37,7 @@
             <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-bell"></i></span>
             <div class="info-box-content">
                 <span class="info-box-text text-center h6">Alarmas Activas</span>
-                <span class="info-box-number text-center h4">278</span>
+                <span class="info-box-number text-center h4">{{ cantidad_alarmas_activas }}</span>
             </div>
 
         </div>
@@ -64,7 +64,7 @@
             <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-handshake"></i></span>
             <div class="info-box-content">
                 <span class="info-box-text text-center h6 text-nowrap">Benef. de Acciones Sociales</span>
-                <span class="info-box-number text-center h4">329</span>
+                <span class="info-box-number text-center h4">{{ cantidad_legajos_con_planes_sociales }}</span>
             </div>
 
         </div>
@@ -148,14 +148,14 @@
             <span class="info-box-icon bg-success elevation-1"><i class="fas fa-address-card"></i></span>
             <div class="info-box-content">
                 <span class="info-box-text text-left h6 text-nowrap">Poblacion total registrada en HSU</span>
-                <span class="info-box-number text-center h4">6.453 (2%)</span>
+                <span class="info-box-number text-center h4">{{ cantidad_total_legajos }} ({{ porcentaje_legajos|floatformat:2 }}%)</span>
             </div>
         </div>
         <div class="info-box mb-2 bg-dark">
             <span class="info-box-icon bg-success elevation-1"><i class="fas fa-address-card"></i></span>
             <div class="info-box-content">
                 <span class="info-box-text text-left h6 text-nowrap">Poblacion 018 en HSU</span>
-                <span class="info-box-number text-center h4">1606 (0,5%)</span>
+                <span class="info-box-number text-center h4">{{ cantidad_legajos }} (37%)</span>
             </div>
         </div>
         <div class="info-box mb-2 bg-dark">
