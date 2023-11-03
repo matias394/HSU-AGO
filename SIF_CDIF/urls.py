@@ -21,17 +21,20 @@ urlpatterns = [
     # IVI
     path('CDIF/criterios_ivi/crear', login_required(CDIFCriteriosIVICreateView.as_view()), name='CDIF_criterios_ivi_crear'),
     path('CDIF/indice_ivi/crear/<pk>', login_required(CDIFIndiceIviCreateView.as_view()), name='CDIF_indiceivi_crear'),
+    path('CDIF/indice_ivi_egreso/crear/<pk>', login_required(CDIFIndiceIviEgresoCreateView.as_view()), name='CDIF_indiceiviegreso_crear'),
     path('CDIF/indice_ivi/ver/<pk>', login_required(CDIFIndiceIviDetailView.as_view()), name='CDIF_indiceivi_ver'),
     path('CDIF/indice_ivi/editar/<pk>', login_required(CDIFIndiceIviUpdateView.as_view()), name='CDIF_indiceivi_editar'),
     # Vacantes
     path('CDIF/vacantes/list/', login_required(CDIFVacantesListView.as_view()), name='CDIF_vacantes_listar'),
     path('CDIF/vacantes/ver/<pk>', login_required(CDIFVacantesDetailView.as_view()), name='CDIF_vacantes_ver'),
-        path('CDIF/vacantes/crear/<pk>', login_required(CDIFVacantesAdmision.as_view()), name='CDIF_vacantes_form'),
+    path('CDIF/vacantes/crear/<pk>', login_required(CDIFVacantesAdmision.as_view()), name='CDIF_vacantes_form'),
     path('CDIF/vacantes/cambio/<pk>', login_required(CDIFVacantesAdmisionCambio.as_view()), name='CDIF_vacantes_form_cambio'),
     # Admisiones
     path('CDIF/admisiones/ver/<pk>', login_required(CDIFAdmisionesDetailView.as_view()), name='CDIF_admisiones_ver'),
     path('CDIF/admisiones/listar/', login_required(CDIFAdmisionesListView.as_view()), name='CDIF_admisiones_listar'),
+    path('CDIF/admisiones/buscar', login_required(CDIFAdmisionesBuscarListView.as_view()), name='CDIF_admisiones_buscar'),
     path('CDIF/asignado_admisiones/ver/<pk>', login_required(CDIFAsignadoAdmisionDetail.as_view()), name='CDIF_asignado_admisiones_ver'),
+    path('CDIF/inactiva_admisiones/ver/<pk>', login_required(CDIFInactivaAdmisionDetail.as_view()), name='CDIF_inactiva_admisiones_ver'),
     # Intervensiones
     path('CDIF/intervenciones/crear/<pk>', login_required(CDIFIntervencionesCreateView.as_view()), name='CDIF_intervenciones_crear'),
     path('CDIF/intervenciones/ver/<pk>', login_required(CDIFIntervencionesLegajosListView.as_view()), name='CDIF_intervenciones_legajos_listar'),

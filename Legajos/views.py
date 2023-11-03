@@ -655,6 +655,13 @@ class LegajosDerivacionesUpdateView(PermisosMixin, UpdateView):
         initial = super().get_initial()
         initial["fk_usuario"] = self.request.user
         return initial
+        
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs["pk"]
+        context = super().get_context_data(**kwargs)
+        legajo = LegajosDerivaciones.objects.filter(id=pk).first()
+        context["legajo"] = Legajos.objects.filter(id=legajo.fk_legajo.id).first()
+        return context
 
 class LegajosDerivacionesHistorial(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"
