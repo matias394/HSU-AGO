@@ -31,8 +31,8 @@ class CDIFDerivacionesBuscarListView(TemplateView, PermisosMixin):
             if object_list and object_list.count() == 1:
                 id = None
                 for o in object_list:
-                    pk = o.id
-                return redirect("legajos_ver", pk)
+                    pk = LegajosDerivaciones.objects.filter(fk_legajo_id = o.id).first()
+                return redirect("CDIF_derivaciones_ver", pk.id)
 
             if not object_list:
                 messages.warning(self.request, ("La búsqueda no arrojó resultados."))
@@ -135,17 +135,17 @@ class CDIFPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
         form.instance.creado_por_id = self.request.user.id
         sala = form.cleaned_data['sala_postula']
         turno = form.cleaned_data['turno_postula']
-        if sala == 'Bebe' and turno == 'Mañana':
+        if sala == 'Bebés' and turno == 'Mañana':
             form.instance.sala_short = 'manianabb'
-        elif sala == 'Bebe' and turno == 'Tarde':
+        elif sala == 'Bebés' and turno == 'Tarde':
             form.instance.sala_short = 'tardebb'
-        elif sala == '2' and turno == 'Mañana':
+        elif sala == 'Sala de 2' and turno == 'Mañana':
             form.instance.sala_short = 'maniana2'
-        elif sala == '2' and turno == 'Tarde':
+        elif sala == 'Sala de 2' and turno == 'Tarde':
             form.instance.sala_short = 'tarde2'
-        elif sala == '3' and turno == 'Mañana':
+        elif sala == 'Sala de 3' and turno == 'Mañana':
             form.instance.sala_short = 'maniana3'
-        elif sala == '3' and turno == 'Tarde':
+        elif sala == 'Sala de 3' and turno == 'Tarde':
             form.instance.sala_short = 'tarde3'
         self.object = form.save()
 
@@ -192,6 +192,21 @@ class CDIFPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin)
         form.instance.creado_por_id = pk.creado_por_id
         form.instance.estado = pk.estado
         form.instance.modificado_por_id = self.request.user.id
+        sala = form.cleaned_data['sala_postula']
+        turno = form.cleaned_data['turno_postula']
+        if sala == 'Bebés' and turno == 'Mañana':
+            form.instance.sala_short = 'manianabb'
+        elif sala == 'Bebés' and turno == 'Tarde':
+            form.instance.sala_short = 'tardebb'
+        elif sala == 'Sala de 2' and turno == 'Mañana':
+            form.instance.sala_short = 'maniana2'
+        elif sala == 'Sala de 2' and turno == 'Tarde':
+            form.instance.sala_short = 'tarde2'
+        elif sala == 'Sala de 3' and turno == 'Mañana':
+            form.instance.sala_short = 'maniana3'
+        elif sala == 'Sala de 3' and turno == 'Tarde':
+            form.instance.sala_short = 'tarde3'
+        self.object = form.save()
         self.object = form.save()
 
         return HttpResponseRedirect(reverse('CDIF_preadmisiones_ver', args=[self.object.pk]))
@@ -333,8 +348,13 @@ class CDIFIndiceIviCreateView (PermisosMixin, CreateView):
         derivacion = CDIF_PreAdmision.objects.filter(fk_legajo_id=pk).first()
         clave = str(uuid.uuid4())
         nombres_campos = request.POST.keys()
+        puntaje_maximo = Criterios_IVI.objects.aggregate(total=Sum('puntaje'))['total']
+        total_puntaje = 0
         for f in nombres_campos:
             if f.isdigit():
+                criterio_ivi = Criterios_IVI.objects.filter(id=f).first()
+                # Sumar el valor de f al total_puntaje
+                total_puntaje += int(criterio_ivi.puntaje)
                 base = CDIF_IndiceIVI()
                 base.fk_criterios_ivi_id = f
                 base.fk_legajo_id = pk
@@ -344,7 +364,6 @@ class CDIFIndiceIviCreateView (PermisosMixin, CreateView):
                 base.clave = clave
                 base.save()
             if f == 'observaciones':
-                puntaje_maximo = Criterios_IVI.objects.aggregate(total=Sum('puntaje'))['total']
                 base2 = CDIF_Historial_IVI()
                 base2.observaciones = request.POST.get('observaciones', '')
                 base2.programa = "CDIF"
@@ -354,6 +373,17 @@ class CDIFIndiceIviCreateView (PermisosMixin, CreateView):
                 base2.clave = clave
                 base2.save()
         
+        # total_puntaje contiene la suma de los valores de F
+        foto = CDIF_Foto_IVI()
+        foto.fk_derivacion_id = derivacion.id
+        foto.fk_legajo_id = pk
+        foto.puntaje = total_puntaje
+        foto.puntaje_max = puntaje_maximo
+        foto.tipo = "Inicial"
+        foto.clave = clave
+        foto.creado_por_id = self.request.user.id
+        foto.save()
+
         #---------HISTORIAL---------------------------------
         pk=self.kwargs["pk"]
         legajo = CDIF_PreAdmision.objects.filter(fk_legajo=pk).first()
@@ -495,7 +525,10 @@ class CDIFAdmisionesListView(PermisosMixin, ListView):
         context = super().get_context_data(**kwargs)
         criterio = CDIF_IndiceIVI.objects.all()
         admi = CDIF_Admision.objects.all()
+        foto = CDIF_Foto_IVI.objects.all()
+
         context["admi"] = admi
+        context["foto"] = foto
         context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         return context
 
@@ -675,8 +708,15 @@ class CDIFAsignadoAdmisionDetail(PermisosMixin, DetailView):
         movimientosVO =  CDIF_VacantesOtorgadas.objects.filter(fk_admision_id=admi.id).all()
         intervenciones = CDIF_Intervenciones.objects.filter(fk_admision_id=admi.id).all()
         intervenciones_last = CDIF_Intervenciones.objects.filter(fk_admision_id=admi.id).last()
+        foto_ivi_fin = CDIF_Foto_IVI.objects.filter(fk_derivacion_id=admi.fk_preadmi_id).last()
+        foto_ivi_inicio = CDIF_Foto_IVI.objects.filter(fk_derivacion_id=admi.fk_preadmi_id).first()
+        print("------------------------------------")
+        print(foto_ivi_fin)
+        print(foto_ivi_inicio)
+        print(admi.id)
 
-
+        context["foto_ivi_fin"] = foto_ivi_fin
+        context["foto_ivi_inicio"] = foto_ivi_inicio
         context["observaciones"] = observaciones
         context["observaciones2"] = observaciones2
         context["criterio"] = criterio
@@ -690,7 +730,44 @@ class CDIFAsignadoAdmisionDetail(PermisosMixin, DetailView):
         context["intervenciones_last"] = intervenciones_last
         
         return context
-    
+
+class CDIFInactivaAdmisionDetail(PermisosMixin, DetailView):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_CDIF/inactiva_admisiones_detail.html"
+    model = CDIF_Admision
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        admi = CDIF_Admision.objects.filter(pk=self.kwargs["pk"]).first()
+
+        preadmi = CDIF_PreAdmision.objects.filter(pk=admi.fk_preadmi_id).first()
+        criterio = CDIF_IndiceIVI.objects.filter(fk_derivacion_id=preadmi)
+        criterio2 = CDIF_IndiceIVI.objects.filter(fk_derivacion_id=preadmi)
+        observaciones = CDIF_Historial_IVI.objects.filter(clave=criterio.first().clave).first()
+        observaciones2 = CDIF_Historial_IVI.objects.filter(clave=criterio2.last().clave).first()
+        lastVO = CDIF_VacantesOtorgadas.objects.filter(fk_admision_id=admi.id).last()
+        movimientosVO =  CDIF_VacantesOtorgadas.objects.filter(fk_admision_id=admi.id).all()
+        intervenciones = CDIF_Intervenciones.objects.filter(fk_admision_id=admi.id).all()
+        intervenciones_last = CDIF_Intervenciones.objects.filter(fk_admision_id=admi.id).last()
+        foto_ivi_fin = CDIF_Foto_IVI.objects.filter(fk_derivacion_id=admi.fk_preadmi_id).last()
+        foto_ivi_inicio = CDIF_Foto_IVI.objects.filter(fk_derivacion_id=admi.fk_preadmi_id).first()
+
+        
+        context["foto_ivi_fin"] = foto_ivi_fin
+        context["foto_ivi_inicio"] = foto_ivi_inicio
+        context["observaciones"] = observaciones
+        context["observaciones2"] = observaciones2
+        context["criterio"] = criterio
+        context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["puntaje2"] = criterio2.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["object"] = admi
+        context["vo"] = self.object
+        context["lastvo"] = lastVO
+        context["movimientosVO"] = movimientosVO
+        context["intervenciones_count"] = intervenciones.count()
+        context["intervenciones_last"] = intervenciones_last
+        
+        return context
 
 
 class CDIFVacantesListView(PermisosMixin, ListView):
@@ -897,3 +974,107 @@ class CDIFIntervencionesDeleteView(PermisosMixin, DeleteView):
         else:
             self.object.delete()
             return redirect(self.success_url)
+        
+
+class CDIFAdmisionesBuscarListView(PermisosMixin, TemplateView):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_CDIF/admisiones_buscar.html"
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        object_list = CDIF_PreAdmision.objects.none()
+        mostrar_resultados = False
+        mostrar_btn_resetear = False
+        query = self.request.GET.get("busqueda")
+        if query:
+            object_list = CDIF_Admision.objects.filter(Q(fk_preadmi__fk_legajo__apellido__iexact=query) | Q(fk_preadmi__fk_legajo__documento__iexact=query), fk_preadmi__fk_derivacion__fk_programa_id=23).exclude(estado__in=['Rechazada','Aceptada']).distinct()
+            if not object_list:
+                messages.warning(self.request, ("La búsqueda no arrojó resultados."))
+
+            mostrar_btn_resetear = True
+            mostrar_resultados = True
+
+        context["mostrar_resultados"] = mostrar_resultados
+        context["mostrar_btn_resetear"] = mostrar_btn_resetear
+        context["object_list"] = object_list
+
+        return self.render_to_response(context)
+    
+class CDIFIndiceIviEgresoCreateView (PermisosMixin, CreateView):
+    permission_required = "Usuarios.rol_admin"
+    model = Legajos
+    template_name = "SIF_CDIF/indiceivi_form.html"
+    form_class = CDIF_IndiceIviForm
+    success_url = reverse_lazy("legajos_listar")
+    
+    
+    def get_context_data(self, **kwargs):
+        pk=self.kwargs["pk"]
+        context = super().get_context_data(**kwargs)
+        admi = CDIF_Admision.objects.filter(pk=pk).first()
+        object = Legajos.objects.filter(pk=admi.fk_preadmi.fk_legajo.id).first()
+        criterio = Criterios_IVI.objects.all()
+        context["object"] = object
+        context["criterio"] = criterio
+        context['form2'] = CDIF_IndiceIviHistorialForm()
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        pk=self.kwargs["pk"]
+        admi = CDIF_Admision.objects.filter(pk=pk).first()
+        # Genera una clave única utilizando uuid4 (versión aleatoria)
+        derivacion = CDIF_PreAdmision.objects.filter(fk_legajo_id=admi.fk_preadmi.fk_legajo.id).first()
+        clave = str(uuid.uuid4())
+        nombres_campos = request.POST.keys()
+        puntaje_maximo = Criterios_IVI.objects.aggregate(total=Sum('puntaje'))['total']
+        total_puntaje = 0
+        for f in nombres_campos:
+            if f.isdigit():
+                criterio_ivi = Criterios_IVI.objects.filter(id=f).first()
+                # Sumar el valor de f al total_puntaje
+                total_puntaje += int(criterio_ivi.puntaje)
+                base = CDIF_IndiceIVI()
+                base.fk_criterios_ivi_id = f
+                base.fk_legajo_id = admi.fk_preadmi.fk_legajo.id
+                base.fk_derivacion_id = derivacion.id
+                base.presencia = True
+                base.programa = "CDIF"
+                base.clave = clave
+                base.save()
+            if f == 'observaciones':
+                base2 = CDIF_Historial_IVI()
+                base2.observaciones = request.POST.get('observaciones', '')
+                base2.programa = "CDIF"
+                base2.puntaje_max = puntaje_maximo
+                base2.creado_por_id = self.request.user.id
+                base2.fk_legajo_id = admi.fk_preadmi.fk_legajo.id
+                base2.clave = clave
+                base2.save()
+        
+        # total_puntaje contiene la suma de los valores de F
+        foto = CDIF_Foto_IVI()
+        foto.fk_derivacion_id = derivacion.id
+        foto.fk_legajo_id = admi.fk_preadmi.fk_legajo.id
+        foto.puntaje = total_puntaje
+        foto.puntaje_max = puntaje_maximo
+        foto.tipo = "Egreso"
+        foto.clave = clave
+        foto.creado_por_id = self.request.user.id
+        foto.save()
+
+        admi.estado = "Inactiva"
+        admi.modificado_por_id = self.request.user.id
+        admi.save()
+
+        #---------HISTORIAL---------------------------------
+        pk=self.kwargs["pk"]
+        legajo = admi.fk_preadmi
+        base = CDIF_Historial()
+        base.fk_legajo_id = legajo.fk_legajo.id
+        base.fk_legajo_derivacion_id = legajo.fk_derivacion_id
+        base.fk_preadmi_id = legajo.id
+        base.movimiento = "IVI EGRESO"
+        base.creado_por_id = self.request.user.id
+        base.save()
+
+        return redirect('CDIF_admisiones_listar')

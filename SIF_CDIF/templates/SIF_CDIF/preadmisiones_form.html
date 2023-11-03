@@ -96,6 +96,9 @@
                                                         <label>Madre o cuidador principal</label>
                                                         <select name="fk_legajo_1" class="form-control custom-select" id="id_fk_legajo_1">
                                                             <option value=""></option>
+                                                            {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                            <option value="{{object.fk_legajo_1.id}}" selected>{{object.fk_legajo_1}}</option>
+                                                            {% endif %}
                                                             {% for f in familia %}
                                                             <option value="{{f.fk_legajo_1.id}}">{{f.fk_legajo_1}}</option>
                                                             {% endfor %}
@@ -106,15 +109,27 @@
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Vínculo</label>
-                                                        <input type="text" class="form-control" id="vinculo" readonly>
+                                                        <input type="text" class="form-control" id="vinculo" 
+                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        value="{{object.vinculo}}"
+                                                        {% endif %}
+                                                        readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Tipo de documento</label>
-                                                        <input type="text" class="form-control" id="tipo_doc" readonly>
+                                                        <input type="text" class="form-control" id="tipo_doc"
+                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        value="{{object.fk_legajo_1.tipo_doc}}"
+                                                        {% endif %}
+                                                        readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Numero documento</label>
-                                                        <input type="text" class="form-control" id="documento" readonly>
+                                                        <input type="text" class="form-control" id="documento" 
+                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        value="{{object.fk_legajo_1.documento}}"
+                                                        {% endif %}
+                                                        readonly>
                                                     </div>
 
                                                 </div>
@@ -312,6 +327,9 @@
                                                         <label>Padre o apoyo en la crianza</label>
                                                         <select name="fk_legajo_2" class="form-control custom-select" id="id_fk_legajo_2">
                                                             <option value="" selected=""></option>
+                                                            {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                            <option value="{{object.fk_legajo_2.id}}" selected>{{object.fk_legajo_2}}</option>
+                                                            {% endif %}
                                                             {% for f in familia %}
                                                             <option value="{{f.fk_legajo_1.id}}">{{f.fk_legajo_1}}</option>
                                                             {% endfor %}
@@ -322,15 +340,24 @@
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Vínculo</label>
-                                                        <input type="text" class="form-control" id="vinculo2" readonly>
+                                                        <input type="text" class="form-control" id="vinculo2" 
+                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        value="{{object.vinculo2}}"
+                                                        {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Tipo de documento</label>
-                                                        <input type="text" class="form-control" id="tipo_doc2" readonly>
+                                                        <input type="text" class="form-control" id="tipo_doc2" 
+                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        value="{{object.fk_legajo_2.tipo_doc}}"
+                                                        {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Numero documento</label>
-                                                        <input type="text" class="form-control" id="documento2" readonly>
+                                                        <input type="text" class="form-control" id="documento2" 
+                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        value="{{object.fk_legajo_2.documento}}"
+                                                        {% endif %}readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -442,6 +469,9 @@
                                                         <label>Conviviente</label>
                                                         <select name="fk_legajo_3" class="form-control custom-select" id="id_fk_legajo_3">
                                                             <option value="" selected=""></option>
+                                                            {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                            <option value="{{object.fk_legajo_3.id}}" selected>{{object.fk_legajo_3}}</option>
+                                                            {% endif %}
                                                             {% for f in familia %}
                                                             <option value="{{f.fk_legajo_1.id}}">{{f.fk_legajo_1}}</option>
                                                             {% endfor %}
@@ -452,15 +482,24 @@
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Vínculo</label>
-                                                        <input type="text" class="form-control" id="vinculo3" readonly>
+                                                        <input type="text" class="form-control" id="vinculo3" 
+                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        value="{{object.vinculo3}}"
+                                                        {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Tipo de documento</label>
-                                                        <input type="text" class="form-control" id="tipo_doc3" readonly>
+                                                        <input type="text" class="form-control" id="tipo_doc3" 
+                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        value="{{object.fk_legajo_3.tipo_doc}}"
+                                                        {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Numero documento</label>
-                                                        <input type="text" class="form-control" id="documento3" readonly>
+                                                        <input type="text" class="form-control" id="documento3" 
+                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        value="{{object.fk_legajo_3.documento}}"
+                                                        {% endif %}readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -533,6 +572,9 @@
                                                         <label>Conviviente</label>
                                                         <select name="fk_legajo_4" class="form-control custom-select" id="id_fk_legajo_4">
                                                             <option value="" selected=""></option>
+                                                            {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                            <option value="{{object.fk_legajo_4.id}}" selected>{{object.fk_legajo_4}}</option>
+                                                            {% endif %}
                                                             {% for f in familia %}
                                                             <option value="{{f.fk_legajo_1.id}}">{{f.fk_legajo_1}}</option>
                                                             {% endfor %}
@@ -543,15 +585,24 @@
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Vínculo</label>
-                                                        <input type="text" class="form-control" id="vinculo4" readonly>
+                                                        <input type="text" class="form-control" id="vinculo4" 
+                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        value="{{object.vinculo4}}"
+                                                        {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Tipo de documento</label>
-                                                        <input type="text" class="form-control" id="tipo_doc4" readonly>
+                                                        <input type="text" class="form-control" id="tipo_doc4" 
+                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        value="{{object.fk_legajo_4.tipo_doc}}"
+                                                        {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Numero documento</label>
-                                                        <input type="text" class="form-control" id="documento4" readonly>
+                                                        <input type="text" class="form-control" id="documento4" 
+                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        value="{{object.fk_legajo_4.documento}}"
+                                                        {% endif %}readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -624,6 +675,9 @@
                                                         <label>Conviviente</label>
                                                         <select name="fk_legajo_5" class="form-control custom-select" id="id_fk_legajo_5">
                                                             <option value="" selected=""></option>
+                                                            {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                            <option value="{{object.fk_legajo_5.id}}" selected>{{object.fk_legajo_5}}</option>
+                                                            {% endif %}
                                                             {% for f in familia %}
                                                             <option value="{{f.fk_legajo_1.id}}">{{f.fk_legajo_1}}</option>
                                                             {% endfor %}
@@ -634,15 +688,24 @@
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Vínculo</label>
-                                                        <input type="text" class="form-control" id="vinculo5" readonly>
+                                                        <input type="text" class="form-control" id="vinculo5" 
+                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        value="{{object.vinculo5}}"
+                                                        {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Tipo de documento</label>
-                                                        <input type="text" class="form-control" id="tipo_doc5" readonly>
+                                                        <input type="text" class="form-control" id="tipo_doc5" 
+                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        value="{{object.fk_legajo_5.tipo_doc}}"
+                                                        {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Numero documento</label>
-                                                        <input type="text" class="form-control" id="documento5" readonly>
+                                                        <input type="text" class="form-control" id="documento5" 
+                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        value="{{object.fk_legajo_5.documento}}"
+                                                        {% endif %}readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -705,6 +768,9 @@
                                     <label>Centro al que postula</label>
                                     <select name="centro_postula" class="form-control custom-select" id="id_centro_postula">
                                         <option value="" selected=""></option>
+                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                        <option value="{{object.centro_postula.id}}" selected>{{object.centro_postula}}</option>
+                                        {% endif %}
                                         {% for c in centros %}
                                         <option value="{{c.id}}">{{c.nombre}}</option>
                                         {% endfor %}
@@ -746,6 +812,7 @@
     });
 </script>
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
     // Asocia un evento change al SELECT
     $('#id_fk_legajo_1').change(function() {
         // Obtiene el valor seleccionado
@@ -770,8 +837,7 @@
         }
         {% endfor %}
     });
-</script>
-<script>
+
     // Asocia un evento change al SELECT
     $('#id_fk_legajo_2').change(function() {
         // Obtiene el valor seleccionado
@@ -796,8 +862,7 @@
         }
         {% endfor %}
     });
-</script>
-<script>
+
     // Asocia un evento change al SELECT
     $('#id_fk_legajo_3').change(function() {
         // Obtiene el valor seleccionado
@@ -822,8 +887,7 @@
         }
         {% endfor %}
     });
-</script>
-<script>
+
     // Asocia un evento change al SELECT
     $('#id_fk_legajo_4').change(function() {
         // Obtiene el valor seleccionado
@@ -848,8 +912,7 @@
         }
         {% endfor %}
     });
-</script>
-<script>
+
     // Asocia un evento change al SELECT
     $('#id_fk_legajo_5').change(function() {
         // Obtiene el valor seleccionado
@@ -874,5 +937,6 @@
         }
         {% endfor %}
     });
+});
 </script>
 {% endblock %}

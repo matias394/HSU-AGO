@@ -156,6 +156,18 @@ class CDIF_Historial_IVI(models.Model):
     modificado_por = models.ForeignKey(Usuarios, related_name='IVI_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
+
+class CDIF_Foto_IVI(models.Model):
+    fk_derivacion = models.ForeignKey(CDIF_PreAdmision, on_delete=models.CASCADE, null=True, blank=True)
+    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, null=True, blank=True)
+    puntaje = models.SmallIntegerField(null=True, blank=True) 
+    puntaje_max = models.SmallIntegerField(null=True, blank=True)
+    tipo = models.CharField (max_length=350, null=True, blank=True)
+    clave = models.CharField (max_length=350, null=True, blank=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='IVI_foto_creado_por', on_delete=models.PROTECT, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='IVI_foto_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado = models.DateField(auto_now_add=True, null=True, blank=True)
+    modificado = models.DateField(auto_now=True, null=True, blank=True)
  
 class CDIF_Vacantes(models.Model):
     fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, null=True, blank=True)

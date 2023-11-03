@@ -10,7 +10,7 @@
 
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"><a href="{% url 'CDIF_derivaciones_listar' %}">CDIF Derivaciones</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'CDIF_admisiones_listar' %}">CDIF Admisiones</a></li>
     <li class="breadcrumb-item active">Buscar legajo</li>
 </ol>
 {% endblock %};
@@ -20,7 +20,7 @@
 
 {% block content %}
 
-<h2 class="text-center display-4 mb-3">Buscar legajo para derivar</h2>
+<h2 class="text-center display-4 mb-3">Buscar legajo para pre-admisión</h2>
 <form method="GET">
     <div class="row">
         <div class="col-md-10 offset-md-1">          
@@ -43,7 +43,6 @@
 {% if mostrar_resultados%}
 <div class="row mt-3">
     <div class="col-12 text-center">
-        <a href="{% url 'legajos_crear' %}" class="btn btn-primary btn-lg d-block d-sm-inline mt-2 mr-2 ">Agregar</a>
         <a href="{% url 'CDIF_derivaciones_buscar' %}" class="btn btn-secondary btn-lg d-block d-sm-inline mt-2 ">Resetear</a>
     </div>
 </div>
@@ -62,34 +61,22 @@
                             <th>Documento</th>
                             <th>Sexo</th>
                             <th>Fecha de nacimiento</th>
-                            <th>Edad</th>
-                            <th>Estado</th>
-                            <th style="width: 15%" class="notexport"> </th>
+                            <th style="width: 20%" class="notexport"> </th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for o in object_list %}
                         <tr>
-                            <td><a href="{% url 'legajos_ver' o.id %}" class="font-weight-bold" title="Ver detalles">
-                                {{o}}</a></td>
-                            <td>{{o.tipo_doc}} {{o.documento}}</td>
-                            <td>{{o.sexo}}</td>
-                            <td>{{o.fecha_nacimiento|date:'d/m/Y'}}</td>
-                            <td>{{o.edad}} </td>
-                            <td > 
-                                {% if o.estado  %}
-                                <span class="text-success font-weight-bold">Activo</span>
-                                {% else %}
-                                <span class="text-danger font-weight-bold">Inactivo</span>
-                                {% endif %}
-                              </td>
+                            <td><a href="{% url 'legajos_ver' o.fk_preadmi.fk_legajo.id %}" class="font-weight-bold" title="Ver detalles">
+                                {{o.fk_preadmi.fk_legajo }}</a></td>
+                            <td>{{o.fk_preadmi.fk_legajo.tipo_doc}} {{o.fk_legajo.documento}}</td>
+                            <td>{{o.fk_preadmi.fk_legajo.sexo}}</td>
+                            <td>{{o.fk_preadmi.fk_legajo.fecha_nacimiento|date:'d/m/Y'}}</td>
                             <td class="project-actions text-right"> 
-                                {%if perms.Usuarios.rol_admin%} 
                                 <div class="btn-group" role="group"> 
-                                    <a href="{% url 'legajos_ver' o.id %}" class="btn btn-secondary btn-sm ver">Ver</a> 
-                                    <a href="{% url 'legajosderivaciones_crear' o.id %}" class="btn btn-primary btn-sm editar">Derivar</a> 
-                                    </div>
-                                {%endif%}
+                                    <a href="{% url 'CDIF_admisiones_ver' o.id %}" class="btn btn-secondary btn-sm ver">Ver admision</a>
+                                    <a href="{% url 'legajos_ver' o.fk_preadmi.fk_legajo.id %}" class="btn btn-primary btn-sm editar">Ver legajo</a> 
+                                </div>
                             </td>
                         </tr>
                         {% endfor %}

@@ -149,6 +149,7 @@ Pre-admisiones
         </div>
       </div>
       <div class="card-body">
+        {% if object.fk_legajo_1 %}
         <div class="row bg-secondary pl-2 my-2 font-weight-bold"> Madre o cuidador principal</div>
         <dl class="row mb-0">
           <dd class="col-sm-3 mb-2">Nombre</dd>
@@ -166,7 +167,7 @@ Pre-admisiones
           <dd class="col-sm-3 mb-2">Sexo</dd>
           <dt class="col-sm-9 mb-2">{{object.fk_legajo_1.sexo}}</dt>
         </dl>
-
+{% endif %}
 {% if object.fk_legajo_2 %}
         <!-- Padre o cuidador secundario -->
         <div class="row bg-secondary pl-2 my-2 font-weight-bold"> Padre o cuidador secundario</div>
