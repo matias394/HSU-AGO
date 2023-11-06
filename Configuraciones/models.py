@@ -399,11 +399,29 @@ class Vacantes(models.Model):
     nombre = models.CharField(max_length=100)
     observaciones = models.CharField(max_length=300, null=True, blank=True)
     fk_programa = models.ForeignKey(Programas, on_delete=models.PROTECT)
-    sala = models.CharField(max_length=100, choices=CHOICE_SALA_VACANTE)
-    turno = models.CharField(max_length=100, choices=CHOICE_TURNO_VACANTE)
-    cantidad = models.PositiveIntegerField(
+    manianabb = models.PositiveIntegerField(
         validators=[MinValueValidator(0)],
-        default=0,
+        default=0, verbose_name = 'Turno Mañana', 
+    )
+    tardebb = models.PositiveIntegerField(
+        validators=[MinValueValidator(0)],
+        default=0,verbose_name = 'Turno Tarde',
+    )
+    maniana2 = models.PositiveIntegerField(
+        validators=[MinValueValidator(0)],
+        default=0,verbose_name = 'Turno Mañana',
+    )
+    tarde2 = models.PositiveIntegerField(
+        validators=[MinValueValidator(0)],
+        default=0,verbose_name = 'Turno Tarde',
+    )
+    maniana3 = models.PositiveIntegerField(
+        validators=[MinValueValidator(0)],
+        default=0, verbose_name = 'Turno Mañana',
+    )
+    tarde3 = models.PositiveIntegerField(
+        validators=[MinValueValidator(0)],
+        default=0,verbose_name = 'Turno Tarde',
     )
     estado = models.BooleanField(default=True)
 

@@ -630,13 +630,19 @@ class LegajosDerivacionesCreateView(PermisosMixin, CreateView):
             # excluyo los programas que ya tienen derivaciones en curso para este legajo (solo dejo fuera las 'asesoradas')
 
             programas = Programas.objects.all().exclude(
-                id__in=LegajosDerivaciones.objects.filter(fk_legajo=pk).exclude(estado__in=["Asesoramiento", "finalizada"]).values_list("fk_programa", flat=True)
+                id__in=LegajosDerivaciones.objects.filter(fk_legajo=pk).exclude(estado__in=["Rechazada", "Finalizada"]).values_list("fk_programa", flat=True)
             )
 
             form.fields["fk_programa"].queryset = programas
             form.fields["fk_legajo"].initial = pk
             form.fields["fk_usuario"].initial = self.request.user
         return form
+
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs["pk"]
+        context = super().get_context_data(**kwargs)
+        context["legajo"] = Legajos.objects.filter(id=pk).first()
+        return context
 
 
 class LegajosDerivacionesUpdateView(PermisosMixin, UpdateView):
@@ -649,12 +655,38 @@ class LegajosDerivacionesUpdateView(PermisosMixin, UpdateView):
         initial = super().get_initial()
         initial["fk_usuario"] = self.request.user
         return initial
+        
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs["pk"]
+        context = super().get_context_data(**kwargs)
+        legajo = LegajosDerivaciones.objects.filter(id=pk).first()
+        context["legajo"] = Legajos.objects.filter(id=legajo.fk_legajo.id).first()
+        return context
+
+class LegajosDerivacionesHistorial(PermisosMixin, ListView):
+    permission_required = "Usuarios.rol_admin"
+    model = LegajosDerivaciones
+    template_name="Legajos/legajosderivaciones_historial.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(LegajosDerivacionesHistorial, self).get_context_data(**kwargs)
+        pk = self.kwargs.get("pk")
+
+        legajo = Legajos.objects.filter(id=pk).first()
+        historial = LegajosDerivaciones.objects.filter(fk_legajo_id=pk)
+
+        context["historial"] = historial
+        context["legajo"] = legajo
+        context["pendientes"] = historial.filter(estado="Pendiente").count()
+        context["admitidas"] = historial.filter(estado="Aceptada").count()
+        context["rechazadas"] = historial.filter(estado="Rechazada").count()
+        return context
 
 
 class LegajosDerivacionesDeleteView(PermisosMixin, DeleteView):
     permission_required = "Usuarios.rol_admin"
     model = LegajosDerivaciones
-    success_url = reverse_lazy("legajosderivaciones_listar")
+    #success_url = reverse_lazy("legajosderivaciones_listar")
 
     def form_valid(self, form):
         if self.object.estado != "Pendiente":
@@ -674,9 +706,10 @@ class LegajosDerivacionesDeleteView(PermisosMixin, DeleteView):
             return redirect("legajosderivaciones_ver", pk=int(self.object.id))
 
         else:
+            legajo = LegajosDerivaciones.objects.filter(pk=self.object.id).first()
             self.object.delete()
 
-            return HttpResponseRedirect(self.get_success_url())
+            return redirect("legajosderivaciones_historial", pk=legajo.fk_legajo_id)
 
 
 class LegajosDerivacionesDetailView(PermisosMixin, DetailView):
@@ -1107,4 +1140,9 @@ class DeleteArchivo(PermisosMixin, View):
                 "mensaje" : "No fue posible eliminar el archivo."}  
 
         return JsonResponse(data)
+    
+
+  
+
+
 # endregion ###########################################################

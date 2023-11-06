@@ -56,7 +56,7 @@ class UsuariosLoginView(LoginView):
         user=form.get_user()
         auth_login(self.request, user)
         permisos= user.get_all_permissions()
-        if 'rol_directivo' in permisos:
+        if 'rol_directivo' or 'rol_admin'in permisos:
             return redirect('dashboard')
         else:
             return redirect('legajos_listar')

@@ -1,7 +1,7 @@
 {% extends "includes/base.html" %}
 {% load static %}
 {% block title %}Vacantes{% endblock %}
-{% block titulo-pagina %}vacantes{% endblock %};
+{% block titulo-pagina %}Vacantes{% endblock %};
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right ">
     <li class="breadcrumb-item">Configuraciones </li>
@@ -36,13 +36,19 @@
                     <dt class="col-sm-3 font-weight-normal">Nombre</dt>
                     <dd class="col-sm-9 font-weight-bold">{{ object.nombre}} </dd>
                     <dt class="col-sm-3 font-weight-normal">Programa</dt>
-                    <dd class="col-sm-9 font-weight-bold">{{object.fk_programa|default_if_none:"-"}} </dd>
-                    <dt class="col-sm-3 font-weight-normal">Estado </dt>
-                    <dd class="col-sm-9 font-weight-bold">{{ object.estado|default_if_none:"-" }} </dd>
-                    <dt class="col-sm-3 font-weight-normal">Cantidad</dt>
-                    <dd class="col-sm-9 font-weight-bold">{{ object.cantidad|default_if_none:"-" }} </dd>
-                    <dt class="col-sm-3 font-weight-normal">Turno</dt>
-                    <dd class="col-sm-9 font-weight-bold">{{ object.turno|default_if_none:"-" }} </dd>
+                    <dd class="col-sm-9 font-weight-bold">{{object.fk_programa|default_if_none:"-"}} cupos</dd>
+                    <dt class="col-sm-3 font-weight-normal">Bebe turno mañana</dt>
+                    <dd class="col-sm-9 font-weight-bold">{{ object.manianabb|default_if_none:"-" }} cupos</dd>
+                    <dt class="col-sm-3 font-weight-normal">Bebe turno tarde</dt>
+                    <dd class="col-sm-9 font-weight-bold">{{ object.tardebb|default_if_none:"-" }} cupos</dd>
+                    <dt class="col-sm-3 font-weight-normal">2 años turno mañana</dt>
+                    <dd class="col-sm-9 font-weight-bold">{{ object.maniana2|default_if_none:"-" }} cupos</dd>
+                    <dt class="col-sm-3 font-weight-normal">2 años turno tarde</dt>
+                    <dd class="col-sm-9 font-weight-bold">{{ object.tarde2|default_if_none:"-" }} cupos</dd>
+                    <dt class="col-sm-3 font-weight-normal">3 años turno mañana</dt>
+                    <dd class="col-sm-9 font-weight-bold">{{ object.maniana3|default_if_none:"-" }} cupos</dd>
+                    <dt class="col-sm-3 font-weight-normal">3 años turno tarde</dt>
+                    <dd class="col-sm-9 font-weight-bold">{{ object.tarde3|default_if_none:"-" }} cupos</dd>
                     <dt class="col-sm-3 font-weight-normal">Estado</dt>
                     <dd class="col-sm-9 font-weight-bold">  
                         {% if object.estado %}
@@ -50,6 +56,8 @@
                         {% else %}
                         <span class="text-danger font-weight-bold">Inactivo</span>
                         {% endif %} </dd>
+                        <dt class="col-sm-3 font-weight-normal">Observaciones</dt>
+                        <dd class="col-sm-9 font-weight-bold">{{ object.observaciones|default_if_none:"-" }} cupos</dd>
                 </dl>
             </div>
         </div>

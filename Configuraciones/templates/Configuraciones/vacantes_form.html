@@ -49,25 +49,60 @@
                 {{form.fk_programa| as_crispy_field}}
               </div>
             </div>
-
-            <div class="col-12">
+          </div>
+          <div class="row">
+            <div class="col-2">
+              <div class="form-group mt-4 mr-5 text-left h6 font-weight-bold">
+                Bebes:
+              </div>
+            </div>
+            <div class="col-5">
               <div class="form-group">
-                {{form.sala| as_crispy_field}}
+                {{form.manianabb| as_crispy_field}}
+              </div>
+            </div>
+            <div class="col-5">
+              <div class="form-group">
+                {{form.tardebb| as_crispy_field}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-2">
+              <div class="form-group  mt-4 mr-5 text-left h6 font-weight-bold">
+                2 años:
+              </div>
+            </div>
+            <div class="col-5">
+              <div class="form-group">
+                {{form.maniana2| as_crispy_field}}
               </div>
             </div>
 
-            <div class="col-12">
+            <div class="col-5">
               <div class="form-group">
-                {{form.turno| as_crispy_field}}
+                {{form.tarde2| as_crispy_field}}
               </div>
             </div>
-
-            <div class="col-12">
-              <div class="form-group">
-                {{form.cantidad| as_crispy_field}}
+          </div>
+          <div class="row">
+            <div class="col-2">
+              <div class="form-group  mt-4 mr-5 text-left h6 font-weight-bold">
+                3 años:
               </div>
             </div>
-            
+            <div class="col-5">
+              <div class="form-group">
+                {{form.maniana3| as_crispy_field}}
+              </div>
+            </div>
+            <div class="col-5">
+              <div class="form-group">
+                {{form.tarde3| as_crispy_field}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
             <div class="col-12">
               <div class="form-group">
                 {{form.observaciones| as_crispy_field}}

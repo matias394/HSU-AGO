@@ -5,7 +5,8 @@ from django.contrib.auth.decorators import login_required
 from .views import *
 
 urlpatterns = [
-    path('dashboard/', login_required(TemplateView.as_view(template_name='dashboard.html')), name='dashboard'),
+    path('dashboard/', login_required(DashboardView.as_view()), name='dashboard'),
+    path('metricas/', login_required(TemplateView.as_view(template_name='metricas.html')), name='metricas'),
     path('busqueda/menu', login_required(BusquedaMenu.as_view()), name='busqueda_menu'),
     # Plantilla Ejemplos
     path('plantilla/ejemplos/500', login_required(TemplateView.as_view(template_name='Ejemplos/500.html')), name='500'),

@@ -580,3 +580,8 @@ NOMBRES_MESES_MAP = {
     11: 'Noviembre',
     12: 'Diciembre',
 }
+CHOICE_RECHAZO = [
+    (None, ''),
+    ('No corresponde',  'No corresponde'),
+    ('Fuera de edad requerida',  'Fuera de edad requerida'),
+]
