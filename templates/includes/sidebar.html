@@ -423,6 +423,12 @@
 			</a>
 		</li>
 		<li class="nav-item">
+			<a href="{% url 'intervenciones_salud_HC' %}" class="nav-link {% if 'intervenciones_salud_HC' in pagina_actual %}active{% endif %}">
+				<i class="fas fa-arrow-alt-circle-right nav-icon"></i>
+				<p>Intervenciones salud </p>
+			</a>
+		</li>
+		<li class="nav-item">
 			<a href="{% url '403' %}" class="nav-link {% if '403' in pagina_actual %}active{% endif %}">
 				<i class="fas fa-arrow-alt-circle-right nav-icon"></i>
 				<p>Error 403 </p>
