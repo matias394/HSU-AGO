@@ -95,7 +95,7 @@ class CDIF_IndiceIviForm (forms.ModelForm):
 
 class CDIF_IndiceIviHistorialForm (forms.ModelForm):
     class Meta:
-        model = CDIF_Historial_IVI
+        model = CDIF_Foto_IVI
         fields = '__all__'
         widgets = {}
         labels = {}

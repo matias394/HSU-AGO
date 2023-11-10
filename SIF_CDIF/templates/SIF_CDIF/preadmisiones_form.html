@@ -109,9 +109,9 @@
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Vínculo</label>
-                                                        <input type="text" class="form-control" id="vinculo" 
+                                                        <input type="text" class="form-control" id="vinculo1" name="vinculo1" 
                                                         {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                        value="{{object.vinculo}}"
+                                                        value="{{object.vinculo1}}"
                                                         {% endif %}
                                                         readonly>
                                                     </div>
@@ -340,7 +340,7 @@
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Vínculo</label>
-                                                        <input type="text" class="form-control" id="vinculo2" 
+                                                        <input type="text" class="form-control" id="vinculo2" name="vinculo2" 
                                                         {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
                                                         value="{{object.vinculo2}}"
                                                         {% endif %}readonly>
@@ -482,7 +482,7 @@
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Vínculo</label>
-                                                        <input type="text" class="form-control" id="vinculo3" 
+                                                        <input type="text" class="form-control" id="vinculo3" name="vinculo3" 
                                                         {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
                                                         value="{{object.vinculo3}}"
                                                         {% endif %}readonly>
@@ -585,7 +585,7 @@
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Vínculo</label>
-                                                        <input type="text" class="form-control" id="vinculo4" 
+                                                        <input type="text" class="form-control" id="vinculo4" name="vinculo4" 
                                                         {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
                                                         value="{{object.vinculo4}}"
                                                         {% endif %}readonly>
@@ -688,7 +688,7 @@
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Vínculo</label>
-                                                        <input type="text" class="form-control" id="vinculo5" 
+                                                        <input type="text" class="form-control" id="vinculo5" name="vinculo5" 
                                                         {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
                                                         value="{{object.vinculo5}}"
                                                         {% endif %}readonly>
@@ -819,7 +819,7 @@
         var seleccion = $(this).val();
         var tipo_doc = document.getElementById("tipo_doc");
         var documento = document.getElementById("documento");
-        var vinculo = document.getElementById("vinculo");
+        var vinculo = document.getElementById("vinculo1");
 
         // Lógica para determinar el contenido del div basado en la selección
         {% for f in familia %}

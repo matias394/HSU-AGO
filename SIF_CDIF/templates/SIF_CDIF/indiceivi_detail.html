@@ -29,7 +29,7 @@
   <div class="col-12 my-3 mx-2 d-print-none">
     <!-- <a href="{% url 'admisiones_historial'%}" class="btn btn-primary mr-1">Ver admisiones</a> -->
     <a href="{% url 'CDIF_preadmisiones_ver3' object.id %}" class="btn btn-primary mr-1">Volver pre-admisión</a>
-    <!--<a href="{% url 'indice_ivi_form' %}" class="btn btn-secondary mr-1">Agregar nuevo</a>-->
+    <a href="{% url 'CDIF_indiceivi_editar' object.id %}" class="btn btn-secondary mr-1">Editar</a>
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
   </div>
 </div>
@@ -48,15 +48,15 @@
           <dd class="col-sm-3 mb-2">Índice</dd>
           <dt class="col-sm-9 mb-2">Índice de vulnerabilidad infantil (IVI)</dt>
           <dd class="col-sm-3 mb-2">Tipo</dd>
-          <dt class="col-sm-9 mb-2">De ingreso</dt>
+          <dt class="col-sm-9 mb-2">{{foto_ivi.tipo}}</dt>
           <dd class="col-sm-3 mb-2">Fecha</dd>
-          <dt class="col-sm-9 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
+          <dt class="col-sm-9 mb-2">{{foto_ivi.creado|date:'d/m/Y'}}</dt>
           <dd class="col-sm-3 mb-2">Para el programa</dd>
           <dt class="col-sm-9 mb-2">CDIF</dt>
           <dd class="col-sm-3 mb-2">Generado por</dd>
-          <dt class="col-sm-9 mb-2">{{object.creado_por}}</dt>
+          <dt class="col-sm-9 mb-2">{{foto_ivi.creado_por}}</dt>
           <dd class="col-sm-3 mb-2">Observaciones</dd>
-          <dt class="col-sm-9 mb-2">{{observaciones}}</dt>
+          <dt class="col-sm-9 mb-2">{{foto_ivi.observaciones}}</dt>
         </dl>
       </div>
     </div>
@@ -87,7 +87,7 @@
   <!-- Detalle puntajes del indice -->
   <div class="col-sm-4">
     <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-warning">{{puntaje.total}}</span>
+      <span class="info-box-icon bg-warning">{{foto_ivi.puntaje}}</span>
       <div class="info-box-content h5 my-0">
         <span class="info-box-text">Puntaje</span>
       </div>
@@ -111,7 +111,7 @@
   </div>
   <div class="col-sm-4">
     <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-secondary"> {{maximo}}</span>
+      <span class="info-box-icon bg-secondary"> {{foto_ivi.puntaje_max}}</span>
       <div class="info-box-content h5 my-0">
         <span class="info-box-text"> Puntaje máximo posible</span>
       </div>
@@ -119,7 +119,7 @@
   </div>
   <div class="col-sm-4">
     <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-secondary"> {{mod_puntaje.total}}</span>
+      <span class="info-box-icon bg-secondary"> {{mod_puntaje.total|default:"0"}}</span>
       <div class="info-box-content h5 my-0">
         <span class="info-box-text"> Puntaje modificable total</span>
       </div>
