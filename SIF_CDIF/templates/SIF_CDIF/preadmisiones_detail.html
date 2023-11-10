@@ -37,7 +37,9 @@ CDIF Pre-admisiones
     <a href="{% url 'CDIF_preadmisiones_eliminar' object.pk %}" class="btn btn-danger mr-1 mt-2 mt-sm-0">Eliminar</a>
     {% endif %}
     {% if object.estado == 'Finalizada' %}
-    <a href="{% url 'CDIF_indiceivi_crear' object.fk_derivacion.fk_legajo_id %}" class="btn btn-primary mr-1">Generar IVI</a>
+    {% if object.ivi == 'NO' %}
+    <a href="{% url 'CDIF_indiceivi_crear' object.pk %}" class="btn btn-primary mr-1">Generar IVI</a>
+    {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     {% endif %}
     </div>
@@ -166,13 +168,7 @@ CDIF Pre-admisiones
           <dd class="col-sm-3 mb-2">Nombre</dd>
           <dt class="col-sm-9 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_1_id %}" title="Ver legajo">{{object.fk_legajo_1}}</a> </dt>
           <dd class="col-sm-3 mb-2">Vínculo</dd>
-          <dt class="col-sm-9 mb-2">
-          {% for f in familia %}
-          {% if f.fk_legajo_1 == object.fk_legajo_1 %}
-          {{f.vinculo_inverso}}
-          {% endif %}
-          {% endfor %}
-          </dt>
+          <dt class="col-sm-9 mb-2">{{object.vinculo1}}</dt>
           <dd class="col-sm-3 mb-2">Documento</dd>
           <dt class="col-sm-9 mb-2">{{object.fk_legajo_1.tipo_doc}}  {{object.fk_legajo_1.documento}}</dt>
           <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
@@ -188,13 +184,7 @@ CDIF Pre-admisiones
           <dd class="col-sm-3 mb-2">Nombre</dd>
           <dt class="col-sm-9 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_2_id %}" title="Ver legajo">{{object.fk_legajo_2}}</a> </dt>
           <dd class="col-sm-3 mb-2">Vínculo</dd>
-          <dt class="col-sm-9 mb-2">
-          {% for f in familia %}
-          {% if f.fk_legajo_1 == object.fk_legajo_2 %}
-          {{f.vinculo_inverso}}
-          {% endif %}
-          {% endfor %}
-          </dt>
+          <dt class="col-sm-9 mb-2">{{object.vinculo2}}</dt>
           <dd class="col-sm-3 mb-2">Documento</dd>
           <dt class="col-sm-9 mb-2">{{object.fk_legajo_2.tipo_doc}}  {{object.fk_legajo_2.documento}}</dt>
           <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
@@ -213,13 +203,7 @@ CDIF Pre-admisiones
           <dd class="col-sm-3 mb-2">Nombre</dd>
           <dt class="col-sm-9 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_3_id %}" title="Ver legajo">{{object.fk_legajo_3}}</a> </dt>
           <dd class="col-sm-3 mb-2">Vínculo</dd>
-          <dt class="col-sm-9 mb-2">
-          {% for f in familia %}
-          {% if f.fk_legajo_1 == object.fk_legajo_3 %}
-          {{f.vinculo_inverso}}
-          {% endif %}
-          {% endfor %}
-          </dt>
+          <dt class="col-sm-9 mb-2">{{object.vinculo3}}</dt>
           <dd class="col-sm-3 mb-2">Documento</dd>
           <dt class="col-sm-9 mb-2">{{object.fk_legajo_3.tipo_doc}}  {{object.fk_legajo_3.documento}}</dt>
           <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
@@ -233,13 +217,7 @@ CDIF Pre-admisiones
             <dd class="col-sm-3 mb-2">Nombre</dd>
             <dt class="col-sm-9 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_4_id %}" title="Ver legajo">{{object.fk_legajo_4}}</a> </dt>
             <dd class="col-sm-3 mb-2">Vínculo</dd>
-            <dt class="col-sm-9 mb-2">
-            {% for f in familia %}
-            {% if f.fk_legajo_1 == object.fk_legajo_4 %}
-            {{f.vinculo_inverso}}
-            {% endif %}
-            {% endfor %}
-            </dt>
+            <dt class="col-sm-9 mb-2">{{object.vinculo4}}</dt>
             <dd class="col-sm-3 mb-2">Documento</dd>
             <dt class="col-sm-9 mb-2">{{object.fk_legajo_4.tipo_doc}}  {{object.fk_legajo_4.documento}}</dt>
             <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
@@ -253,13 +231,7 @@ CDIF Pre-admisiones
             <dd class="col-sm-3 mb-2">Nombre</dd>
             <dt class="col-sm-9 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_5_id %}" title="Ver legajo">{{object.fk_legajo_5}}</a> </dt>
             <dd class="col-sm-3 mb-2">Vínculo</dd>
-            <dt class="col-sm-9 mb-2">
-            {% for f in familia %}
-            {% if f.fk_legajo_1 == object.fk_legajo_5 %}
-            {{f.vinculo_inverso}}
-            {% endif %}
-            {% endfor %}
-            </dt>
+            <dt class="col-sm-9 mb-2">{{object.vinculo5}}</dt>
             <dd class="col-sm-3 mb-2">Documento</dd>
             <dt class="col-sm-9 mb-2">{{object.fk_legajo_5.tipo_doc}}  {{object.fk_legajo_5.documento}}</dt>
             <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>

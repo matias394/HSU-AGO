@@ -20,7 +20,7 @@
 
 {% block content %}
 
-<h2 class="text-center display-4 mb-3">Buscar legajo para pre-admisión</h2>
+<h2 class="text-center display-4 mb-3">Buscar legajo para admisión</h2>
 <form method="GET">
     <div class="row">
         <div class="col-md-10 offset-md-1">          
@@ -43,7 +43,8 @@
 {% if mostrar_resultados%}
 <div class="row mt-3">
     <div class="col-12 text-center">
-        <a href="{% url 'CDIF_derivaciones_buscar' %}" class="btn btn-secondary btn-lg d-block d-sm-inline mt-2 ">Resetear</a>
+        <a href="{% url 'legajos_crear' %}" class="btn btn-primary btn-lg d-block d-sm-inline mt-2 mr-2 ">Agregar</a>
+        <a href="{% url 'CDIF_admisiones_buscar' %}" class="btn btn-secondary btn-lg d-block d-sm-inline mt-2 ">Resetear</a>
     </div>
 </div>
 

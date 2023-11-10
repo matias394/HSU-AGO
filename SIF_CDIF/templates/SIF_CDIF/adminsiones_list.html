@@ -54,15 +54,21 @@
                 <td class=""> <a href="{% url 'CDIF_admisiones_ver' a.id %}" title="Ver detalle de admisión">{{a.fk_preadmi.fk_legajo}}</a></td>
                 <td class="">{{a.fk_preadmi.fk_legajo.documento}}</td>
                 <td>{{a.fk_preadmi.centro_postula}}</td>
-                <td class="text-center"><span class="badge badge-circle  mx-2">
+                <td class="text-center">
                   {% for f in foto %}
-                  {% if f.fk_derivacion.id == a.fk_preadmi.id %}
-                  {{ f.puntaje }}
+                  {% if f.fk_preadmi_id == a.fk_preadmi.id and f.tipo == "Ingreso"%}
+                  <span class=" badge badge-warning">{{ f.puntaje }}</span>
                   {% endif %}
                   {% endfor %}
-                </span></td>
-                <td class="text-center">-</td>
-                <td><span class="text-success">{{a.estado}}</span></td>
+                </td>
+                <td class="text-center">
+                  {% for f in foto %}
+                  {% if f.fk_preadmi_id == a.fk_preadmi.id and f.tipo == "Egreso"%}
+                  <span class=" badge badge-success">{{ f.puntaje }}</span>
+                  {% endif %}
+                  {% endfor %}
+                </td>
+                <td><span class="{% if a.estado == "Activa" %}text-success{% endif %}{% if a.estado == "Inactiva" %}text-danger{% endif %}">{{a.estado}}</span></td>
                 <td class="project-actions text-right">
                   <div class="btn-group" role="group">
                     {% if a.estado_vacante == "Finalizada"  and a.estado == "Activa" %}

@@ -5,7 +5,7 @@
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right ">
     <li class="breadcrumb-item">Índices</li>
-    <li class="breadcrumb-item"><a href="{% url 'legajos_ver' object.id %}" title="Ver legajo">{{object}}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'legajos_ver' object.fk_legajo.id %}" title="Ver legajo">{{object.fk_legajo}}</a></li>
         {%if request.resolver_match.url_name == "CDIF_indiceivi_editar" %}
         <li class="breadcrumb-item active">Editar</li>
         {% else %}
@@ -27,13 +27,13 @@
             <div class="card-body">
                 <dl class="row mb-0">
                     <dd class="col-sm-2 mb-2">Nombre</dd>
-                    <dt class="col-sm-10 mb-2"><a href="{% url 'legajos_ver' object.id %}" title="Ver legajo">{{object}}</a></dt>
+                    <dt class="col-sm-10 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo.id %}" title="Ver legajo">{{object.fk_legajo}}</a></dt>
                     <dd class="col-sm-2 mb-2">DNI</dd>
-                    <dt class="col-sm-10 mb-2">{{object.documento}}</dt>
+                    <dt class="col-sm-10 mb-2">{{object.fk_legajo.documento}}</dt>
                     <dd class="col-sm-2 mb-2">Fecha de nacimiento</dd>
-                    <dt class="col-sm-10 mb-2">{{object.fecha_nacimiento|date:'d/m/Y'}}</dt>
+                    <dt class="col-sm-10 mb-2">{{object.fk_legajo.fecha_nacimiento|date:'d/m/Y'}}</dt>
                     <dd class="col-sm-2 mb-2">Sexo</dd>
-                    <dt class="col-sm-10 mb-2">{{object.sexo}}</dt>
+                    <dt class="col-sm-10 mb-2">{{object.fk_legajo.sexo}}</dt>
                 </dl>
             </div>
         </div>

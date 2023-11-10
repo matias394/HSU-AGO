@@ -117,9 +117,9 @@ Admisiones
       <div class="card-body pb-1">
         <dl class="row mb-0">
           <dd class="col-sm-7 mb-2">Puntaje</dd>
-          <dt class="col-sm-5 mb-2"><span class=" badge badge-warning">{{puntaje.total}}</span></dt>
+          <dt class="col-sm-5 mb-2"><span class=" badge badge-warning">{{puntaje}}</span></dt>
           <dd class="col-sm-7 mb-2">Fecha del índice</dd>
-          <dt class="col-sm-5 mb-2">{{observaciones.creado|date:'d/m/Y'}}</dt>
+          <dt class="col-sm-5 mb-2">{{foto_ivi.creado|date:'d/m/Y'}}</dt>
           <dd class="col-sm-7 mb-2">Puntaje máximo posible</dd>
           <dt class="col-sm-5 mb-2">{{maximo}}</dt>
           <dd class="col-sm-7 mb-2">Criterios presentes</dd>
@@ -128,7 +128,7 @@ Admisiones
           <dt class="col-sm-5 mb-2">{{modificables}}</dt>
           <dd class="col-sm-7 mb-2">Puntaje modificable</dd>
           <dt class="col-sm-5 mb-2">{{mod_puntaje.total}}</dt>
-          <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Generado por {{observaciones.creado_por}}</dd>
+          <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Generado por {{foto_ivi.creado_por}}</dd>
         </dl>
       </div>
 
