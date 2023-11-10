@@ -83,6 +83,8 @@ urlpatterns = [
     path('plantilla/programas/intervenciones_list', login_required(TemplateView.as_view(template_name='Ejemplos/intervenciones_list.html')), name='intervenciones_list'),
     path('plantilla/programas/intervenciones_form', login_required(TemplateView.as_view(template_name='Ejemplos/intervenciones_form.html')), name='intervenciones_form'),
     path('plantilla/programas/intervenciones_detail', login_required(TemplateView.as_view(template_name='Ejemplos/intervenciones_detail.html')), name='intervenciones_detail'),
+    # Intervenciones salud HC
+    path('plantilla/programas/intervenciones_salud_HC', login_required(TemplateView.as_view(template_name='Ejemplos/intervenciones_salud_HC.html')), name='intervenciones_salud_HC'),
     # CDIF reportes
     path('plantilla/programas/cdif_reportes', login_required(TemplateView.as_view(template_name='Ejemplos/cdif_reportes.html')), name='cdif_reportes'),
 ]
