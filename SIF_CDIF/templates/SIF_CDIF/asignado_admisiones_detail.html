@@ -161,11 +161,14 @@ Admisiones
             </tr>
           </thead>
           <tbody>
-
+            {% for c in criterio %}
+            {% if c.fk_criterios_ivi.tipo == 'Madre o Cuidador principal' and c.fk_criterios_ivi.modificable == "Si"%}
             <tr>
               <td colspan="4" class="text-center bg-secondary py-1">Madre o Cuidador principal
               </td>
             </tr>
+            {% endif %}
+            {% endfor %}
             {% for c in criterio %}
             {% if c.fk_criterios_ivi.modificable == "Si" %}
             {% if c.fk_criterios_ivi.tipo == 'Madre o Cuidador principal' %}
@@ -179,9 +182,14 @@ Admisiones
             {% endif %}
             {% endif %}
             {% endfor %}
+            {% for c in criterio %}
+            {% if c.fk_criterios_ivi.tipo == 'Bebé, niño o niña' and c.fk_criterios_ivi.modificable == "Si"%}
             <tr>
-              <td colspan="4" class="text-center bg-secondary py-1">Bebé, niño o niña</td>
+              <td colspan="4" class="text-center bg-secondary py-1">Bebé, niño o niña
+              </td>
             </tr>
+            {% endif %}
+            {% endfor %}
             {% for c in criterio %}
             {% if c.fk_criterios_ivi.modificable == "Si" %}
             {% if c.fk_criterios_ivi.tipo == 'Bebé, niño o niña' %}
@@ -195,10 +203,14 @@ Admisiones
             {% endif %}
             {% endif %}
             {% endfor %}
+            {% for c in criterio %}
+            {% if c.fk_criterios_ivi.tipo == 'Familia' and c.fk_criterios_ivi.modificable == "Si"%}
             <tr>
               <td colspan="4" class="text-center bg-secondary py-1">Familia
               </td>
             </tr>
+            {% endif %}
+            {% endfor %}
             {% for c in criterio %}
             {% if c.fk_criterios_ivi.modificable == "Si" %}
             {% if c.fk_criterios_ivi.tipo == 'Familia' %}
@@ -212,9 +224,14 @@ Admisiones
             {% endif %}
             {% endif %}
             {% endfor %}
+            {% for c in criterio %}
+            {% if c.fk_criterios_ivi.tipo == 'Ajustes' and c.fk_criterios_ivi.modificable == "Si"%}
             <tr>
-              <td colspan="4" class="text-center bg-secondary py-1">Ajustes</td>
+              <td colspan="4" class="text-center bg-secondary py-1">Ajustes
+              </td>
             </tr>
+            {% endif %}
+            {% endfor %}
             {% for c in criterio %}
             {% if c.fk_criterios_ivi.modificable == "Si" %}
             {% if c.fk_criterios_ivi.tipo == 'Ajustes' %}
