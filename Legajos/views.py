@@ -106,6 +106,9 @@ class LegajosDetailView(DetailView):
 
         legajo_alertas = LegajoAlertas.objects.filter(fk_legajo=pk)        
 
+        count_intervenciones = LegajosDerivaciones.objects.filter(fk_legajo_id=pk).count()
+        
+
         # Obtener todas las categorías con la cantidad de alertas en cada una
         categorias_con_alertas = legajo_alertas.values(
             'fk_alerta__fk_categoria'
@@ -208,7 +211,7 @@ class LegajosDetailView(DetailView):
         context["count_baja"] = LegajoAlertas.objects.filter(fk_legajo=pk, fk_alerta__gravedad="Precaución").count()
         context["historial_alertas"] = True if HistorialLegajoAlertas.objects.filter(fk_legajo=pk).exists() else False
         context["datos_json"] = datos_json
-
+        context['count_intervenciones'] = count_intervenciones
         return context
 
 
@@ -1142,7 +1145,23 @@ class DeleteArchivo(PermisosMixin, View):
         return JsonResponse(data)
     
 
-  
+class programasIntervencionesView(TemplateView):
+    template_name = "Legajos/programas_intervencion.html"
+    model = Legajos
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        legajo = Legajos.objects.filter(pk=self.kwargs["pk"]).first()
+
+        context["legajo"] = legajo
+        
+        return context
+
+
+
+
 
 
 # endregion ###########################################################
