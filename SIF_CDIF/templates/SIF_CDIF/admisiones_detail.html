@@ -83,11 +83,11 @@ Admisiones
       <div class="card-body pb-2">
         <dl class="row mb-0">
           <dd class="col-sm-5 mb-2">Estado admisión</dd>
-          <dt class="col-sm-7 mb-2"><span class="text-success font-weight-bold">{{object.estado}}</span></dt>
+          <dt class="col-sm-7 mb-2"><span class="text-{% if object.estado == "Inactiva" %}danger{% else %}success{% endif %} font-weight-bold">{{object.estado}}</span></dt>
           <dd class="col-sm-5 mb-2">Fecha de admisión</dd>
           <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
           <dd class="col-sm-5 mb-2">Estado vacante</dd>
-          <dt class="col-sm-7 mb-2"><span class="badge badge-warning">{{object.estado_vacante}}</span></dt>
+          <dt class="col-sm-7 mb-2"><span class="badge badge-{% if object.estado_vacante == 'Pendiente' %}warning{% endif %}{% if object.estado_vacante == 'Finalizada' %}success{% endif %}">{{object.estado_vacante}}</span></dt>
           <dd class="col-sm-5 mb-2">Fecha de vacante</dd>
           <dt class="col-sm-7 mb-2">-</dt>
           <dd class="col-sm-5 mb-2">Centro </dd>

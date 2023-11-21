@@ -2,7 +2,7 @@
 {% load static %};
 
 {% block title %}
-Admisiones Formulario
+Admisiones
 {%endblock %};
 
 {% block titulo-pagina %}
@@ -133,8 +133,8 @@ Admisiones
       <div class="card-header">
         <h3 class="card-title">Evolución de impacto </h3>
         <div class="card-tools d-inline">
-          <span class="badge badge-success description-percentage h6 my-0 mx-2"><i class="fas fa-caret-up"></i>
-            5%</span>
+          <!--<span class="badge badge-success description-percentage h6 my-0 mx-2"><i class="fas fa-caret-up"></i>
+            5%</span>-->
           <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
             <i class="fas fa-minus"></i>
           </button>
@@ -147,12 +147,12 @@ Admisiones
               <th>Criterios modificables</th>
               <th class="text-center px-1" width="6%">Puntaje</th>
               <th class="text-center px-1" width="10%">Intervenciones</th>
-              <th class="text-center px-1" width="10%">Impacto</th>
+              <!--<th class="text-center px-1" width="10%">Impacto</th>-->
             </tr>
           </thead>
           <tbody>
             {% for c in criterio %}
-            {% if c.fk_criterios_ivi.tipo == 'Madre o Cuidador principal' and c.fk_criterios_ivi.modificable == "Si"%}
+            {% if c.fk_criterios_ivi.tipo == 'Madre o Cuidador principal' and c.fk_criterios_ivi.modificable == "Si" and forloop.counter == 1 %}
             <tr>
               <td colspan="4" class="text-center bg-secondary py-1">Madre o Cuidador principal
               </td>
@@ -166,14 +166,14 @@ Admisiones
                 <td>{{c.fk_criterios_ivi.criterio}}</td>
                 <td class="text-center">{{c.fk_criterios_ivi.puntaje}}</td>
                 <td class="text-center"></td>
-                <td class="text-center"><span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span></td>
+                <!--<td class="text-center"><span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span></td>-->
             </tr>
   
             {% endif %}
             {% endif %}
             {% endfor %}
             {% for c in criterio %}
-            {% if c.fk_criterios_ivi.tipo == 'Bebé, niño o niña' and c.fk_criterios_ivi.modificable == "Si"%}
+            {% if c.fk_criterios_ivi.tipo == 'Bebé, niño o niña' and c.fk_criterios_ivi.modificable == "Si" and forloop.counter == 1 %}
             <tr>
               <td colspan="4" class="text-center bg-secondary py-1">Bebé, niño o niña
               </td>
@@ -187,14 +187,14 @@ Admisiones
                 <td>{{c.fk_criterios_ivi.criterio}}</td>
                 <td class="text-center">{{c.fk_criterios_ivi.puntaje}}</td>
                 <td class="text-center"></td>
-                <td class="text-center"><span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span></td>
+                <!--<td class="text-center"><span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span></td>-->
             </tr>
   
             {% endif %}
             {% endif %}
             {% endfor %}
             {% for c in criterio %}
-            {% if c.fk_criterios_ivi.tipo == 'Familia' and c.fk_criterios_ivi.modificable == "Si"%}
+            {% if c.fk_criterios_ivi.tipo == 'Familia' and c.fk_criterios_ivi.modificable == "Si" and forloop.counter == 1 %}
             <tr>
               <td colspan="4" class="text-center bg-secondary py-1">Familia
               </td>
@@ -208,14 +208,14 @@ Admisiones
                 <td>{{c.fk_criterios_ivi.criterio}}</td>
                 <td class="text-center">{{c.fk_criterios_ivi.puntaje}}</td>
                 <td class="text-center"></td>
-                <td class="text-center"><span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span></td>
+                <!--<td class="text-center"><span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span></td>-->
             </tr>
   
             {% endif %}
             {% endif %}
             {% endfor %}
             {% for c in criterio %}
-            {% if c.fk_criterios_ivi.tipo == 'Ajustes' and c.fk_criterios_ivi.modificable == "Si"%}
+            {% if c.fk_criterios_ivi.tipo == 'Ajustes' and c.fk_criterios_ivi.modificable == "Si" and forloop.counter == 1 %}
             <tr>
               <td colspan="4" class="text-center bg-secondary py-1">Ajustes
               </td>
@@ -229,7 +229,7 @@ Admisiones
                 <td>{{c.fk_criterios_ivi.criterio}}</td>
                 <td class="text-center">{{c.fk_criterios_ivi.puntaje}}</td>
                 <td class="text-center"></td>
-                <td class="text-center"><span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span></td>
+                <!--<td class="text-center"><span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span></td>-->
             </tr>
   
             {% endif %}

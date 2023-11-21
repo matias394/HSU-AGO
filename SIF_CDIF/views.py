@@ -1,6 +1,6 @@
 from django.views.generic import CreateView,ListView,DetailView,UpdateView,DeleteView,TemplateView, FormView
 from Legajos.models import LegajosDerivaciones
-from Legajos.forms import DerivacionesRechazoForm
+from Legajos.forms import DerivacionesRechazoForm, LegajosDerivacionesForm
 from django.db.models import Q
 from .models import *
 from Configuraciones.models import *
@@ -109,6 +109,32 @@ class CDIFDerivacionesRechazo(PermisosMixin, CreateView):
     
     def get_success_url(self):
         return reverse('CDIF_derivaciones_listar')
+    
+class CDIFDerivacionesUpdateView(PermisosMixin, UpdateView):
+    permission_required = "Usuarios.rol_admin"
+    model = LegajosDerivaciones
+    template_name = "SIF_CDIF/derivaciones_form.html"
+    form_class = LegajosDerivacionesForm
+    success_message = "Derivación editada con éxito"
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial["fk_usuario"] = self.request.user
+        return initial
+        
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs["pk"]
+        context = super().get_context_data(**kwargs)
+        legajo = LegajosDerivaciones.objects.filter(id=pk).first()
+        context["legajo"] = Legajos.objects.filter(id=legajo.fk_legajo.id).first()
+        return context
+    
+    def form_invalid(self, form):
+        return super().form_invalid(form)   
+    
+    def get_success_url(self):
+        pk = self.kwargs['pk']
+        return reverse('CDIF_derivaciones_ver', kwargs={'pk': pk})
 
 class CDIFPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin):
     permission_required = "Usuarios.rol_admin"
@@ -134,7 +160,7 @@ class CDIFPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
     def form_valid(self, form):
         pk = self.kwargs["pk"]
         form.instance.estado = 'En proceso'
-        form.instance.vinculo1 = form.cleaned_data['vinculo']
+        form.instance.vinculo1 = form.cleaned_data['vinculo1']
         form.instance.vinculo2 = form.cleaned_data['vinculo2']
         form.instance.vinculo3 = form.cleaned_data['vinculo3']
         form.instance.vinculo4 = form.cleaned_data['vinculo4']
@@ -287,6 +313,7 @@ class CDIFPreAdmisionesBuscarListView(PermisosMixin, TemplateView):
         query = self.request.GET.get("busqueda")
         if query:
             object_list = CDIF_PreAdmision.objects.filter(Q(fk_legajo__apellido__iexact=query) | Q(fk_legajo__documento__iexact=query), fk_derivacion__fk_programa_id=23).exclude(estado__in=['Rechazada','Aceptada']).distinct()
+            #object_list = Legajos.objects.filter(Q(apellido__iexact=query) | Q(documento__iexact=query))
             if not object_list:
                 messages.warning(self.request, ("La búsqueda no arrojó resultados."))
 
@@ -1047,6 +1074,7 @@ class CDIFIndiceIviEgresoCreateView (PermisosMixin, CreateView):
         context["object"] = object
         context["criterio"] = criterio
         context['form2'] = CDIF_IndiceIviHistorialForm()
+        context['admi'] = admi
         return context
     
     def post(self, request, *args, **kwargs):
