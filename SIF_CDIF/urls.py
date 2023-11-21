@@ -9,6 +9,7 @@ urlpatterns = [
     path('CDIF/derivaciones/listar', login_required(CDIFDerivacionesListView.as_view()), name='CDIF_derivaciones_listar'),
     path('CDIF/derivaciones/buscar', login_required(CDIFDerivacionesBuscarListView.as_view()), name='CDIF_derivaciones_buscar'),
     path('CDIF/derivaciones/ver/<pk>', login_required(CDIFDerivacionesDetailView.as_view()), name='CDIF_derivaciones_ver'),
+    path('CDIF/derivaciones/editar/<pk>', login_required(CDIFDerivacionesUpdateView.as_view()), name='CDIF_derivaciones_editar'),
     path('CDIF/derivaciones/rechazo/<pk>', login_required(CDIFDerivacionesRechazo.as_view()), name='CDIF_derivaciones_rechazo'),
     # PreAdmisiones
     path('CDIF/preadmisiones/crear/<pk>', login_required(CDIFPreAdmisionesCreateView.as_view()), name='CDIF_preadmisiones_crear'),

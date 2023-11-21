@@ -26,9 +26,13 @@ Intervenciones
 <div class="row">
   <!-- botones -->
   <div class="col-12 my-3 mx-2 d-print-none">
+    {% if object.fk_admision.estado == "Activa" %}
     <a href="{% url 'CDIF_intervencion_editar' object.id %}" class="btn btn-primary mr-1">Editar</a>
+    {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
+    {% if object.fk_admision.estado == "Activa" %}
     <a href="{% url 'CDIF_intervencion_borrar' object.id %}" class="btn btn-danger mr-1">Eliminar</a>
+    {% endif %}
   </div>
   <!-- ./botones -->
 
