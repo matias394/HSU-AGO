@@ -52,7 +52,7 @@
             <span class="info-box-icon bg-success elevation-1"><i class="fas fa-share-square"></i></span>
             <div class="info-box-content">
                 <span class="info-box-text text-center h6">Derivaciones Pendientes</span>
-                <span class="info-box-number text-center h4">138</span>
+                <span class="info-box-number text-center h4">{{ pendientes.count }}</span>
             </div>
 
         </div>
@@ -220,7 +220,7 @@
             <div class="card-body">
                 <div class="small-box bg-primary mb-2">
                     <div class="inner">
-                        <h3>350</h3>
+                        <h3>{{ cantidad_legajos }}</h3>
                         <p>Total</p>
                     </div>
                     <div class="icon">
