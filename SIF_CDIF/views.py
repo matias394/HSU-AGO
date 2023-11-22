@@ -8,7 +8,7 @@ from .forms import *
 from Usuarios.mixins import PermisosMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
-from django.db.models import Sum, F, ExpressionWrapper, IntegerField
+from django.db.models import Sum, F, ExpressionWrapper, IntegerField, Count, Max
 import uuid
 from django.shortcuts import redirect
 from django.contrib import messages
@@ -631,9 +631,9 @@ class CDIFVacantesAdmision(PermisosMixin, CreateView):
     def form_valid(self, form):
         sala = form.cleaned_data['sala']
         turno = form.cleaned_data['turno']
-        if sala == 'Bebe' and turno == 'Mañana':
+        if sala == 'Bebes' and turno == 'Mañana':
             form.instance.salashort = 'manianabb'
-        elif sala == 'Bebe' and turno == 'Tarde':
+        elif sala == 'Bebes' and turno == 'Tarde':
             form.instance.salashort = 'tardebb'
         elif sala == '2' and turno == 'Mañana':
             form.instance.salashort = 'maniana2'
@@ -646,7 +646,7 @@ class CDIFVacantesAdmision(PermisosMixin, CreateView):
         self.object = form.save()
 
         base1 = CDIF_Admision.objects.filter(pk=self.kwargs["pk"]).first()
-        base1.estado_vacante = "Finalizada"
+        base1.estado_vacante = "Asignada"
         base1.save()
         
         # --------- HISTORIAL ---------------------------------
@@ -699,12 +699,17 @@ class CDIFVacantesAdmisionCambio(PermisosMixin, CreateView):
             messages.error(self.request, 'El campo fecha de egreso es requerido.')
             return super().form_invalid(form) 
         else:
+            pk = self.kwargs["pk"]
+            vacante_anterior = CDIF_VacantesOtorgadas.objects.filter(fk_admision_id=pk).last()
+            vacante_anterior.estado_vacante = "Cambiado"
+            vacante_anterior.save()
+
             form.evento = "CambioVacante"
             sala = form.cleaned_data['sala']
             turno = form.cleaned_data['turno']
-            if sala == 'Bebe' and turno == 'Mañana':
+            if sala == 'Bebes' and turno == 'Mañana':
                 form.instance.salashort = 'manianabb'
-            elif sala == 'Bebe' and turno == 'Tarde':
+            elif sala == 'Bebes' and turno == 'Tarde':
                 form.instance.salashort = 'tardebb'
             elif sala == '2' and turno == 'Mañana':
                 form.instance.salashort = 'maniana2'
@@ -718,7 +723,7 @@ class CDIFVacantesAdmisionCambio(PermisosMixin, CreateView):
 
         
             # --------- HISTORIAL ---------------------------------
-            pk = self.kwargs["pk"]
+            
             legajo = CDIF_Admision.objects.filter(pk=pk).first()
             base = CDIF_Historial()
             base.fk_legajo_id = legajo.fk_preadmi.fk_legajo.id
@@ -884,6 +889,42 @@ class CDIFVacantesDetailView (PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_CDIF/vacantes_detail.html"
     model = Vacantes
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        organizacion = Vacantes.objects.filter(pk=self.kwargs["pk"])
+        asig_manianabb = CDIF_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="Bebes", turno= "Mañana", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
+        asig_tardebb = CDIF_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="Bebes", turno= "Tarde", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
+        asig_maniana2 = CDIF_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="2", turno= "Mañana", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
+        asig_tarde2 = CDIF_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="2", turno= "Tarde", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
+        asig_maniana3 = CDIF_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="3", turno= "Mañana", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
+        asig_tarde3 = CDIF_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="3", turno= "Tarde", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
+        esp_manianabb = CDIF_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="manianabb",estado_vacante='Lista de espera').count()
+        esp_tardebb = CDIF_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="tardebb",estado_vacante='Lista de espera').count()
+        esp_maniana2 = CDIF_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="maniana2",estado_vacante='Lista de espera').count()
+        esp_tarde2 = CDIF_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="tarde2",estado_vacante='Lista de espera').count()
+        esp_maniana3 = CDIF_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="maniana3",estado_vacante='Lista de espera').count()
+        esp_tarde3 =  CDIF_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="tarde3",estado_vacante='Lista de espera').count()
+
+        admi = CDIF_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], fk_admision__estado ="Activa", estado_vacante = "Asignada")
+        admi2 = CDIF_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"], estado ="Activa", estado_vacante = "Lista de espera")
+        
+        context["object"] = Vacantes.objects.get(pk=self.kwargs["pk"])
+        context["asig_manianabb"] = asig_manianabb
+        context["asig_tardebb"] = asig_tardebb
+        context["asig_maniana2"] = asig_maniana2
+        context["asig_tarde2"] = asig_tarde2
+        context["asig_maniana3"] = asig_maniana3
+        context["asig_tarde3"] = asig_tarde3
+        context["esp_manianabb"] = esp_manianabb
+        context["esp_tardebb"] = esp_tardebb
+        context["esp_maniana2"] = esp_maniana2
+        context["esp_tarde2"] = esp_tarde2
+        context["esp_maniana3"] = esp_maniana3
+        context["esp_tarde3"] = esp_tarde3
+        context["admi"] = admi
+        context["admi2"] = admi2
+        return context
 
 class CDIFIntervencionesCreateView(PermisosMixin, CreateView):
     permission_required = "Usuarios.rol_admin"
