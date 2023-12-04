@@ -19,6 +19,12 @@ urlpatterns = [
     path('CDLE/preadmisiones/listar', login_required(CDLEPreAdmisionesListView.as_view()), name='CDLE_preadmisiones_listar'),
     path('CDLE/preadmisiones/buscar', login_required(CDLEPreAdmisionesBuscarListView.as_view()), name='CDLE_preadmisiones_buscar'),
     path('CDLE/preadmisiones/eliminar/<pk>', login_required(CDLEPreAdmisionesDeleteView.as_view()), name='CDLE_preadmisiones_eliminar'),
+    # Indice Ingreso
+    path('CDLE/criterios_ingreso/crear', login_required(CDLECriteriosIngresoCreateView.as_view()), name='CDLE_criterios_ingreso_crear'),
+    path('CDLE/indice_ingreso/crear/<pk>', login_required(CDLEIndiceIngresoCreateView.as_view()), name='CDLE_indiceingreso_crear'),
+    #path('CDLE/indice_ivi_egreso/crear/<pk>', login_required(CDLEIndiceIviEgresoCreateView.as_view()), name='CDLE_indiceiviegreso_crear'),
+    path('CDLE/indice_ingreso/ver/<pk>', login_required(CDLEIndiceIngresoDetailView.as_view()), name='CDLE_indiceingreso_ver'),
+    path('CDLE/indice_ingreso/editar/<pk>', login_required(CDLEIndiceIngresoUpdateView.as_view()), name='CDLE_indiceingreso_editar'),
     # IVI
     path('CDLE/criterios_ivi/crear', login_required(CDLECriteriosIVICreateView.as_view()), name='CDLE_criterios_ivi_crear'),
     path('CDLE/indice_ivi/crear/<pk>', login_required(CDLEIndiceIviCreateView.as_view()), name='CDLE_indiceivi_crear'),

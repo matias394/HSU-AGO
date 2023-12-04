@@ -39,7 +39,7 @@ Pre-admisiones
 
 
     <!-- Datos de pre-admisión -->
-    <div class="col-sm-4 pb-3">
+    <div class="col-sm-3 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
           <h3 class="card-title">Detalle Pre-admisión</h3>
@@ -73,7 +73,7 @@ Pre-admisiones
     <!-- /  -->
 
     <!-- Datos de legajo -->
-    <div class="col-sm-4 pb-3">
+    <div class="col-sm-3 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
           <h3 class="card-title">Detalle Legajo</h3>
@@ -98,9 +98,38 @@ Pre-admisiones
       </div>
     </div>
     <!-- /  -->
+        <!-- Datos de Indice Ingreso-->
+        <div class="col-sm-3 pb-3">
+          <div class="card card-outline card-primary h-100 mb-0">
+            <div class="card-header">
+              <h3 class="card-title">Detalle índice de ingreso</h3>
+              <div class="card-tools d-inline">
+                <a href="{% url 'CDLE_indiceingreso_ver' object.id %}" class="ml-3 mr-2">Ver detalles</a>
+                <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body pb-1">
+              <dl class="row mb-0">
+                <dd class="col-sm-7 mb-2">Puntaje</dd>
+                <dt class="col-sm-5 mb-2"><span class=" badge badge-warning">{{puntaje_ingreso}}</span></dt>
+                <dd class="col-sm-7 mb-2">Fecha del índice</dd>
+                <dt class="col-sm-5 mb-2">{{foto_ingreso.creado|date:'d/m/Y'}}</dt>
+                <dd class="col-sm-7 mb-2">Puntaje máximo posible</dd>
+                <dt class="col-sm-5 mb-2">{{maximo_ingreso}}</dt>
+                <dd class="col-sm-7 mb-2">Criterios presentes</dd>
+                <dt class="col-sm-5 mb-2">{{cantidad_ingreso}}</dt>
+                <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Generado por {{foto_ingreso.creado_por}}</dd>
+              </dl>
+            </div>
+    
+          </div>
+        </div>
+        <!-- /  -->
 
     <!-- Datos de Indice -->
-    <div class="col-sm-4 pb-3">
+    <div class="col-sm-3 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
           <h3 class="card-title">Detalle IVI de ingreso</h3>

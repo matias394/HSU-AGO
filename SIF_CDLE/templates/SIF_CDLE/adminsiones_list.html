@@ -39,7 +39,7 @@
                 <th>Admisión</th>
                 <th>Nombre</th>
                 <th>Documento</th>
-                <th>Centro</th>
+                <th>Indice ingreso</th>
                 <th>IVI de ingreso</th>
                 <th>IVI de egreso</th>
                 <th>Estado</th>
@@ -53,7 +53,13 @@
                 <td class="mailbox-date">{{a.creado|date:'d/m/Y'}}</td>
                 <td class=""> <a href="{% url 'CDLE_admisiones_ver' a.id %}" title="Ver detalle de admisión">{{a.fk_preadmi.fk_legajo}}</a></td>
                 <td class="">{{a.fk_preadmi.fk_legajo.documento}}</td>
-                <td>{{a.fk_preadmi.centro_postula}}</td>
+                <td>
+                  {% for f in foto_ingreso %}
+                  {% if f.fk_preadmi_id == a.fk_preadmi.id and f.tipo == "Ingreso"%}
+                  <span class=" badge badge-warning">{{ f.puntaje }}</span>
+                  {% endif %}
+                  {% endfor %}
+                </td>
                 <td class="text-center">
                   {% for f in foto %}
                   {% if f.fk_preadmi_id == a.fk_preadmi.id and f.tipo == "Ingreso"%}

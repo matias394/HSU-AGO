@@ -99,12 +99,35 @@ class CDLE_PreadmisionesForm (forms.ModelForm):
             'turno_postula':'',
         }
 
+class criterios_Ingreso (forms.ModelForm):
+    class Meta:
+        model = Criterios_Ingreso
+        fields = '__all__'
+        widgets = {}
+        labels = {}
+
+class CDLE_IndiceIngresoForm (forms.ModelForm):
+    class Meta:
+        model = CDLE_IndiceIngreso
+        fields = '__all__'
+        widgets = {}
+        labels = {}
+
+class CDLE_IndiceIngresoHistorialForm (forms.ModelForm):
+    class Meta:
+        model = CDLE_Foto_Ingreso
+        fields = '__all__'
+        widgets = {}
+        labels = {}
+
+
 class criterios_IVI (forms.ModelForm):
     class Meta:
         model = Criterios_IVI
         fields = '__all__'
         widgets = {}
         labels = {}
+
 
 class CDLE_IndiceIviForm (forms.ModelForm):
     class Meta:

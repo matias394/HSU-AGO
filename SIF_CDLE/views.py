@@ -228,9 +228,13 @@ class CDLEPreAdmisionesDetailView(PermisosMixin, DetailView):
         legajo = LegajosDerivaciones.objects.filter(pk=pk.fk_derivacion_id).first()
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         ivi = CDLE_IndiceIVI.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
+        ingreso = CDLE_IndiceIngreso.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
         resultado = ivi.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ivi__puntaje')).order_by('-creado')
+        resultado_ingreso = ingreso.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ingreso__puntaje')).order_by('-creado')
         context["ivi"] = ivi
+        context["ingreso"] = ingreso
         context["resultado"] = resultado
+        context["resultado_ingreso"] = resultado_ingreso
         context["legajo"] = legajo
         context["familia"] = familia
         return context
@@ -241,6 +245,7 @@ class CDLEPreAdmisionesDetailView(PermisosMixin, DetailView):
             objeto = self.get_object()
             objeto.estado = 'Finalizada'
             objeto.ivi = "NO"
+            objeto.indice_ingreso = "NO"
             objeto.admitido = "NO"
             objeto.save()
 
@@ -321,6 +326,182 @@ class CDLEPreAdmisionesDeleteView(PermisosMixin, DeleteView):
         else:
             self.object.delete()
             return redirect(self.success_url)
+
+class CDLECriteriosIngresoCreateView(PermisosMixin, CreateView):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_CDLE/criterios_ingreso_form.html"
+    model = Criterios_Ingreso
+    form_class = criterios_Ingreso
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return HttpResponseRedirect(reverse('CDLE_criterios_ingreso_crear'))
+    
+class CDLEIndiceIngresoCreateView (PermisosMixin, CreateView):
+    permission_required = "Usuarios.rol_admin"
+    model = Criterios_Ingreso
+    template_name = "SIF_CDLE/indiceingreso_form.html"
+    form_class = CDLE_IndiceIngresoForm    
+    
+    def get_context_data(self, **kwargs):
+        pk=self.kwargs["pk"]
+        context = super().get_context_data(**kwargs)
+        object = CDLE_PreAdmision.objects.filter(pk=pk).first()
+        #object = Legajos.objects.filter(pk=pk).first()
+        criterio = Criterios_Ingreso.objects.all()
+        context["object"] = object
+        context["criterio"] = criterio
+        context['form2'] = CDLE_IndiceIngresoHistorialForm()
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        pk=self.kwargs["pk"]
+        # Genera una clave única utilizando uuid4 (versión aleatoria)
+        preadmi = CDLE_PreAdmision.objects.filter(pk=pk).first()
+        clave = str(uuid.uuid4())
+        nombres_campos = request.POST.keys()
+        puntaje_maximo = Criterios_Ingreso.objects.aggregate(total=Sum('puntaje'))['total']
+        total_puntaje = 0
+        for f in nombres_campos:
+            if f.isdigit():
+                criterio_ingreso = Criterios_Ingreso.objects.filter(id=f).first()
+                # Sumar el valor de f al total_puntaje
+                total_puntaje += int(criterio_ingreso.puntaje)
+                base = CDLE_IndiceIngreso()
+                base.fk_criterios_ingreso_id = f
+                base.fk_legajo_id = preadmi.fk_legajo_id
+                base.fk_preadmi_id = pk
+                base.tipo = "Ingreso"
+                base.presencia = True
+                base.programa = "CDLE"
+                base.clave = clave
+                base.save()
+        
+        # total_puntaje contiene la suma de los valores de F
+        foto = CDLE_Foto_Ingreso()
+        foto.observaciones = request.POST.get('observaciones', '')
+        foto.fk_preadmi_id = pk
+        foto.fk_legajo_id = preadmi.fk_legajo_id
+        foto.puntaje = total_puntaje
+        foto.puntaje_max = puntaje_maximo
+        #foto.crit_modificables = crit_modificables
+        #foto.crit_presentes = crit_presentes
+        foto.tipo = "Ingreso"
+        foto.clave = clave
+        foto.creado_por_id = self.request.user.id
+        foto.save()
+
+        preadmi.indice_ingreso = "SI"
+        preadmi.save()
+
+        #---------HISTORIAL---------------------------------
+        pk=self.kwargs["pk"]
+        base = CDLE_Historial()
+        base.fk_legajo_id = preadmi.fk_legajo.id
+        base.fk_legajo_derivacion_id = preadmi.fk_derivacion_id
+        base.fk_preadmi_id = preadmi.id
+        base.movimiento = "CREACION INDICE INGRESO"
+        base.creado_por_id = self.request.user.id
+        base.save()
+
+        return redirect('CDLE_indiceingreso_ver', preadmi.id)
+
+class CDLEIndiceIngresoUpdateView (PermisosMixin, UpdateView):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_CDLE/indiceingreso_edit.html"
+    model = CDLE_PreAdmision
+    form_class = CDLE_IndiceIngresoForm
+
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs["pk"]
+        activos = CDLE_IndiceIngreso.objects.filter(fk_preadmi_id=pk)
+        observaciones = CDLE_Foto_Ingreso.objects.filter(fk_preadmi_id=pk).first()
+
+        context = super().get_context_data(**kwargs)
+        context["object"] = CDLE_PreAdmision.objects.filter(pk=pk).first()
+        context["activos"] = activos
+        context["clave"] = observaciones.clave
+        context["observaciones"] = observaciones.observaciones
+        context["criterio"] = Criterios_Ingreso.objects.all()
+        context['form2'] = CDLE_IndiceIngresoHistorialForm()
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        pk=self.kwargs["pk"]
+        preadmi = CDLE_PreAdmision.objects.filter(pk=pk).first()
+        CDLE_foto = CDLE_Foto_IVI.objects.filter(fk_preadmi_id=pk).first()
+        clave = CDLE_foto.clave
+        indices_ingreso = CDLE_IndiceIngreso.objects.filter(clave=clave)
+        #CDLE_foto.delete()
+        indices_ingreso.delete()
+        nombres_campos = request.POST.keys()
+        puntaje_maximo = Criterios_Ingreso.objects.aggregate(total=Sum('puntaje'))['total']
+        total_puntaje = 0
+        for f in nombres_campos:
+            if f.isdigit():
+                criterio_ingreso = Criterios_Ingreso.objects.filter(id=f).first()
+                # Sumar el valor de f al total_puntaje
+                total_puntaje += int(criterio_ingreso.puntaje)
+                base = CDLE_IndiceIVI()
+                base.fk_criterios_ingreso_id = f
+                base.fk_legajo_id = preadmi.fk_legajo_id
+                base.fk_preadmi_id = pk
+                base.presencia = True
+                base.programa = "CDLE"
+                base.clave = clave
+                base.save()
+        
+        # total_puntaje contiene la suma de los valores de F
+        foto = CDLE_Foto_Ingreso.objects.filter(clave=clave).first()
+        foto.observaciones = request.POST.get('observaciones', '')
+        foto.fk_preadmi_id = pk
+        foto.fk_legajo_id = preadmi.fk_legajo_id
+        foto.puntaje = total_puntaje
+        foto.puntaje_max = puntaje_maximo
+        #foto.crit_modificables = crit_modificables
+        #foto.crit_presentes = crit_presentes
+        #foto.tipo = "Ingreso"
+        #foto.clave = clave
+        foto.modificado_por_id = self.request.user.id
+        foto.save()
+
+        #---------HISTORIAL---------------------------------
+        pk=self.kwargs["pk"]
+        preadmi = CDLE_PreAdmision.objects.filter(pk=pk).first()
+        base = CDLE_Historial()
+        base.fk_legajo_id = preadmi.fk_legajo.id
+        base.fk_legajo_derivacion_id = preadmi.fk_derivacion_id
+        base.fk_preadmi_id = preadmi.id
+        base.movimiento = "MODIFICACION INDICE INGRESO"
+        base.creado_por_id = self.request.user.id
+        base.save()
+
+        return redirect('CDLE_indiceingreso_ver', preadmi.id)
+    
+class CDLEIndiceIngresoDetailView(PermisosMixin, DetailView):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_CDLE/indiceingreso_detail.html"
+    model = CDLE_PreAdmision
+
+    def get_context_data(self, **kwargs):
+        pk=self.kwargs["pk"]
+        context = super().get_context_data(**kwargs)
+        criterio = CDLE_IndiceIngreso.objects.filter(fk_preadmi_id=pk, tipo="Ingreso")
+        object = CDLE_PreAdmision.objects.filter(pk=pk).first()
+        foto_ingreso = CDLE_Foto_Ingreso.objects.filter(fk_preadmi_id=pk, tipo="Ingreso").first()
+
+        context["object"] = object
+        context["foto_ingreso"] = foto_ingreso
+        context["criterio"] = criterio
+        context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
+        context["cantidad"] = criterio.count()
+        context["modificables"] = criterio.filter(fk_criterios_ingreso__modificable='SI').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ingreso__modificable='SI').aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
+        context["ajustes"] = criterio.filter(fk_criterios_ingreso__tipo='Ajustes').count()
+        #context['maximo'] = foto_ingreso.puntaje_max
+        return context
+    
+#--------- CREAR IVI -------------------------------------
 
 class CDLECriteriosIVICreateView(PermisosMixin, CreateView):
     permission_required = "Usuarios.rol_admin"
@@ -493,8 +674,8 @@ class CDLEIndiceIviDetailView(PermisosMixin, DetailView):
         context["criterio"] = criterio
         context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable='SI').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable='Si').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable='Si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         #context['maximo'] = foto_ivi.puntaje_max
         return context
@@ -510,17 +691,23 @@ class CDLEPreAdmisiones3DetailView(PermisosMixin, DetailView):
         legajo = LegajosDerivaciones.objects.filter(pk=pk.fk_derivacion_id).first()
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         criterio = CDLE_IndiceIVI.objects.filter(fk_preadmi_id=pk, tipo="Ingreso")
+        criterio_ingreso = CDLE_IndiceIngreso.objects.filter(fk_preadmi_id=pk, tipo="Ingreso")
         foto_ivi = CDLE_Foto_IVI.objects.filter(fk_preadmi_id= pk, tipo="Ingreso").first()
+        foto_ingreso = CDLE_Foto_Ingreso.objects.filter(fk_preadmi_id= pk, tipo="Ingreso").first()
 
         context["legajo"] = legajo
         context["familia"] = familia
         context["foto_ivi"] = foto_ivi
+        context["foto_ingreso"] = foto_ingreso
         context["puntaje"] = foto_ivi.puntaje
+        context["puntaje_ingreso"] = foto_ingreso.puntaje
         context["cantidad"] = criterio.count()
+        context["cantidad_ingreso"] = criterio_ingreso.count()
         context["modificables"] = criterio.filter(fk_criterios_ivi__modificable='SI').count()
         context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
+        context['maximo_ingreso'] = foto_ingreso.puntaje_max
         return context
     
     def post(self, request, *args, **kwargs):
@@ -548,7 +735,7 @@ class CDLEPreAdmisiones3DetailView(PermisosMixin, DetailView):
             base.save()
 
             # Redirige de nuevo a la vista de detalle actualizada
-            return redirect('CDLE_asignado_admisiones_ver', legajo.pk)
+            return redirect('CDLE_asignado_admisiones_ver', redirigir)
 
 class CDLEAdmisionesListView(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"
@@ -558,12 +745,16 @@ class CDLEAdmisionesListView(PermisosMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         criterio = CDLE_IndiceIVI.objects.all()
+        criterio_ingreso = CDLE_IndiceIngreso.objects.all()
         admi = CDLE_Admision.objects.all()
         foto = CDLE_Foto_IVI.objects.all()
+        foto_ingreso = CDLE_Foto_Ingreso.objects.all()
 
         context["admi"] = admi
         context["foto"] = foto
+        context["foto_ingreso"] = foto_ingreso
         context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["puntaje_ingreso"] = criterio_ingreso.aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
         return context
 
 class CDLEAdmisionesDetailView(PermisosMixin, DetailView):
@@ -600,8 +791,10 @@ class CDLEAsignadoAdmisionDetail(PermisosMixin, DetailView):
 
         preadmi = CDLE_PreAdmision.objects.filter(pk=admi.fk_preadmi_id).first()
         criterio = CDLE_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
+        criterio_ingreso = CDLE_IndiceIngreso.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
         criterio2 = CDLE_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
         observaciones = CDLE_Foto_IVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso").first()
+        observaciones_ingreso = CDLE_Foto_Ingreso.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso").first()
         observaciones2 = CDLE_Foto_IVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso").first()
         intervenciones = CDLE_Intervenciones.objects.filter(fk_admision_id=admi.id).all()
         intervenciones_last = CDLE_Intervenciones.objects.filter(fk_admision_id=admi.id).last()
@@ -611,9 +804,11 @@ class CDLEAsignadoAdmisionDetail(PermisosMixin, DetailView):
         context["foto_ivi_fin"] = foto_ivi_fin
         context["foto_ivi_inicio"] = foto_ivi_inicio
         context["observaciones"] = observaciones
+        context["observaciones_ingreso"] = observaciones_ingreso
         context["observaciones2"] = observaciones2
         context["criterio"] = criterio
         context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["puntaje_ingreso"] = criterio_ingreso.aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
         context["puntaje2"] = criterio2.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["object"] = admi
         context["vo"] = self.object
