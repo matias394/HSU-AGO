@@ -165,6 +165,13 @@ CHOICE_TURNO_POSTULA=[
     ('Mañana', 'Mañana'),
     ('Tarde', 'Tarde'),
 ]
+CHOICE_TIPO_INGRESO=[
+    (None, ''),
+    ('Criteros autónomos de ingreso', 'Criteros autónomos de ingreso'),
+    ('Motivo de falta de control o control insuficiente', 'Motivo de falta de control o control insuficiente'),
+    ('Criterios combinables de ingreso', 'Criterios combinables de ingreso'),
+    ('Criterios sociales para el ingreso', 'Criterios sociales para el ingreso'),
+]
 CHOICE_TIPO_IVI=[
     (None, ''),
     ('Madre o Cuidador principal', 'Madre o Cuidador principal'),

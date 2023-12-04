@@ -99,6 +99,15 @@ Admisiones
     <div class="row h-100">
       <div class="col-12">
         <div class="info-box py-3">
+          <span class="info-box-icon bg-success">{{puntaje_ingreso.total}}</span>
+          <div class="info-box-content">
+            <span class="info-box-text">Indice de ingreso</span>
+            <span class="info-box-number h6">{{observaciones_ingreso.creado|date:'d/m/Y'}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="info-box py-3">
           <span class="info-box-icon bg-warning">{{puntaje.total}}</span>
           <div class="info-box-content">
             <span class="info-box-text">IVI de ingreso</span>
