@@ -26,12 +26,6 @@ Admisiones
   <!-- botones -->
   <div class="col-12 my-3 mx-2 d-print-none">
     {% if object.estado != "Inactiva" %}
-    {% if object.estado_vacante == "Lista de espera" %}
-    <a href="{% url 'CDIF_vacantes_form' object.id %}" class="btn btn-primary mr-1">Otorgar vacante</a>
-    {% endif %}
-    {% if object.estado_vacante == "Finalizada" %}
-    <a href="{% url 'CDIF_vacantes_form_cambio' object.id %}" class="btn btn-primary mr-1">Modificar vacante</a>
-    {% endif %}
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
   </div>
@@ -74,7 +68,7 @@ Admisiones
       <div class="card-header">
         <h3 class="card-title">Detalle Admisión</h3>
         <div class="card-tools d-inline">
-          <a href="{% url 'CDIF_preadmisiones_ver3' object.fk_preadmi.id %}" class="ml-3 mr-2">Ver pre-admisión</a>
+          <a href="{% url 'CDLE_preadmisiones_ver3' object.fk_preadmi.id %}" class="ml-3 mr-2">Ver pre-admisión</a>
           <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
             <i class="fas fa-minus"></i>
           </button>
@@ -86,16 +80,10 @@ Admisiones
           <dt class="col-sm-7 mb-2"><span class="text-{% if object.estado == "Inactiva" %}danger{% else %}success{% endif %} font-weight-bold">{{object.estado}}</span></dt>
           <dd class="col-sm-5 mb-2">Fecha de admisión</dd>
           <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
-          <dd class="col-sm-5 mb-2">Estado vacante</dd>
-          <dt class="col-sm-7 mb-2"><span class="badge badge-{% if object.estado_vacante == 'Pendiente' %}warning{% endif %}{% if object.estado_vacante == 'Finalizada' %}success{% endif %}">{{object.estado_vacante}}</span></dt>
-          <dd class="col-sm-5 mb-2">Fecha de vacante</dd>
-          <dt class="col-sm-7 mb-2">-</dt>
-          <dd class="col-sm-5 mb-2">Centro </dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.centro_postula}}</dt>
-          <dd class="col-sm-5 mb-2">Sala</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.sala_postula}}</dt>
-          <dd class="col-sm-5 mb-2">Turno</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.turno_postula}}</dt>
+          <dd class="col-sm-5 mb-2">Acompaniante </dd>
+          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.acompaniante}}</dt>
+          <dd class="col-sm-5 mb-2">Madrina</dd>
+          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.madrina}}</dt>
         </dl>
       </div>
     </div>
@@ -108,7 +96,7 @@ Admisiones
       <div class="card-header">
         <h3 class="card-title">Detalle IVI de ingreso</h3>
         <div class="card-tools d-inline">
-          <a href="{% url 'CDIF_indiceivi_ver' object.fk_preadmi.id %}" class="ml-3 mr-2">Ver detalles</a>
+          <a href="{% url 'CDLE_indiceivi_ver' object.fk_preadmi.id %}" class="ml-3 mr-2">Ver detalles</a>
           <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
             <i class="fas fa-minus"></i>
           </button>
@@ -142,7 +130,7 @@ Admisiones
 <div class="row mt-4 d-print-none">
   <div class="col-12 mx-2">
     <div class="form-group  d-flex justify-content-between">
-      <a href="{% url 'CDIF_admisiones_listar' %}" class="btn btn-secondary">Volver</a>
+      <a href="{% url 'CDLE_admisiones_listar' %}" class="btn btn-secondary">Volver</a>
     </div>
   </div>
 </div>

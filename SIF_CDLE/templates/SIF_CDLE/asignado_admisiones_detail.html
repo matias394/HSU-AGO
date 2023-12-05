@@ -2,7 +2,7 @@
 {% load static %};
 
 {% block title %}
-Admisiones
+Admisiones Formulario
 {%endblock %};
 
 {% block titulo-pagina %}
@@ -26,12 +26,11 @@ Admisiones
   <!-- botones -->
   <div class="col-12 my-3 mx-2 d-print-none">
     {% if object.estado != "Inactiva" %}
-    <a href="{% url 'CDIF_intervenciones_legajos_listar' object.id %}" class="btn btn-primary mr-1">Ver intervenciones</a>
-    <a href="{% url 'CDIF_vacantes_form_cambio' object.id %}" class="btn btn-secondary mr-1">Cambiar vacante</a>
+    <a href="{% url 'CDLE_intervenciones_legajos_listar' object.id %}" class="btn btn-primary mr-1">Ver intervenciones</a>
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     {% if object.estado != "Inactiva" %}
-    <a href="{% url 'CDIF_indiceiviegreso_crear' object.id %}" class="btn btn-danger mr-1">Inactivar</a>
+    <a href="{% url 'CDLE_indiceiviegreso_crear' object.id %}" class="btn btn-danger mr-1">Inactivar</a>
     {% endif %}
   </div>
   <!-- ./botones -->
@@ -73,7 +72,7 @@ Admisiones
       <div class="card-header">
         <h3 class="card-title">Detalle Admisión</h3>
         <div class="card-tools d-inline">
-          <a href="{% url 'CDIF_admisiones_ver' object.id %}" class="ml-3 mr-2">Ver admisión</a>
+          <a href="{% url 'CDLE_asignado_admisiones_ver' object.id %}" class="ml-3 mr-2">Ver Admisión</a>
           <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
             <i class="fas fa-minus"></i>
           </button>
@@ -82,11 +81,13 @@ Admisiones
       <div class="card-body pb-2">
         <dl class="row mb-0">
           <dd class="col-sm-5 mb-2">Estado</dd>
-          <dt class="col-sm-7 mb-2"><span class="text-danger font-weight-bold">{{object.estado}}</span></dt>
-          <dd class="col-sm-5 mb-2">Fecha de inactivacion</dd>
-          <dt class="col-sm-7 mb-2">{{object.modificado|date:'d/m/Y'}}</dt>
-          <dd class="col-sm-5 mb-2">Motivo</dd>
-          <dt class="col-sm-7 mb-2">{{foto_ivi_fin.observaciones}}</dt>
+          <dt class="col-sm-7 mb-2"><span class="text-success font-weight-bold">{{object.estado}}</span></dt>
+          <dd class="col-sm-5 mb-2">Fecha de admisión</dd>
+          <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
+          <dd class="col-sm-5 mb-2">Acompañante</dd>
+          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.acompaniante}}</dt>
+          <dd class="col-sm-5 mb-2">Madrina</dd>
+          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.madrina}}</dt>
         </dl>
       </div>
     </div>
@@ -98,10 +99,19 @@ Admisiones
     <div class="row h-100">
       <div class="col-12">
         <div class="info-box py-3">
-          <span class="info-box-icon bg-warning">{{foto_ivi_inicio.puntaje}}</span>
+          <span class="info-box-icon bg-success">{{puntaje_ingreso.total}}</span>
+          <div class="info-box-content">
+            <span class="info-box-text">Indice de ingreso</span>
+            <span class="info-box-number h6">{{observaciones_ingreso.creado|date:'d/m/Y'}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="info-box py-3">
+          <span class="info-box-icon bg-warning">{{puntaje.total}}</span>
           <div class="info-box-content">
             <span class="info-box-text">IVI de ingreso</span>
-            <span class="info-box-number h6">{{foto_ivi_inicio.creado|date:'d/m/Y'}}</span>
+            <span class="info-box-number h6">{{observaciones.creado|date:'d/m/Y'}}</span>
           </div>
         </div>
       </div>
@@ -116,10 +126,10 @@ Admisiones
       </div>
       <div class="col-12">
         <div class="info-box py-3">
-          <span class="info-box-icon bg-success">{{foto_ivi_fin.puntaje}}</span>
+          <span class="info-box-icon bg-success">{{puntaje2.total}}</span>
           <div class="info-box-content">
-            <span class="info-box-text">IVI de Egreso</span>
-            <span class="info-box-number h6">{{foto_ivi_fin.creado|date:'d/m/Y'}}</span>
+            <span class="info-box-text">Valoración actual IVI</span>
+            <span class="info-box-number h6">{{observaciones2.creado|date:'d/m/Y'}}</span>
           </div>
         </div>
       </div>
@@ -127,14 +137,14 @@ Admisiones
   </div>
   <!-- / -->
 
-  <!-- evolucion de impacto sobre criterios -->
+  <!-- evolucion de impacto sobre criterios 
   <div class="col-12 mt-3">
     <div class="card card-primary card-outline">
       <div class="card-header">
         <h3 class="card-title">Evolución de impacto </h3>
         <div class="card-tools d-inline">
-          <!--<span class="badge badge-success description-percentage h6 my-0 mx-2"><i class="fas fa-caret-up"></i>
-            5%</span>-->
+          <span class="badge badge-success description-percentage h6 my-0 mx-2"><i class="fas fa-caret-up"></i>
+            5%</span>
           <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
             <i class="fas fa-minus"></i>
           </button>
@@ -147,15 +157,14 @@ Admisiones
               <th>Criterios modificables</th>
               <th class="text-center px-1" width="6%">Puntaje</th>
               <th class="text-center px-1" width="10%">Intervenciones</th>
-              <!--<th class="text-center px-1" width="10%">Impacto</th>-->
+              <th class="text-center px-1" width="10%">Impacto</th>
             </tr>
           </thead>
           <tbody>
             {% for c in criterio %}
             {% if c.fk_criterios_ivi.tipo == 'Madre o Cuidador principal' and c.fk_criterios_ivi.modificable == "Si" and forloop.counter == 1 %}
             <tr>
-              <td colspan="4" class="text-center bg-secondary py-1">Madre o Cuidador principal
-              </td>
+              <td colspan="4" class="text-center bg-secondary py-1">Madre o Cuidador principal</td>
             </tr>
             {% endif %}
             {% endfor %}
@@ -166,7 +175,7 @@ Admisiones
                 <td>{{c.fk_criterios_ivi.criterio}}</td>
                 <td class="text-center">{{c.fk_criterios_ivi.puntaje}}</td>
                 <td class="text-center"></td>
-                <!--<td class="text-center"><span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span></td>-->
+                <td class="text-center"><span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span></td>
             </tr>
   
             {% endif %}
@@ -175,8 +184,7 @@ Admisiones
             {% for c in criterio %}
             {% if c.fk_criterios_ivi.tipo == 'Bebé, niño o niña' and c.fk_criterios_ivi.modificable == "Si" and forloop.counter == 1 %}
             <tr>
-              <td colspan="4" class="text-center bg-secondary py-1">Bebé, niño o niña
-              </td>
+              <td colspan="4" class="text-center bg-secondary py-1">Bebé, niño o niña</td>
             </tr>
             {% endif %}
             {% endfor %}
@@ -187,7 +195,7 @@ Admisiones
                 <td>{{c.fk_criterios_ivi.criterio}}</td>
                 <td class="text-center">{{c.fk_criterios_ivi.puntaje}}</td>
                 <td class="text-center"></td>
-                <!--<td class="text-center"><span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span></td>-->
+                <td class="text-center"><span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span></td>
             </tr>
   
             {% endif %}
@@ -196,8 +204,7 @@ Admisiones
             {% for c in criterio %}
             {% if c.fk_criterios_ivi.tipo == 'Familia' and c.fk_criterios_ivi.modificable == "Si" and forloop.counter == 1 %}
             <tr>
-              <td colspan="4" class="text-center bg-secondary py-1">Familia
-              </td>
+              <td colspan="4" class="text-center bg-secondary py-1">Familia</td>
             </tr>
             {% endif %}
             {% endfor %}
@@ -208,7 +215,7 @@ Admisiones
                 <td>{{c.fk_criterios_ivi.criterio}}</td>
                 <td class="text-center">{{c.fk_criterios_ivi.puntaje}}</td>
                 <td class="text-center"></td>
-                <!--<td class="text-center"><span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span></td>-->
+                <td class="text-center"><span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span></td>
             </tr>
   
             {% endif %}
@@ -217,8 +224,7 @@ Admisiones
             {% for c in criterio %}
             {% if c.fk_criterios_ivi.tipo == 'Ajustes' and c.fk_criterios_ivi.modificable == "Si" and forloop.counter == 1 %}
             <tr>
-              <td colspan="4" class="text-center bg-secondary py-1">Ajustes
-              </td>
+              <td colspan="4" class="text-center bg-secondary py-1">Ajustes</td>
             </tr>
             {% endif %}
             {% endfor %}
@@ -229,7 +235,7 @@ Admisiones
                 <td>{{c.fk_criterios_ivi.criterio}}</td>
                 <td class="text-center">{{c.fk_criterios_ivi.puntaje}}</td>
                 <td class="text-center"></td>
-                <!--<td class="text-center"><span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span></td>-->
+                <td class="text-center"><span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span></td>
             </tr>
   
             {% endif %}
@@ -241,50 +247,8 @@ Admisiones
       </div>
     </div>
   </div>
-  <!-- / -->
+ -->
 
-  <!-- historial de vacantes -->
-  <div class="col-12 mt-3">
-    <div class="card card-primary card-outline">
-      <div class="card-header">
-        <h3 class="card-title">Historial de vacantes </h3>
-        <div class="card-tools ">
-          <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
-            <i class="fas fa-minus"></i>
-          </button>
-        </div>
-      </div>
-      <div class="card-body table-responsive p-0">
-        <table class="table table-head-fixed table-bordered">
-          <thead>
-            <tr>
-              <th>Ingreso</th>
-              <th>Centro</th>
-              <th>Sala</th>
-              <th>Turno</th>
-              <th>Educadora</th>
-              <th>Egreso</th>
-              <th>Motivo</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for e in movimientosVO %}
-            <tr>
-              <td>{{e.fecha_ingreso|date:'d/m/Y'}}</td>
-              <td>{{e.fk_organismo}}</td>
-              <td>{{e.sala}}</td>
-              <td>{{e.turno}}</td>
-              <td>{{e.educador}}</td>
-              <td>{{e.fecha_egreso|date:'d/m/Y'|default:"-"}}</td>
-              <td>{{e.motivo|default:"-"}}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-  <!-- / -->
 
 
 </div>
@@ -293,7 +257,7 @@ Admisiones
 <div class="row mt-4 d-print-none">
   <div class="col-12 mx-2">
     <div class="form-group  d-flex justify-content-between">
-      <a href="{% url 'CDIF_admisiones_listar' %}" class="btn btn-secondary">Volver</a>
+      <a href="{% url 'CDLE_admisiones_listar' %}" class="btn btn-secondary">Volver</a>
     </div>
   </div>
 </div>

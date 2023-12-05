@@ -158,12 +158,12 @@
                 <td class="project-actions text-right">
                   <div class="btn-group" role="group">
                     {% if a.estado_vacante == "Asignada" %}
-                    <a href="{% url 'CDIF_vacantes_form_cambio' a.fk_admision_id %}" class="btn btn-primary btn-sm ver">Cambiar vacante</a>
+                    <a href="{% url 'CDLE_vacantes_form_cambio' a.fk_admision_id %}" class="btn btn-primary btn-sm ver">Cambiar vacante</a>
                     {% endif %}
                     {% if a.estado_vacante == "Lista de espera"%}
-                    <a href="{% url 'CDIF_vacantes_form' a.fk_admision_id %}" class="btn btn-primary btn-sm ver">Otorgar vacante</a>
+                    <a href="{% url 'CDLE_vacantes_form' a.fk_admision_id %}" class="btn btn-primary btn-sm ver">Otorgar vacante</a>
                     {% endif %}
-                    <a href="{% url 'CDIF_asignado_admisiones_ver' a.fk_admision_id %}" class="btn btn-secondary btn-sm editar">Ver</a>
+                    <a href="{% url 'CDLE_asignado_admisiones_ver' a.fk_admision_id %}" class="btn btn-secondary btn-sm editar">Ver</a>
                   </div>
                 </td>
               </tr>
@@ -179,12 +179,12 @@
                 <td class="project-actions text-right">
                   <div class="btn-group" role="group">
                     {% if a.estado_vacante == "Asignada" %}
-                    <a href="{% url 'CDIF_vacantes_form_cambio' a.id %}" class="btn btn-primary btn-sm ver">Cambiar vacante</a>
+                    <a href="{% url 'CDLE_vacantes_form_cambio' a.id %}" class="btn btn-primary btn-sm ver">Cambiar vacante</a>
                     {% endif %}
                     {% if a.estado_vacante == "Lista de espera"%}
-                    <a href="{% url 'CDIF_vacantes_form' a.id %}" class="btn btn-primary btn-sm ver">Otorgar vacante</a>
+                    <a href="{% url 'CDLE_vacantes_form' a.id %}" class="btn btn-primary btn-sm ver">Otorgar vacante</a>
                     {% endif %}
-                    <a href="{% url 'CDIF_asignado_admisiones_ver' a.id %}" class="btn btn-secondary btn-sm editar">Ver</a>
+                    <a href="{% url 'CDLE_asignado_admisiones_ver' a.id %}" class="btn btn-secondary btn-sm editar">Ver</a>
                   </div>
                 </td>
               </tr>
@@ -198,7 +198,7 @@
 </div>
 <div class="row mt-4 d-print-none">
   <div class="col-12 mx-2">
-    <a href="{% url 'CDIF_vacantes_listar' %}" class="btn btn-secondary"
+    <a href="{% url 'CDLE_vacantes_listar' %}" class="btn btn-secondary"
       title="Ver listado de vacantes por centro">Volver</a>
   </div>
 </div>

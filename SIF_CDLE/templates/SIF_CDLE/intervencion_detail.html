@@ -27,11 +27,11 @@ Intervenciones
   <!-- botones -->
   <div class="col-12 my-3 mx-2 d-print-none">
     {% if object.fk_admision.estado == "Activa" %}
-    <a href="{% url 'CDIF_intervencion_editar' object.id %}" class="btn btn-primary mr-1">Editar</a>
+    <a href="{% url 'CDLE_intervencion_editar' object.id %}" class="btn btn-primary mr-1">Editar</a>
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     {% if object.fk_admision.estado == "Activa" %}
-    <a href="{% url 'CDIF_intervencion_borrar' object.id %}" class="btn btn-danger mr-1">Eliminar</a>
+    <a href="{% url 'CDLE_intervencion_borrar' object.id %}" class="btn btn-danger mr-1">Eliminar</a>
     {% endif %}
   </div>
   <!-- ./botones -->
@@ -104,7 +104,7 @@ Intervenciones
       <div class="card-header">
         <h3 class="card-title">Detalle Admisión</h3>
         <div class="card-tools d-inline">
-          <a href="{% url 'CDIF_asignado_admisiones_ver' object.fk_admision.id %}" class="ml-3 mr-2">Ver admisión</a>
+          <a href="{% url 'CDLE_asignado_admisiones_ver' object.fk_admision.id %}" class="ml-3 mr-2">Ver admisión</a>
           <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
             <i class="fas fa-minus"></i>
           </button>
@@ -116,18 +116,10 @@ Intervenciones
           <dt class="col-sm-7 mb-2"><span class="text-success font-weight-bold">{{object.fk_admision.estado}}</span></dt>
           <dd class="col-sm-5 mb-2">Fecha de admisión</dd>
           <dt class="col-sm-7 mb-2">{{object.fk_admision.creado|date:'d/m/Y'}}</dt>
-          <dd class="col-sm-5 mb-2">Estado vacante</dd>
-          <dt class="col-sm-7 mb-2"><span class="badge badge-success">{{object.fk_admision.estado_vacante}}</span></dt>
-          <dd class="col-sm-5 mb-2">Fecha de vacante</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_admision.fk_preadmi.creado|date:'d/m/Y'}}</dt>
-          <dd class="col-sm-5 mb-2">Centro actual </dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_admision.fk_preadmi.centro_postula}}</dt>
-          <dd class="col-sm-5 mb-2">Sala actual</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_admision.fk_preadmi.sala_postula}}</dt>
-          <dd class="col-sm-5 mb-2">Turno actual</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_admision.fk_preadmi.turno_postula}}</dt>
-          <dd class="col-sm-5 mb-2">Educador/a actual</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_admision.fk_preadmi.educador}}</dt>
+          <dd class="col-sm-5 mb-2">Acompañante</dd>
+          <dt class="col-sm-7 mb-2">{{object.fk_admision.fk_preadmi.acompaniante}}</dt>
+          <dd class="col-sm-5 mb-2">Madrina</dd>
+          <dt class="col-sm-7 mb-2">{{object.fk_admision.fk_preadmi.madrina}}</dt>
         </dl>
       </div>
     </div>
@@ -136,7 +128,7 @@ Intervenciones
 </div>
 <div class="col-12 d-print-none">
   <div class="form-group  d-flex justify-content-between">
-    <a href="{% url 'CDIF_intervenciones_legajos_listar' object.fk_admision.id %}" class="btn btn-secondary">Volver</a>
+    <a href="{% url 'CDLE_intervenciones_legajos_listar' object.fk_admision.id %}" class="btn btn-secondary">Volver</a>
   </div>
 </div>
 

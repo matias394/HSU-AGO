@@ -28,8 +28,8 @@
   <!-- botones -->
   <div class="col-12 my-3 mx-2 d-print-none">
     <!-- <a href="{% url 'admisiones_historial'%}" class="btn btn-primary mr-1">Ver admisiones</a> -->
-    <a href="{% url 'CDIF_preadmisiones_ver3' object.id %}" class="btn btn-primary mr-1">Volver pre-admisión</a>
-    <a href="{% url 'CDIF_indiceivi_editar' object.id %}" class="btn btn-secondary mr-1">Editar</a>
+    <a href="{% url 'CDLE_preadmisiones_ver3' object.id %}" class="btn btn-primary mr-1">Volver pre-admisión</a>
+    <a href="{% url 'CDLE_indiceivi_editar' object.id %}" class="btn btn-secondary mr-1">Editar</a>
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
   </div>
 </div>
@@ -52,7 +52,7 @@
           <dd class="col-sm-3 mb-2">Fecha</dd>
           <dt class="col-sm-9 mb-2">{{foto_ivi.creado|date:'d/m/Y'}}</dt>
           <dd class="col-sm-3 mb-2">Para el programa</dd>
-          <dt class="col-sm-9 mb-2">CDIF</dt>
+          <dt class="col-sm-9 mb-2">CDLE</dt>
           <dd class="col-sm-3 mb-2">Generado por</dd>
           <dt class="col-sm-9 mb-2">{{foto_ivi.creado_por}}</dt>
           <dd class="col-sm-3 mb-2">Observaciones</dd>
@@ -215,7 +215,7 @@
 <div class="row mt-4 d-print-none">
   <div class="col-12 mx-2">
     <div class="form-group  d-flex justify-content-between">
-      <a href="{% url 'CDIF_preadmisiones_listar' %}" class="btn btn-secondary">Volver</a>
+      <a href="{% url 'CDLE_preadmisiones_listar' %}" class="btn btn-secondary">Volver</a>
     </div>
   </div>
 </div>

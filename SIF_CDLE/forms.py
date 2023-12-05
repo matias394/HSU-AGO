@@ -4,9 +4,9 @@ from .validators import MaxSizeFileValidator
 from .models import *
 
 
-class CDIF_PreadmisionesForm (forms.ModelForm):
+class CDLE_PreadmisionesForm (forms.ModelForm):
     class Meta:
-        model = CDIF_PreAdmision
+        model = CDLE_PreAdmision
         fields = '__all__'
         widgets = {
             'emb_no_control_1': forms.CheckboxInput(),
@@ -40,6 +40,26 @@ class CDIF_PreadmisionesForm (forms.ModelForm):
             'retomar_estudios_5': forms.CheckboxInput(),
             'aprender_oficio_5': forms.CheckboxInput(),
             'programa_Pilares_5': forms.CheckboxInput(),
+            'test_embarazo': forms.CheckboxInput(),
+            'fum': forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
+            'fpp': forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
+            'primer_embarazo': forms.CheckboxInput(),
+            'libreta_sanitaria': forms.CheckboxInput(),
+            'metodos_anticonceptivos': forms.CheckboxInput(),
+            'utilizabas_alguno': forms.CheckboxInput(),
+            'comienza_control': forms.CheckboxInput(),
+            'prim_trim_control_obstetra': forms.CheckboxInput(),
+            'prim_trim_estudios_labo': forms.CheckboxInput(),
+            'prim_trim_estudios_eco': forms.CheckboxInput(),
+            'prim_trim_estudios_pap': forms.CheckboxInput(),
+            'prim_trim_estudios_grupo_factor': forms.CheckboxInput(),
+            'prim_trim_control_odonto': forms.CheckboxInput(),
+            'seg_trim_control_obsetra': forms.CheckboxInput(),
+            'seg_trim_control_fetal': forms.CheckboxInput(),
+            'seg_trim_p75': forms.CheckboxInput(),
+            'ter_trim_control_rutina': forms.CheckboxInput(),
+            'ter_trim_monitoreo_fetal': forms.CheckboxInput(),
+            'ter_trim_electro_cardio': forms.CheckboxInput(),
         }
         labels = {
             'fk_legajo_1':'',
@@ -77,7 +97,30 @@ class CDIF_PreadmisionesForm (forms.ModelForm):
             'centro_postula':'',
             'sala_postula':'',
             'turno_postula':'',
+            'acompaniante':'Acompañante',
         }
+
+class criterios_Ingreso (forms.ModelForm):
+    class Meta:
+        model = Criterios_Ingreso
+        fields = '__all__'
+        widgets = {}
+        labels = {}
+
+class CDLE_IndiceIngresoForm (forms.ModelForm):
+    class Meta:
+        model = CDLE_IndiceIngreso
+        fields = '__all__'
+        widgets = {}
+        labels = {}
+
+class CDLE_IndiceIngresoHistorialForm (forms.ModelForm):
+    class Meta:
+        model = CDLE_Foto_Ingreso
+        fields = '__all__'
+        widgets = {}
+        labels = {}
+
 
 class criterios_IVI (forms.ModelForm):
     class Meta:
@@ -86,45 +129,24 @@ class criterios_IVI (forms.ModelForm):
         widgets = {}
         labels = {}
 
-class CDIF_IndiceIviForm (forms.ModelForm):
+
+class CDLE_IndiceIviForm (forms.ModelForm):
     class Meta:
-        model = CDIF_IndiceIVI
+        model = CDLE_IndiceIVI
         fields = '__all__'
         widgets = {}
         labels = {}
 
-class CDIF_IndiceIviHistorialForm (forms.ModelForm):
+class CDLE_IndiceIviHistorialForm (forms.ModelForm):
     class Meta:
-        model = CDIF_Foto_IVI
+        model = CDLE_Foto_IVI
         fields = '__all__'
         widgets = {}
         labels = {}
 
-class CDIF_VacantesOtorgadasForm (forms.ModelForm):
+class CDLE_IntervencionesForm (forms.ModelForm):
     class Meta:
-        model = CDIF_VacantesOtorgadas
-        fields = '__all__'
-        widgets = {
-            'fecha_ingreso': forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
-            'sala': forms.Select(choices=[('', ''),('Bebes', 'Bebés'), ('2', '2'), ('3', '3')]),
-            'turno': forms.Select(choices=[('', ''), ('Mañana', 'Mañana'), ('Tarde', 'Tarde')]),
-            'fecha_egreso': forms.DateInput(attrs={'type': 'date','required':'required'}, format="%Y-%m-%d"),
-            'motivo': forms.Select(choices=[('', ''),('Cambio de ciclo', 'Cambio de ciclo'), ('Cambio de turno', 'Cambio de turno'), ('Cambio de centro', 'Cambio de centro')]),
-            'detalles': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
-        }
-        labels = {
-            'fk_organismo':'Centro al que ingresa',
-            'sala':'Sala a la que ingresa',
-            'turno':'Turno al que ingresa',
-            'educador':'Educador/a',
-            'fecha_egreso':'Fecha de egreso*',
-            'motivo':'Motivo principal',
-            'detalles':'Detalles',
-        }
-
-class CDIF_IntervencionesForm (forms.ModelForm):
-    class Meta:
-        model = CDIF_Intervenciones
+        model = CDLE_Intervenciones
         fields = '__all__'
         widgets = {
             'detalle': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
@@ -141,9 +163,9 @@ class CDIF_IntervencionesForm (forms.ModelForm):
         super().__init__(*args, **kwargs)
         
         # Filtra las opciones del campo criterio_modificable aquí
-        self.fields['criterio_modificable'].queryset = Criterios_IVI.objects.filter(modificable = "SI")
+        self.fields['criterio_modificable'].queryset = Criterios_IVI.objects.filter(modificable = "Si")
 
-class CDIF_OpcionesResponsablesForm (forms.ModelForm):
+class CDLE_OpcionesResponsablesForm (forms.ModelForm):
     class Meta:
         model = OpcionesResponsables
         fields = '__all__'
