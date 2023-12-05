@@ -97,6 +97,7 @@ class CDLE_PreadmisionesForm (forms.ModelForm):
             'centro_postula':'',
             'sala_postula':'',
             'turno_postula':'',
+            'acompaniante':'Acompañante',
         }
 
 class criterios_Ingreso (forms.ModelForm):
