@@ -758,10 +758,12 @@ class CDLEAdmisionesListView(PermisosMixin, ListView):
         admi = CDLE_Admision.objects.all()
         foto = CDLE_Foto_IVI.objects.all()
         foto_ingreso = CDLE_Foto_Ingreso.objects.all()
+        conteo = CDLE_IndiceIngreso.objects.values('fk_preadmi_id').annotate(total=Count('fk_preadmi_id'))
 
+        context ["conteo"] = conteo
         context["admi"] = admi
         context["foto"] = foto
-        context["foto_ingreso"] = foto_ingreso
+        context["foto_ingreso"] = criterio_ingreso.aggregate(total=Count('fk_criterios_ingreso'))
         context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["puntaje_ingreso"] = criterio_ingreso.aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
         return context
