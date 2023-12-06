@@ -4,13 +4,13 @@
 {% block head %}
 {% endblock %}
 
-{% block title %}CDIF Derivaciones{% endblock %};
+{% block title %}PDV Derivaciones{% endblock %};
 
 {% block titulo-pagina %}{% endblock %};
 
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"><a href="{% url 'CDIF_preadmisiones_listar' %}">CDIF Pre-admisiones</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'PDV_preadmisiones_listar' %}">PDV Pre-admisiones</a></li>
     <li class="breadcrumb-item active">Buscar legajo</li>
 </ol>
 {% endblock %};
@@ -44,7 +44,7 @@
 <div class="row mt-3">
     <div class="col-12 text-center">
         <a href="{% url 'legajos_crear' %}" class="btn btn-primary btn-lg d-block d-sm-inline mt-2 mr-2 ">Agregar</a>
-        <a href="{% url 'CDIF_preadmisiones_buscar' %}" class="btn btn-secondary btn-lg d-block d-sm-inline mt-2 ">Resetear</a>
+        <a href="{% url 'PDV_preadmisiones_buscar' %}" class="btn btn-secondary btn-lg d-block d-sm-inline mt-2 ">Resetear</a>
     </div>
 </div>
 
@@ -77,13 +77,13 @@
                                 {%if perms.Usuarios.rol_admin%} 
                                 <div class="btn-group" role="group"> 
                                     {% if o.estado == 'Pendiente' %}
-                                    <a href="{% url 'CDIF_preadmisiones_crear' o.id %}" class="btn btn-primary btn-sm ver">Pre-admitir</a>
+                                    <a href="{% url 'PDV_preadmisiones_crear' o.id %}" class="btn btn-primary btn-sm ver">Pre-admitir</a>
                                     {% endif %}
                                     {% if o.estado == 'Finalizada' and o.ivi == 'NO'%}
-                                    <a href="{% url 'CDIF_preadmisiones_ver' o.id %}" class="btn btn-primary btn-sm ver">Ver pre-admision</a>
+                                    <a href="{% url 'PDV_preadmisiones_ver' o.id %}" class="btn btn-primary btn-sm ver">Ver pre-admision</a>
                                     {% endif %}
                                     {% if o.estado == 'Finalizada' and o.ivi == 'SI'%}
-                                    <a href="{% url 'CDIF_preadmisiones3_ver' o.id %}" class="btn btn-primary btn-sm ver">Admitir</a>
+                                    <a href="{% url 'PDV_preadmisiones3_ver' o.id %}" class="btn btn-primary btn-sm ver">Admitir</a>
                                     {% endif %}
                                     <a href="{% url 'legajos_ver' o.fk_legajo.id %}" class="btn btn-secondary btn-sm editar">Ver legajo</a> 
                                     </div>

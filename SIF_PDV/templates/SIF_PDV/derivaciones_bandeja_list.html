@@ -13,8 +13,8 @@
 {% endblock %};
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right">
-  <li class="breadcrumb-item"><a href="{% url 'CDIF_derivaciones_listar'%}"
-      title="Ver historial de derivaciones">CDIF Derivaciones</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'PDV_derivaciones_listar'%}"
+      title="Ver historial de derivaciones">PDV Derivaciones</a></li>
   <li class="breadcrumb-item active">Listado</li>
 </ol>
 {% endblock %};
@@ -22,7 +22,7 @@
 
 <div class="row">
   <div class="col-md-2">
-    <a href="{% url 'CDIF_derivaciones_buscar' %}" class="btn btn-primary btn-block mb-3">Derivar</a>
+    <a href="{% url 'PDV_derivaciones_buscar' %}" class="btn btn-primary btn-block mb-3">Derivar</a>
     <div class="card">
       <div class="card-header">
         <h3 class="card-title">Carpetas</h3>
@@ -100,12 +100,12 @@
                 <td> <span class="badge badge-{% if o.estado == "Aceptada" %}success{% endif %}{% if o.estado == "Pendiente" %}warning{% endif %}{% if o.estado == "Rechazada" %}danger{% endif %}">{{o.estado}}</span>
                 <td class="text-center"><span class="badge {% if o.importancia == "Muy urgente" %}badge-Muyurgente{% else %}badge-{{o.importancia}} {% endif %}">{{o.importancia}}</span></td>
                 <td> <span class="font-weight-bold">{{o.fk_usuario}}</span>
-                <td class=""><a href="{% url 'CDIF_derivaciones_ver' o.id %}" title="Ver detalle">{{o.fk_legajo}}</a></td>
+                <td class=""><a href="{% url 'PDV_derivaciones_ver' o.id %}" title="Ver detalle">{{o.fk_legajo}}</a></td>
                 <td class="">{{o.m2m_alertas.all.count}} alerta{% if o.m2m_alertas.all.count > 1 %}s{% endif %}</td>
                 <td class="text-center ">{% if o.archivos %}<a href="{{ o.archivos.url}}" target="_blank"><i
                       class="fas fa-paperclip text-white"></i></a>{% else %}-{% endif %}</td>
                 <td class="text-right">
-                        <a href="{% url 'CDIF_derivaciones_ver' o.id %}" class="btn btn-primary btn-sm ver"
+                        <a href="{% url 'PDV_derivaciones_ver' o.id %}" class="btn btn-primary btn-sm ver"
                           title="Ver detalle">Ver</a>
                 </td>
               </tr>

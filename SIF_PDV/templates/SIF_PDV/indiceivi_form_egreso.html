@@ -6,7 +6,7 @@
 <ol class="breadcrumb float-sm-right ">
     <li class="breadcrumb-item">Índices</li>
     <li class="breadcrumb-item"><a href="{% url 'legajos_ver' object.id %}" title="Ver legajo">{{object}}</a></li>
-        {%if request.resolver_match.url_name == "CDIF_indiceivi_editar" %}
+        {%if request.resolver_match.url_name == "PDV_indiceivi_editar" %}
         <li class="breadcrumb-item active">Editar</li>
         {% else %}
         <li class="breadcrumb-item active">Agregar</li>

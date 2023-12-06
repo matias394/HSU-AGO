@@ -26,9 +26,9 @@ Intervenciones
 <div class="row">
   <!-- botones -->
   <div class="col-12 my-3 mx-2 d-print-none">
-    <a href="{% url 'CDIF_intervencion_editar' object.id %}" class="btn btn-primary mr-1">Editar</a>
+    <a href="{% url 'PDV_intervencion_editar' object.id %}" class="btn btn-primary mr-1">Editar</a>
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
-    <a href="{% url 'CDIF_intervencion_borrar' object.id %}" class="btn btn-danger mr-1">Eliminar</a>
+    <a href="{% url 'PDV_intervencion_borrar' object.id %}" class="btn btn-danger mr-1">Eliminar</a>
   </div>
   <!-- ./botones -->
 
@@ -100,7 +100,7 @@ Intervenciones
       <div class="card-header">
         <h3 class="card-title">Detalle Admisión</h3>
         <div class="card-tools d-inline">
-          <a href="{% url 'CDIF_asignado_admisiones_ver' object.fk_admision.id %}" class="ml-3 mr-2">Ver admisión</a>
+          <a href="{% url 'PDV_asignado_admisiones_ver' object.fk_admision.id %}" class="ml-3 mr-2">Ver admisión</a>
           <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
             <i class="fas fa-minus"></i>
           </button>
@@ -132,7 +132,7 @@ Intervenciones
 </div>
 <div class="col-12 d-print-none">
   <div class="form-group  d-flex justify-content-between">
-    <a href="{% url 'CDIF_intervenciones_legajos_listar' object.fk_admision.id %}" class="btn btn-secondary">Volver</a>
+    <a href="{% url 'PDV_intervenciones_legajos_listar' object.fk_admision.id %}" class="btn btn-secondary">Volver</a>
   </div>
 </div>
 

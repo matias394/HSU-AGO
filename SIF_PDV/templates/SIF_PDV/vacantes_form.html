@@ -12,7 +12,7 @@ Vacantes
 
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right">
-  <li class="breadcrumb-item"><a href="{% url 'CDIF_vacantes_listar'%}" title="Ver lisatdo de vacantes">Vacantes</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'PDV_vacantes_listar'%}" title="Ver lisatdo de vacantes">Vacantes</a></li>
   <li class="breadcrumb-item "><a href="{% url 'legajos_ver' object.fk_preadmi.fk_legajo.id %}" title="Ver legajo">{{object.fk_preadmi.fk_legajo}}</a></li>
   <li class="breadcrumb-item active">Detalle</li>
 </ol>
@@ -89,7 +89,7 @@ Vacantes
       <div class="card-header">
         <h3 class="card-title">Detalle IVI de ingreso</h3>
         <div class="card-tools d-inline">
-          <a href="{% url 'CDIF_indiceivi_ver' object.fk_preadmi.id %}" class="ml-3 mr-2">Ver detalles</a>
+          <a href="{% url 'PDV_indiceivi_ver' object.fk_preadmi.id %}" class="ml-3 mr-2">Ver detalles</a>
           <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
             <i class="fas fa-minus"></i>
           </button>
@@ -152,7 +152,7 @@ Vacantes
 
       <div class="mt-4 mx-2 btn-toolbar" role="toolbar">
         <button type="submit" class="btn btn-primary mr-2">Confirmar</button>
-        <a href="{% url 'CDIF_admisiones_ver' object.id %}" class="btn btn-secondary">Cancelar</a>
+        <a href="{% url 'PDV_admisiones_ver' object.id %}" class="btn btn-secondary">Cancelar</a>
       </div>
     </form>
   </div>

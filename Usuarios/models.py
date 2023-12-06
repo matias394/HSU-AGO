@@ -47,6 +47,7 @@ class Usuarios(models.Model):
             ("programa_externo", "Externo"),
             ("programa_CDIF", "CDIF"),
             ("programa_CDLE", "CDLE"),
+            ("programa_PDV", "PDV"),
             ("programa_1000D", "1000D"),
             ("programa_Reporte", "Reporte"),
             ("programa_Administracion", "Administración"),

@@ -11,8 +11,8 @@ Derivaciones
 
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right">
-  <li class="breadcrumb-item"><a href="{% url 'CDIF_derivaciones_listar'%}"
-      title="Ver historial de derivaciones">CDIF Derivaciones</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'PDV_derivaciones_listar'%}"
+      title="Ver historial de derivaciones">PDV Derivaciones</a></li>
   <li class="breadcrumb-item "><a href="{% url 'legajos_ver' object.fk_legajo.id %}" title="Ver legajo">{{object.fk_legajo}}</a></li>
   <li class="breadcrumb-item active">Detalle</li>
 </ol>
@@ -27,8 +27,8 @@ Derivaciones
   <!-- botones -->
   <div class="col-12 my-3 mx-2 d-print-none">
     {% if object.estado == "Pendiente" %}
-    <a href="{% url 'CDIF_preadmisiones_crear' object.pk %}" class="btn btn-primary mr-1 ">Aceptar</a>
-    <a href="{% url 'CDIF_derivaciones_rechazo'  object.pk %}" class="btn btn-secondary mr-1 ">Rechazar</a>
+    <a href="{% url 'PDV_preadmisiones_crear' object.pk %}" class="btn btn-primary mr-1 ">Aceptar</a>
+    <a href="{% url 'PDV_derivaciones_rechazo'  object.pk %}" class="btn btn-secondary mr-1 ">Rechazar</a>
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     {% if request.user.id == object.fk_usuario.id and object.estado == 'Pendiente' %}
@@ -119,7 +119,7 @@ Derivaciones
           <div class="card-tools">
             <!--SACANDO EL BOTON DE AGREGAR IVI POR AHORA-->
             {% if object.estado == "Finalizada" %}
-            <a href="{% url 'CDIF_indiceivi_crear' object.fk_legajo.id %}" class="btn btn-sm btn-primary">Generar nuevo</a>
+            <a href="{% url 'PDV_indiceivi_crear' object.fk_legajo.id %}" class="btn btn-sm btn-primary">Generar nuevo</a>
             {% endif %}
           </div>
         </div>
@@ -155,7 +155,7 @@ Derivaciones
   <div class="row mt-4 d-print-none">
     <div class="col-12 mx-2">
       <div class="form-group  d-flex justify-content-between">
-        <a href="{% url 'CDIF_derivaciones_listar' %}" class="btn btn-secondary">Volver</a>
+        <a href="{% url 'PDV_derivaciones_listar' %}" class="btn btn-secondary">Volver</a>
       </div>
     </div>
   </div>

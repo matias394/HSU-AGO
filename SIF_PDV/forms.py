@@ -4,9 +4,9 @@ from .validators import MaxSizeFileValidator
 from .models import *
 
 
-class CDIF_PreadmisionesForm (forms.ModelForm):
+class PDV_PreadmisionesForm (forms.ModelForm):
     class Meta:
-        model = CDIF_PreAdmision
+        model = PDV_PreAdmision
         fields = '__all__'
         widgets = {
             'emb_no_control_1': forms.CheckboxInput(),
@@ -86,23 +86,23 @@ class criterios_IVI (forms.ModelForm):
         widgets = {}
         labels = {}
 
-class CDIF_IndiceIviForm (forms.ModelForm):
+class PDV_IndiceIviForm (forms.ModelForm):
     class Meta:
-        model = CDIF_IndiceIVI
+        model = PDV_IndiceIVI
         fields = '__all__'
         widgets = {}
         labels = {}
 
-class CDIF_IndiceIviHistorialForm (forms.ModelForm):
+class PDV_IndiceIviHistorialForm (forms.ModelForm):
     class Meta:
-        model = CDIF_Foto_IVI
+        model = PDV_Foto_IVI
         fields = '__all__'
         widgets = {}
         labels = {}
 
-class CDIF_VacantesOtorgadasForm (forms.ModelForm):
+class PDV_VacantesOtorgadasForm (forms.ModelForm):
     class Meta:
-        model = CDIF_VacantesOtorgadas
+        model = PDV_VacantesOtorgadas
         fields = '__all__'
         widgets = {
             'fecha_ingreso': forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
@@ -122,9 +122,9 @@ class CDIF_VacantesOtorgadasForm (forms.ModelForm):
             'detalles':'Detalles',
         }
 
-class CDIF_IntervencionesForm (forms.ModelForm):
+class PDV_IntervencionesForm (forms.ModelForm):
     class Meta:
-        model = CDIF_Intervenciones
+        model = PDV_Intervenciones
         fields = '__all__'
         widgets = {
             'detalle': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
@@ -143,7 +143,7 @@ class CDIF_IntervencionesForm (forms.ModelForm):
         # Filtra las opciones del campo criterio_modificable aquí
         self.fields['criterio_modificable'].queryset = Criterios_IVI.objects.filter(modificable = "Si")
 
-class CDIF_OpcionesResponsablesForm (forms.ModelForm):
+class PDV_OpcionesResponsablesForm (forms.ModelForm):
     class Meta:
         model = OpcionesResponsables
         fields = '__all__'

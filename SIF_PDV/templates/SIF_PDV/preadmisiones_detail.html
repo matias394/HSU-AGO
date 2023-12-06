@@ -2,17 +2,17 @@
 {% load static %};
 
 {% block title %}
-CDIF Pre-admisiones detalle
+PDV Pre-admisiones detalle
 {%endblock %};
 
 {% block titulo-pagina %}
-CDIF Pre-admisiones
+PDV Pre-admisiones
 {% endblock %};
 
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right">
-  <li class="breadcrumb-item"><a href="{% url 'CDIF_preadmisiones_listar'%}"
-      title="Ver historial de Pre-admisiones">CDIF Pre-admisiones</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'PDV_preadmisiones_listar'%}"
+      title="Ver historial de Pre-admisiones">PDV Pre-admisiones</a></li>
   <li class="breadcrumb-item "><a href="{% url 'legajos_ver' object.fk_derivacion.fk_legajo_id %}" title="Ver legajo">{{object.fk_derivacion}}</a></li>
   <li class="breadcrumb-item active">Detalle</li>
 </ol>
@@ -32,13 +32,13 @@ CDIF Pre-admisiones
         {% csrf_token %}
         <button type="submit" name="finalizar_preadm" class="btn btn-primary mr-1" >Finalizar</button>
     </form>
-    <a href="{% url 'CDIF_preadmisiones_editar' object.pk %}" class="btn btn-secondary mr-1">Editar</a>
+    <a href="{% url 'PDV_preadmisiones_editar' object.pk %}" class="btn btn-secondary mr-1">Editar</a>
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
-    <a href="{% url 'CDIF_preadmisiones_eliminar' object.pk %}" class="btn btn-danger mr-1 mt-2 mt-sm-0">Eliminar</a>
+    <a href="{% url 'PDV_preadmisiones_eliminar' object.pk %}" class="btn btn-danger mr-1 mt-2 mt-sm-0">Eliminar</a>
     {% endif %}
     {% if object.estado == 'Finalizada' %}
     {% if object.ivi == 'NO' %}
-    <a href="{% url 'CDIF_indiceivi_crear' object.pk %}" class="btn btn-primary mr-1">Generar IVI</a>
+    <a href="{% url 'PDV_indiceivi_crear' object.pk %}" class="btn btn-primary mr-1">Generar IVI</a>
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     {% endif %}
@@ -253,7 +253,7 @@ CDIF Pre-admisiones
 <div class="row mt-4 d-print-none">
   <div class="col-12 mx-2">
     <div class="form-group  d-flex justify-content-between">
-      <a href="{% url 'CDIF_preadmisiones_listar' %}" class="btn btn-secondary">Volver</a>
+      <a href="{% url 'PDV_preadmisiones_listar' %}" class="btn btn-secondary">Volver</a>
     </div>
   </div>
 </div>

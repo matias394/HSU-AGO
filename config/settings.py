@@ -63,7 +63,8 @@ INSTALLED_APPS = [
     'Legajos',
     # Programas
     'SIF_CDIF',
-    'SIF_CDLE'
+    'SIF_CDLE',
+    'SIF_PDV'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
