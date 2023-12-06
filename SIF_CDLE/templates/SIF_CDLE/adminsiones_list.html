@@ -54,9 +54,9 @@
                 <td class=""> <a href="{% url 'CDLE_admisiones_ver' a.id %}" title="Ver detalle de admisión">{{a.fk_preadmi.fk_legajo}}</a></td>
                 <td class="">{{a.fk_preadmi.fk_legajo.documento}}</td>
                 <td>
-                  {% for f in foto_ingreso %}
-                  {% if f.fk_preadmi_id == a.fk_preadmi.id and f.tipo == "Ingreso"%}
-                  <span class=" badge badge-warning">{{ f.puntaje }}</span>
+                  {% for item in conteo %}
+                  {% if item.fk_preadmi_id == a.fk_preadmi.id %}
+                  <span class=" badge badge-warning">{{ item.total }}</span>
                   {% endif %}
                   {% endfor %}
                 </td>
