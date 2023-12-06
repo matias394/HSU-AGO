@@ -233,6 +233,10 @@ class CDLEPreAdmisionesDetailView(PermisosMixin, DetailView):
         resultado_ingreso = ingreso.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ingreso__puntaje')).order_by('-creado')
         context["ivi"] = ivi
         context["ingreso"] = ingreso
+        context['criterios_total'] = ingreso.count()
+        context["cant_combinables"] = ingreso.filter(fk_criterios_ingreso__tipo='Criterios combinables para el ingreso').count()
+        context["cant_sociales"] = ingreso.filter(fk_criterios_ingreso__tipo='Criterios sociales para el ingreso').count() 
+        context["autonomos"] = ingreso.filter(fk_criterios_ingreso__tipo='Criteros autónomos de ingreso').all()
         context["resultado"] = resultado
         context["resultado_ingreso"] = resultado_ingreso
         context["legajo"] = legajo
@@ -495,7 +499,8 @@ class CDLEIndiceIngresoDetailView(PermisosMixin, DetailView):
         context["criterio"] = criterio
         context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ingreso__modificable='SI').count()
+        context["cant_combinables"] = criterio.filter(fk_criterios_ingreso__tipo='Criterios combinables para el ingreso').count()
+        context["cant_sociales"] = criterio.filter(fk_criterios_ingreso__tipo='Criterios sociales para el ingreso').count()
         context["mod_puntaje"] = criterio.filter(fk_criterios_ingreso__modificable='SI').aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ingreso__tipo='Ajustes').count()
         #context['maximo'] = foto_ingreso.puntaje_max
@@ -708,6 +713,10 @@ class CDLEPreAdmisiones3DetailView(PermisosMixin, DetailView):
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
         context['maximo_ingreso'] = foto_ingreso.puntaje_max
+        context['criterios_total'] = criterio_ingreso.count()
+        context["cant_combinables"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='Criterios combinables para el ingreso').count()
+        context["cant_sociales"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='Criterios sociales para el ingreso').count() 
+        context["autonomos"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='Criteros autónomos de ingreso').all()
         return context
     
     def post(self, request, *args, **kwargs):
@@ -749,10 +758,12 @@ class CDLEAdmisionesListView(PermisosMixin, ListView):
         admi = CDLE_Admision.objects.all()
         foto = CDLE_Foto_IVI.objects.all()
         foto_ingreso = CDLE_Foto_Ingreso.objects.all()
+        conteo = CDLE_IndiceIngreso.objects.values('fk_preadmi_id').annotate(total=Count('fk_preadmi_id'))
 
+        context ["conteo"] = conteo
         context["admi"] = admi
         context["foto"] = foto
-        context["foto_ingreso"] = foto_ingreso
+        context["foto_ingreso"] = criterio_ingreso.aggregate(total=Count('fk_criterios_ingreso'))
         context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["puntaje_ingreso"] = criterio_ingreso.aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
         return context
@@ -808,7 +819,7 @@ class CDLEAsignadoAdmisionDetail(PermisosMixin, DetailView):
         context["observaciones2"] = observaciones2
         context["criterio"] = criterio
         context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
-        context["puntaje_ingreso"] = criterio_ingreso.aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
+        context["cant_ingreso"] = criterio_ingreso.count()
         context["puntaje2"] = criterio2.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["object"] = admi
         context["vo"] = self.object
