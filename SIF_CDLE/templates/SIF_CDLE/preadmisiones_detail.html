@@ -111,43 +111,34 @@ CDLE Pre-admisiones
     </div>
     <!-- /  -->
 
-    <!-- Datos de Indice -->
+    <!-- Detalle de Ingreso -->
     <div class="col-sm-3 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
           <h3 class="card-title">Detalle índice de ingreso</h3>
-          <div class="card-tools d-inline">
+          <div class="card-tools">
             <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
               <i class="fas fa-minus"></i>
             </button>
           </div>
         </div>
-        <div class="card-body p-2">
-          <ul class="products-list product-list-in-card pl-2 pr-2">
-            {% if resultado_ingreso %}
-            {% for r in resultado_ingreso %}
-            <li class="item p-1">
-              <a href="javascript:void(0)">
-                <div class="product-img h4 p-0">
-                  <span class="badge badge-success float-center p-3">{{r.total}}</span>
-                </div>
-                <div class="product-info">
-                  <span class="product-title">Indice ingreso</span>
-                  <span class="product-description">
-                    {{r.programa}} | {{ r.creado|date:"d/m/Y" }}
-                  </span>
-                </div>
-              </a>
-            </li>
-            {% endfor %}
-            {% else %}
-            <h6>Sin índices.</h6>
-            {% endif %}
-          </ul>          
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dd class="col-sm-8 mb-2">Cantidad total de criterios</dd>
+            <dt class="col-sm-4 mb-2"><span class="badge badge-warning float-center">{{ criterios_total }}</span></dt>
+            <dd class="col-sm-8 mb-2">Fecha del índice</dd>
+            <dt class="col-sm-4 mb-2">{{legajo.fk_legajo.fecha_nacimiento|date:'d/m/Y'}}</dt>
+            <dd class="col-sm-8 mb-2">Criterios autonomos de ingreso</dd>
+            <dt class="col-sm-4 mb-2">{% for a in autonomos %} {{a.fk_criterios_ingreso.criterio}} {% endfor %}</dt>
+            <dd class="col-sm-8 mb-2">Criterios sociales presentes</dd>
+            <dt class="col-sm-4 mb-2">{{ cant_sociales }}</dt>
+            <dd class="col-sm-8 mb-2">Criterios combinables presentes</dd>
+            <dt class="col-sm-4 mb-2">{{ cant_combinables }}</dt>
+          </dl>
         </div>
-
       </div>
     </div>
+    <!-- /  -->
 
     <div class="col-sm-3 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">

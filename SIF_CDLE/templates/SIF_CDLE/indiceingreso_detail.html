@@ -29,7 +29,7 @@
   <div class="col-12 my-3 mx-2 d-print-none">
     <!-- <a href="{% url 'admisiones_historial'%}" class="btn btn-primary mr-1">Ver admisiones</a> -->
     <a href="{% url 'CDLE_preadmisiones_ver' object.id %}" class="btn btn-primary mr-1">Volver pre-admisión</a>
-    <a href="{% url 'CDLE_indiceingreso_editar' object.id %}" class="btn btn-secondary mr-1">Editar</a>
+    <!--<a href="{% url 'CDLE_indiceingreso_editar' object.id %}" class="btn btn-secondary mr-1">Editar</a>-->
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
   </div>
 </div>
@@ -87,15 +87,7 @@
   <!-- Detalle puntajes del indice -->
   <div class="col-sm-4">
     <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-warning">{{foto_ingreso.puntaje}}</span>
-      <div class="info-box-content h5 my-0">
-        <span class="info-box-text">Puntaje</span>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-4">
-    <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-secondary">{{cantidad}}</span>
+      <span class="info-box-icon bg-warning">{{cantidad}}</span>
       <div class="info-box-content h5 my-0">
         <span class="info-box-text">Criterios presentes</span>
       </div>
@@ -103,9 +95,17 @@
   </div>
   <div class="col-sm-4">
     <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-secondary"> {{foto_ingreso.puntaje_max}}</span>
+      <span class="info-box-icon bg-secondary">{{cant_combinables}}</span>
       <div class="info-box-content h5 my-0">
-        <span class="info-box-text"> Puntaje máximo posible</span>
+        <span class="info-box-text">Criterios combinables</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="info-box mb-2 ">
+      <span class="info-box-icon bg-secondary">{{cant_sociales}}</span>
+      <div class="info-box-content h5 my-0">
+        <span class="info-box-text">Criterios sociales</span>
       </div>
     </div>
   </div>
@@ -121,8 +121,6 @@
         <thead>
           <tr>
             <th>Criterio</th>
-            <th class="text-center px-1" width="8%">Puntaje</th>
-            <th class="text-center px-1" width="8%">Modificable</th>
           </tr>
         </thead>
         <tbody>
@@ -135,8 +133,6 @@
           {% if c.fk_criterios_ingreso.tipo == 'Criteros autónomos de ingreso' %}
           <tr>
               <td>{{c.fk_criterios_ingreso.criterio}}</td>
-              <td class="text-center">{{c.fk_criterios_ingreso.puntaje}}</td>
-              <td class="text-center"><span class=" badge {% if c.fk_criterios_ingreso.modificable == 'No' %}badge-primary {% else %}badge-info {% endif %}px-2">{{c.fk_criterios_ingreso.modificable}}</span></td>
           </tr>
 
           {% endif %}
@@ -148,8 +144,6 @@
           {% if c.fk_criterios_ingreso.tipo == 'Motivo de falta de control o control insuficiente' %}
           <tr>
               <td>{{c.fk_criterios_ingreso.criterio}}</td>
-              <td class="text-center">{{c.fk_criterios_ingreso.puntaje}}</td>
-              <td class="text-center"><span class=" badge {% if c.fk_criterios_ingreso.modificable == 'No' %}badge-primary {% else %}badge-info {% endif %}px-2">{{c.fk_criterios_ingreso.modificable}}</span></td>
           </tr>
 
           {% endif %}
@@ -162,8 +156,6 @@
           {% if c.fk_criterios_ingreso.tipo == 'Criterios combinables para el ingreso' %}
           <tr>
               <td>{{c.fk_criterios_ingreso.criterio}}</td>
-              <td class="text-center">{{c.fk_criterios_ingreso.puntaje}}</td>
-              <td class="text-center"><span class=" badge {% if c.fk_criterios_ingreso.modificable == 'No' %}badge-primary {% else %}badge-info {% endif %}px-2">{{c.fk_criterios_ingreso.modificable}}</span></td>
           </tr>
 
           {% endif %}
@@ -175,8 +167,6 @@
           {% if c.fk_criterios_ingreso.tipo == 'Criterios sociales para el ingreso' %}
           <tr>
               <td>{{c.fk_criterios_ingreso.criterio}}</td>
-              <td class="text-center">{{c.fk_criterios_ingreso.puntaje}}</td>
-              <td class="text-center"><span class=" badge {% if c.fk_criterios_ingreso.modificable == 'No' %}badge-primary {% else %}badge-info {% endif %}px-2">{{c.fk_criterios_ingreso.modificable}}</span></td>
           </tr>
 
           {% endif %}
