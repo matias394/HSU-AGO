@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     # Programas
     'SIF_CDIF',
     'SIF_CDLE',
+    'SIF_MILD',
     'SIF_PDV'
 ]
 
