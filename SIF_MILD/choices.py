@@ -252,6 +252,7 @@ CHOICE_CENTRO_CONTROL=[
 ]
 
 CHOICE_METODOS_ANTICONCEPTIVOS = [
+    ('', ''),
     ('Preservativo', 'Preservativo'),
     ('Inyectable', 'Inyectable'),
     ('Implante_Anticonceptivo', 'Implante Anticonceptivo'),
@@ -263,7 +264,51 @@ CHOICE_METODOS_ANTICONCEPTIVOS = [
 ]
 
 CHOICE_EMBARAZO_CONTROLADO = [
+    ('', ''),
     ('Si', 'Si'),
     ('No', 'No'),
     ('Insuficiente', 'Insuficiente'),
+]
+
+CHOICE_CRI_SANITARIOS = [
+    ('', ''),
+    ('Madre SIN controles de salud o controles insuficientes durante el embarazo', 'Madre SIN controles de salud o controles insuficientes durante el embarazo'),
+    ('Niño menor de 2 afios SIN controles de salud y/o vacunación incompleta', 'Niño menor de 2 afios SIN controles de salud y/o vacunación incompleta'),
+    ('Niño prematuro con necesidad de seguimiento', 'Niño prematuro con necesidad de seguimiento'),
+    ('Niño menor de 2 años desnutrido', 'Niño menor de 2 años desnutrido'),
+]
+CHOICE_CRI_SOCIALES = [
+    ('', ''),
+    ('Ingreso por debajo de la canasta básica', 'Ingreso por debajo de la canasta básica'),
+    ('Sin obra social', 'Sin obra social'),
+    ('Situación habitacional crítica: Hacinamiento, con vivienda de madera y chapa', 'Situación habitacional crítica: Hacinamiento, con vivienda de madera y chapa'),
+    ('Madre sin red de contención', 'Madre sin red de contención'),
+    ('Familia numerosa (4 menores 0 más a cargo)', 'Familia numerosa (4 menores 0 más a cargo)'),
+    ('Cuidador principal con consumo problemático', 'Cuidador principal con consumo problemático'),
+    ('Violencia hacia la madre y/o el no', 'Violencia hacia la madre y/o el no'),
+    ('Cuidador principal analfabeto', 'Cuidador principal analfabeto'),
+    ('Falta de DNI de la madre y/o de! niño.', 'Falta de DNI de la madre y/o de! niño.'),
+    ('Cuidador principal con problemas de salud mental diagnosticado y/o capacidades reducidas', 'Cuidador principal con problemas de salud mental diagnosticado y/o capacidades reducidas'),
+    ('Intervención del servicio local', 'Intervención del servicio local'),
+]
+
+CHOICE_DNI_NINIO = [
+    ('', ''),
+    ('Tiene DNI', 'Tiene DNI'),
+    ('Sólo tiene partida de nacimiento', 'Sólo tiene partida de nacimiento'),
+    ('Sólo tiene constancia de parto', 'Sólo tiene constancia de parto'),
+    ('Le falta el DNI plástico', 'Le falta el DNI plástico'),
+    ('DNI en trámite', 'DNI en trámite'),
+    ('No tiene ninguno (no hay registro de ese nacimiento)', 'No tiene ninguno (no hay registro de ese nacimiento)'),
+]
+CHOICE_SEXO_NINIO = [
+    ('', ''),
+    ('Varón', 'Varón'),
+    ('Mujer', 'Mujer'),
+]
+CHOICE_DONDE_ATIENDE = [
+    ('', ''),
+    ('Parto Domiciliario', 'Parto Domiciliario'),
+    ('Parto Extrapartidario', 'Parto Extrapartidario'),
+    ('Parto en institución privada', 'Parto en institución privada'),
 ]
