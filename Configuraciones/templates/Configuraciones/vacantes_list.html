@@ -45,9 +45,11 @@
             <tr>
             <th>Nombre</th>
             <th >Programa</th>
+            <th >Organismo</th>
             <th >Turno</th>
             <th >Cantidad</th>
             <th >Sala</th>
+            <th >Cupo</th>
             <th >Estado</th>
               <th style="width: 15%" class="notexport">
               </th>
@@ -58,9 +60,11 @@
             <tr  >
               <td><a href="{% url 'vacantes_ver' o.id %}" class ="font-weight-bold" >{{o.nombre}}</a> </td>
               <td > {{o.fk_programa |default_if_none:"-" }}</td>
+              <td > {{o.fk_organismo |default_if_none:"-" }}</td>
               <td> {{o.turno}}</td>
               <td> {{o.cantidad}}</td>
               <td> {{o.sala}}</td>
+              <td> {{o.cupos}}</td>
               <td>
                 {% if o.estado  %}
                 <span class="text-success font-weight-bold">Activo</span>
