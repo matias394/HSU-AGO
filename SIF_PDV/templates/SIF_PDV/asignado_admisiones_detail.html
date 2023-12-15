@@ -27,7 +27,7 @@ Admisiones
   <div class="col-12 my-3 mx-2 d-print-none">
     {% if object.estado != "Inactiva" %}
     <a href="{% url 'PDV_intervenciones_legajos_listar' object.id %}" class="btn btn-primary mr-1">Ver intervenciones</a>
-    <a href="{% url 'PDV_vacantes_form_cambio' object.id %}" class="btn btn-secondary mr-1">Cambiar vacante</a>
+   <a href="{% url 'PDV_vacantes_form_cambio' object.id %}" class="btn btn-secondary mr-1">Cambiar acompañante</a>
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     {% if object.estado != "Inactiva" %}
@@ -85,18 +85,22 @@ Admisiones
           <dt class="col-sm-7 mb-2"><span class="text-success font-weight-bold">{{object.estado}}</span></dt>
           <dd class="col-sm-5 mb-2">Fecha de admisión</dd>
           <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
-          <dd class="col-sm-5 mb-2">Estado vacante</dd>
+        <!--  <dd class="col-sm-5 mb-2">Estado vacante</dd>
           <dt class="col-sm-7 mb-2"><span class="badge badge-success">{{lastvo.estado_vacante}}</span></dt>
           <dd class="col-sm-5 mb-2">Fecha de vacante</dd>
-          <dt class="col-sm-7 mb-2">{{lastvo.fecha_ingreso|date:'d/m/Y'}}</dt>
+          <dt class="col-sm-7 mb-2">{{lastvo.fecha_ingreso|date:'d/m/Y'}}</dt>-->
           <dd class="col-sm-5 mb-2">Centro actual </dd>
           <dt class="col-sm-7 mb-2">{{lastvo.fk_organismo}}</dt>
-          <dd class="col-sm-5 mb-2">Sala actual</dd>
+          <dd class="col-sm-5 mb-2">Taller actual </dd>
+          <dt class="col-sm-7 mb-2"></dt>
+          <dd class="col-sm-5 mb-2">Valor indice de ingreso</dd>
+          <dt class="col-sm-7 mb-2">{{ f.puntaje }}</dt>
+       <!--  <dd class="col-sm-5 mb-2">Sala actual</dd>
           <dt class="col-sm-7 mb-2">{{lastvo.sala}}</dt>
           <dd class="col-sm-5 mb-2">Turno actual</dd>
           <dt class="col-sm-7 mb-2">{{lastvo.turno}}</dt>
           <dd class="col-sm-5 mb-2">Educador/a actual</dd>
-          <dt class="col-sm-7 mb-2">{{lastvo.educador}}</dt>
+          <dt class="col-sm-7 mb-2">{{lastvo.educador}}</dt>-->
         </dl>
       </div>
     </div>
@@ -138,6 +142,7 @@ Admisiones
   <!-- / -->
 
   <!-- evolucion de impacto sobre criterios -->
+  <!-- 
   <div class="col-12 mt-3">
     <div class="card card-primary card-outline">
       <div class="card-header">
@@ -251,7 +256,7 @@ Admisiones
       </div>
     </div>
   </div>
-  <!-- / -->
+   -->
 
   <!-- historial de vacantes -->
   <div class="col-12 mt-3">
