@@ -52,12 +52,12 @@ class PDVDerivacionesBuscarListView(TemplateView, PermisosMixin):
 class PDVDerivacionesListView(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_PDV/derivaciones_bandeja_list.html"
-    queryset = LegajosDerivaciones.objects.filter(fk_programa=23)
+    queryset = LegajosDerivaciones.objects.filter(fk_programa=26)
 
     def get_context_data(self, **kwargs):
         context = super(PDVDerivacionesListView, self).get_context_data(**kwargs)
 
-        model = LegajosDerivaciones.objects.filter(fk_programa=23)
+        model = LegajosDerivaciones.objects.filter(fk_programa=26)
 
         context["todas"] = model
         context["pendientes"] = model.filter(estado="Pendiente")
@@ -74,7 +74,7 @@ class PDVDerivacionesDetailView(PermisosMixin, DetailView):
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
-        legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=23).first()
+        legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=26).first()
         ivi = PDV_IndiceIVI.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
         resultado = ivi.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ivi__puntaje')).order_by('-creado')
         context["pk"] = pk
@@ -90,7 +90,7 @@ class PDVDerivacionesRechazo(PermisosMixin, CreateView):
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
-        legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=23).first()
+        legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=26).first()
         context["object"] = legajo
         return context
     
@@ -123,7 +123,7 @@ class PDVPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin):
         legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
-        centros = Vacantes.objects.filter(fk_programa_id=23)
+        centros = Vacantes.objects.filter(fk_programa_id=26)
         context["pk"] = pk
         context["legajo"] = legajo
         context["familia"] = familia
@@ -134,7 +134,7 @@ class PDVPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin):
     def form_valid(self, form):
         pk = self.kwargs["pk"]
         form.instance.estado = 'En proceso'
-        form.instance.vinculo1 = form.cleaned_data['vinculo']
+        form.instance.vinculo1 = form.cleaned_data['vinculo1']
         form.instance.vinculo2 = form.cleaned_data['vinculo2']
         form.instance.vinculo3 = form.cleaned_data['vinculo3']
         form.instance.vinculo4 = form.cleaned_data['vinculo4']
@@ -187,7 +187,7 @@ class PDVPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin):
         legajo = LegajosDerivaciones.objects.filter(pk=pk.fk_derivacion_id).first()
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
-        centros = Vacantes.objects.filter(fk_programa_id=23)
+        centros = Vacantes.objects.filter(fk_programa_id=26)
 
         context["pk"] = pk.fk_derivacion_id
         context["legajo"] = legajo
@@ -286,7 +286,7 @@ class PDVPreAdmisionesBuscarListView(PermisosMixin, TemplateView):
         mostrar_btn_resetear = False
         query = self.request.GET.get("busqueda")
         if query:
-            object_list = PDV_PreAdmision.objects.filter(Q(fk_legajo__apellido__iexact=query) | Q(fk_legajo__documento__iexact=query), fk_derivacion__fk_programa_id=23).exclude(estado__in=['Rechazada','Aceptada']).distinct()
+            object_list = PDV_PreAdmision.objects.filter(Q(fk_legajo__apellido__iexact=query) | Q(fk_legajo__documento__iexact=query), fk_derivacion__fk_programa_id=26).exclude(estado__in=['Rechazada','Aceptada']).distinct()
             if not object_list:
                 messages.warning(self.request, ("La búsqueda no arrojó resultados."))
 
@@ -1017,7 +1017,7 @@ class PDVAdmisionesBuscarListView(PermisosMixin, TemplateView):
         mostrar_btn_resetear = False
         query = self.request.GET.get("busqueda")
         if query:
-            object_list = PDV_Admision.objects.filter(Q(fk_preadmi__fk_legajo__apellido__iexact=query) | Q(fk_preadmi__fk_legajo__documento__iexact=query), fk_preadmi__fk_derivacion__fk_programa_id=23).exclude(estado__in=['Rechazada','Aceptada']).distinct()
+            object_list = PDV_Admision.objects.filter(Q(fk_preadmi__fk_legajo__apellido__iexact=query) | Q(fk_preadmi__fk_legajo__documento__iexact=query), fk_preadmi__fk_derivacion__fk_programa_id=26).exclude(estado__in=['Rechazada','Aceptada']).distinct()
             if not object_list:
                 messages.warning(self.request, ("La búsqueda no arrojó resultados."))
 
