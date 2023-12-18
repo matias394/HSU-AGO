@@ -171,6 +171,7 @@ class PDV_Vacantes(models.Model):
     fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, null=True, blank=True)
     fk_derivacion = models.ForeignKey(PDV_PreAdmision, on_delete=models.CASCADE, null=True, blank=True)
     fk_vacantes = models.ForeignKey(Vacantes, on_delete=models.CASCADE, null=True, blank=True)
+    fk_organismo = models.ForeignKey(Organismos, on_delete=models.PROTECT, null=True, blank=True)
     organizacion = models.CharField(max_length=100)
     sala = models.CharField(max_length=100)
     estado = models.CharField(max_length=100)
@@ -181,7 +182,7 @@ class PDV_Vacantes(models.Model):
 
     def __str__(self):
         return f'{self.organizacion} - Sala {self.sala}'
-
+    
 
 class PDV_Admision(models.Model):
     fk_preadmi = models.ForeignKey(PDV_PreAdmision, on_delete=models.CASCADE)
