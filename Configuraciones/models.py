@@ -424,6 +424,14 @@ class Vacantes(models.Model):
         validators=[MinValueValidator(0)],
         default=0,verbose_name = 'Turno Tarde',
     )
+    maniana4 = models.PositiveIntegerField(
+        validators=[MinValueValidator(0)],
+        default=0, verbose_name = 'Turno Mañana',
+    )
+    tarde4 = models.PositiveIntegerField(
+        validators=[MinValueValidator(0)],
+        default=0,verbose_name = 'Turno Tarde',
+    )
     estado = models.BooleanField(default=True)
 
 
