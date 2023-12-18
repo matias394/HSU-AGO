@@ -117,9 +117,4 @@ CHOICE_CRITERIO_ALERTA=[
     ('Precaución', 'Precaución'),
 ]
 
-CHOICE_CUPO=[
-    (None, ''),
-    ('Turno Mañana', 'Turno Mañana'),
-    ('Turno Tarde', 'Turno Tarde'),
-]
 
