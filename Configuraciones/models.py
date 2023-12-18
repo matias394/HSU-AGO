@@ -400,7 +400,6 @@ class Vacantes(models.Model):
     observaciones = models.CharField(max_length=300, null=True, blank=True)
     fk_programa = models.ForeignKey(Programas, on_delete=models.PROTECT)
     fk_organismo = models.ForeignKey(Organismos, on_delete=models.PROTECT, null=True, blank=True)
-    cupos = models.CharField(max_length=50, choices=CHOICE_CUPO, null=True, blank=True)
     manianabb = models.PositiveIntegerField(
         validators=[MinValueValidator(0)],
         default=0, verbose_name = 'Turno Mañana', 
