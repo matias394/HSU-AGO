@@ -109,6 +109,24 @@
             </div>
           </div>
           <div class="row">
+            <div class="col-2">
+              <div class="form-group  mt-4 mr-5 text-left h6 font-weight-bold">
+                General:
+              </div>
+            </div>
+            <div class="col-5">
+              <div class="form-group">
+                {{form.maniana4| as_crispy_field}}
+              </div>
+            </div>
+
+            <div class="col-5">
+              <div class="form-group">
+                {{form.tarde4| as_crispy_field}}
+              </div>
+            </div>
+          </div>
+          <div class="row">
             <div class="col-12">
               <div class="form-group">
                 {{form.observaciones| as_crispy_field}}
