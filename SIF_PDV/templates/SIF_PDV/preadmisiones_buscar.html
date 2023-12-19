@@ -83,7 +83,7 @@
                                     <a href="{% url 'PDV_preadmisiones_ver' o.id %}" class="btn btn-primary btn-sm ver">Ver pre-admision</a>
                                     {% endif %}
                                     {% if o.estado == 'Finalizada' and o.ivi == 'SI'%}
-                                    <a href="{% url 'PDV_preadmisiones3_ver' o.id %}" class="btn btn-primary btn-sm ver">Admitir</a>
+                                    <a href="{% url 'PDV_preadmisiones_ver3' o.id %}" class="btn btn-primary btn-sm ver">Admitir</a>
                                     {% endif %}
                                     <a href="{% url 'legajos_ver' o.fk_legajo.id %}" class="btn btn-secondary btn-sm editar">Ver legajo</a> 
                                     </div>

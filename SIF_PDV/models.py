@@ -117,6 +117,7 @@ class PDV_PreAdmision (models.Model):
     centro_postula = models.ForeignKey(Vacantes, on_delete=models.CASCADE, null=True, blank=True)
     sala_postula =  models.CharField(max_length=150, choices=CHOICE_SALA_POSTULA, null=True, blank=True)
     turno_postula =  models.CharField(max_length=150, choices=CHOICE_TURNO_POSTULA, null=True, blank=True)
+    taller_postula =  models.CharField(max_length=150, choices=CHOICE_TALLER_POSTULA, null=True, blank=True)
     sala_short = models.CharField(max_length=150, null=True, blank=True)
     vinculo1 = models.CharField(max_length=150, null=True, blank=True)
     vinculo2 = models.CharField(max_length=150, null=True, blank=True)
