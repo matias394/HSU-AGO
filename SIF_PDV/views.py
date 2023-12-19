@@ -207,6 +207,7 @@ class PDVPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin):
         form.instance.estado = pk.estado
         form.instance.modificado_por_id = self.request.user.id
         sala = form.cleaned_data['sala_postula']
+        
         turno = form.cleaned_data['turno_postula']
         if sala == 'Bebés' and turno == 'Mañana':
             form.instance.sala_short = 'manianabb'
@@ -806,8 +807,12 @@ class PDVVacantesListView(PermisosMixin, ListView):
     template_name = 'SIF_PDV/vacantes_list.html'
     context_object_name = 'organizaciones'
     
+    
     def get_queryset(self):
-        organizaciones = Vacantes.objects.values_list('nombre', flat=True).distinct()
+        # org = Vacantes.objects.values_list('fk_organismo', flat=True).distinct()
+        # organizaciones = Organismos.objects.filter(id__in=org)
+        organizaciones = Vacantes.objects.values_list('fk_organismo', flat=True).distinct()
+        organizaciones = Organismos.objects.filter(id__in=organizaciones)
         data = []
 
         for organizacion in organizaciones:
@@ -815,7 +820,7 @@ class PDVVacantesListView(PermisosMixin, ListView):
 
             # Calcular la cantidad de vacantes por sala agrupadas
             for sala_group in [['manianabb', 'tardebb'], ['maniana2', 'tarde2'], ['maniana3', 'tarde3']]:
-                total_vacantes = Vacantes.objects.filter(nombre=organizacion).aggregate(
+                total_vacantes = Vacantes.objects.filter(fk_organismo=organizacion).aggregate(
                     total=Sum(F(sala_group[0]) + F(sala_group[1]))
                 )['total'] or 0
 
@@ -852,11 +857,12 @@ class PDVVacantesListView(PermisosMixin, ListView):
     #    context['organizaciones'] = self.get_queryset()
     #    print(context)
     #    return context
-    
+
 class PDVVacantesDetailView (PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_PDV/vacantes_detail.html"
     model = Vacantes
+    
 
 class PDVIntervencionesCreateView(PermisosMixin, CreateView):
     permission_required = "Usuarios.rol_admin"
