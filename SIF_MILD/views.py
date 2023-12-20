@@ -234,7 +234,7 @@ class MILDPreAdmisionesDetailView(PermisosMixin, DetailView):
         context["ivi"] = ivi
         context["ingreso"] = ingreso
         context['criterios_total'] = ingreso.count()
-        context["cant_combinables"] = ingreso.filter(fk_criterios_ingreso__tipo='Criterios combinables para el ingreso').count()
+        context["cant_sanitarios"] = ingreso.filter(fk_criterios_ingreso__tipo='Criterios sanitarios para el ingreso').count()
         context["cant_sociales"] = ingreso.filter(fk_criterios_ingreso__tipo='Criterios sociales para el ingreso').count() 
         context["autonomos"] = ingreso.filter(fk_criterios_ingreso__tipo='Criteros autónomos de ingreso').all()
         context["resultado"] = resultado
@@ -499,7 +499,7 @@ class MILDIndiceIngresoDetailView(PermisosMixin, DetailView):
         context["criterio"] = criterio
         context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
         context["cantidad"] = criterio.count()
-        context["cant_combinables"] = criterio.filter(fk_criterios_ingreso__tipo='Criterios combinables para el ingreso').count()
+        context["cant_sanitarios"] = criterio.filter(fk_criterios_ingreso__tipo='Criterios sanitarios para el ingreso').count()
         context["cant_sociales"] = criterio.filter(fk_criterios_ingreso__tipo='Criterios sociales para el ingreso').count()
         context["mod_puntaje"] = criterio.filter(fk_criterios_ingreso__modificable='SI').aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ingreso__tipo='Ajustes').count()
@@ -714,7 +714,7 @@ class MILDPreAdmisiones3DetailView(PermisosMixin, DetailView):
         context['maximo'] = foto_ivi.puntaje_max
         context['maximo_ingreso'] = foto_ingreso.puntaje_max
         context['criterios_total'] = criterio_ingreso.count()
-        context["cant_combinables"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='Criterios combinables para el ingreso').count()
+        context["cant_sanitarios"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='Criterios sanitarios para el ingreso').count()
         context["cant_sociales"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='Criterios sociales para el ingreso').count() 
         context["autonomos"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='Criteros autónomos de ingreso').all()
         return context
