@@ -111,8 +111,8 @@ Pre-admisiones
         </div>
         <div class="card-body">
           <dl class="row mb-0">
-            <dd class="col-sm-8 mb-2">Cantidad total de criterios</dd>
-            <dt class="col-sm-4 mb-2"><span class="badge badge-warning float-center">{{ criterios_total }}</span></dt>
+            <dd class="col-sm-8 mb-2">Aplica</dd>
+            <dt class="col-sm-4 mb-2">{% if cant_sanitarios >= 1 or cant_sociales >= 5 %}<span class="badge bg-success"> SI {% else %} <span class="badge bg-danger"> NO {% endif %}</span></dt>
             <dd class="col-sm-8 mb-2">Fecha del índice</dd>
             <dt class="col-sm-4 mb-2">{{autonomos.creado|date:'d/m/Y'}}</dt>
             <dd class="col-sm-8 mb-2">Criterios sociales presentes</dd>
