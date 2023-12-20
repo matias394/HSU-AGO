@@ -224,7 +224,7 @@ class MILD_Foto_IVI(models.Model):
 
 class Criterios_Ingreso(models.Model):
     criterio =  models.CharField(max_length=250, null=False, blank=False)
-    tipo =  models.CharField(max_length=250, choices=CHOICE_TIPO_INGRESO, null=False, blank=False)
+    tipo =  models.CharField(max_length=250, choices=CHOICE_TIPO_INGRESO_MILD, null=False, blank=False)
     puntaje =  models.SmallIntegerField(null=False, blank=False)
     modificable =  models.CharField(max_length=50, choices=CHOICE_NOSI, null=False, blank=False)
     

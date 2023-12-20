@@ -312,3 +312,8 @@ CHOICE_DONDE_ATIENDE = [
     ('Parto Extrapartidario', 'Parto Extrapartidario'),
     ('Parto en institución privada', 'Parto en institución privada'),
 ]
+CHOICE_TIPO_INGRESO_MILD = [
+    (None, ''),
+    ('Criterios sanitarios para el ingreso', 'Criterios sanitarios para el ingreso'),
+    ('Criterios sociales para el ingreso', 'Criterios sociales para el ingreso'),
+]
