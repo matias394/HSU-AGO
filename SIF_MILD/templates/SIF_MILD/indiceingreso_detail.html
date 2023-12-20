@@ -87,9 +87,9 @@
   <!-- Detalle puntajes del indice -->
   <div class="col-sm-4">
     <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-warning">{{cantidad}}</span>
+      {% if cant_sanitarios >= 1 or cant_sociales >= 5 %}<span class="info-box-icon bg-success"> SI {% else %} <span class="info-box-icon bg-danger"> NO </span>
       <div class="info-box-content h5 my-0">
-        <span class="info-box-text">Criterios presentes</span>
+        <span class="info-box-text">Aplica</span>
       </div>
     </div>
   </div>
