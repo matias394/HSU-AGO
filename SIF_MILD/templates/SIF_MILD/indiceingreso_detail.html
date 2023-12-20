@@ -126,29 +126,6 @@
         <tbody>
 
           <tr>
-            <td colspan="3" class="text-center bg-secondary py-1">Criteros autónomos de ingreso
-            </td>
-          </tr>
-          {% for c in criterio %}
-          {% if c.fk_criterios_ingreso.tipo == 'Criteros autónomos de ingreso' %}
-          <tr>
-              <td>{{c.fk_criterios_ingreso.criterio}}</td>
-          </tr>
-
-          {% endif %}
-          {% endfor %}
-          <tr>
-            <td colspan="3" class="text-center bg-secondary py-1">Motivo de falta de control o control insuficiente</td>
-          </tr>
-          {% for c in criterio %}
-          {% if c.fk_criterios_ingreso.tipo == 'Motivo de falta de control o control insuficiente' %}
-          <tr>
-              <td>{{c.fk_criterios_ingreso.criterio}}</td>
-          </tr>
-
-          {% endif %}
-          {% endfor %}
-          <tr>
             <td colspan="3" class="text-center bg-secondary py-1">Criterios sanitarios para el ingreso
             </td>
           </tr>
