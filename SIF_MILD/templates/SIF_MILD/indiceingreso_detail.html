@@ -95,9 +95,9 @@
   </div>
   <div class="col-sm-4">
     <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-secondary">{{cant_combinables}}</span>
+      <span class="info-box-icon bg-secondary">{{cant_sanitarios}}</span>
       <div class="info-box-content h5 my-0">
-        <span class="info-box-text">Criterios combinables</span>
+        <span class="info-box-text">Criterios sanitarios</span>
       </div>
     </div>
   </div>
@@ -149,11 +149,11 @@
           {% endif %}
           {% endfor %}
           <tr>
-            <td colspan="3" class="text-center bg-secondary py-1">Criterios combinables para el ingreso
+            <td colspan="3" class="text-center bg-secondary py-1">Criterios sanitarios para el ingreso
             </td>
           </tr>
           {% for c in criterio %}
-          {% if c.fk_criterios_ingreso.tipo == 'Criterios combinables para el ingreso' %}
+          {% if c.fk_criterios_ingreso.tipo == 'Criterios sanitarios para el ingreso' %}
           <tr>
               <td>{{c.fk_criterios_ingreso.criterio}}</td>
           </tr>

@@ -128,8 +128,6 @@ CDLE Pre-admisiones
             <dt class="col-sm-4 mb-2"><span class="badge badge-warning float-center">{{ criterios_total }}</span></dt>
             <dd class="col-sm-8 mb-2">Fecha del índice</dd>
             <dt class="col-sm-4 mb-2">{{legajo.fk_legajo.fecha_nacimiento|date:'d/m/Y'}}</dt>
-            <dd class="col-sm-8 mb-2">Criterios autonomos de ingreso</dd>
-            <dt class="col-sm-4 mb-2">{% for a in autonomos %} {{a.fk_criterios_ingreso.criterio}} {% endfor %}</dt>
             <dd class="col-sm-8 mb-2">Criterios sociales presentes</dd>
             <dt class="col-sm-4 mb-2">{{ cant_sociales }}</dt>
             <dd class="col-sm-8 mb-2">Criterios combinables presentes</dd>
