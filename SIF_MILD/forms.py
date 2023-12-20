@@ -74,6 +74,8 @@ class MILD_PreadmisionesForm (forms.ModelForm):
             'digestiva': forms.CheckboxInput(),
             'alergias': forms.CheckboxInput(),
             'vacunas': forms.CheckboxInput(),
+            'obra_social': forms.CheckboxInput(),
+            'libreta_sanitaria': forms.CheckboxInput(),
 
         }
         labels = {

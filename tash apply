@@ -1,0 +1,66 @@
+[1mdiff --git a/Legajos/templates/Legajos/legajos_detail.html b/Legajos/templates/Legajos/legajos_detail.html[m
+[1mindex b30d6e4..92961af 100644[m
+[1m--- a/Legajos/templates/Legajos/legajos_detail.html[m
+[1m+++ b/Legajos/templates/Legajos/legajos_detail.html[m
+[36m@@ -907,11 +907,11 @@[m
+                                     <div class="events" style="width: 500px;">[m
+                                         <ol>[m
+                                             <li><a href="#0" data-date="01/01/2020" class="older-event selected" style="left: 0px;">01/01/2020</a></li>[m
+[31m-                                            <li><a href="#0" data-date="01/02/2020" style="left: 0px;">01/02/2020</a></li>[m
+[31m-                                            <li><a href="#0" data-date="01/03/2020" style="left: 0px;">01/03/2020</a></li>[m
+[31m-                                            <li><a href="#0" data-date="03/03/2020" style="left: 0px;">03/03/2020</a></li>[m
+[31m-                                            <li><a href="#0" data-date="10/07/2020" style="left: 0px;">10/07/2020</a></li>[m
+[31m-                                            <li><a href="#0" data-date="04/02/2021" style="left: 0px;">04/02/2021</a></li>[m
+[32m+[m[32m                                            <li><a href="#0" data-date="02/01/2020" style="left: 0px;">01/02/2020</a></li>[m
+[32m+[m[32m                                            <li><a href="#0" data-date="03/01/2020" style="left: 0px;">01/03/2020</a></li>[m
+[32m+[m[32m                                            <li><a href="#0" data-date="04/01/2020" style="left: 0px;">03/03/2020</a></li>[m
+[32m+[m[32m                                            <li><a href="#0" data-date="06/01/2020" style="left: 0px;">10/07/2020</a></li>[m
+[32m+[m[32m                                            <li><a href="#0" data-date="08/01/2020" style="left: 0px;">04/02/2021</a></li>[m
+                                         </ol>[m
+                                         <span class="filling-line" aria-hidten="true" style="transform: scaleX(0.281506);"></span>[m
+                                     </div>[m
+[36m@@ -937,7 +937,7 @@[m
+                                                 Además se evidencian signos de violencia de género en la madre de familia.[m
+                                             </p>[m
+                                     </li>[m
+[31m-                                    <li data-date="01/02/2020" class="">[m
+[32m+[m[32m                                    <li data-date="02/01/2020" class="">[m
+                                         <h5 class="text-bold">[m
+                                             Asistencia habitacional <span class="badge badge-secondary">Ingreso</span><br>[m
+                                             <small>01/02/2020</small>[m
+[36m@@ -947,7 +947,7 @@[m
+                                             [m
+                                         </p>[m
+                                     </li>[m
+[31m-                                    <li data-date="01/03/2020" >[m
+[32m+[m[32m                                    <li data-date="03/01/2020" >[m
+                                         <br>[m
+                                         <h5 class="text-bold">[m
+                                             Incendios <span class="badge badge-secondary">Ingreso</span><br>[m
+[36m@@ -958,7 +958,7 @@[m
+                                                 hecho por lo cual el programa de incendios interviene en los meses posteriores para ayudar en la reconstrucción del hogar.[m
+                                             </p>[m
+                                     </li>[m
+[31m-                                    <li data-date="03/03/2020">[m
+[32m+[m[32m                                    <li data-date="04/01/2020">[m
+                                         <h5 class="text-bold">[m
+                                             Asistencia alimentaria <span class="badge badge-secondary">Ingreso</span> <br>[m
+                                             <small>03/03/2020</small>[m
+[36m@@ -967,7 +967,7 @@[m
+                                             <p>Durante todo el aislamiento social preventivo y obligatorio el municipio asiste a la familia con entrega de alimentos. [m
+                                             </p>[m
+                                     </li>[m
+[31m-                                    <li data-date="10/07/2020">[m
+[32m+[m[32m                                    <li data-date="06/01/2020">[m
+                                         <h5 class="text-bold"> [m
+                                             Camino de la embarazada <span class="badge badge-secondary">Ingreso</span> <br>[m
+                                             <small>10/07/2020</small>[m
+[36m@@ -977,7 +977,7 @@[m
+                                                  A partir de esto se articula con todas las áreas de asistencia, y se la incluye al programa Camino de la embrazada[m
+                                             </p>[m
+                                     </li>[m
+[31m-                                    <li data-date="04/02/2021">[m
+[32m+[m[32m                                    <li data-date="08/01/2021">[m
+                                         <h5 class="text-bold"> [m
+                                             Camino de la embarazada <span class="badge badge-secondary">Egreso</span> <br>[m
+                                             <small>04/02/2021</small>[m
