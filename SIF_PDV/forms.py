@@ -76,7 +76,7 @@ class PDV_PreadmisionesForm (forms.ModelForm):
             'fk_legajo_5':'',
             'centro_postula':'',
             'sala_postula':'',
-            'turno_postula':'',
+            'taller_postula':'',
         }
 
 class criterios_IVI (forms.ModelForm):
