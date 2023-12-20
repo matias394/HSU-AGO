@@ -229,7 +229,7 @@ class VacantesForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['fk_programa'].label = "Programa"
-    
+        self.fields['fk_organismo'].label = "Organismo"
     class Meta:
         model = Vacantes
         exclude = ()
