@@ -4,6 +4,7 @@ from Legajos.models import *
 from django.core.validators import MinValueValidator, MaxValueValidator
 from .choices import *
 from django.urls import *
+from SIF_CDIF.models import Criterios_IVI
 
 # Create your models here.
 
@@ -187,14 +188,6 @@ class MILD_PreAdmision (models.Model):
     estado = models.CharField(max_length=100, null=True, blank=True)
     tipo = models.CharField(max_length=100, null=True, blank=True)
 
-class Criterios_IVI(models.Model):
-    criterio =  models.CharField(max_length=250, null=False, blank=False)
-    tipo =  models.CharField(max_length=250, choices=CHOICE_TIPO_IVI, null=False, blank=False)
-    puntaje =  models.SmallIntegerField(null=False, blank=False)
-    modificable =  models.CharField(max_length=50, choices=CHOICE_NOSI, null=False, blank=False)
-    
-    def __str__(self):
-        return self.criterio
 
 class MILD_IndiceIVI(models.Model):
     fk_criterios_ivi = models.ForeignKey(Criterios_IVI, on_delete=models.CASCADE)
