@@ -961,7 +961,7 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="row">
-                                                <div class="col-sm-12 ">
+                                                <!--<div class="col-sm-12 ">
                                                     <div class="form-row flex justify-content-center">
                                                         <div class="col-sm-4 pl-5 pr-5">
                                                             <div class="form-group mt-4 pt-2">
@@ -1114,7 +1114,17 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div>-->
+                                                <table class="table">
+                                                    <tbody>
+                                                      <tr>
+                                                        <th scope="row">1</th>
+                                                        <td>Mark</td>
+                                                        <td>Otto</td>
+                                                        <td>@mdo</td>
+                                                      </tr>
+                                                    </tbody>
+                                                  </table>
                                             </div>
 
                                         </div>
@@ -1142,13 +1152,13 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-sm-12 ">
-                                                    <div class="form-row flex justify-content-center">
-                                                        <div class="col-sm-4 pl-5 pr-5">
+                                                    <div class="form-row flex justify-content-left">
+                                                        <div class="col-sm-6">
                                                             <div class="form-group mt-4 pt-2">
                                                                 {{form.acompaniante_entrevista| as_crispy_field}}
                                                             </div>
                                                         </div>
-                                                        <div class="col-sm-4 pl-5 pr-5">
+                                                        <div class="col-sm-6">
                                                             <div class="form-group mt-4 pt-2">
                                                                 {{form.acompaniante_asignado| as_crispy_field}}
                                                             </div>

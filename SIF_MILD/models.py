@@ -170,7 +170,7 @@ class MILD_PreAdmision (models.Model):
     vacunas = models.BooleanField(verbose_name='¿Recibió todas las vacunas correspondientes a su edad?', null=True, blank=True)
     
     acompaniante_entrevista = models.ForeignKey(Usuarios,verbose_name='Acompañante que realizo la entrevista', related_name='MILD_Acompaniante_entrevista', on_delete=models.PROTECT, blank=True, null=True)
-    acompaniante_asignado = models.ForeignKey(AgentesExternos,verbose_name='Acompañante asignado', related_name='MILD_Acompaniante_asignado', on_delete=models.PROTECT, blank=True, null=True)
+    acompaniante_asignado = models.ForeignKey(Usuarios,verbose_name='Acompañante asignado', related_name='MILD_Acompaniante_asignado', on_delete=models.PROTECT, blank=True, null=True)
     observaciones_gral = models.CharField(max_length=350, null=True, blank=True, verbose_name='Aquí puede detallar información adicional de la familia, o temas que es importante resaltar acerca de la misma.')
 
     vinculo1 = models.CharField(max_length=150, null=True, blank=True)
