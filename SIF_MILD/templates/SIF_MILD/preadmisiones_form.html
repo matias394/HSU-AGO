@@ -961,7 +961,7 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="row">
-                                                <div class="col-sm-12 ">
+                                                <!--<div class="col-sm-12 ">
                                                     <div class="form-row flex justify-content-center">
                                                         <div class="col-sm-4 pl-5 pr-5">
                                                             <div class="form-group mt-4 pt-2">
@@ -1114,7 +1114,130 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div>-->
+                                                <table class="table">
+                                                    <tbody>
+                                                      <tr>
+                                                        <th scope="row">{{ form.obra_social.label_tag }}</th>
+                                                        <td class="text-center">{{form.obra_social}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.libreta_sanitaria.label_tag }}</th>
+                                                        <td class="text-center">{{form.libreta_sanitaria}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.sexo_ninio.label_tag }}</th>
+                                                        <td class="text-center">{{form.sexo_ninio}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.ultimo_control.label_tag }}</th>
+                                                        <td class="text-center">{{form.ultimo_control}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.enf_recu_con_trata.label_tag }}</th>
+                                                        <td class="text-center">{{form.enf_recu_con_trata}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.enf_recu_sin_trata.label_tag }}</th>
+                                                        <td class="text-center">{{form.enf_recu_sin_trata}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.enf_conta_con_trata.label_tag }}</th>
+                                                        <td class="text-center">{{form.enf_conta_con_trata}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.enf_conta_sin_trata.label_tag }}</th>
+                                                        <td class="text-center">{{form.enf_conta_sin_trata}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.enf_mental_con_trata.label_tag }}</th>
+                                                        <td class="text-center">{{form.enf_mental_con_trata}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.enf_mental_sin_trata.label_tag }}</th>
+                                                        <td class="text-center">{{form.enf_mental_sin_trata}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.capa_reducidas.label_tag }}</th>
+                                                        <td class="text-center">{{form.capa_reducidas}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.certif_discap.label_tag }}</th>
+                                                        <td class="text-center">{{form.certif_discap}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.medicamento.label_tag }}</th>
+                                                        <td class="text-center">{{form.medicamento}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.bajo_peso.label_tag }}</th>
+                                                        <td class="text-center">{{form.bajo_peso}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.sobrepeso.label_tag }}</th>
+                                                        <td class="text-center">{{form.sobrepeso}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.prematuro.label_tag }}</th>
+                                                        <td class="text-center">{{form.prematuro}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.interv_quirurgicas.label_tag }}</th>
+                                                        <td class="text-center">{{form.interv_quirurgicas}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.accidentes_domesticos.label_tag }}</th>
+                                                        <td class="text-center">{{form.accidentes_domesticos}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.colecho.label_tag }}</th>
+                                                        <td class="text-center">{{form.colecho}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.enfermedad.label_tag }}</th>
+                                                        <td class="text-center">{{form.enfermedad}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.auditiva.label_tag }}</th>
+                                                        <td class="text-center">{{form.auditiva}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.respiratoria.label_tag }}</th>
+                                                        <td class="text-center">{{form.respiratoria}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.visual.label_tag }}</th>
+                                                        <td class="text-center">{{form.visual}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.traumatologica.label_tag }}</th>
+                                                        <td class="text-center">{{form.traumatologica}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.emocional.label_tag }}</th>
+                                                        <td class="text-center">{{form.emocional}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.psiquica.label_tag }}</th>
+                                                        <td class="text-center">{{form.psiquica}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.digestiva.label_tag }}</th>
+                                                        <td class="text-center">{{form.digestiva}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.alergias.label_tag }}</th>
+                                                        <td class="text-center">{{form.alergias}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th scope="row">{{ form.vacunas.label_tag }}</th>
+                                                        <td class="text-center">{{form.vacunas}}</td>
+                                                      </tr>
+                                                      <tr>
+                                                        <th colspan="2">{{form.observaciones_salud| as_crispy_field}}</th>
+                                                      </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
 
                                         </div>
@@ -1142,13 +1265,13 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-sm-12 ">
-                                                    <div class="form-row flex justify-content-center">
-                                                        <div class="col-sm-4 pl-5 pr-5">
+                                                    <div class="form-row flex justify-content-left">
+                                                        <div class="col-sm-6">
                                                             <div class="form-group mt-4 pt-2">
                                                                 {{form.acompaniante_entrevista| as_crispy_field}}
                                                             </div>
                                                         </div>
-                                                        <div class="col-sm-4 pl-5 pr-5">
+                                                        <div class="col-sm-6">
                                                             <div class="form-group mt-4 pt-2">
                                                                 {{form.acompaniante_asignado| as_crispy_field}}
                                                             </div>

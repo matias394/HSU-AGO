@@ -4,6 +4,7 @@ from Legajos.models import *
 from django.core.validators import MinValueValidator, MaxValueValidator
 from .choices import *
 from django.urls import *
+from SIF_CDIF.models import Criterios_IVI
 
 # Create your models here.
 
@@ -169,7 +170,7 @@ class MILD_PreAdmision (models.Model):
     vacunas = models.BooleanField(verbose_name='¿Recibió todas las vacunas correspondientes a su edad?', null=True, blank=True)
     
     acompaniante_entrevista = models.ForeignKey(Usuarios,verbose_name='Acompañante que realizo la entrevista', related_name='MILD_Acompaniante_entrevista', on_delete=models.PROTECT, blank=True, null=True)
-    acompaniante_asignado = models.ForeignKey(AgentesExternos,verbose_name='Acompañante asignado', related_name='MILD_Acompaniante_asignado', on_delete=models.PROTECT, blank=True, null=True)
+    acompaniante_asignado = models.ForeignKey(Usuarios,verbose_name='Acompañante asignado', related_name='MILD_Acompaniante_asignado', on_delete=models.PROTECT, blank=True, null=True)
     observaciones_gral = models.CharField(max_length=350, null=True, blank=True, verbose_name='Aquí puede detallar información adicional de la familia, o temas que es importante resaltar acerca de la misma.')
 
     vinculo1 = models.CharField(max_length=150, null=True, blank=True)
@@ -187,14 +188,6 @@ class MILD_PreAdmision (models.Model):
     estado = models.CharField(max_length=100, null=True, blank=True)
     tipo = models.CharField(max_length=100, null=True, blank=True)
 
-class Criterios_IVI(models.Model):
-    criterio =  models.CharField(max_length=250, null=False, blank=False)
-    tipo =  models.CharField(max_length=250, choices=CHOICE_TIPO_IVI, null=False, blank=False)
-    puntaje =  models.SmallIntegerField(null=False, blank=False)
-    modificable =  models.CharField(max_length=50, choices=CHOICE_NOSI, null=False, blank=False)
-    
-    def __str__(self):
-        return self.criterio
 
 class MILD_IndiceIVI(models.Model):
     fk_criterios_ivi = models.ForeignKey(Criterios_IVI, on_delete=models.CASCADE)
@@ -224,7 +217,7 @@ class MILD_Foto_IVI(models.Model):
 
 class Criterios_Ingreso(models.Model):
     criterio =  models.CharField(max_length=250, null=False, blank=False)
-    tipo =  models.CharField(max_length=250, choices=CHOICE_TIPO_INGRESO, null=False, blank=False)
+    tipo =  models.CharField(max_length=250, choices=CHOICE_TIPO_INGRESO_MILD, null=False, blank=False)
     puntaje =  models.SmallIntegerField(null=False, blank=False)
     modificable =  models.CharField(max_length=50, choices=CHOICE_NOSI, null=False, blank=False)
     

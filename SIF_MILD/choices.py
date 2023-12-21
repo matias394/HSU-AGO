@@ -308,7 +308,13 @@ CHOICE_SEXO_NINIO = [
 ]
 CHOICE_DONDE_ATIENDE = [
     ('', ''),
+    ('Hospital Larcade','Hospital Larcade'),
     ('Parto Domiciliario', 'Parto Domiciliario'),
     ('Parto Extrapartidario', 'Parto Extrapartidario'),
     ('Parto en institución privada', 'Parto en institución privada'),
+]
+CHOICE_TIPO_INGRESO_MILD = [
+    (None, ''),
+    ('Criterios sanitarios para el ingreso', 'Criterios sanitarios para el ingreso'),
+    ('Criterios sociales para el ingreso', 'Criterios sociales para el ingreso'),
 ]
