@@ -137,8 +137,8 @@ class MILD_PreAdmision (models.Model):
     domicilio_no = models.CharField(max_length=250, null=True, blank=True, verbose_name='En caso de contestar no, especificar')
     hermanos = models.IntegerField(null=True, blank=True, verbose_name='¿Cuántos hermanos tiene el niño? (él NO cuenta)?')
 
-    obra_social = models.IntegerField(null=True, blank=True, verbose_name='Tiene Obra Social')
-    libreta_sanitaria = models.IntegerField(null=True, blank=True, verbose_name='Tiene Libreta Sanitaria')
+    obra_social = models.BooleanField(null=True, blank=True, verbose_name='Tiene Obra Social')
+    libreta_sanitaria = models.BooleanField(null=True, blank=True, verbose_name='Tiene Libreta Sanitaria')
     sexo_ninio = models.CharField(max_length=250, choices=CHOICE_DONDE_ATIENDE, null=True, blank=True, verbose_name='¿Dónde se atiende?')
     ultimo_control = models.DateField(null=True, blank=True, verbose_name='¿Cuándo fue su último control pediátrico?')
     enf_recu_con_trata = models.BooleanField(verbose_name='Padece enfermedad recurrente EN tratamiento', null=True, blank=True)

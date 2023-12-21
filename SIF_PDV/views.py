@@ -142,19 +142,19 @@ class PDVPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin):
         form.instance.creado_por_id = self.request.user.id
 
         sala = form.cleaned_data['sala_postula']
-        turno = form.cleaned_data['turno_postula']
+        taller = form.cleaned_data['taller_postula']
 
-        if sala == 'Bebés' and turno == 'Mañana':
+        if sala == 'Bebés' and taller == 'Mañana':
             form.instance.sala_short = 'manianabb'
-        elif sala == 'Bebés' and turno == 'Tarde':
+        elif sala == 'Bebés' and taller == 'Tarde':
             form.instance.sala_short = 'tardebb'
-        elif sala == 'Sala de 2' and turno == 'Mañana':
+        elif sala == 'Sala de 2' and taller == 'Mañana':
             form.instance.sala_short = 'maniana2'
-        elif sala == 'Sala de 2' and turno == 'Tarde':
+        elif sala == 'Sala de 2' and taller == 'Tarde':
             form.instance.sala_short = 'tarde2'
-        elif sala == 'Sala de 3' and turno == 'Mañana':
+        elif sala == 'Sala de 3' and taller == 'Mañana':
             form.instance.sala_short = 'maniana3'
-        elif sala == 'Sala de 3' and turno == 'Tarde':
+        elif sala == 'Sala de 3' and taller == 'Tarde':
             form.instance.sala_short = 'tarde3'
         self.object = form.save()
 
@@ -207,19 +207,18 @@ class PDVPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin):
         form.instance.estado = pk.estado
         form.instance.modificado_por_id = self.request.user.id
         sala = form.cleaned_data['sala_postula']
-        
-        turno = form.cleaned_data['turno_postula']
-        if sala == 'Bebés' and turno == 'Mañana':
+        taller = form.cleaned_data['taller_postula']
+        if sala == 'Bebés' and taller == 'Mañana':
             form.instance.sala_short = 'manianabb'
-        elif sala == 'Bebés' and turno == 'Tarde':
+        elif sala == 'Bebés' and taller == 'Tarde':
             form.instance.sala_short = 'tardebb'
-        elif sala == 'Sala de 2' and turno == 'Mañana':
+        elif sala == 'Sala de 2' and taller == 'Mañana':
             form.instance.sala_short = 'maniana2'
-        elif sala == 'Sala de 2' and turno == 'Tarde':
+        elif sala == 'Sala de 2' and taller == 'Tarde':
             form.instance.sala_short = 'tarde2'
-        elif sala == 'Sala de 3' and turno == 'Mañana':
+        elif sala == 'Sala de 3' and taller == 'Mañana':
             form.instance.sala_short = 'maniana3'
-        elif sala == 'Sala de 3' and turno == 'Tarde':
+        elif sala == 'Sala de 3' and taller == 'Tarde':
             form.instance.sala_short = 'tarde3'
         self.object = form.save()
 
@@ -937,7 +936,6 @@ class PDVIntervencionesLegajosListView(PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_PDV/intervenciones_legajo_list.html"
     model = PDV_Admision
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         admi = PDV_Admision.objects.filter(pk=self.kwargs["pk"]).first()
