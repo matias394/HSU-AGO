@@ -27,7 +27,7 @@ Admisiones
   <div class="col-12 my-3 mx-2 d-print-none">
     {% if object.estado != "Inactiva" %}
     <a href="{% url 'PDV_intervenciones_legajos_listar' object.id %}" class="btn btn-primary mr-1">Ver intervenciones</a>
-   <a href="{% url 'PDV_vacantes_form_cambio' object.id %}" class="btn btn-secondary mr-1">Cambiar acompañante</a>
+   <a href="{% url 'PDV_vacantes_form_cambio' object.id %}" class="btn btn-secondary mr-1">Cambiar vacante</a>
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     {% if object.estado != "Inactiva" %}
@@ -275,9 +275,9 @@ Admisiones
             <tr>
               <th>Ingreso</th>
               <th>Centro</th>
-              <th>Sala</th>
+              <th>Taller</th>
               <th>Turno</th>
-              <th>Educadora</th>
+              {% comment %} <th>Educadora</th> {% endcomment %}   
               <th>Egreso</th>
               <th>Motivo</th>
             </tr>
@@ -289,7 +289,7 @@ Admisiones
               <td>{{e.fk_organismo}}</td>
               <td>{{e.sala}}</td>
               <td>{{e.turno}}</td>
-              <td>{{e.educador}}</td>
+              {% comment %} <td>{{e.educador}}</td> {% endcomment %}
               <td>{{e.fecha_egreso|date:'d/m/Y'|default:"-"}}</td>
               <td>{{e.motivo|default:"-"}}</td>
             </tr>
