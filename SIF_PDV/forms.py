@@ -111,10 +111,11 @@ class PDV_VacantesOtorgadasForm (forms.ModelForm):
             'fecha_egreso': forms.DateInput(attrs={'type': 'date','required':'required'}, format="%Y-%m-%d"),
             'motivo': forms.Select(choices=[('', ''),('Cambio de ciclo', 'Cambio de ciclo'), ('Cambio de turno', 'Cambio de turno'), ('Cambio de centro', 'Cambio de centro')]),
             'detalles': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
+            
         }
         labels = {
-            'fk_organismo':'Centro al que ingresa',
-            'sala':'Sala a la que ingresa',
+            'fk_organismo2':'Centro al que ingresa',
+            'fk_organismo':'Taller al que ingresa',
             'turno':'Turno al que ingresa',
             'educador':'Educador/a',
             'fecha_egreso':'Fecha de egreso*',
