@@ -602,22 +602,23 @@ class PDVVacantesAdmision(PermisosMixin, CreateView):
     form_class = PDV_VacantesOtorgadasForm
 
     def form_valid(self, form):
-        sala = form.cleaned_data['sala']
+        fk_organismo2 = form.cleaned_data['fk_organismo2']
+        fk_organismo = form.cleaned_data['fk_organismo']
         turno = form.cleaned_data['turno']
-        if sala == 'Bebe' and turno == 'Mañana':
-            form.instance.salashort = 'manianabb'
-        elif sala == 'Bebe' and turno == 'Tarde':
-            form.instance.salashort = 'tardebb'
-        elif sala == '2' and turno == 'Mañana':
-            form.instance.salashort = 'maniana2'
-        elif sala == '2' and turno == 'Tarde':
-            form.instance.salashort = 'tarde2'
-        elif sala == '3' and turno == 'Mañana':
-            form.instance.salashort = 'maniana3'
-        elif sala == '3' and turno == 'Tarde':
-            form.instance.salashort = 'tarde3'
+        # if sala == 'Bebe' and turno == 'Mañana':
+        #     form.instance.salashort = 'manianabb'
+        # elif sala == 'Bebe' and turno == 'Tarde':
+        #     form.instance.salashort = 'tardebb'
+        # elif sala == '2' and turno == 'Mañana':
+        #     form.instance.salashort = 'maniana2'
+        # elif sala == '2' and turno == 'Tarde':
+        #     form.instance.salashort = 'tarde2'
+        # elif sala == '3' and turno == 'Mañana':
+        #     form.instance.salashort = 'maniana3'
+        # elif sala == '3' and turno == 'Tarde':
+        #     form.instance.salashort = 'tarde3'
         self.object = form.save()
-
+    
         base1 = PDV_Admision.objects.filter(pk=self.kwargs["pk"]).first()
         base1.estado_vacante = "Finalizada"
         base1.save()
@@ -673,20 +674,24 @@ class PDVVacantesAdmisionCambio(PermisosMixin, CreateView):
             return super().form_invalid(form) 
         else:
             form.evento = "CambioVacante"
-            sala = form.cleaned_data['sala']
+            # sala = form.cleaned_data['sala']
+            fk_organismo2 = form.cleaned_data['fk_organismo2']
+            fk_organismo = form.cleaned_data['fk_organismo']
             turno = form.cleaned_data['turno']
-            if sala == 'Bebe' and turno == 'Mañana':
-                form.instance.salashort = 'manianabb'
-            elif sala == 'Bebe' and turno == 'Tarde':
-                form.instance.salashort = 'tardebb'
-            elif sala == '2' and turno == 'Mañana':
-                form.instance.salashort = 'maniana2'
-            elif sala == '2' and turno == 'Tarde':
-                form.instance.salashort = 'tarde2'
-            elif sala == '3' and turno == 'Mañana':
-                form.instance.salashort = 'maniana3'
-            elif sala == '3' and turno == 'Tarde':
-                form.instance.salashort = 'tarde3'
+            
+
+            # if sala == 'Bebe' and turno == 'Mañana':
+            #     form.instance.salashort = 'manianabb'
+            # elif sala == 'Bebe' and turno == 'Tarde':
+            #     form.instance.salashort = 'tardebb'
+            # elif sala == '2' and turno == 'Mañana':
+            #     form.instance.salashort = 'maniana2'
+            # elif sala == '2' and turno == 'Tarde':
+            #     form.instance.salashort = 'tarde2'
+            # elif sala == '3' and turno == 'Mañana':
+            #     form.instance.salashort = 'maniana3'
+            # elif sala == '3' and turno == 'Tarde':
+            #     form.instance.salashort = 'tarde3'
             self.object = form.save()
 
         

@@ -197,6 +197,7 @@ class PDV_Admision(models.Model):
 class PDV_VacantesOtorgadas (models.Model):
     fk_admision = models.ForeignKey(PDV_Admision, on_delete=models.CASCADE)
     fk_organismo = models.ForeignKey(Vacantes, on_delete=models.CASCADE)
+    fk_organismo2 = models.ForeignKey(Organismos, on_delete=models.PROTECT, null=True, blank=True)
     sala = models.CharField(max_length=150, null=False, blank=False)
     salashort = models.CharField(max_length=150, null=True, blank=True)
     turno = models.CharField(max_length=150, null=False, blank=False)
