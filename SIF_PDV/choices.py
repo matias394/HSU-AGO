@@ -160,11 +160,7 @@ CHOICE_SALA_POSTULA=[
     ('Sala de 2', 'Sala de 2'),
     ('Sala de 3', 'Sala de 3'),
 ]
-CHOICE_TALLER_POSTULA=[
-    (None, ''),
-    ('Taller 1', 'Taller 1'),
-    ('Taller 2', 'Taller 2'),
-]
+
 CHOICE_TURNO_POSTULA=[
     (None, ''),
     ('Mañana ', 'Mañana'),
