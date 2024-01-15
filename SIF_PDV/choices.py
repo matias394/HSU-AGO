@@ -220,3 +220,14 @@ CHOICE_ACCION_DESARROLLADA=[
     ('Se realizo un control del niño sano','Se realizo un control del niño sano'),
     ('Se articulo con una institución no municipal','Se articulo con una institución no municipal'),
 ]
+CHOICE_VALORACION=[
+    ('Si', 'SI'),
+    ('No', 'No'),
+    ('No se', 'No se'),
+]
+
+CHOICE_GESTION=[
+    ('Si', 'SI'),
+    ('No', 'No'),
+    ('No se', 'No se'),
+]

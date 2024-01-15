@@ -126,11 +126,14 @@ PDV Pre-admisiones
             <dd class="col-sm-8 mb-2">Falta de autogestion</dd>
             <dt class="col-sm-4 mb-2" id="respuestaDetalle"></dt>
             <dd class="col-sm-8 mb-2">Falta de autovaloracion </dd>
-            <dt class="col-sm-4 mb-2" id="respuestaDetalle"></dt>
+            <dt class="col-sm-4 mb-2" id="respuestaDetalle">
+              {{ respuesta_autovaloracion }}
+            </dt>
+          
             <dd class="col-sm-8 mb-2">Fecha</dd>
             <dt class="col-sm-4 mb-2">{{legajo.fk_legajo.fecha_nacimiento|date:'d/m/Y'}}</dt>
             <dd class="col-sm-8 mb-2">Observaciones</dd>
-            <dt class="col-sm-4 mb-2"></dt>
+            <dt class="col-sm-4 mb-2">{{foto_ivi.observaciones}}</dt>
           </dl>
         </div>
       </div>

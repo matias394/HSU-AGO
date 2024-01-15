@@ -138,6 +138,11 @@ class Criterios_IVI(models.Model):
     tipo =  models.CharField(max_length=250, choices=CHOICE_TIPO_IVI, null=False, blank=False)
     puntaje =  models.SmallIntegerField(null=False, blank=False)
     modificable =  models.CharField(max_length=50, choices=CHOICE_NOSI, null=False, blank=False)
+    autovaloracion = models.CharField(max_length=50, choices=CHOICE_VALORACION, null=False, blank=False, default='No')
+    autogestion = models.CharField(max_length=50, choices=CHOICE_GESTION, null=False, blank=False, default='No')
+    observaciones = models.CharField(max_length=350, null=True, blank=True)
+    
+
     
     def __str__(self):
         return self.criterio
