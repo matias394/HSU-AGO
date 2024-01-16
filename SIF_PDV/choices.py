@@ -160,11 +160,7 @@ CHOICE_SALA_POSTULA=[
     ('Sala de 2', 'Sala de 2'),
     ('Sala de 3', 'Sala de 3'),
 ]
-CHOICE_TALLER_POSTULA=[
-    (None, ''),
-    ('Taller 1', 'Taller 1'),
-    ('Taller 2', 'Taller 2'),
-]
+
 CHOICE_TURNO_POSTULA=[
     (None, ''),
     ('Mañana ', 'Mañana'),
@@ -223,4 +219,15 @@ CHOICE_ACCION_DESARROLLADA=[
     ('Se brindo información','Se brindo información'),
     ('Se realizo un control del niño sano','Se realizo un control del niño sano'),
     ('Se articulo con una institución no municipal','Se articulo con una institución no municipal'),
+]
+CHOICE_VALORACION=[
+    ('Si', 'SI'),
+    ('No', 'No'),
+    ('No se', 'No se'),
+]
+
+CHOICE_GESTION=[
+    ('Si', 'SI'),
+    ('No', 'No'),
+    ('No se', 'No se'),
 ]

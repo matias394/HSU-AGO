@@ -117,7 +117,7 @@ class PDV_PreAdmision (models.Model):
     centro_postula = models.ForeignKey(Vacantes, on_delete=models.CASCADE, null=True, blank=True)
     sala_postula =  models.CharField(max_length=150, choices=CHOICE_SALA_POSTULA, null=True, blank=True)
     turno_postula =  models.CharField(max_length=150, choices=CHOICE_TURNO_POSTULA, null=True, blank=True)
-    taller_postula =  models.CharField(max_length=150, choices=CHOICE_TALLER_POSTULA, null=True, blank=True)
+    taller_postula =  models.ForeignKey(Organismos, on_delete=models.CASCADE, null=True, blank=True)
     sala_short = models.CharField(max_length=150, null=True, blank=True)
     vinculo1 = models.CharField(max_length=150, null=True, blank=True)
     vinculo2 = models.CharField(max_length=150, null=True, blank=True)
@@ -138,6 +138,11 @@ class Criterios_IVI(models.Model):
     tipo =  models.CharField(max_length=250, choices=CHOICE_TIPO_IVI, null=False, blank=False)
     puntaje =  models.SmallIntegerField(null=False, blank=False)
     modificable =  models.CharField(max_length=50, choices=CHOICE_NOSI, null=False, blank=False)
+    autovaloracion = models.CharField(max_length=50, choices=CHOICE_VALORACION, null=False, blank=False, default='No')
+    autogestion = models.CharField(max_length=50, choices=CHOICE_GESTION, null=False, blank=False, default='No')
+    observaciones = models.CharField(max_length=350, null=True, blank=True)
+    
+
     
     def __str__(self):
         return self.criterio

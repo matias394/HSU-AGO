@@ -46,8 +46,8 @@
       <div class="card-body">
         <dl class="row mb-0">
           <dd class="col-sm-3 mb-2">Índice</dd>
-          <dt class="col-sm-9 mb-2">Índice de vulnerabilidad infantil (IVI)</dt>
-          <dd class="col-sm-3 mb-2">Tipo</dd>
+          <dt class="col-sm-9 mb-2">Índice de ingreso</dt>
+          <dd class="col-sm-3 mb-2">Tipo de ingreso</dd>
           <dt class="col-sm-9 mb-2">{{foto_ivi.tipo}}</dt>
           <dd class="col-sm-3 mb-2">Fecha</dd>
           <dt class="col-sm-9 mb-2">{{foto_ivi.creado|date:'d/m/Y'}}</dt>
@@ -89,50 +89,28 @@
     <div class="info-box mb-2 ">
       <span class="info-box-icon bg-warning">{{foto_ivi.puntaje}}</span>
       <div class="info-box-content h5 my-0">
-        <span class="info-box-text">Puntaje</span>
+        <span class="info-box-text">Aplica</span>
       </div>
     </div>
   </div>
   <div class="col-sm-4">
     <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-secondary">{{cantidad}}</span>
+      <span class="info-box-icon bg-secondary"></span>
       <div class="info-box-content h5 my-0">
-        <span class="info-box-text">Criterios presentes</span>
+        <span class="info-box-text">Falta de autovaloracion</span> 
       </div>
     </div>
   </div>
+  
   <div class="col-sm-4">
     <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-secondary"> {{modificables}}</span>
+      <span class="info-box-icon bg-secondary"></span>
       <div class="info-box-content h5 my-0">
-        <span class="info-box-text">Criterios modificables</span>
+        <span class="info-box-text">falta de autogestion</span>
       </div>
     </div>
   </div>
-  <div class="col-sm-4">
-    <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-secondary"> {{foto_ivi.puntaje_max}}</span>
-      <div class="info-box-content h5 my-0">
-        <span class="info-box-text"> Puntaje máximo posible</span>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-4">
-    <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-secondary"> {{mod_puntaje.total|default:"0"}}</span>
-      <div class="info-box-content h5 my-0">
-        <span class="info-box-text"> Puntaje modificable total</span>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-4">
-    <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-secondary"> {{ajustes}}</span>
-      <div class="info-box-content h5 my-0">
-        <span class="info-box-text"> Ajustes</span>
-      </div>
-    </div>
-  </div>
+  
   <!-- /  -->
 </div>
 <div class="col-12 mt-3 mt-sm-5">

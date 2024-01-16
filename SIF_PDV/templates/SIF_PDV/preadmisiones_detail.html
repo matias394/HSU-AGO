@@ -50,7 +50,7 @@ PDV Pre-admisiones
 
 
     <!-- Datos de Admisión -->
-    <div class="col-sm-4 pb-3">
+    <div class="col-sm-3 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
           <h3 class="card-title">Detalle pre-admisión</h3>
@@ -84,7 +84,7 @@ PDV Pre-admisiones
     <!-- /  -->
 
     <!-- Datos de legajo -->
-    <div class="col-sm-4 pb-3">
+    <div class="col-sm-3 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
           <h3 class="card-title">Detalle Legajo</h3>
@@ -110,8 +110,38 @@ PDV Pre-admisiones
     </div>
     <!-- /  -->
 
+    <!-- Detalle de Ingreso -->
+    <div class="col-sm-3 pb-3">
+      <div class="card card-outline card-primary h-100 mb-0">
+        <div class="card-header">
+          <h3 class="card-title">Detalle índice de ingreso</h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dd class="col-sm-8 mb-2">Falta de autogestion</dd>
+            <dt class="col-sm-4 mb-2" id="respuestaDetalle"></dt>
+            <dd class="col-sm-8 mb-2">Falta de autovaloracion </dd>
+            <dt class="col-sm-4 mb-2" id="respuestaDetalle">
+              {{ respuesta_autovaloracion }}
+            </dt>
+          
+            <dd class="col-sm-8 mb-2">Fecha</dd>
+            <dt class="col-sm-4 mb-2">{{legajo.fk_legajo.fecha_nacimiento|date:'d/m/Y'}}</dt>
+            <dd class="col-sm-8 mb-2">Observaciones</dd>
+            <dt class="col-sm-4 mb-2">{{foto_ivi.observaciones}}</dt>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <!-- /  -->
+
     <!-- Datos de Indice -->
-    <div class="col-sm-4 pb-3">
+    <div class="col-sm-3 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
           <h3 class="card-title">Detalle IVI de ingreso</h3>

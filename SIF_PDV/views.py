@@ -240,6 +240,7 @@ class PDVPreAdmisionesDetailView(PermisosMixin, DetailView):
         context["resultado"] = resultado
         context["legajo"] = legajo
         context["familia"] = familia
+
         return context
     
     def post(self, request, *args, **kwargs):
@@ -250,7 +251,9 @@ class PDVPreAdmisionesDetailView(PermisosMixin, DetailView):
             objeto.ivi = "NO"
             objeto.admitido = "NO"
             objeto.save()
-
+            # Obtén el valor de autovaloracion y almacénalo en una variable de sesión
+            respuesta_autovaloracion = request.POST.get('autovaloracion', '')
+            request.session['respuesta_autovaloracion'] = respuesta_autovaloracion
             #---------HISTORIAL---------------------------------
             pk=self.kwargs["pk"]
             legajo = PDV_PreAdmision.objects.filter(pk=pk).first()
@@ -261,8 +264,11 @@ class PDVPreAdmisionesDetailView(PermisosMixin, DetailView):
             base.movimiento = "FINALIZADO PREADMISION"
             base.creado_por_id = self.request.user.id
             base.save()
+
+
             # Redirige de nuevo a la vista de detalle actualizada
             return HttpResponseRedirect(self.request.path_info)
+            
 
 class PDVPreAdmisionesListView(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"
@@ -354,6 +360,10 @@ class PDVIndiceIviCreateView (PermisosMixin, CreateView):
         context["object"] = object
         context["criterio"] = criterio
         context['form2'] = PDV_IndiceIviHistorialForm()
+        context['CHOICE_VALORACION'] = CHOICE_VALORACION
+        context['CHOICE_GESTION'] = CHOICE_GESTION
+
+
         return context
     
     def post(self, request, *args, **kwargs):
