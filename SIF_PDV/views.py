@@ -719,10 +719,11 @@ class PDVVacantesAdmisionCambio(PermisosMixin, CreateView):
 
         return redirect('PDV_asignado_admisiones_ver', legajo.id)
     
-    #def form_invalid(self, form):
-    #    errors = form.errors
-    #    print(errors)
-    #    return super().form_invalid(form) 
+    def form_invalid(self, form):
+        errors = form.errors
+        #print(errors)
+        messages.error(self.request, errors)
+        return super().form_invalid(form) 
     
 
     def get_context_data(self, **kwargs):
