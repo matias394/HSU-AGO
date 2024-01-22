@@ -154,89 +154,25 @@
             <div class="card-footer p-0">
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item">
-                        <a href="76" class="nav-link">
-                            Santiago Baez
+                        {% for f in familiares_fk1 %}
+                        <a href="{% url 'legajos_ver' f.fk_legajo_2_id %}"  class="nav-link">
+                            <span class="username">{{f.fk_legajo_2}}</span>
                             <span class="float-right text-danger">
                                 20</span>
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="69" class="nav-link">
-                            Jessica Baez
+                    
+                    {% empty %}
+                    {% endfor %}
+                    {% for f in familiares_fk2 %}
+                    
+                        <a href="{% url 'legajos_ver' f.fk_legajo_1_id %}"  class="nav-link">
+                            <span class="username">{{f.fk_legajo_1}}</span>
                             <span class="float-right text-success">18
                             </span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="80" class="nav-link">
-                            Catalina Villalba
-                            <span class="float-right text-warning"> 11
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="72" class="nav-link">
-                            Morena Baez
-                            <span class="float-right text-primary">11
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="74" class="nav-link">
-                            Rocio Baez
-                            <span class="float-right text-orange">11
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="73" class="nav-link">
-                            Ricardo Baez
-                            <span class="float-right text-info">11
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="75" class="nav-link">
-                            Salomé Baez
-                            <span class="float-right text-secondary">11
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="70" class="nav-link">
-                            Jorge Baez
-                            <span class="float-right text-lime">9
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="77" class="nav-link">
-                            Zoe Rivera
-                            <span class="float-right text-fuchsia">7
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="78" class="nav-link">
-                            Hermindo Baez
-                            <span class="float-right text-olive">6
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="79" class="nav-link">
-                            Bautista Rivera
-                            <span class="float-right text-lightblue">6
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="71" class="nav-link">
-                            Martín Baez
-                            <span class="float-right text-pink">4
-                            </span>
-                        </a>
-                    </li>
+                    {% empty %}
+                    {% endfor %}
                 </ul>
             </div>
         </div>
