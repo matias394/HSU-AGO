@@ -32,7 +32,7 @@ import json
 
 # Configurar el locale para usar el idioma español
 import locale
-locale.setlocale(locale.LC_ALL, 'es_AR.UTF-8')
+#locale.setlocale(locale.LC_ALL, 'es_AR.UTF-8')
 # guardado de log de usuarios
 import logging
 logger = logging.getLogger('django')
