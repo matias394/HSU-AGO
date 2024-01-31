@@ -138,11 +138,7 @@ class Criterios_IVI(models.Model):
     tipo =  models.CharField(max_length=250, choices=CHOICE_TIPO_IVI, null=False, blank=False)
     puntaje =  models.SmallIntegerField(null=False, blank=False)
     modificable =  models.CharField(max_length=50, choices=CHOICE_NOSI, null=False, blank=False)
-    autovaloracion = models.CharField(max_length=50, choices=CHOICE_VALORACION, null=False, blank=False, default='No')
-    autogestion = models.CharField(max_length=50, choices=CHOICE_GESTION, null=False, blank=False, default='No')
     observaciones = models.CharField(max_length=350, null=True, blank=True)
-    
-
     
     def __str__(self):
         return self.criterio
@@ -157,6 +153,7 @@ class PDV_IndiceIVI(models.Model):
     clave = models.CharField (max_length=350, null=True, blank=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
+    
 
 class PDV_Foto_IVI(models.Model):
     fk_preadmi = models.ForeignKey(PDV_PreAdmision, on_delete=models.CASCADE, null=True, blank=True)
@@ -172,6 +169,11 @@ class PDV_Foto_IVI(models.Model):
     modificado_por = models.ForeignKey(Usuarios, related_name='PDV_IVI_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
+    autovaloracion = models.CharField(max_length=50, choices=CHOICE_VALORACION, null=False, blank=False, default='No')
+    autogestion = models.CharField(max_length=50, choices=CHOICE_GESTION, null=False, blank=False, default='No')
+    anticonceptivo = models.CharField(max_length=50, choices=CHOICE_CONCEPTIVO, null=False, blank=False, default='No')
+    calificacion = models.CharField(max_length=50, choices=CHOICE_CALIFICAR, null=False, blank=False, default='No')
+    
  
 class PDV_Vacantes(models.Model):
     fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, null=True, blank=True)

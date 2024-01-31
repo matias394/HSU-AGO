@@ -14,6 +14,7 @@ urlpatterns = [
     path('PDV/preadmisiones/crear/<pk>', login_required(PDVPreAdmisionesCreateView.as_view()), name='PDV_preadmisiones_crear'),
     path('PDV/preadmisiones/editar/<pk>', login_required(PDVPreAdmisionesUpdateView.as_view()), name='PDV_preadmisiones_editar'),
     path('PDV/preadmisiones/ver/<pk>', login_required(PDVPreAdmisionesDetailView.as_view()), name='PDV_preadmisiones_ver'),
+    path('PDV/preadmisiones/ver2/<pk>', login_required(PDVPreAdmisionesDetailView2.as_view()), name='PDV_preadmisiones_ver2'),
     path('PDV/preadmisiones/ver3/<pk>', login_required(PDVPreAdmisiones3DetailView.as_view()), name='PDV_preadmisiones_ver3'),
     path('PDV/preadmisiones/listar', login_required(PDVPreAdmisionesListView.as_view()), name='PDV_preadmisiones_listar'),
     path('PDV/preadmisiones/buscar', login_required(PDVPreAdmisionesBuscarListView.as_view()), name='PDV_preadmisiones_buscar'),

@@ -83,14 +83,20 @@ class criterios_IVI (forms.ModelForm):
     class Meta:
         model = Criterios_IVI
         fields = '__all__'
-        widgets = {}
+        widgets = {
+            'autovaloracion': forms.Select(choices=CHOICE_VALORACION),
+            'autogestion': forms.Select(choices=CHOICE_GESTION),
+        }
         labels = {}
 
 class PDV_IndiceIviForm (forms.ModelForm):
     class Meta:
         model = PDV_IndiceIVI
         fields = '__all__'
-        widgets = {}
+        widgets = {
+            'autovaloracion': forms.Select(choices=CHOICE_VALORACION),
+            'autogestion': forms.Select(choices=CHOICE_GESTION),
+        }
         labels = {}
 
 class PDV_IndiceIviHistorialForm (forms.ModelForm):
@@ -99,6 +105,7 @@ class PDV_IndiceIviHistorialForm (forms.ModelForm):
         fields = '__all__'
         widgets = {}
         labels = {}
+
 
 class PDV_VacantesOtorgadasForm (forms.ModelForm):
     class Meta:

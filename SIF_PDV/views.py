@@ -234,7 +234,64 @@ class PDVPreAdmisionesDetailView(PermisosMixin, DetailView):
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(pk=pk.fk_derivacion_id).first()
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
+        ivi = PDV_IndiceIVI.objects.filter(fk_legajo_id=legajo.fk_legajo_id) 
+        foto_ivi = PDV_Foto_IVI.objects.filter(fk_preadmi_id=pk, tipo="Ingreso").first()
+        
+        resultado = ivi.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ivi__puntaje')).order_by('-creado')
+        context["ivi"] = ivi
+        context["resultado"] = resultado
+        context["legajo"] = legajo
+        context["familia"] = familia
+        context["foto_ivi"] = foto_ivi
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        if 'finalizar_preadm' in request.POST:
+            # Realiza la actualización del campo aquí
+            objeto = self.get_object()
+            objeto.estado = 'Finalizada'
+            objeto.ivi = "NO"
+            objeto.admitido = "NO"
+            objeto.save()
+           
+            #---------HISTORIAL---------------------------------
+            pk=self.kwargs["pk"]
+            legajo = PDV_PreAdmision.objects.filter(pk=pk).first()
+            base = PDV_Historial()
+            base.fk_legajo_id = legajo.fk_legajo.id
+            base.fk_legajo_derivacion_id = legajo.fk_derivacion_id
+            base.fk_preadmi_id = pk
+            base.movimiento = "FINALIZADO PREADMISION"
+            base.creado_por_id = self.request.user.id
+            base.save()
+
+            
+
+            
+
+
+            # Redirige de nuevo a la vista de detalle actualizada
+            return HttpResponseRedirect(self.request.path_info)
+        
+
+        
+
+
+class PDVPreAdmisionesDetailView2(PermisosMixin, DetailView):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_PDV/preadmisiones_detail2.html"
+    model = PDV_PreAdmision
+
+    def get_context_data(self, **kwargs):
+        pk = PDV_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
+        context = super().get_context_data(**kwargs)
+        legajo = LegajosDerivaciones.objects.filter(pk=pk.fk_derivacion_id).first()
+        familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         ivi = PDV_IndiceIVI.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
+        foto_ivi = PDV_Foto_IVI.objects.filter(fk_preadmi_id=pk, tipo="Ingreso").first()
+
+       
+        context["foto_ivi"] = foto_ivi
         resultado = ivi.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ivi__puntaje')).order_by('-creado')
         context["ivi"] = ivi
         context["resultado"] = resultado
@@ -357,11 +414,15 @@ class PDVIndiceIviCreateView (PermisosMixin, CreateView):
         object = PDV_PreAdmision.objects.filter(pk=pk).first()
         #object = Legajos.objects.filter(pk=pk).first()
         criterio = Criterios_IVI.objects.all()
+        criterio2 = PDV_Foto_IVI.objects.all()
         context["object"] = object
+        context["criterio2"] = criterio2
         context["criterio"] = criterio
         context['form2'] = PDV_IndiceIviHistorialForm()
         context['CHOICE_VALORACION'] = CHOICE_VALORACION
         context['CHOICE_GESTION'] = CHOICE_GESTION
+        context['CHOICE_CONCEPTIVO'] = CHOICE_CONCEPTIVO
+        context['CHOICE_CALIFICAR'] = CHOICE_CALIFICAR
 
 
         return context
@@ -396,12 +457,25 @@ class PDVIndiceIviCreateView (PermisosMixin, CreateView):
         foto.fk_legajo_id = preadmi.fk_legajo_id
         foto.puntaje = total_puntaje
         foto.puntaje_max = puntaje_maximo
+        foto.anticonceptivo = request.POST.get('anticonceptivo', '')
+        foto.autovaloracion = request.POST.get('autovaloracion', '')
+        # Calcula 'aplica' en base a 'autovaloracion' y 'autogestion'
+        aplica = 'SI' if foto.autovaloracion == 'SI' or foto.autogestion == 'SI' else 'NO'
+        foto.autogestion = request.POST.get('autogestion', '')
+        foto.calificacion = request.POST.get('calificacion', '')
         #foto.crit_modificables = crit_modificables
         #foto.crit_presentes = crit_presentes
         foto.tipo = "Ingreso"
         foto.clave = clave
         foto.creado_por_id = self.request.user.id
         foto.save()
+
+        # Imprime los valores para depurar
+        print(f'autovaloracion: {foto.autovaloracion}')
+        print(f'autogestion: {foto.autogestion}')
+
+         
+      
 
         preadmi.ivi = "SI"
         preadmi.save()
@@ -437,6 +511,13 @@ class PDVIndiceIviUpdateView (PermisosMixin, UpdateView):
         context["observaciones"] = observaciones.observaciones
         context["criterio"] = Criterios_IVI.objects.all()
         context['form2'] = PDV_IndiceIviHistorialForm()
+        context['CHOICE_VALORACION'] = CHOICE_VALORACION
+        context['CHOICE_GESTION'] = CHOICE_GESTION
+        context['CHOICE_CONCEPTIVO'] = CHOICE_CONCEPTIVO
+        context['CHOICE_CALIFICAR'] = CHOICE_CALIFICAR
+       
+        
+
         return context
     
     def post(self, request, *args, **kwargs):
@@ -471,6 +552,10 @@ class PDVIndiceIviUpdateView (PermisosMixin, UpdateView):
         foto.fk_legajo_id = preadmi.fk_legajo_id
         foto.puntaje = total_puntaje
         foto.puntaje_max = puntaje_maximo
+        foto.anticonceptivo = request.POST.get('anticonceptivo', '')
+        foto.autovaloracion = request.POST.get('autovaloracion', '')
+        foto.autogestion = request.POST.get('autogestion', '')
+        foto.calificacion = request.POST.get('calificacion', '')
         #foto.crit_modificables = crit_modificables
         #foto.crit_presentes = crit_presentes
         #foto.tipo = "Ingreso"
@@ -500,12 +585,32 @@ class PDVIndiceIviDetailView(PermisosMixin, DetailView):
     def get_context_data(self, **kwargs):
         pk=self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
+        # Añadir declaraciones print para depuración
+        print(f"Debug: Valor de pk: {pk}")
         criterio = PDV_IndiceIVI.objects.filter(fk_preadmi_id=pk, tipo="Ingreso")
         object = PDV_PreAdmision.objects.filter(pk=pk).first()
         foto_ivi = PDV_Foto_IVI.objects.filter(fk_preadmi_id=pk, tipo="Ingreso").first()
 
+        if foto_ivi.autovaloracion == 'SI' and foto_ivi.autogestion == 'SI':
+            aplica = 'SI'
+        elif foto_ivi.autovaloracion == 'SI' and foto_ivi.autogestion == 'NO':
+            aplica = 'SI'
+        elif foto_ivi.autovaloracion == 'NO' and foto_ivi.autogestion == 'SI':
+            aplica = 'SI'
+        elif foto_ivi.autovaloracion == 'No se' or foto_ivi.autogestion == 'SI':
+            aplica = 'SI'
+        elif foto_ivi.autovaloracion == 'SI' or foto_ivi.autogestion == 'NO se':
+            aplica = 'SI'
+        else:
+            aplica = 'NO'
+
+
         context["object"] = object
         context["foto_ivi"] = foto_ivi
+        context["aplica"] = aplica
+        # Añadir declaraciones print para depuración
+        print(f"Debug: Valor de aplica: {aplica}")
+
         context["criterio"] = criterio
         context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["cantidad"] = criterio.count()
@@ -719,10 +824,11 @@ class PDVVacantesAdmisionCambio(PermisosMixin, CreateView):
 
         return redirect('PDV_asignado_admisiones_ver', legajo.id)
     
-    #def form_invalid(self, form):
-    #    errors = form.errors
-    #    print(errors)
-    #    return super().form_invalid(form) 
+    def form_invalid(self, form):
+        errors = form.errors
+        #print(errors)
+        messages.error(self.request, errors)
+        return super().form_invalid(form) 
     
 
     def get_context_data(self, **kwargs):
