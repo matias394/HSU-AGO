@@ -173,10 +173,9 @@ CHOICE_TURNO_POSTULA=[
 ]
 CHOICE_TIPO_IVI=[
     (None, ''),
-    ('Madre o Cuidador principal', 'Madre o Cuidador principal'),
-    ('Bebé, niño o niña', 'Bebé, niño o niña'),
-    ('Familia', 'Familia'),
-    ('Ajustes', 'Ajustes'),
+    ('AUTOVALORACION', 'AUTOVALORACION'),
+    ('AUTOGESTION', 'AUTOGESTION'),
+    
 ]
 CHOICE_NOSI=[
     (None, ''),
@@ -230,4 +229,30 @@ CHOICE_GESTION=[
     ('Si', 'SI'),
     ('No', 'No'),
     ('No se', 'No se'),
+]
+
+CHOICE_CONCEPTIVO=[
+    ('Preservativo', 'Preservativo'),
+    ('Inyectable', 'Inyectable'),
+    ('Implante anticonceptivo', 'Implante anticonceptivo'),
+    ('Diu', 'Diu'),
+    ('Parche anticonceptivo', 'Parche anticonceptivo'),
+    ('Anticonceptivo Oral', 'Anticonceptivo Oral'),
+    ('Ligadura Tubaria', 'Ligadura Tubaria'),
+    ('Ninguno', 'Ninguno'),
+]
+
+
+CHOICE_CALIFICAR=[
+    ('0', '0'),
+    ('1', '1'),
+    ('2', '2'),
+    ('3', '3'),
+    ('4', '4'),
+    ('5', '5'),
+    ('6', '6'),
+    ('7', '7'),
+    ('8', '8'),
+    ('9', '9'),
+    ('10', '10'),
 ]

@@ -60,7 +60,7 @@
                             <tr>
                                 <th>Criterio</th>
 
-                                <th class="text-center px-1" width="7%">Presencia</th>
+                                <th class="text-center px-1" width="12%">Presencia</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -73,18 +73,14 @@
 
                                 <td class="text-center px-0">
                                     <div class="form-group col-sm-12">
-                                        <select id="id_nombre" name="nombre" class="form-control">
-                                            <option value="Preservativo">Preservativo</option>
-                                            <option value="Inyectable">Inyectable</option>
-                                            <option value="implante anticonceptivo">implante anticonceptivo</option>
-                                            <option value="diu">diu</option>
-                                            <option value="Parche anticonceptivo">Parche anticonceptivo</option>
-                                            <option value="Anticonceptivo Oral">Anticonceptivo Oral</option>
-                                            <option value="Ligadura Tubaria">Ligadura Tubaria</option>
-                                            <option value="Ninguno">Ninguno</option>
-                                        </select>
+                                        <div class="input-group">
+                                            <select name="anticonceptivo" class="form-control">
+                                                {% for choice in CHOICE_CONCEPTIVO %}
+                                                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
                                     </div>
-
                                 </td>
                             </tr>
                             <tr>
@@ -103,8 +99,8 @@
 
                                 <td class="text-center px-0">
                                     <div class="icheck-primary d-inline">
-                                        <input type="checkbox" id="checkboxPrimary3">
-                                        <label for="checkboxPrimary3">
+                                        <input type="checkbox" id="checkboxPrimary4">
+                                        <label for="checkboxPrimary4">
 
                                         </label>
                                     </div>
@@ -115,8 +111,8 @@
 
                                 <td class="text-center px-0">
                                     <div class="icheck-primary d-inline">
-                                        <input type="checkbox" id="checkboxPrimary4">
-                                        <label for="checkboxPrimary4">
+                                        <input type="checkbox" id="checkboxPrimary5">
+                                        <label for="checkboxPrimary5">
                                         </label>
                                     </div>
                                 </td>
@@ -126,36 +122,30 @@
 
                                 <td class="text-center px-0">
                                     <div class="form-group col-sm-12">
-                                        <select id="id_nombre1" name="nombre1" class="form-control">
-                                            <option value="0">0</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                            <option value="7">7</option>
-                                            <option value="8">8</option>
-                                            <option value="9">9</option>
-                                            <option value="10">10</option>
-                                        </select>
+                                        <div class="input-group">
+                                            <select name="calificacion" class="form-control">
+                                                {% for choice in CHOICE_CALIFICAR %}
+                                                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td>Mujer con falta de autovaloración</td>
+                                <td>Mujer con falta de autovaloracion</td>
                                 <td class="text-center px-0">
                                     <div class="form-group col-sm-12">
-                                        <select name="autovaloracion">
-                                            {% for choice in CHOICE_VALORACION %}
-                                                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
-                                            {% endfor %}
-                                        </select>
-                                        
+                                        <div class="input-group">
+                                            <select name="autovaloracion" class="form-control">
+                                                {% for choice in CHOICE_VALORACION %}
+                                                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
                                 <td colspan="4" class="text-center bg-secondary py-1">AUTOGESTION</td>
                             </tr>
                             <tr>
@@ -206,21 +196,19 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Mujer con falta de auto gestión</td>
-
+                                <td>Mujer con falta de autogestión</td>
                                 <td class="text-center px-0">
                                     <div class="form-group col-sm-12">
-                                        <select name="autovaloracion">
-                                            {% for choice in CHOICE_GESTION %}
-                                                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
-                                            {% endfor %}
-                                        </select>
-                                        
+                                        <div class="input-group">
+                                            <select name="autogestion" class="form-control">
+                                                {% for choice in CHOICE_GESTION %}
+                                                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
                                     </div>
-
                                 </td>
                             </tr>
-
                         </tbody>
                     </table>
                 </div>
