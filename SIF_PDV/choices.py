@@ -181,6 +181,15 @@ CHOICE_NOSI=[
     (None, ''),
     ('SI', 'SI'),
     ('NO', 'NO'),
+    
+]
+CHOICE_SINO=[
+    (None, ''),
+    ('SI', 'SI'),
+    ('NO', 'NO'),
+    
+
+    
 ]
 CHOICE_RESPONSABLES=[
     ('Garcia Maria Begoña','Garcia Maria Begoña'),
