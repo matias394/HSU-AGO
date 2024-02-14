@@ -52,12 +52,12 @@ class MADerivacionesBuscarListView(TemplateView, PermisosMixin):
 class MADerivacionesListView(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_MA/derivaciones_bandeja_list.html"
-    queryset = LegajosDerivaciones.objects.filter(fk_programa=25)
+    queryset = LegajosDerivaciones.objects.filter(fk_programa=30)
 
     def get_context_data(self, **kwargs):
         context = super(MADerivacionesListView, self).get_context_data(**kwargs)
 
-        model = LegajosDerivaciones.objects.filter(fk_programa=25)
+        model = LegajosDerivaciones.objects.filter(fk_programa=30)
 
         context["todas"] = model
         context["pendientes"] = model.filter(estado="Pendiente")
@@ -74,7 +74,7 @@ class MADerivacionesDetailView(PermisosMixin, DetailView):
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
-        legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=25).first()
+        legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=30).first()
         ivi = MA_IndiceIVI.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
         resultado = ivi.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ivi__puntaje')).order_by('-creado')
         context["pk"] = pk
@@ -90,7 +90,7 @@ class MADerivacionesRechazo(PermisosMixin, CreateView):
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
-        legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=25).first()
+        legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=30).first()
         context["object"] = legajo
         return context
     
