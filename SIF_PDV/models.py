@@ -8,13 +8,13 @@ from django.urls import *
 # Create your models here.
 
 #class legajo_PDV (models.Model):
-#    fk_programa = models.ForeignKey(Programas, on_delete=models.PROTECT)
-#    fk_legajo = models.ForeignKey(Legajos, on_delete=models.PROTECT)
+#    fk_programa = models.ForeignKey(Programas, on_delete=models.CASCADE)
+#    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE)
 #    nombre = models.CharField(max_length=100, unique=True)
 #    estado = models.BooleanField(default=True)
 #    observaciones = models.CharField(max_length=300, null=True, blank=True)
-#    #creado_por = models.ForeignKey(Usuarios, related_name='PDV_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-#    #modificado_por = models.ForeignKey(Usuarios, related_name='PDV_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
+#    #creado_por = models.ForeignKey(Usuarios, related_name='PDV_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+#    #modificado_por = models.ForeignKey(Usuarios, related_name='PDV_modificado_por', on_delete=models.CASCADE, blank=True, null=True)
 #    creado = models.DateField(auto_now_add=True)
 #    modificado = models.DateField(auto_now=True)
 #
@@ -49,7 +49,7 @@ from django.urls import *
 #        verbose_name_plural = "Centros"
 
 class PDV_PreAdmision (models.Model):
-    fk_derivacion = models.ForeignKey(LegajosDerivaciones, on_delete=models.PROTECT)
+    fk_derivacion = models.ForeignKey(LegajosDerivaciones, on_delete=models.CASCADE)
     fk_legajo = models.ForeignKey(Legajos, related_name='PDV_fk_legajo', on_delete=models.CASCADE, null=True, blank=True)
     fk_legajo_1 = models.ForeignKey(Legajos, related_name='PDV_fk_legajo_1', on_delete=models.CASCADE, null=True, blank=True)
     fk_legajo_2 = models.ForeignKey(Legajos, related_name='PDV_fk_legajo_2', on_delete=models.CASCADE, null=True, blank=True)
@@ -126,8 +126,8 @@ class PDV_PreAdmision (models.Model):
     vinculo5 = models.CharField(max_length=150, null=True, blank=True)
     ivi = models.CharField(max_length=150, null=True, blank=True)
     admitido = models.CharField(max_length=150, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='PDV_PreAdm_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='PDV_PreAdm_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='PDV_PreAdm_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='PDV_PreAdm_modificado_por', on_delete=models.CASCADE, blank=True, null=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
     estado = models.CharField(max_length=100, null=True, blank=True)
@@ -165,8 +165,8 @@ class PDV_Foto_IVI(models.Model):
     observaciones = models.CharField(max_length=350, null=True, blank=True)
     tipo = models.CharField (max_length=350, null=True, blank=True)
     clave = models.CharField (max_length=350, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='PDV_IVI_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='PDV_IVI_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='PDV_IVI_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='PDV_IVI_modificado_por', on_delete=models.CASCADE, blank=True, null=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
     autovaloracion = models.CharField(max_length=50, choices=CHOICE_VALORACION, null=False, blank=False, default='No')
@@ -179,14 +179,14 @@ class PDV_Vacantes(models.Model):
     fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, null=True, blank=True)
     fk_derivacion = models.ForeignKey(PDV_PreAdmision, on_delete=models.CASCADE, null=True, blank=True)
     fk_vacantes = models.ForeignKey(Vacantes, on_delete=models.CASCADE, null=True, blank=True)
-    fk_organismo = models.ForeignKey(Organismos, on_delete=models.PROTECT, null=True, blank=True)
+    fk_organismo = models.ForeignKey(Organismos, on_delete=models.CASCADE, null=True, blank=True)
     organizacion = models.CharField(max_length=100)
     sala = models.CharField(max_length=100)
     estado = models.CharField(max_length=100)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='PDV_Vacante_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='PDV_Vacante_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='PDV_Vacante_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='PDV_Vacante_modificada_por', on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return f'{self.organizacion} - Sala {self.sala}'
@@ -198,13 +198,13 @@ class PDV_Admision(models.Model):
     estado = models.CharField(max_length=150, null=True, blank=True, default="Activa")
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='PDV_Admision_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='PDV_Admision_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='PDV_Admision_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='PDV_Admision_modificada_por', on_delete=models.CASCADE, blank=True, null=True)
 
 class PDV_VacantesOtorgadas (models.Model):
     fk_admision = models.ForeignKey(PDV_Admision, on_delete=models.CASCADE)
     fk_organismo = models.ForeignKey(Vacantes, on_delete=models.CASCADE)
-    fk_organismo2 = models.ForeignKey(Organismos, on_delete=models.PROTECT, null=True, blank=True)
+    fk_organismo2 = models.ForeignKey(Organismos, on_delete=models.CASCADE, null=True, blank=True)
     sala = models.CharField(max_length=150, null=False, blank=False)
     salashort = models.CharField(max_length=150, null=True, blank=True)
     turno = models.CharField(max_length=150, null=False, blank=False)
@@ -217,8 +217,8 @@ class PDV_VacantesOtorgadas (models.Model):
     evento = models.CharField(max_length=100, null=True, blank=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='PDV_VacanteOtorgada_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='PDV_VacanteOtorgada_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='PDV_VacanteOtorgada_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='PDV_VacanteOtorgada_modificada_por', on_delete=models.CASCADE, blank=True, null=True)
 
 
 class PDV_HistorialVacantes (models.Model):
@@ -228,8 +228,8 @@ class PDV_HistorialVacantes (models.Model):
     sala = models.CharField(max_length=150, null=True, blank=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='PDV_HistorialVacantes_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='PDV_HistorialVacantes_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='PDV_HistorialVacantes_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='PDV_HistorialVacantes_modificada_por', on_delete=models.CASCADE, blank=True, null=True)
 
 class OpcionesResponsables(models.Model):
     nombre = models.CharField(max_length=250, unique=True)
@@ -246,8 +246,8 @@ class PDV_Intervenciones(models.Model):
     detalle = models.CharField(max_length=350, null=True, blank=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='PDV_Intervenciones_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='PDV_Intervenciones_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='PDV_Intervenciones_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='PDV_Intervenciones_modificada_por', on_delete=models.CASCADE, blank=True, null=True)
 
 
 class PDV_Historial(models.Model):

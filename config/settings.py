@@ -66,7 +66,8 @@ INSTALLED_APPS = [
     'SIF_CDLE',
     'SIF_MILD',
     'SIF_PDV',
-    
+    'SIF_SL',
+    'SIF_MA',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
