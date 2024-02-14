@@ -87,31 +87,33 @@
   <!-- Detalle puntajes del indice -->
   <div class="col-sm-4">
     <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-warning">{{foto_ivi.puntaje}}</span>
+      <span class="info-box-icon bg-secondary">{{ aplica }}</span>
       <div class="info-box-content h5 my-0">
         <span class="info-box-text">Aplica</span>
       </div>
     </div>
   </div>
-  <div class="col-sm-4">
-    <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-secondary"></span>
-      <div class="info-box-content h5 my-0">
-        <span class="info-box-text">Falta de autovaloracion</span> 
-      </div>
+  
+
+<div class="col-sm-4">
+  <div class="info-box mb-2 ">
+    <span class="info-box-icon bg-secondary">{{ foto_ivi.autovaloracion }}</span>
+    <div class="info-box-content h5 my-0">
+      <span class="info-box-text">Falta de autovaloracion</span> 
     </div>
   </div>
-  
-  <div class="col-sm-4">
-    <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-secondary"></span>
-      <div class="info-box-content h5 my-0">
-        <span class="info-box-text">falta de autogestion</span>
-      </div>
+</div>
+
+<div class="col-sm-4">
+  <div class="info-box mb-2 ">
+    <span class="info-box-icon bg-secondary">{{ foto_ivi.autogestion }}</span>
+    <div class="info-box-content h5 my-0">
+      <span class="info-box-text">Falta de autogestion</span>
     </div>
   </div>
-  
-  <!-- /  -->
+</div>
+<!-- /  -->
+
 </div>
 <div class="col-12 mt-3 mt-sm-5">
   <div class="card card-outline card-primary">
@@ -123,66 +125,36 @@
         <thead>
           <tr>
             <th>Criterio</th>
-            <th class="text-center px-1" width="8%">Puntaje</th>
-            <th class="text-center px-1" width="8%">Modificable</th>
           </tr>
         </thead>
         <tbody>
 
           <tr>
-            <td colspan="3" class="text-center bg-secondary py-1">Madre o Cuidador principal
+            <td colspan="3" class="text-center bg-secondary py-1">AUTOVALORACION
             </td>
           </tr>
           {% for c in criterio %}
-          {% if c.fk_criterios_ivi.tipo == 'Madre o Cuidador principal' %}
+          {% if c.fk_criterios_ivi.tipo == 'AUTOVALORACION' %}
           <tr>
               <td>{{c.fk_criterios_ivi.criterio}}</td>
-              <td class="text-center">{{c.fk_criterios_ivi.puntaje}}</td>
-              <td class="text-center"><span class=" badge {% if c.fk_criterios_ivi.modificable == 'No' %}badge-primary {% else %}badge-info {% endif %}px-2">{{c.fk_criterios_ivi.modificable}}</span></td>
+              
           </tr>
 
           {% endif %}
           {% endfor %}
           <tr>
-            <td colspan="3" class="text-center bg-secondary py-1">Bebé, niño o niña</td>
+            <td colspan="3" class="text-center bg-secondary py-1">AUTOGESTION</td>
           </tr>
           {% for c in criterio %}
-          {% if c.fk_criterios_ivi.tipo == 'Bebé, niño o niña' %}
+          {% if c.fk_criterios_ivi.tipo == 'AUTOGESTION' %}
           <tr>
               <td>{{c.fk_criterios_ivi.criterio}}</td>
-              <td class="text-center">{{c.fk_criterios_ivi.puntaje}}</td>
-              <td class="text-center"><span class=" badge {% if c.fk_criterios_ivi.modificable == 'No' %}badge-primary {% else %}badge-info {% endif %}px-2">{{c.fk_criterios_ivi.modificable}}</span></td>
+              
           </tr>
 
           {% endif %}
           {% endfor %}
-          <tr>
-            <td colspan="3" class="text-center bg-secondary py-1">Familia
-            </td>
-          </tr>
-          {% for c in criterio %}
-          {% if c.fk_criterios_ivi.tipo == 'Familia' %}
-          <tr>
-              <td>{{c.fk_criterios_ivi.criterio}}</td>
-              <td class="text-center">{{c.fk_criterios_ivi.puntaje}}</td>
-              <td class="text-center"><span class=" badge {% if c.fk_criterios_ivi.modificable == 'No' %}badge-primary {% else %}badge-info {% endif %}px-2">{{c.fk_criterios_ivi.modificable}}</span></td>
-          </tr>
-
-          {% endif %}
-          {% endfor %}
-          <tr>
-            <td colspan="3" class="text-center bg-secondary py-1">Ajustes</td>
-          </tr>
-          {% for c in criterio %}
-          {% if c.fk_criterios_ivi.tipo == 'Ajustes' %}
-          <tr>
-              <td>{{c.fk_criterios_ivi.criterio}}</td>
-              <td class="text-center">{{c.fk_criterios_ivi.puntaje}}</td>
-              <td class="text-center"><span class=" badge {% if c.fk_criterios_ivi.modificable == 'No' %}badge-primary {% else %}badge-info {% endif %}px-2">{{c.fk_criterios_ivi.modificable}}</span></td>
-          </tr>
-
-          {% endif %}
-          {% endfor %}
+          
 
         </tbody>
       </table>
