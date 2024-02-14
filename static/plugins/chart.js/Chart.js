@@ -5205,7 +5205,7 @@ core_defaults._set('bubble', {
 
 var controller_bubble = core_datasetController.extend({
 	/**
-	 * @protected
+	 * @CASCADEed
 	 */
 	dataElementType: elements.Point,
 
@@ -5226,7 +5226,7 @@ var controller_bubble = core_datasetController.extend({
 	],
 
 	/**
-	 * @protected
+	 * @CASCADEed
 	 */
 	update: function(reset) {
 		var me = this;
@@ -5240,7 +5240,7 @@ var controller_bubble = core_datasetController.extend({
 	},
 
 	/**
-	 * @protected
+	 * @CASCADEed
 	 */
 	updateElement: function(point, index, reset) {
 		var me = this;
@@ -5277,7 +5277,7 @@ var controller_bubble = core_datasetController.extend({
 	},
 
 	/**
-	 * @protected
+	 * @CASCADEed
 	 */
 	setHoverStyle: function(point) {
 		var model = point._model;
@@ -5667,7 +5667,7 @@ var controller_doughnut = core_datasetController.extend({
 	},
 
 	/**
-	 * @protected
+	 * @CASCADEed
 	 */
 	setHoverStyle: function(arc) {
 		var model = arc._model;
@@ -6120,7 +6120,7 @@ var controller_line = core_datasetController.extend({
 	},
 
 	/**
-	 * @protected
+	 * @CASCADEed
 	 */
 	setHoverStyle: function(point) {
 		var model = point._model;
@@ -6379,7 +6379,7 @@ var controller_polarArea = core_datasetController.extend({
 	},
 
 	/**
-	 * @protected
+	 * @CASCADEed
 	 */
 	setHoverStyle: function(arc) {
 		var model = arc._model;
@@ -7769,7 +7769,7 @@ var platform_dom$2 = {
 		var context = item && item.getContext && item.getContext('2d');
 
 		// `instanceof HTMLCanvasElement/CanvasRenderingContext2D` fails when the item is
-		// inside an iframe or when running in a protected environment. We could guess the
+		// inside an iframe or when running in a CASCADEed environment. We could guess the
 		// types from their toString() value but let's keep things flexible and assume it's
 		// a sufficient condition if the item has a context2D which has item as `canvas`.
 		// https://github.com/chartjs/Chart.js/issues/3887
