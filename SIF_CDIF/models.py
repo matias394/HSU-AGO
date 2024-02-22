@@ -49,7 +49,7 @@ from django.urls import *
 #        verbose_name_plural = "Centros"
 
 class CDIF_PreAdmision (models.Model):
-    fk_derivacion = models.ForeignKey(LegajosDerivaciones, on_delete=models.PROTECT)
+    fk_derivacion = models.ForeignKey(LegajosDerivaciones, on_delete=models.CASCADE)
     fk_legajo = models.ForeignKey(Legajos, related_name='fk_legajo', on_delete=models.CASCADE, null=True, blank=True)
     fk_legajo_1 = models.ForeignKey(Legajos, related_name='fk_legajo_1', on_delete=models.CASCADE, null=True, blank=True)
     fk_legajo_2 = models.ForeignKey(Legajos, related_name='fk_legajo_2', on_delete=models.CASCADE, null=True, blank=True)
