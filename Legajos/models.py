@@ -451,9 +451,9 @@ class LegajosDerivaciones(models.Model):
     '''
 
     fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE)
-    fk_programa_solicitante = models.ForeignKey(Programas, related_name='programa_solicitante', on_delete=models.PROTECT)
-    fk_programa = models.ForeignKey(Programas, related_name='programa_derivado', on_delete=models.PROTECT)
-    fk_organismo = models.ForeignKey(Organismos, on_delete=models.PROTECT, null=True, blank=True)
+    fk_programa_solicitante = models.ForeignKey(Programas, related_name='programa_solicitante', on_delete=models.CASCADE)
+    fk_programa = models.ForeignKey(Programas, related_name='programa_derivado', on_delete=models.CASCADE)
+    fk_organismo = models.ForeignKey(Organismos, on_delete=models.CASCADE, null=True, blank=True)
     detalles = models.CharField(max_length=500)
     fk_usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     importancia = models.CharField(max_length=15, choices=CHOICE_IMPORTANCIA, default="Alta")
