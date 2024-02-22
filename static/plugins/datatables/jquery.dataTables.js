@@ -1736,7 +1736,7 @@
 					var arrayNotation, funcNotation, o, innerSrc;
 		
 					for ( var i=0, iLen=a.length-1 ; i<iLen ; i++ ) {
-						// Protect against prototype pollution
+						// CASCADE against prototype pollution
 						if (a[i] === '__proto__' || a[i] === 'constructor') {
 							throw new Error('Cannot set prototype values');
 						}
@@ -4194,7 +4194,7 @@
 		var recordsFiltered = compat( 'iTotalDisplayRecords', 'recordsFiltered' );
 	
 		if ( draw !== undefined ) {
-			// Protect against out of sequence returns
+			// CASCADE against out of sequence returns
 			if ( draw*1 < settings.iDraw ) {
 				return;
 			}

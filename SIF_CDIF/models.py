@@ -8,13 +8,13 @@ from django.urls import *
 # Create your models here.
 
 #class legajo_CDIF (models.Model):
-#    fk_programa = models.ForeignKey(Programas, on_delete=models.PROTECT)
-#    fk_legajo = models.ForeignKey(Legajos, on_delete=models.PROTECT)
+#    fk_programa = models.ForeignKey(Programas, on_delete=models.CASCADE)
+#    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE)
 #    nombre = models.CharField(max_length=100, unique=True)
 #    estado = models.BooleanField(default=True)
 #    observaciones = models.CharField(max_length=300, null=True, blank=True)
-#    #creado_por = models.ForeignKey(Usuarios, related_name='creado_por', on_delete=models.PROTECT, blank=True, null=True)
-#    #modificado_por = models.ForeignKey(Usuarios, related_name='modificado_por', on_delete=models.PROTECT, blank=True, null=True)
+#    #creado_por = models.ForeignKey(Usuarios, related_name='creado_por', on_delete=models.CASCADE, blank=True, null=True)
+#    #modificado_por = models.ForeignKey(Usuarios, related_name='modificado_por', on_delete=models.CASCADE, blank=True, null=True)
 #    creado = models.DateField(auto_now_add=True)
 #    modificado = models.DateField(auto_now=True)
 #
@@ -125,8 +125,8 @@ class CDIF_PreAdmision (models.Model):
     vinculo5 = models.CharField(max_length=150, null=True, blank=True)
     ivi = models.CharField(max_length=150, null=True, blank=True)
     admitido = models.CharField(max_length=150, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='PreAdm_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='PreAdm_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='PreAdm_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='PreAdm_modificado_por', on_delete=models.CASCADE, blank=True, null=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
     estado = models.CharField(max_length=100, null=True, blank=True)
@@ -162,8 +162,8 @@ class CDIF_Foto_IVI(models.Model):
     observaciones = models.CharField(max_length=350, null=True, blank=True)
     tipo = models.CharField (max_length=350, null=True, blank=True)
     clave = models.CharField (max_length=350, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='IVI_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='IVI_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='IVI_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='IVI_modificado_por', on_delete=models.CASCADE, blank=True, null=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
  
@@ -176,8 +176,8 @@ class CDIF_Vacantes(models.Model):
     estado = models.CharField(max_length=100)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='Vacante_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='Vacante_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='Vacante_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='Vacante_modificada_por', on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return f'{self.organizacion} - Sala {self.sala}'
@@ -189,8 +189,8 @@ class CDIF_Admision(models.Model):
     estado = models.CharField(max_length=150, null=True, blank=True, default="Activa")
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='Admision_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='Admision_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='Admision_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='Admision_modificada_por', on_delete=models.CASCADE, blank=True, null=True)
 
 class CDIF_VacantesOtorgadas (models.Model):
     fk_admision = models.ForeignKey(CDIF_Admision, on_delete=models.CASCADE)
@@ -207,8 +207,8 @@ class CDIF_VacantesOtorgadas (models.Model):
     evento = models.CharField(max_length=100, null=True, blank=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='VacanteOtorgada_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='VacanteOtorgada_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='VacanteOtorgada_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='VacanteOtorgada_modificada_por', on_delete=models.CASCADE, blank=True, null=True)
 
 
 class CDIF_HistorialVacantes (models.Model):
@@ -218,8 +218,8 @@ class CDIF_HistorialVacantes (models.Model):
     sala = models.CharField(max_length=150, null=True, blank=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='HistorialVacantes_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='HistorialVacantes_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='HistorialVacantes_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='HistorialVacantes_modificada_por', on_delete=models.CASCADE, blank=True, null=True)
 
 class OpcionesResponsables(models.Model):
     nombre = models.CharField(max_length=250, unique=True)
@@ -236,8 +236,8 @@ class CDIF_Intervenciones(models.Model):
     detalle = models.CharField(max_length=350, null=True, blank=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='Intervenciones_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='Intervenciones_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='Intervenciones_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='Intervenciones_modificada_por', on_delete=models.CASCADE, blank=True, null=True)
 
 
 class CDIF_Historial(models.Model):

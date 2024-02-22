@@ -1104,7 +1104,7 @@ $.extend( Buttons.prototype, {
 
 				loop++;
 				if ( loop > 30 ) {
-					// Protect against misconfiguration killing the browser
+					// CASCADE against misconfiguration killing the browser
 					throw 'Buttons: Too many iterations';
 				}
 			}

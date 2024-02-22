@@ -8,13 +8,13 @@ from django.urls import *
 # Create your models here.
 
 #class legajo_CDLE (models.Model):
-#    fk_programa = models.ForeignKey(Programas, on_delete=models.PROTECT)
-#    fk_legajo = models.ForeignKey(Legajos, on_delete=models.PROTECT)
+#    fk_programa = models.ForeignKey(Programas, on_delete=models.CASCADE)
+#    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE)
 #    nombre = models.CharField(max_length=100, unique=True)
 #    estado = models.BooleanField(default=True)
 #    observaciones = models.CharField(max_length=300, null=True, blank=True)
-#    #creado_por = models.ForeignKey(Usuarios, related_name='CDLE_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-#    #modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
+#    #creado_por = models.ForeignKey(Usuarios, related_name='CDLE_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+#    #modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_modificado_por', on_delete=models.CASCADE, blank=True, null=True)
 #    creado = models.DateField(auto_now_add=True)
 #    modificado = models.DateField(auto_now=True)
 #
@@ -149,8 +149,8 @@ class CDLE_PreAdmision (models.Model):
     ter_trim_control_rutina = models.BooleanField(verbose_name='Ecografía, hisopado vaginal y laboratorio', null=True, blank=True)
     ter_trim_monitoreo_fetal = models.BooleanField(verbose_name='Monitoreo fetal', null=True, blank=True)
     ter_trim_electro_cardio = models.BooleanField(verbose_name='Electro cardiograma', null=True, blank=True)
-    acompaniante = models.ForeignKey(Usuarios, related_name='CDLE_Acompaniante', on_delete=models.PROTECT, blank=True, null=True)
-    madrina = models.ForeignKey(AgentesExternos, related_name='CDLE_Madrina', on_delete=models.PROTECT, blank=True, null=True)
+    acompaniante = models.ForeignKey(Usuarios, related_name='CDLE_Acompaniante', on_delete=models.CASCADE, blank=True, null=True)
+    madrina = models.ForeignKey(AgentesExternos, related_name='CDLE_Madrina', on_delete=models.CASCADE, blank=True, null=True)
     vinculo1 = models.CharField(max_length=150, null=True, blank=True)
     vinculo2 = models.CharField(max_length=150, null=True, blank=True)
     vinculo3 = models.CharField(max_length=150, null=True, blank=True)
@@ -159,8 +159,8 @@ class CDLE_PreAdmision (models.Model):
     ivi = models.CharField(max_length=150, null=True, blank=True)
     indice_ingreso = models.CharField(max_length=150, null=True, blank=True)
     admitido = models.CharField(max_length=150, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='CDLE_PreAdm_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_PreAdm_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='CDLE_PreAdm_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_PreAdm_modificado_por', on_delete=models.CASCADE, blank=True, null=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
     estado = models.CharField(max_length=100, null=True, blank=True)
@@ -196,8 +196,8 @@ class CDLE_Foto_IVI(models.Model):
     observaciones = models.CharField(max_length=350, null=True, blank=True)
     tipo = models.CharField (max_length=350, null=True, blank=True)
     clave = models.CharField (max_length=350, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='CDLE_IVI_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_IVI_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='CDLE_IVI_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_IVI_modificado_por', on_delete=models.CASCADE, blank=True, null=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
 
@@ -231,8 +231,8 @@ class CDLE_Foto_Ingreso(models.Model):
     observaciones = models.CharField(max_length=350, null=True, blank=True)
     tipo = models.CharField (max_length=350, null=True, blank=True)
     clave = models.CharField (max_length=350, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='CDLE_Ingreso_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_Ingreso_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='CDLE_Ingreso_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_Ingreso_modificado_por', on_delete=models.CASCADE, blank=True, null=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
 
@@ -243,8 +243,8 @@ class CDLE_Admision(models.Model):
     estado = models.CharField(max_length=150, null=True, blank=True, default="Activa")
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='CDLE_Admision_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_Admision_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='CDLE_Admision_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_Admision_modificada_por', on_delete=models.CASCADE, blank=True, null=True)
 
 class OpcionesResponsables(models.Model):
     nombre = models.CharField(max_length=250, unique=True)
@@ -262,8 +262,8 @@ class CDLE_Intervenciones(models.Model):
     detalle = models.CharField(max_length=350, null=True, blank=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='CDLE_Intervenciones_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_Intervenciones_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='CDLE_Intervenciones_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_Intervenciones_modificada_por', on_delete=models.CASCADE, blank=True, null=True)
 
 
 class CDLE_Historial(models.Model):

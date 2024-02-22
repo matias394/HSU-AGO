@@ -9,13 +9,13 @@ from SIF_CDIF.models import Criterios_IVI
 # Create your models here.
 
 #class legajo_MILD (models.Model):
-#    fk_programa = models.ForeignKey(Programas, on_delete=models.PROTECT)
-#    fk_legajo = models.ForeignKey(Legajos, on_delete=models.PROTECT)
+#    fk_programa = models.ForeignKey(Programas, on_delete=models.CASCADE)
+#    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE)
 #    nombre = models.CharField(max_length=100, unique=True)
 #    estado = models.BooleanField(default=True)
 #    observaciones = models.CharField(max_length=300, null=True, blank=True)
-#    #creado_por = models.ForeignKey(Usuarios, related_name='MILD_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-#    #modificado_por = models.ForeignKey(Usuarios, related_name='MILD_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
+#    #creado_por = models.ForeignKey(Usuarios, related_name='MILD_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+#    #modificado_por = models.ForeignKey(Usuarios, related_name='MILD_modificado_por', on_delete=models.CASCADE, blank=True, null=True)
 #    creado = models.DateField(auto_now_add=True)
 #    modificado = models.DateField(auto_now=True)
 #
@@ -50,7 +50,7 @@ from SIF_CDIF.models import Criterios_IVI
 #        verbose_name_plural = "Centros"
 
 class MILD_PreAdmision (models.Model):
-    fk_derivacion = models.ForeignKey(LegajosDerivaciones, on_delete=models.PROTECT)
+    fk_derivacion = models.ForeignKey(LegajosDerivaciones, on_delete=models.CASCADE)
     fk_legajo = models.ForeignKey(Legajos, related_name='MILD_fk_legajo', on_delete=models.CASCADE, null=True, blank=True)
     fk_legajo_1 = models.ForeignKey(Legajos, related_name='MILD_fk_legajo_1', on_delete=models.CASCADE, null=True, blank=True)
     fk_legajo_2 = models.ForeignKey(Legajos, related_name='MILD_fk_legajo_2', on_delete=models.CASCADE, null=True, blank=True)
@@ -169,8 +169,8 @@ class MILD_PreAdmision (models.Model):
     observaciones_salud = models.CharField(max_length=250, null=True, blank=True, verbose_name='Observaciones/detalles de salud')
     vacunas = models.BooleanField(verbose_name='¿Recibió todas las vacunas correspondientes a su edad?', null=True, blank=True)
     
-    acompaniante_entrevista = models.ForeignKey(Usuarios,verbose_name='Acompañante que realizo la entrevista', related_name='MILD_Acompaniante_entrevista', on_delete=models.PROTECT, blank=True, null=True)
-    acompaniante_asignado = models.ForeignKey(Usuarios,verbose_name='Acompañante asignado', related_name='MILD_Acompaniante_asignado', on_delete=models.PROTECT, blank=True, null=True)
+    acompaniante_entrevista = models.ForeignKey(Usuarios,verbose_name='Acompañante que realizo la entrevista', related_name='MILD_Acompaniante_entrevista', on_delete=models.CASCADE, blank=True, null=True)
+    acompaniante_asignado = models.ForeignKey(Usuarios,verbose_name='Acompañante asignado', related_name='MILD_Acompaniante_asignado', on_delete=models.CASCADE, blank=True, null=True)
     observaciones_gral = models.CharField(max_length=350, null=True, blank=True, verbose_name='Aquí puede detallar información adicional de la familia, o temas que es importante resaltar acerca de la misma.')
 
     vinculo1 = models.CharField(max_length=150, null=True, blank=True)
@@ -181,8 +181,8 @@ class MILD_PreAdmision (models.Model):
     ivi = models.CharField(max_length=150, null=True, blank=True)
     indice_ingreso = models.CharField(max_length=150, null=True, blank=True)
     admitido = models.CharField(max_length=150, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='MILD_PreAdm_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='MILD_PreAdm_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='MILD_PreAdm_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='MILD_PreAdm_modificado_por', on_delete=models.CASCADE, blank=True, null=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
     estado = models.CharField(max_length=100, null=True, blank=True)
@@ -210,8 +210,8 @@ class MILD_Foto_IVI(models.Model):
     observaciones = models.CharField(max_length=350, null=True, blank=True)
     tipo = models.CharField (max_length=350, null=True, blank=True)
     clave = models.CharField (max_length=350, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='MILD_IVI_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='MILD_IVI_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='MILD_IVI_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='MILD_IVI_modificado_por', on_delete=models.CASCADE, blank=True, null=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
 
@@ -245,8 +245,8 @@ class MILD_Foto_Ingreso(models.Model):
     observaciones = models.CharField(max_length=350, null=True, blank=True)
     tipo = models.CharField (max_length=350, null=True, blank=True)
     clave = models.CharField (max_length=350, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='MILD_Ingreso_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='MILD_Ingreso_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='MILD_Ingreso_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='MILD_Ingreso_modificado_por', on_delete=models.CASCADE, blank=True, null=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
 
@@ -257,8 +257,8 @@ class MILD_Admision(models.Model):
     estado = models.CharField(max_length=150, null=True, blank=True, default="Activa")
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='MILD_Admision_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='MILD_Admision_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='MILD_Admision_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='MILD_Admision_modificada_por', on_delete=models.CASCADE, blank=True, null=True)
 
 class OpcionesResponsables(models.Model):
     nombre = models.CharField(max_length=250, unique=True)
@@ -276,8 +276,8 @@ class MILD_Intervenciones(models.Model):
     detalle = models.CharField(max_length=350, null=True, blank=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='MILD_Intervenciones_creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='MILD_Intervenciones_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='MILD_Intervenciones_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='MILD_Intervenciones_modificada_por', on_delete=models.CASCADE, blank=True, null=True)
 
 
 class MILD_Historial(models.Model):

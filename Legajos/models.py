@@ -36,8 +36,8 @@ class Legajos(models.Model):
     m2m_familiares = models.ManyToManyField('self', through='LegajoGrupoFamiliar', symmetrical=True, blank=True)
     observaciones = models.CharField(max_length=300, blank=True, null=True)
     estado = models.BooleanField(default=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='modificado_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='modificado_por', on_delete=models.CASCADE, blank=True, null=True)
     creado = models.DateField(auto_now_add=True)
     modificado = models.DateField(auto_now=True)
 
@@ -321,10 +321,10 @@ class LegajoAlertas(models.Model):
     Registro de Alertas de vulnerabilidad asociadas a un Legajo determinado Tanto el alta como la baja se guardan en un historial del alertas.
     '''
 
-    fk_alerta = models.ForeignKey(Alertas, related_name='alerta', on_delete=models.PROTECT)
+    fk_alerta = models.ForeignKey(Alertas, related_name='alerta', on_delete=models.CASCADE)
     fk_legajo = models.ForeignKey(Legajos, related_name='legajo_alerta', on_delete=models.CASCADE)
     fecha_inicio = models.DateField(auto_now=True)
-    creada_por = models.ForeignKey(Usuarios, related_name='creada_por', on_delete=models.PROTECT, blank=True, null=True)
+    creada_por = models.ForeignKey(Usuarios, related_name='creada_por', on_delete=models.CASCADE, blank=True, null=True)
     observaciones = models.CharField(max_length=140, null=True, blank=True)
 
     def __str__(self):
@@ -345,11 +345,11 @@ class HistorialLegajoAlertas(models.Model):
     Guardado de historial de los distintos movimientos (CREACION/ELIMINACION)  de alertas de vulnerabilidad asociadas a un Legajo.
     Se graban a traves funciones detalladas en el archivo signals.py de esta app.
     '''
-    fk_alerta = models.ForeignKey(Alertas, related_name='hist_alerta', on_delete=models.PROTECT)
+    fk_alerta = models.ForeignKey(Alertas, related_name='hist_alerta', on_delete=models.CASCADE)
     fk_legajo = models.ForeignKey(Legajos, related_name='hist_legajo_alerta', on_delete=models.CASCADE)
     observaciones = models.CharField(max_length=140, null=True, blank=True)
-    creada_por = models.ForeignKey(Usuarios, related_name='hist_creada_por', on_delete=models.PROTECT, blank=True, null=True)
-    eliminada_por = models.ForeignKey(Usuarios, related_name='hist_eliminada_por', on_delete=models.PROTECT, blank=True, null=True)
+    creada_por = models.ForeignKey(Usuarios, related_name='hist_creada_por', on_delete=models.CASCADE, blank=True, null=True)
+    eliminada_por = models.ForeignKey(Usuarios, related_name='hist_eliminada_por', on_delete=models.CASCADE, blank=True, null=True)
     fecha_inicio = models.DateField(auto_now=True)
     fecha_fin = models.DateField(null=True, blank=True)
     meses_activa = models.JSONField(default=list, blank=True)  # Campo para almacenar los meses en los que estuvo activa
