@@ -7,6 +7,7 @@ from .models import *
 from .forms import *
 from django.db.models import Q
 from django.urls import reverse_lazy
+from .utils import insertar_programas
 
 # region ############################################################### Secretarías
 
@@ -175,6 +176,7 @@ class OrganismosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 class ProgramasListView(PermisosMixin, ListView):
     permission_required = ['Usuarios.rol_admin','Usuarios.rol_observador','Usuarios.rol_consultante']
     model = Programas
+    template_name = 'programas_list.html'
 
     # Funcion de busqueda
 
@@ -188,6 +190,14 @@ class ProgramasListView(PermisosMixin, ListView):
             object_list = self.model.objects.all()
 
         return object_list
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Llamar a la función para insertar programas
+        insertar_programas()
+
+        return context
 
 
 class ProgramasDetailView(PermisosMixin, DetailView):

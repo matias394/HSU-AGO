@@ -8277,8 +8277,8 @@ function InflateState() {
   this.havedict = false;      /* true if dictionary provided */
   this.flags = 0;             /* gzip header method and flags (0 if zlib) */
   this.dmax = 0;              /* zlib header max distance (INFLATE_STRICT) */
-  this.check = 0;             /* protected copy of check value */
-  this.total = 0;             /* protected copy of output count */
+  this.check = 0;             /* CASCADEed copy of check value */
+  this.total = 0;             /* CASCADEed copy of output count */
   // TODO: may be {}
   this.head = null;           /* where to save gzip header information */
 

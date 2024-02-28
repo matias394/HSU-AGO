@@ -15,6 +15,7 @@ urlpatterns = [
     path('CDIF/preadmisiones/crear/<pk>', login_required(CDIFPreAdmisionesCreateView.as_view()), name='CDIF_preadmisiones_crear'),
     path('CDIF/preadmisiones/editar/<pk>', login_required(CDIFPreAdmisionesUpdateView.as_view()), name='CDIF_preadmisiones_editar'),
     path('CDIF/preadmisiones/ver/<pk>', login_required(CDIFPreAdmisionesDetailView.as_view()), name='CDIF_preadmisiones_ver'),
+    path('CDIF/preadmisiones/ver2/<pk>', login_required(CDIFPreAdmisiones2DetailView.as_view()), name='CDIF_preadmisiones_ver2'),
     path('CDIF/preadmisiones/ver3/<pk>', login_required(CDIFPreAdmisiones3DetailView.as_view()), name='CDIF_preadmisiones_ver3'),
     path('CDIF/preadmisiones/listar', login_required(CDIFPreAdmisionesListView.as_view()), name='CDIF_preadmisiones_listar'),
     path('CDIF/preadmisiones/buscar', login_required(CDIFPreAdmisionesBuscarListView.as_view()), name='CDIF_preadmisiones_buscar'),

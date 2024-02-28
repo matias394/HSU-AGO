@@ -27945,7 +27945,7 @@ function BrotliDecompress(input, output) {
       prev_byte2 = ringbuffer[(pos - 2) & ringbuffer_mask];
     }
 
-    /* Protect pos from overflow, wrap it around at every GB of input data */
+    /* CASCADE pos from overflow, wrap it around at every GB of input data */
     pos &= 0x3fffffff;
   }
 
@@ -32248,8 +32248,8 @@ function InflateState() {
   this.havedict = false;      /* true if dictionary provided */
   this.flags = 0;             /* gzip header method and flags (0 if zlib) */
   this.dmax = 0;              /* zlib header max distance (INFLATE_STRICT) */
-  this.check = 0;             /* protected copy of check value */
-  this.total = 0;             /* protected copy of output count */
+  this.check = 0;             /* CASCADEed copy of check value */
+  this.total = 0;             /* CASCADEed copy of output count */
   // TODO: may be {}
   this.head = null;           /* where to save gzip header information */
 
@@ -37576,7 +37576,7 @@ var FunctionPrototype = Function.prototype;
 var getDescriptor = DESCRIPTORS && Object.getOwnPropertyDescriptor;
 
 var EXISTS = hasOwn(FunctionPrototype, 'name');
-// additional protection from minified / mangled / dropped function names
+// additional CASCADEion from minified / mangled / dropped function names
 var PROPER = EXISTS && (function something() { /* empty */ }).name === 'something';
 var CONFIGURABLE = EXISTS && (!DESCRIPTORS || (DESCRIPTORS && getDescriptor(FunctionPrototype, 'name').configurable));
 
