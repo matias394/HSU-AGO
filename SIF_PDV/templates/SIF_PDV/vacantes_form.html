@@ -139,14 +139,21 @@ Vacantes
             <div class="col-sm-2 form-group">
                 {{ form.fk_organismo| as_crispy_field }}
             </div>
+
+            <div class="col-sm-2 form-group">
+              {{ form.sala| as_crispy_field }}
+            </div>
             <div class="col-sm-2 form-group">
               {{ form.turno| as_crispy_field }}
             </div>
+
+           
            
 
           </div>
         </div>
       </div>
+
 
       <div class="mt-4 mx-2 btn-toolbar" role="toolbar">
         <button type="submit" class="btn btn-primary mr-2">Confirmar</button>
