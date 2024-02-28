@@ -47,4 +47,13 @@ urlpatterns = [
     path('legajos/derivaciones/historial/<pk>', login_required(LegajosDerivacionesHistorial.as_view()), name='legajosderivaciones_historial'),
      # Plantilla Programas de asistencia
     path('legajos/programas_intervencion/<pk>', login_required(programasIntervencionesView.as_view()), name='programas_intervencion'),
+     # Plantilla Acciones Sociales
+    path('legajos/acciones_sociales/<pk>', login_required(accionesSocialesView.as_view()), name='acciones_sociales'),
+     # Plantilla Interveciones de salud
+    path('legajos/intervenciones_salud/<pk>', login_required(intervencionesSaludView.as_view()), name='intervenciones_salud'),
+     # Plantilla Indices
+    path('legajos/indices/<pk>', login_required(indicesView.as_view()), name='indices'),
+    # Plantilla Indice detalle
+    path('legajos/indices_detalle/<pk>', login_required(indicesDetalleView.as_view()), name='indices_detalle'),
+
 ]

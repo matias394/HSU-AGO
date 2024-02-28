@@ -55,6 +55,85 @@
                         <i class="fas fa-minus"></i>
                     </button>
                 </div>
+                <h3 class="card-title font-weight-bold pt-1 mr-3">
+                    Datos Personales
+                </h3>
+            </div>
+
+            
+            <div class="card-body card-comments p-0 pb-1">
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <div class="comment-text">
+                            Nombre
+                            <span class="username">{{object}}</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="comment-text">
+                            Documento
+                            <span class="username">{{object.tipo_doc}} {{object.documento}}</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="comment-text">
+                            Sexo
+                            <span class="username">{{object.sexo}}</span>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <div class="comment-text">
+                            Fecha de nacimiento
+                            <span class="username">{{object.fecha_nacimiento|date:'d/m/Y'}}</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="comment-text">
+                            Nacionalidad
+                            <span class="username">{{object.nacionalidad|default_if_none:"-"}}</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="comment-text">
+                            Estado civil
+                            <span class="username">{{object.estado_civil|default_if_none:"-"}}</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="comment-text">
+                            Teléfono
+                            <span class="username">{{object.telefono|default_if_none:"-"}}</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="comment-text">
+                            Email
+                            <span class="username">{{object.email|default_if_none:"-"}}</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="comment-text">
+                            Estado
+                            {% if object.estado %}
+                            <span class="username text-success font-weight-bold">Activo</span>
+                            {% else %}
+                            <span class="username text-danger font-weight-bold">Inactivo</span>
+                            {% endif %}
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
 
                 <h3 class="card-title font-weight-bold pt-1 mr-3">
                     Grupo familiar
@@ -216,7 +295,7 @@
             </div>
            
             <div class="card-footer text-center">
-                <a href="{% url 'indices'  %}" class="uppercase">Ver detalles</a>
+                <a href="{% url 'indices' object.id  %}" class="uppercase">Ver detalles</a>
             </div>
 
         </div>
@@ -378,7 +457,7 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-5">
+            {% comment %} <div class="col-sm-5">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title font-weight-bold"> Datos personales</h3>
@@ -453,8 +532,8 @@
                         </ul>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-4">
+            </div> {% endcomment %}
+            <div class="col-sm-9">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title font-weight-bold">Ubicación</h3>
@@ -496,7 +575,7 @@
                         <div class="icon">
                             <i class="ion ion-android-home"></i>
                         </div>
-                        <a href="{% url 'acciones_sociales'%}" class="small-box-footer">Ver
+                        <a href="{% url 'acciones_sociales' object.id  %}" class="small-box-footer">Ver
                             más <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                     <div class="small-box bg-lightblue col-12 mb-3 mb-sm-0 px-0">
@@ -507,7 +586,7 @@
                         <div class="icon">
                             <i class="ion ion-ios-clock-outline"></i>
                         </div>
-                        <a href="{% url 'intervenciones_salud_HC'%}" class="small-box-footer">Ver
+                        <a href="{% url 'intervenciones_salud' object.id  %}" class="small-box-footer">Ver
                             más <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
 
