@@ -531,7 +531,12 @@ class CDIFIndiceIviDetailView(PermisosMixin, DetailView):
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         #context['maximo'] = foto_ivi.puntaje_max
         return context
-    
+
+class CDIFPreAdmisiones2DetailView(PermisosMixin, DetailView):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_CDIF/preadmisiones_detail2.html"
+    model = CDIF_PreAdmision  
+
 class CDIFPreAdmisiones3DetailView(PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_CDIF/preadmisiones_detail3.html"
