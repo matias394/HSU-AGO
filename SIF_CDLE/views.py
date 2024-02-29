@@ -685,6 +685,11 @@ class CDLEIndiceIviDetailView(PermisosMixin, DetailView):
         #context['maximo'] = foto_ivi.puntaje_max
         return context
     
+class CDLEPreAdmisiones2DetailView(PermisosMixin, DetailView):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_CDLE/preadmisiones_detail2.html"
+    model = CDLE_PreAdmision  
+    
 class CDLEPreAdmisiones3DetailView(PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_CDLE/preadmisiones_detail3.html"

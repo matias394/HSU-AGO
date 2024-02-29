@@ -15,6 +15,7 @@ urlpatterns = [
     path('CDLE/preadmisiones/crear/<pk>', login_required(CDLEPreAdmisionesCreateView.as_view()), name='CDLE_preadmisiones_crear'),
     path('CDLE/preadmisiones/editar/<pk>', login_required(CDLEPreAdmisionesUpdateView.as_view()), name='CDLE_preadmisiones_editar'),
     path('CDLE/preadmisiones/ver/<pk>', login_required(CDLEPreAdmisionesDetailView.as_view()), name='CDLE_preadmisiones_ver'),
+    path('CDLE/preadmisiones/ver2/<pk>', login_required(CDLEPreAdmisiones2DetailView.as_view()), name='CDLE_preadmisiones_ver2'),
     path('CDLE/preadmisiones/ver3/<pk>', login_required(CDLEPreAdmisiones3DetailView.as_view()), name='CDLE_preadmisiones_ver3'),
     path('CDLE/preadmisiones/listar', login_required(CDLEPreAdmisionesListView.as_view()), name='CDLE_preadmisiones_listar'),
     path('CDLE/preadmisiones/buscar', login_required(CDLEPreAdmisionesBuscarListView.as_view()), name='CDLE_preadmisiones_buscar'),
