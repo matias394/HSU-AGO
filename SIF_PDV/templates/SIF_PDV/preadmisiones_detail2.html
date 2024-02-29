@@ -57,9 +57,9 @@ PDV Pre-admisiones
             <div class="card-body pb-1">
                 <dl class="row mb-0">
                     <dd class="col-sm-5 mb-2">Centro solicitado</dd>
-                    <dt class="col-sm-7 mb-2">{{object.centro_postula}}</dt>
+                    <dt class="col-sm-7 mb-2">{{object.centro_postula|default:''}}</dt>
                     <dd class="col-sm-5 mb-2">Taller solicitado</dd>
-                    <dt class="col-sm-7 mb-2">{{object.taller_postula}}</dt>
+                    <dt class="col-sm-7 mb-2">{{object.taller_postula|default:''}}</dt>
                     {% if object.modificado_por %}
                     <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">
                         Modificado por {{object.modificado_por}} - {{object.modificado|date:'d/m/Y'}}
@@ -90,25 +90,25 @@ PDV Pre-admisiones
           <dd class="col-sm-3 mb-2">Nombre</dd>
           <dt class="col-sm-9 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_1_id %}" title="Ver legajo">{{object.fk_legajo_1}}</a> </dt>
           <dd class="col-sm-3 mb-2">Vínculo</dd>
-          <dt class="col-sm-9 mb-2">{{object.vinculo1}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.vinculo1}}|default:''</dt>
           <dd class="col-sm-3 mb-2">Documento</dd>
           <dt class="col-sm-9 mb-2">{{object.fk_legajo_1.tipo_doc}}  {{object.fk_legajo_1.documento}}</dt>
           <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_1.fecha_nacimiento|date:'d/m/Y'}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.fk_legajo_1.fecha_nacimiento|date:'d/m/Y'|default:''}}</dt>
           <dd class="col-sm-3 mb-2">Sexo</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_1.sexo}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.fk_legajo_1.sexo|default:''}}</dt>
           <dd class="col-sm-3 mb-2">Cantidad de menores a cargo</dd>
-          <dt class="col-sm-9 mb-2">{{object.menores_a_cargo_1}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.menores_a_cargo_1|default:''}}</dt>
           <dd class="col-sm-3 mb-2">¿Realiza controles ginecológicos?</dd>
-          <dt class="col-sm-9 mb-2">{{object.control_gine_1}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.control_gine_1|default:''}}</dt>
           <dd class="col-sm-3 mb-2">Cantidad total de hijos</dd>
-          <dt class="col-sm-9 mb-2">{{object.hijos_1}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.hijos_1|default:''}}</dt>
           <dd class="col-sm-3 mb-2">Cantidad total de embarazos</dd>
-          <dt class="col-sm-9 mb-2">{{object.embarazos_1}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.embarazos_1|default:''}}</dt>
           <dd class="col-sm-3 mb-2">Cantidad de abortos espontáneos</dd>
-          <dt class="col-sm-9 mb-2">{{object.abortos_esp_1}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.abortos_esp_1|default:''}}</dt>
           <dd class="col-sm-3 mb-2">Cantidad de abortos provocados</dd>
-          <dt class="col-sm-9 mb-2">{{object.abortos_prov_1}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.abortos_prov_1|default:''}}</dt>
           <dd class="col-sm-3 mb-2">¿Embarazo NO controlado?</dd>
           <dt class="col-sm-9 mb-2">
             {% if object.emb_no_control_1 == True %}
@@ -166,15 +166,15 @@ PDV Pre-admisiones
             {% endif %}
           </dt>
           <dd class="col-sm-3 mb-2">¿Está embarazada actualmente?</dd>
-          <dt class="col-sm-9 mb-2">{{object.emb_actualmente_1}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.emb_actualmente_1|default:''}}</dt>
           <dd class="col-sm-3 mb-2">¿Tiene los controles?</dd>
-          <dt class="col-sm-9 mb-2">{{object.controles_1}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.controles_1|default:''}}</dt>
           <dd class="col-sm-3 mb-2">Embarazo actual</dd>
-          <dt class="col-sm-9 mb-2">{{object.emb_actualmente_1}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.emb_actualmente_1|default:''}}</dt>
           <dd class="col-sm-3 mb-2">Máximo nivel alcanzado</dd>
-          <dt class="col-sm-9 mb-2">{{object.educ_maximo_1}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.educ_maximo_1|default:''}}</dt>
           <dd class="col-sm-3 mb-2">Estado</dd>
-          <dt class="col-sm-9 mb-2">{{object.educ_estado_1}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.educ_estado_1|default:''}}</dt>
           <dd class="col-sm-3 mb-2">¿Sabe leer?</dd>
           <dt class="col-sm-9 mb-2">
             {% if object.leer_1 == True %}
@@ -208,13 +208,13 @@ PDV Pre-admisiones
             {% endif %}
           </dt>
           <dd class="col-sm-3 mb-2">Planes sociales que recibe</dd>
-          <dt class="col-sm-9 mb-2">{{object.planes_sociales_1}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.planes_sociales_1|default:''}}</dt>
           <dd class="col-sm-3 mb-2">¿Tiene trabajo actualmente?</dd>
-          <dt class="col-sm-9 mb-2">{{object.trabajo_actual_1}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.trabajo_actual_1|default:''}}</dt>
           <dd class="col-sm-3 mb-2">Ocupacion</dd>
-          <dt class="col-sm-9 mb-2">{{object.ocupacion_1}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.ocupacion_1|default:''}}</dt>
           <dd class="col-sm-3 mb-2">Modo de contratación</dd>
-          <dt class="col-sm-9 mb-2">{{object.modo_contrat_1}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.modo_contrat_1|default:''}}</dt>
         </dl>
 {% endif %}
 {% if object.fk_legajo_2 %}
@@ -228,13 +228,13 @@ PDV Pre-admisiones
           <dd class="col-sm-3 mb-2">Documento</dd>
           <dt class="col-sm-9 mb-2">{{object.fk_legajo_2.tipo_doc}}  {{object.fk_legajo_2.documento}}</dt>
           <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_2.fecha_nacimiento|date:'d/m/Y'}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.fk_legajo_2.fecha_nacimiento|date:'d/m/Y'}}|default:''</dt>
           <dd class="col-sm-3 mb-2">Sexo</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_2.sexo}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.fk_legajo_2.sexo|default:''}}</dt>
           <dd class="col-sm-3 mb-2">Máximo nivel alcanzado</dd>
-          <dt class="col-sm-9 mb-2">{{object.educ_maximo_2}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.educ_maximo_2|default:''}}</dt>
           <dd class="col-sm-3 mb-2">Estado</dd>
-          <dt class="col-sm-9 mb-2">{{object.educ_estado_2}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.educ_estado_2|default:''}}</dt>
           <dd class="col-sm-3 mb-2">¿Sabe leer?</dd>
           <dt class="col-sm-9 mb-2">
             {% if object.leer_2 == True %}
@@ -268,15 +268,15 @@ PDV Pre-admisiones
             {% endif %}
           </dt>
           <dd class="col-sm-3 mb-2">Quiere participar del Programa Pilares</dd>
-          <dt class="col-sm-9 mb-2">{{object.programa_Pilares_2}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.programa_Pilares_2|default:''}}</dt>
           <dd class="col-sm-3 mb-2">Planes sociales que recibe</dd>
-          <dt class="col-sm-9 mb-2">{{object.planes_sociales_2}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.planes_sociales_2|default:''}}</dt>
           <dd class="col-sm-3 mb-2">¿Tiene trabajo actualmente?</dd>
-          <dt class="col-sm-9 mb-2">{{object.trabajo_actual_2}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.trabajo_actual_2|default:''}}</dt>
           <dd class="col-sm-3 mb-2">Ocupación</dd>
-          <dt class="col-sm-9 mb-2">{{object.ocupacion_2 }}</dt>
+          <dt class="col-sm-9 mb-2">{{object.ocupacion_2|default:'' }}</dt>
           <dd class="col-sm-3 mb-2">Modo de contratación</dd>
-          <dt class="col-sm-9 mb-2">{{object.modo_contrat_2}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.modo_contrat_2|default:''}}</dt>
         </dl>
 {% endif %}
 
@@ -289,17 +289,17 @@ PDV Pre-admisiones
           <dd class="col-sm-3 mb-2">Nombre</dd>
           <dt class="col-sm-9 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_3_id %}" title="Ver legajo">{{object.fk_legajo_3}}</a> </dt>
           <dd class="col-sm-3 mb-2">Vínculo</dd>
-          <dt class="col-sm-9 mb-2">{{object.vinculo3}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.vinculo3|default:''}}</dt>
           <dd class="col-sm-3 mb-2">Documento</dd>
           <dt class="col-sm-9 mb-2">{{object.fk_legajo_3.tipo_doc}}  {{object.fk_legajo_3.documento}}</dt>
           <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_3.fecha_nacimiento|date:'d/m/Y'}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.fk_legajo_3.fecha_nacimiento|date:'d/m/Y'|default:''}}</dt>
           <dd class="col-sm-3 mb-2">Sexo</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_3.sexo}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.fk_legajo_3.sexo|default:''}}</dt>
           <dd class="col-sm-3 mb-2">Máximo nivel alcanzado</dd>
-          <dt class="col-sm-9 mb-2">{{object.educ_maximo_3}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.educ_maximo_3|default:''}}</dt>
           <dd class="col-sm-3 mb-2">Estado</dd>
-          <dt class="col-sm-9 mb-2">{{object.educ_estado_3}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.educ_estado_3|default:''}}</dt>
           <dd class="col-sm-3 mb-2">Sabe leer</dd>
           <dt class="col-sm-9 mb-2">
             {% if object.leer_3 == True %}
@@ -347,13 +347,13 @@ PDV Pre-admisiones
             <dd class="col-sm-3 mb-2">Nombre</dd>
             <dt class="col-sm-9 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_4_id %}" title="Ver legajo">{{object.fk_legajo_4}}</a> </dt>
             <dd class="col-sm-3 mb-2">Vínculo</dd>
-            <dt class="col-sm-9 mb-2">{{object.vinculo4}}</dt>
+            <dt class="col-sm-9 mb-2">{{object.vinculo4|default:''}}</dt>
             <dd class="col-sm-3 mb-2">Documento</dd>
             <dt class="col-sm-9 mb-2">{{object.fk_legajo_4.tipo_doc}}  {{object.fk_legajo_4.documento}}</dt>
             <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
-            <dt class="col-sm-9 mb-2">{{object.fk_legajo_4.fecha_nacimiento|date:'d/m/Y'}}</dt>
+            <dt class="col-sm-9 mb-2">{{object.fk_legajo_4.fecha_nacimiento|date:'d/m/Y'|default:''}}</dt>
             <dd class="col-sm-3 mb-2">Sexo</dd>
-            <dt class="col-sm-9 mb-2">{{object.fk_legajo_4.sexo}}</dt>
+            <dt class="col-sm-9 mb-2">{{object.fk_legajo_4.sexo|default:''}}</dt>
             <dd class="col-sm-3 mb-2">Sabe leer</dd>
             <dt class="col-sm-9 mb-2">
               {% if object.leer_4 == True %}
@@ -401,13 +401,13 @@ PDV Pre-admisiones
             <dd class="col-sm-3 mb-2">Nombre</dd>
             <dt class="col-sm-9 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_5_id %}" title="Ver legajo">{{object.fk_legajo_5}}</a> </dt>
             <dd class="col-sm-3 mb-2">Vínculo</dd>
-            <dt class="col-sm-9 mb-2">{{object.vinculo5}}</dt>
+            <dt class="col-sm-9 mb-2">{{object.vinculo5|default:''}}</dt>
             <dd class="col-sm-3 mb-2">Documento</dd>
             <dt class="col-sm-9 mb-2">{{object.fk_legajo_5.tipo_doc}}  {{object.fk_legajo_5.documento}}</dt>
             <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
-            <dt class="col-sm-9 mb-2">{{object.fk_legajo_5.fecha_nacimiento|date:'d/m/Y'}}</dt>
+            <dt class="col-sm-9 mb-2">{{object.fk_legajo_5.fecha_nacimiento|date:'d/m/Y'|default:''}}</dt>
             <dd class="col-sm-3 mb-2">Sexo</dd>
-            <dt class="col-sm-9 mb-2">{{object.fk_legajo_5.sexo}}</dt>
+            <dt class="col-sm-9 mb-2">{{object.fk_legajo_5.sexo|default:''}}</dt>
             <dd class="col-sm-3 mb-2">Sabe leer</dd>
             <dt class="col-sm-9 mb-2">
               {% if object.leer_5 == True %}

@@ -23,6 +23,8 @@ urlpatterns = [
     path('', include('SIF_PDV.urls')),
     path('', include('SIF_SL.urls')),
     path('', include('SIF_MA.urls')),
+    path('', include('MSM.urls')),
+
 ]
 
 urlpatterns += staticfiles_urlpatterns()
