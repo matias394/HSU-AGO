@@ -765,7 +765,7 @@
                         <div id="info-centro" class="content" role="tabpanel" aria-labelledby="info-centro-trigger">
                             <div class="form-row">
                                 <div class="col-sm-3 form-group">
-                                    <label>Centro al que postula</label>
+                                    <label>Taller al que postula</label>
                                     <select name="centro_postula" class="form-control custom-select" id="id_centro_postula">
                                         <option value="" selected=""></option>
                                         {%if request.resolver_match.url_name == "PDV_preadmisiones_editar" %}
@@ -777,7 +777,7 @@
                                       </select>
                                 </div>
                                 <div class="col-sm-3 form-group">
-                                    <label>Taller al que postula</label>
+                                    <label>Centro al que postula</label>
                                     {{form.taller_postula| as_crispy_field}}
                                 </div>
                             </div>
