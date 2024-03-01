@@ -125,6 +125,7 @@
         <thead>
           <tr>
             <th>Criterio</th>
+            <th>Respuesta</th>
           </tr>
         </thead>
         <tbody>
@@ -133,17 +134,37 @@
             <td colspan="3" class="text-center bg-secondary py-1">AUTOVALORACION
             </td>
           </tr>
+          <tr>
+            <td>¿Identificas que habilidades tenes?</td>
+            <td>Si</td>
+            
+        </tr>
+        <tr>
+          <td>Mujer con falta de autovaloración</td>
+          <td>Si</td>
+          
+      </tr>
           {% for c in criterio %}
           {% if c.fk_criterios_ivi.tipo == 'AUTOVALORACION' %}
           <tr>
-              <td>{{c.fk_criterios_ivi.criterio}}</td>
-              
-          </tr>
+            <td>{{c.fk_criterios_ivi.criterio}}</td>
+            
+        </tr>
 
           {% endif %}
           {% endfor %}
           <tr>
             <td colspan="3" class="text-center bg-secondary py-1">AUTOGESTION</td>
+            <tr>
+              <td>¿Tuviste o tenes experiencia laboral?</td>
+              <td>No</td>
+              
+          </tr>
+          <tr>
+            <td>Mujer con falta de autogestión</td>
+            <td>Si</td>
+            
+        </tr>
           </tr>
           {% for c in criterio %}
           {% if c.fk_criterios_ivi.tipo == 'AUTOGESTION' %}
