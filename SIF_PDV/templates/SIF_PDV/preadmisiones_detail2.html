@@ -56,9 +56,9 @@ PDV Pre-admisiones
             </div>
             <div class="card-body pb-1">
                 <dl class="row mb-0">
-                    <dd class="col-sm-5 mb-2">Centro solicitado</dd>
-                    <dt class="col-sm-7 mb-2">{{object.centro_postula|default:''}}</dt>
                     <dd class="col-sm-5 mb-2">Taller solicitado</dd>
+                    <dt class="col-sm-7 mb-2">{{object.centro_postula|default:''}}</dt>
+                    <dd class="col-sm-5 mb-2">Centro solicitado</dd>
                     <dt class="col-sm-7 mb-2">{{object.taller_postula|default:''}}</dt>
                     {% if object.modificado_por %}
                     <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">
