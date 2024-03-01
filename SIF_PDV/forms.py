@@ -111,9 +111,9 @@ class PDV_VacantesOtorgadasForm (forms.ModelForm):
     class Meta:
         model = PDV_VacantesOtorgadas
         fields = '__all__'
+        exclude = ['sala']
         widgets = {
             'fecha_ingreso': forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
-            'sala': forms.Select(choices=[('', ''),('Bebes', 'Bebés'), ('2', '2'), ('3', '3')]),
             'turno': forms.Select(choices=[('', ''), ('Mañana', 'Mañana'), ('Tarde', 'Tarde')]),
             'fecha_egreso': forms.DateInput(attrs={'type': 'date','required':'required'}, format="%Y-%m-%d"),
             'motivo': forms.Select(choices=[('', ''),('Cambio de ciclo', 'Cambio de ciclo'), ('Cambio de turno', 'Cambio de turno'), ('Cambio de centro', 'Cambio de centro')]),
