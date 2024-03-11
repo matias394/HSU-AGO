@@ -1,5 +1,5 @@
-from django.views.generic import CreateView,ListView,DetailView,UpdateView,DeleteView,TemplateView, FormView
-from Legajos.models import LegajosDerivaciones
+from django.views.generic import CreateView,ListView,DetailView,UpdateView,DeleteView,TemplateView, FormView, View
+from Legajos.models import *
 from Legajos.forms import DerivacionesRechazoForm, LegajosDerivacionesForm
 from django.db.models import Q
 from .models import *
@@ -7,10 +7,10 @@ from Configuraciones.models import *
 from .forms import *
 from Usuarios.mixins import PermisosMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.db.models import Sum, F, ExpressionWrapper, IntegerField, Count, Max
 import uuid
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
 
 
@@ -147,12 +147,48 @@ class SLPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin):
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
+        legajo_id = legajo.fk_legajo.id
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
         context["pk"] = pk
         context["legajo"] = legajo
         context["familia"] = familia
         context["familia_inversa"] = familia_inversa
+
+
+        # Obtener todas las categorías con la cantidad de alertas en cada una
+        resto_alertas = 0
+        legajo_alertas = LegajoAlertas.objects.filter(fk_legajo=legajo_id)     
+        categorias_con_alertas = legajo_alertas.values(
+            'fk_alerta__fk_categoria'
+        ).annotate(
+            cantidad_alertas=Count('fk_alerta__fk_categoria')
+        )
+
+        # Obtener las IDs de las categorías con alertas
+        ids_categorias = [item['fk_alerta__fk_categoria'] for item in categorias_con_alertas]
+
+        # Obtener todas las categorías completas
+        categorias_completas = CategoriaAlertas.objects.filter(id__in=ids_categorias).order_by('nombre')
+
+        # Verificar si categorias_completas no es None antes de aplicar el slicing
+        if categorias_completas is not None:
+            # Obtener solo los primeros 8 nombres de categorías (o menos si hay menos de 8)
+            nombres_categorias = categorias_completas.values_list('nombre', flat=True)[:8]
+            if categorias_completas.count() > 8:
+                resto_alertas = categorias_completas.count() - 8
+        else:
+            nombres_categorias = []
+
+        context["nombres_categorias"] = nombres_categorias
+        context["resto_alertas"] = resto_alertas
+        context["alertas_alta"] = LegajoAlertas.objects.filter(fk_legajo=legajo_id, fk_alerta__gravedad="Critica")
+        context["alertas_media"] = LegajoAlertas.objects.filter(fk_legajo=legajo_id, fk_alerta__gravedad="Importante")
+        context["alertas_baja"] = LegajoAlertas.objects.filter(fk_legajo=legajo_id, fk_alerta__gravedad="Precaución")
+        context["count_alta"] = LegajoAlertas.objects.filter(fk_legajo=legajo_id, fk_alerta__gravedad="Critica").count()
+        context["count_media"] = LegajoAlertas.objects.filter(fk_legajo=legajo_id, fk_alerta__gravedad="Importante").count()
+        context["count_baja"] = LegajoAlertas.objects.filter(fk_legajo=legajo_id, fk_alerta__gravedad="Precaución").count()
+        print(legajo_id)
         return context
 
     def form_valid(self, form):
@@ -1102,3 +1138,88 @@ class SLIndiceIviEgresoCreateView (PermisosMixin, CreateView):
         base.save()
 
         return redirect('SL_admisiones_listar')
+    
+
+    #region ################################################################ ARCHIVOS
+class PreAdmArchivosListView(PermisosMixin, ListView):
+    permission_required = "Usuarios.rol_admin"
+    model = PreadmArchivos
+    template_name="SIF_SL/preadmarchivos_list.html"
+
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs["pk"]
+        context = super().get_context_data(**kwargs)
+        context["legajo_archivos"] = PreadmArchivos.objects.filter(fk_legajo=pk)
+        context["legajo"] = Legajos.objects.filter(id=pk).first()
+        return context
+
+class PreAdmArchivosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
+    permission_required = "Usuarios.rol_admin"
+    model = PreadmArchivos
+    form_class = PreadmArchivosForm
+    success_message = "Archivo actualizado correctamente."
+
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs["pk"]
+        context = super().get_context_data(**kwargs)
+        archivos = PreadmArchivos.objects.filter(fk_legajo=pk)
+        imagenes = archivos.filter(tipo="Imagen")
+        documentos = archivos.filter(tipo="Documento")
+        legajo = Legajos.objects.filter(pk=pk).first()
+        context["imagenes"] = imagenes
+        context["documentos"] = documentos
+        context["legajo"] = legajo
+        return context
+
+
+class PreAdmCreateArchivo(TemplateView):
+    def post(self, request):
+        pk = request.POST.get("pk") 
+        legajo = Legajos.objects.get(id=pk)
+        response_data_list = []  # Lista para almacenar las respuestas de los archivos
+
+        files = request.FILES.getlist('file')  # Acceder a los archivos enviados desde Dropzone
+
+        for f in files:
+            if f:
+                file_extension = f.name.split('.')[-1].lower()
+                if file_extension in ['jpg', 'jpeg', 'png', 'gif', 'bmp']:
+                    tipo = 'Imagen'
+                else:
+                    tipo = 'Documento'
+
+                legajo_archivo = PreadmArchivos.objects.create(
+                    fk_legajo=legajo,
+                    archivo=f,
+                    tipo=tipo
+                )
+
+                response_data = {
+                    'id': legajo_archivo.id,
+                    'tipo': legajo_archivo.tipo,
+                    'archivo_url': legajo_archivo.archivo.url,
+                }
+
+                response_data_list.append(response_data)  # Agregar la respuesta actual a la lista
+
+        return JsonResponse(response_data_list, safe=False)  # Devolver la lista completa de respuestas como JSON
+
+
+class PreAdmDeleteArchivo(PermisosMixin, View):
+    permission_required = "Usuarios.rol_admin"
+
+    def get(self, request):
+        try:
+            pk = request.GET.get("id", None)
+            legajo_archivo = get_object_or_404(PreadmArchivos, pk=pk)
+            legajo_archivo.delete()
+
+            data = {"deleted": True,   
+                "tipo_mensaje": "success",             
+                "mensaje" : "Archivo eliminado correctamente."} 
+        except:
+            data = {"deleted": False,   
+                "tipo_mensaje": "error",             
+                "mensaje" : "No fue posible eliminar el archivo."}  
+
+        return JsonResponse(data)
