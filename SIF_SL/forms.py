@@ -40,26 +40,9 @@ class SL_PreadmisionesForm (forms.ModelForm):
             'retomar_estudios_5': forms.CheckboxInput(),
             'aprender_oficio_5': forms.CheckboxInput(),
             'programa_Pilares_5': forms.CheckboxInput(),
-            'test_embarazo': forms.CheckboxInput(),
-            'fum': forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
-            'fpp': forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
-            'primer_embarazo': forms.CheckboxInput(),
-            'libreta_sanitaria': forms.CheckboxInput(),
-            'metodos_anticonceptivos': forms.CheckboxInput(),
-            'utilizabas_alguno': forms.CheckboxInput(),
-            'comienza_control': forms.CheckboxInput(),
-            'prim_trim_control_obstetra': forms.CheckboxInput(),
-            'prim_trim_estudios_labo': forms.CheckboxInput(),
-            'prim_trim_estudios_eco': forms.CheckboxInput(),
-            'prim_trim_estudios_pap': forms.CheckboxInput(),
-            'prim_trim_estudios_grupo_factor': forms.CheckboxInput(),
-            'prim_trim_control_odonto': forms.CheckboxInput(),
-            'seg_trim_control_obsetra': forms.CheckboxInput(),
-            'seg_trim_control_fetal': forms.CheckboxInput(),
-            'seg_trim_p75': forms.CheckboxInput(),
-            'ter_trim_control_rutina': forms.CheckboxInput(),
-            'ter_trim_monitoreo_fetal': forms.CheckboxInput(),
-            'ter_trim_electro_cardio': forms.CheckboxInput(),
+            'obs_vulneracion':forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
+            'dinamica_familiar':forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
+
         }
         labels = {
             'fk_legajo_1':'',
@@ -171,3 +154,8 @@ class SL_OpcionesResponsablesForm (forms.ModelForm):
         fields = '__all__'
         widgets = {}
         labels = {}
+
+class PreadmArchivosForm(forms.ModelForm):
+    class Meta:
+        model = PreadmArchivos
+        fields = ['fk_legajo', 'archivo']

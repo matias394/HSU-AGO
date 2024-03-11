@@ -13,12 +13,20 @@ urlpatterns = [
     path('SL/derivaciones/rechazo/<pk>', login_required(SLDerivacionesRechazo.as_view()), name='SL_derivaciones_rechazo'),
     # PreAdmisiones
     path('SL/preadmisiones/crear/<pk>', login_required(SLPreAdmisionesCreateView.as_view()), name='SL_preadmisiones_crear'),
+    #path('SL/preadmisiones/referentes/<pk>', login_required(SLPreAdmisionesReferentesCreateView.as_view()), name='SL_preadmisiones_referentes_crear'),
     path('SL/preadmisiones/editar/<pk>', login_required(SLPreAdmisionesUpdateView.as_view()), name='SL_preadmisiones_editar'),
     path('SL/preadmisiones/ver/<pk>', login_required(SLPreAdmisionesDetailView.as_view()), name='SL_preadmisiones_ver'),
     path('SL/preadmisiones/ver3/<pk>', login_required(SLPreAdmisiones3DetailView.as_view()), name='SL_preadmisiones_ver3'),
     path('SL/preadmisiones/listar', login_required(SLPreAdmisionesListView.as_view()), name='SL_preadmisiones_listar'),
     path('SL/preadmisiones/buscar', login_required(SLPreAdmisionesBuscarListView.as_view()), name='SL_preadmisiones_buscar'),
     path('SL/preadmisiones/eliminar/<pk>', login_required(SLPreAdmisionesDeleteView.as_view()), name='SL_preadmisiones_eliminar'),
+
+    # Preadmisiones Archivos
+    path('SL/preadmisiones/archivos/listar/<pk>', login_required(PreAdmArchivosListView.as_view()), name='preadmarchivos_listar'),
+    path('SL/preadmisiones/archivos/crear/<pk>', login_required(PreAdmArchivosCreateView.as_view()), name='preadmarchivos_crear'),
+    path('SL/preadmisiones/archivos/crear/ajax/', login_required(PreAdmCreateArchivo.as_view()), name='preadmarchivo_ajax_crear'),    
+    path('SL/preadmisiones/archivos/borrar/ajax/', login_required(PreAdmDeleteArchivo.as_view()), name='preadmarchivo_ajax_borrar'),
+    
     # Indice Ingreso
     path('SL/criterios_ingreso/crear', login_required(SLCriteriosIngresoCreateView.as_view()), name='SL_criterios_ingreso_crear'),
     path('SL/indice_ingreso/crear/<pk>', login_required(SLIndiceIngresoCreateView.as_view()), name='SL_indiceingreso_crear'),
