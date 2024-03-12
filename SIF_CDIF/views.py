@@ -847,6 +847,7 @@ class CDIFVacantesListView(PermisosMixin, ListView):
         organizaciones = Vacantes.objects.values_list('nombre', flat=True).distinct()
         data = []
 
+
         for organizacion in organizaciones:
             organizacion_data = {'organizacion': organizacion}
 
@@ -883,6 +884,8 @@ class CDIFVacantesListView(PermisosMixin, ListView):
             data.append(organizacion_data)
 
         return data
+    
+
     
     #def get_context_data(self, **kwargs):
     #    context = super().get_context_data(**kwargs)

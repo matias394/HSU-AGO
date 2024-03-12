@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'SIF_CDLE',
     'SIF_MILD',
     'SIF_PDV',
+    'MSM',
     'SIF_SL',
     'SIF_MA',
 ]

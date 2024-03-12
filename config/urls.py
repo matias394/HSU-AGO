@@ -21,9 +21,9 @@ urlpatterns = [
     path('', include('SIF_CDLE.urls')),
     path('', include('SIF_MILD.urls')),
     path('', include('SIF_PDV.urls')),
+    path('', include('MSM.urls')),
     path('', include('SIF_SL.urls')),
     path('', include('SIF_MA.urls')),
-    path('', include('MSM.urls')),
 
 ]
 

@@ -97,6 +97,59 @@
     </div>
   </div>
   <!-- ./Datos de los centros -->
+
+   <!-- Datos de los centros -->
+   <div class="col-12">
+    <div class="card card-primary card-outline">
+      <div class="card-header">
+        <h3 class="card-title">Detalle del Organismo</h3>
+      </div>
+      <div class="card-body p-0 m-0">
+        <div class="row p-2">
+            {% for organizacion in organizaciones %}
+          <div class="col-sm-4">
+            <a href="{% url 'CDIF_vacantes_ver' 1 %}">
+              <div class="card pb-0">
+                <div class="card-footer p-0">
+                  <ul class="list-unstyled flex-column my-2">
+                    <li class="mx-2">
+                      <span class="font-weight-bold">
+                        Nombre
+                        <span class="float-right pr-4">{{ organizacion.maniana3_tarde3_total }}</span>
+                      </span>
+                    </li>
+                    <li class="mx-2">
+                      <span class="font-weight-bold">
+                        Calle
+                        <span class="float-right pr-4">{{ organizacion.maniana3_tarde3_total }}</span>
+                      </span>
+                    </li>
+                    <li class="mx-2">
+                      <span class="font-weight-bold">
+                        Numero
+                        <span class="float-right pr-4">{{ organizacion.maniana2_tarde2_total }}</span>
+                      </span>
+                    </li>
+                    <li class="mx-2">
+                      <span class="font-weight-bold">
+                        Barrio
+                        <span class="float-right pr-4">{{ organizacion.manianabb_tardebb_total }}</span>
+                      </span>
+                    </li>
+
+                  </ul>
+                </div>
+              </div>
+            </a>
+        </div>
+        {% endfor %}
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ./Datos de los centros -->
 </div>
 {% endblock content %}
 
