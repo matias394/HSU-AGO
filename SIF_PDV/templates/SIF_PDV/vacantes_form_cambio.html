@@ -46,8 +46,6 @@ Vacantes
           <dt class="col-sm-7 mb-2">{{object.creado_por}}</dt>
           <dd class="col-sm-5 mb-2">Centro solicitado</dd>
           <dt class="col-sm-7 mb-2">{{object.fk_preadmi.centro_postula}}</dt>
-          <dd class="col-sm-5 mb-2">Sala solicitada</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.sala_postula}}</dt>
           <dd class="col-sm-5 mb-2">Turno solicitado</dd>
           <dt class="col-sm-7 mb-2">{{object.fk_preadmi.turno_postula}}</dt>
         </dl>
@@ -102,10 +100,10 @@ Vacantes
             <div class="col-sm-3 form-group">
                 {{ form.fk_organismo| as_crispy_field }}
             </div>
-
-            <div class="col-sm-2 form-group">
-                {{ form.sala| as_crispy_field }}
-            </div>
+           
+            <div class="col-sm-3 form-group">
+              {{ form.fk_organismo2| as_crispy_field }}
+          </div>
             <div class="col-sm-2 form-group">
               {{ form.turno| as_crispy_field }}
             </div>

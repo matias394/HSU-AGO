@@ -38,7 +38,7 @@ PDV Pre-admisiones
     {% endif %}
     {% if object.estado == 'Finalizada' %}
     {% if object.ivi == 'NO' %}
-    <a href="{% url 'PDV_indiceivi_crear' object.pk %}" class="btn btn-primary mr-1">Generar IVI</a>
+    <a href="{% url 'PDV_indiceivi_crear' object.pk %}" class="btn btn-primary mr-1">Generar índice</a>
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     {% endif %}
@@ -50,7 +50,7 @@ PDV Pre-admisiones
 
 
     <!-- Datos de Admisión -->
-    <div class="col-sm-3 pb-3">
+    <div class="col-sm-4 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
           <h3 class="card-title">Detalle pre-admisión</h3>  
@@ -69,9 +69,9 @@ PDV Pre-admisiones
             <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
             <dd class="col-sm-5 mb-2">Solicitud creada por</dd>
             <dt class="col-sm-7 mb-2">{{object.creado_por}}</dt>
-            <dd class="col-sm-5 mb-2">Centro solicitado</dd>
-            <dt class="col-sm-7 mb-2">{{object.centro_postula}}</dt>
             <dd class="col-sm-5 mb-2">Taller solicitado</dd>
+            <dt class="col-sm-7 mb-2">{{object.centro_postula}}</dt>
+            <dd class="col-sm-5 mb-2">Centro solicitado</dd>
             <dt class="col-sm-7 mb-2">{{object.taller_postula}}</dt>
             {% if object.modificado_por %}
             <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Modificado por {{object.modificado_por}} - {{object.modificado|date:'d/m/Y'}}</dd>
@@ -83,7 +83,7 @@ PDV Pre-admisiones
     <!-- /  -->
 
     <!-- Datos de legajo -->
-    <div class="col-sm-3 pb-3">
+    <div class="col-sm-4 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
           <h3 class="card-title">Detalle Legajo</h3>
@@ -110,7 +110,7 @@ PDV Pre-admisiones
     <!-- /  -->
 
     <!-- Detalle de Ingreso -->
-    <div class="col-sm-3 pb-3">
+    <div class="col-sm-4 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
           <h3 class="card-title">Detalle índice de ingreso</h3>
@@ -144,7 +144,7 @@ PDV Pre-admisiones
     </div>
     <!-- /  -->
 
-    <!-- Datos de Indice -->
+    <!-- Datos de Indice 
     <div class="col-sm-3 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
@@ -182,7 +182,7 @@ PDV Pre-admisiones
       </div>
     </div>
   </div>
-  <!-- /  -->
+ -->
 
   <!-- Datos grupo familiar -->
   <div class="col-12">

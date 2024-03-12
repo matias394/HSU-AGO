@@ -58,6 +58,7 @@ CDLE Pre-admisiones
         <div class="card-header">
           <h3 class="card-title">Detalle pre-admisión</h3>
           <div class="card-tools">
+            <a href="{% url 'CDLE_preadmisiones_ver2' object.pk %}" class="ml-3 mr-2">Ver detalle</a>
             <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
               <i class="fas fa-minus"></i>
             </button>
@@ -73,8 +74,8 @@ CDLE Pre-admisiones
             <dt class="col-sm-7 mb-2">{{object.creado_por}}</dt>
             <dd class="col-sm-5 mb-2">Acompañante</dd>
             <dt class="col-sm-7 mb-2">{{object.acompaniante}}</dt>
-            <dd class="col-sm-5 mb-2">Madrina</dd>
-            <dt class="col-sm-7 mb-2">{{object.madrina}}</dt>
+            {% comment %} <dd class="col-sm-5 mb-2">Madrina</dd>
+            <dt class="col-sm-7 mb-2">{{object.madrina}}</dt> {% endcomment %}
             {% if object.modificado_por %}
             <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Modificado por {{object.modificado_por}} - {{object.modificado|date:'d/m/Y'}}</dd>
             {% endif %}

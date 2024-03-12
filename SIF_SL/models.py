@@ -114,41 +114,14 @@ class SL_PreAdmision (models.Model):
     retomar_estudios_5 = models.BooleanField(verbose_name='Quiere retomar estudios', null=True, blank=True)
     aprender_oficio_5 = models.BooleanField(verbose_name='Quiere aprender un oficio', null=True, blank=True)
     programa_Pilares_5 = models.BooleanField(verbose_name='Quiere participar del Programa Pilares', null=True, blank=True)
+
+    expediente_nro = models.CharField(max_length=150, null=False, blank=False, verbose_name='Número de expediente', default=".")
+    tipo_organismo =  models.CharField(max_length=150, choices=CHOICE_TIPO_ORGANISMO, null=True, blank=True, verbose_name='Tipo de organismo')
+    vulneracion = models.CharField(max_length=150, choices=CHOICE_VULNERACION, null=True, blank=True, verbose_name='Vulneración')
+    obs_vulneracion = models.CharField(max_length=800, null=True, blank=True, verbose_name='Observaciones de vulneración')
+    dinamica_familiar = models.CharField(max_length=800, null=True, blank=True, verbose_name='Dinamica familiar')
     
-    test_embarazo =  models.BooleanField(verbose_name='¿Te hiciste test de embarazo?', null=True, blank=True)
-    fum =  models.DateField(verbose_name='Fecha última mestruación', null=True, blank=True)
-    sem_embarazo = models.IntegerField(choices=CHOICE_1to40, null=True, blank=True, verbose_name='Semanas de embarazo')
-    fpp =  models.DateField(verbose_name='FPP', null=True, blank=True)
-    centro_controla = models.CharField(max_length=250, verbose_name='Centro de salud que se controla o controlará', null=True, blank=True, choices=CHOICE_CENTRO_CONTROL)
-    primer_control = models.IntegerField(choices=CHOICE_4to40, null=True, blank=True, verbose_name='¿Semana del primer control?')
-    primer_embarazo = models.BooleanField(verbose_name='¿Es tu primer embarazo?', null=True, blank=True)
-    libreta_sanitaria = models.BooleanField(verbose_name='¿Tiene libreta sanitaria?', null=True, blank=True)
-    metodos_anticonceptivos = models.BooleanField(verbose_name='¿Conoces los métodos anticonceptivos?', null=True, blank=True)
-    cuales_met_anticon_conoces = models.CharField(max_length=250, verbose_name='¿Cuáles conoces?', null=True, blank=True, choices=CHOICE_METODOS_ANTICONCEPTIVOS)
-    utilizabas_alguno = models.BooleanField(verbose_name='¿Utilizabas alguno cuando quedaste embarazada?', null=True, blank=True)
-    cual_usabas = models.CharField(max_length=250, verbose_name='¿Cual usabas?', null=True, blank=True, choices=CHOICE_METODOS_ANTICONCEPTIVOS)
-    sifilis_anterior = models.BooleanField(verbose_name='¿Tuviste sifilis en embarazos anteriores?', null=True, blank=True)
-    sifilis_ahora = models.BooleanField(verbose_name='¿Tenes sifilis actualmente?', null=True, blank=True)
-    sifilis_tratamiento_pareja = models.BooleanField(verbose_name='En caso de haber tenido o tener sifilis: ¿Tu pareja hizo el tratamiento?', null=True, blank=True)
-    consumio_drogas = models.BooleanField(verbose_name='¿Alguna vez consumió drogas?', null=True, blank=True)
-    drogas_ahora = models.BooleanField(verbose_name='¿Consume drogas actualmente?', null=True, blank=True)
-    alcohol_ahora = models.BooleanField(verbose_name='¿Consume alcohol actualmente?', null=True, blank=True)
-    sospecha_consumo = models.BooleanField(verbose_name='Sospecha de consumo', null=True, blank=True)
     
-    embarazo_controlado = models.CharField(max_length=250, verbose_name='Embarazo controlado', null=True, blank=True, choices=CHOICE_EMBARAZO_CONTROLADO)
-    comienza_control = models.BooleanField(verbose_name='¿Comienza control en operativo?', null=True, blank=True)
-    prim_trim_control_obstetra = models.BooleanField(verbose_name='Al menos 1 control con la obstetra', null=True, blank=True)
-    prim_trim_estudios_labo = models.BooleanField(verbose_name='Laboratorio- Rutina 1er trimestre', null=True, blank=True)
-    prim_trim_estudios_eco = models.BooleanField(verbose_name='Ecografía', null=True, blank=True)
-    prim_trim_estudios_pap = models.BooleanField(verbose_name='PAP', null=True, blank=True)
-    prim_trim_estudios_grupo_factor = models.BooleanField(verbose_name='Grupo y Factor', null=True, blank=True)
-    prim_trim_control_odonto = models.BooleanField(verbose_name='Control odontologico', null=True, blank=True)
-    seg_trim_control_obsetra = models.BooleanField(verbose_name='Al menos 2 controles con la obstetra', null=True, blank=True)
-    seg_trim_control_fetal = models.BooleanField(verbose_name='Scan fetal', null=True, blank=True)
-    seg_trim_p75 = models.BooleanField(verbose_name='P75', null=True, blank=True)
-    ter_trim_control_rutina = models.BooleanField(verbose_name='Ecografía, hisopado vaginal y laboratorio', null=True, blank=True)
-    ter_trim_monitoreo_fetal = models.BooleanField(verbose_name='Monitoreo fetal', null=True, blank=True)
-    ter_trim_electro_cardio = models.BooleanField(verbose_name='Electro cardiograma', null=True, blank=True)
     acompaniante = models.ForeignKey(Usuarios, related_name='SL_Acompaniante', on_delete=models.CASCADE, blank=True, null=True)
     madrina = models.ForeignKey(AgentesExternos, related_name='SL_Madrina', on_delete=models.CASCADE, blank=True, null=True)
     vinculo1 = models.CharField(max_length=150, null=True, blank=True)
@@ -275,3 +248,18 @@ class SL_Historial(models.Model):
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     creado_por = models.ForeignKey(Usuarios, on_delete=models.CASCADE, null=True, blank=True)
 
+class PreadmArchivos(models.Model):
+
+    """
+
+    Archivos asociados a una preadmision. En la view se separaran los archivos de imagen de los documentos (para mostrar los primeros enun carousel)
+
+    """
+
+    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE)
+    archivo = models.FileField(upload_to='SIF_SL/archivos/')
+    fecha = models.DateTimeField(auto_now_add=True)
+    tipo = models.CharField(max_length=12)
+    
+    def __str__(self):
+        return f"Archivo {self.id} del legajo {self.fk_legajo}"

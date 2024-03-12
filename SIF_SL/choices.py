@@ -1,14 +1,16 @@
 # ---------- CHOICES---------------------
 CHOICE_TIPO_ORGANISMO = [
     (None, ''),
-    ('Hospital', 'Hospital'),
-    ('CAP', 'CAP'),
-    ('Escuela', 'Escuela'),
-    ('Club Barrial', 'Club Barrial'),
-    ('ONG/Agrupación Comunitaria', 'ONG/Agrupación Comunitaria'),
-    ('Organismo Municipal', 'Organismo Municipal'),
-    ('Organismo Provincial', 'Organismo Provincial'),
-    ('Organismo Nacional', 'Organismo Nacional'),
+    ('Admisión', 'Admisión'),
+    ('Comisaria', 'Comisaria'),
+    ('Institucional', 'Institucional'),
+    ('Salud', 'Salud'),
+    ('U.F.I.s', 'U.F.I.s'),
+    ('Escuelas', 'Escuelas'),
+    ('Zonal', 'Zonal'),
+    ('Oficios judiciales', 'Oficios judiciales'),
+    ('Politicas de genero', 'Politicas de genero'),
+    ('Expediente civil', 'Expediente civil'),
 ]
 
 CHOICE_JURISDICCION = [
@@ -226,44 +228,20 @@ CHOICE_1to40=[(i, str(i)) for i in range(1, 41)]
 
 CHOICE_4to40=[(i, str(i)) for i in range(4, 41)]
 
-CHOICE_CENTRO_CONTROL=[
-    ('20_de_Julio', '20 de Julio'),
-    ('29_de_Septiembre', '29 de Septiembre'),
-    ('Ana_Teresa_Barthalot', 'Ana Teresa Barthalot'),
-    ('C_1_C_Maria_Lobato', 'C.1.C. «Maria Lobato»'),
-    ('Camila_Rolen', 'Camila Rolén'),
-    ('Candido_Castello', 'Candido Castello'),
-    ('Rodolfo_Podesta', 'Rodolfo Podesta'),
-    ('Cura_Brochero', 'Cura Brochero'),
-    ('Alberto_Sabin', 'Alberto Sabin'),
-    ('Federico_Leloir', 'Federico Leloir'),
-    ('Suarez_Paris', 'Suarez Paris'),
-    ('Ratil_Matera', 'Ratil Matera'),
-    ('Rene_Favaloro', 'René Favaloro'),
-    ('Marta_Antoniazzi', 'Marta Antoniazzi'),
-    ('Padre_Mora', 'Padre Mora'),
-    ('Pte_Peren', 'Pte. Perén'),
-    ('Ramen_Carrillo', 'Ramén Carrillo'),
-    ('San_Miguel_Oeste', 'San Miguel Oeste'),
-    ('UF0_Manuelita', 'U.F.0 (Manuelita)'),
-    ('Hospital_Larcade', 'Hospital Larcade'),
-    ('Privado', 'Privado'),
-    ('Extrapartidario', 'Extrapartidario'),
-]
-
-CHOICE_METODOS_ANTICONCEPTIVOS = [
-    ('Preservativo', 'Preservativo'),
-    ('Inyectable', 'Inyectable'),
-    ('Implante_Anticonceptivo', 'Implante Anticonceptivo'),
-    ('DIU', 'DIU'),
-    ('Parche_Anticonceptivo', 'Parche Anticonceptivo'),
-    ('Anticonceptivo_Oral', 'Anticonceptivo Oral'),
-    ('Ligadura_Tubaria', 'Ligadura Tubaria'),
-    ('Ninguno', 'Ninguno'),
-]
-
-CHOICE_EMBARAZO_CONTROLADO = [
-    ('Si', 'Si'),
-    ('No', 'No'),
-    ('Insuficiente', 'Insuficiente'),
+CHOICE_VULNERACION=[
+    (None, ''),
+    ('ASI', 'ASI'),
+    ('Violencia/negligencia', 'Violencia/negligencia'),
+    ('Maltrato infantil', 'Maltrato infantil'),
+    ('Incump. D. D. Asistencia', 'Incump. D. D. Asistencia'),
+    ('Situación de calle', 'Situación de calle'),
+    ('Riesgo habitacional/salud/alimenticio', 'Riesgo habitacional/salud/alimenticio'),
+    ('Fuga de hogar', 'Fuga de hogar'),
+    ('Adolescente en riesgo (embarazo/aborto)', 'Adolescente en riesgo (embarazo/aborto)'),
+    ('Riesgo escolar', 'Riesgo escolar'),
+    ('Conflictos con la ley', 'Conflictos con la ley'),
+    ('Adicciones', 'Adicciones'),
+    ('Niño en riesgo', 'Niño en riesgo'),
+    ('Filiación y guardia', 'Filiación y guardia'),
+    ('Otros', 'Otros'),
 ]
