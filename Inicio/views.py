@@ -192,6 +192,15 @@ def contar_alarmas_activas():
     
     return cantidad_alarmas_activas
 
+def contar_legajos_con_alarmas_activas():
+    # Obtener los IDs de los legajos con al menos una alerta crítica
+    legajos_con_alarmas_activas_ids = LegajoAlertas.objects.filter(fk_alerta__gravedad='Critica').values_list('fk_legajo_id', flat=True).distinct().count()
+    
+    # Contar la cantidad de legajos
+    cantidad_legajos_con_alarmas_activas = (legajos_con_alarmas_activas_ids)
+    
+    return cantidad_legajos_con_alarmas_activas
+
 def contar_legajos_con_planes_sociales():
     # Utiliza una subconsulta para contar los Legajos con planes sociales a través de DimensionEconomia
     cantidad = Legajos.objects.filter(dimensioneconomia__m2m_planes__isnull=False).distinct().count()
@@ -265,6 +274,8 @@ class DashboardView(TemplateView):
         cantidad_adolescente_sin_derivacion_aceptada = contar_adolescente_sin_derivacion_aceptada()
         embarazos_sin_derivacion_aceptada = contar_embarazos_sin_derivacion_aceptada()
         cantidad_embarazos_en_riesgo = contar_embarazos_en_riesgo()
+        cantidad_legajos_con_alarmas_activas = contar_legajos_con_alarmas_activas()
+        
         # Filtrar las alertas con gravedad "Critica" y estado "alarmas_activas"
         cantidad_alarmas_activas = Alertas.objects.filter(gravedad='Critica').count()
 
@@ -298,6 +309,7 @@ class DashboardView(TemplateView):
         context['cantidad_adolescente_sin_derivacion_aceptada'] = cantidad_adolescente_sin_derivacion_aceptada
         context['embarazos_sin_derivacion_aceptada'] = embarazos_sin_derivacion_aceptada
         context['cantidad_embarazos_en_riesgo'] = cantidad_embarazos_en_riesgo
+        context['cantidad_legajos_con_alarmas_activas'] = cantidad_legajos_con_alarmas_activas
 
 
         return context
