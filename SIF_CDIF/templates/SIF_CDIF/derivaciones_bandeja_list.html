@@ -62,23 +62,14 @@
     <div class="card card-primary card-outline">
       <div class="card-header mt-2">
         <h3 class="card-title">Bandeja de derivaciones</h3>
-        <div class="card-tools">
-          <div class="input-group input-group-sm">
-            <input type="text" class="form-control" placeholder="Buscar">
-            <div class="input-group-append">
-              <div class="btn btn-primary">
-                <i class="fas fa-search"></i>
-              </div>
-            </div>
-          </div>
-        </div>
+        
       </div>
 
       <div class="card-body p-0">
         <div class="mailbox-controls">
         </div>
         <div class="table-responsive mailbox-messages">
-          <table class="table table-hover table-striped table-sm" id="tabla-derivaciones">
+          <table class="table table-hover table-striped table-sm projects tabladt2" id="tabla-derivaciones">
             <thead>
               <tr>
                 <td>Fecha</td>
@@ -147,9 +138,7 @@
   </div>
 
 </div>
-{% endblock content %}
 
-{% block customJS %}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   $(document).ready(function () {
@@ -176,5 +165,7 @@
     });
   });
 </script>
+{% endblock content %}
 
+{% block customJS %}
 {% endblock %}
