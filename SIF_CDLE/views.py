@@ -493,6 +493,7 @@ class CDLEIndiceIngresoDetailView(PermisosMixin, DetailView):
         criterio = CDLE_IndiceIngreso.objects.filter(fk_preadmi_id=pk, tipo="Ingreso")
         object = CDLE_PreAdmision.objects.filter(pk=pk).first()
         foto_ingreso = CDLE_Foto_Ingreso.objects.filter(fk_preadmi_id=pk, tipo="Ingreso").first()
+        
 
         context["object"] = object
         context["foto_ingreso"] = foto_ingreso
@@ -504,6 +505,7 @@ class CDLEIndiceIngresoDetailView(PermisosMixin, DetailView):
         context["mod_puntaje"] = criterio.filter(fk_criterios_ingreso__modificable='SI').aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ingreso__tipo='Ajustes').count()
         #context['maximo'] = foto_ingreso.puntaje_max
+       
         return context
     
 #--------- CREAR IVI -------------------------------------
