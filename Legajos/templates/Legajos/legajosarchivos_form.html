@@ -167,7 +167,7 @@ Legajos
                                                 <button type="submit" class="btn btn-primary col start">
                                                     <span class="pl-1">Agregar todos</span>
                                                 </button>
-                                                <button type="reset" class="btn btn-secondary col cancel">
+                                                <button type="remove" class="btn btn-secondary col cancel">
                                                     <span class="pl-1">Cancelar todos</span>
                                                 </button>
                                             </div>
@@ -259,7 +259,7 @@ Legajos
     function deleteArchivo(id) {
         $.ajax({
 
-            // Función Ajax para eliminar la archivos
+            // Función Ajax para eliminar los archivos
             url: '{% url "archivo_ajax_borrar" %}',
             data: {
                 'id': id,

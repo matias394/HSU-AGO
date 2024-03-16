@@ -172,6 +172,7 @@ class CDIF_Vacantes(models.Model):
     fk_derivacion = models.ForeignKey(CDIF_PreAdmision, on_delete=models.CASCADE, null=True, blank=True)
     fk_vacantes = models.ForeignKey(Vacantes, on_delete=models.CASCADE, null=True, blank=True)
     organizacion = models.CharField(max_length=100)
+    fk_organismo = models.ForeignKey(Organismos, on_delete=models.CASCADE, null=True, blank=True)  # Nueva línea
     sala = models.CharField(max_length=100)
     estado = models.CharField(max_length=100)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
