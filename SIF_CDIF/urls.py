@@ -41,7 +41,7 @@ urlpatterns = [
     path('CDIF/intervenciones/crear/<pk>', login_required(CDIFIntervencionesCreateView.as_view()), name='CDIF_intervenciones_crear'),
     path('CDIF/intervenciones/ver/<pk>', login_required(CDIFIntervencionesLegajosListView.as_view()), name='CDIF_intervenciones_legajos_listar'),
     path('CDIF/intervenciones/listar/', login_required(CDIFIntervencionesListView.as_view()), name='CDIF_intervenciones_listar'),
-    path('CDIF/intervencion/ver/<pk>', login_required(CDIFIntervencionesDetail.as_view()), name='CDIF_intervencion_ver'),
+    path('CDIF/intervenciones/ver/<pk>', login_required(CDIFIntervencionesDetail.as_view()), name='CDIF_intervencion_ver'),
     path('CDIF/intervenciones/editar/<pk>', login_required(CDIFIntervencionesUpdateView.as_view()), name='CDIF_intervencion_editar'),
     path('CDIF/intervenciones/borrar/<pk>', login_required(CDIFIntervencionesDeleteView.as_view()), name='CDIF_intervencion_borrar'),
 
