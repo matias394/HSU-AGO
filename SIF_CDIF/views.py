@@ -901,7 +901,8 @@ class CDIFVacantesListView(PermisosMixin, ListView):
                                  'organismo': organizacion.fk_organismo.nombre,
                                  'calle' :organizacion.fk_organismo.calle,
                                  'numero' :organizacion.fk_organismo.altura,
-                                 'barrio' :organizacion.fk_organismo.barrio 
+                                 'barrio' :organizacion.fk_organismo.barrio,
+                                 'id' : organizacion.pk
                                 }  
 
             # Calcular la cantidad de vacantes por sala agrupadas (tu lógica actual aquí)

@@ -111,7 +111,48 @@ CDIF Pre-admisiones
     </div>
     <!-- /  -->
 
-    <!-- Datos de Indice -->
+    <!-- Datos de Admisión -->
+    <div class="col-sm-4 pb-3">
+      <div class="card card-outline card-primary h-100 mb-0">
+        <div class="card-header">
+          <h3 class="card-title">Detalle IVI de ingreso</h3>
+          <div class="card-tools">
+            <a href="{% url 'CDIF_preadmisiones_ver2' object.pk %}" class="ml-3 mr-2">Ver detalle</a>
+            <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body pb-1">
+          <dl class="row mb-0">
+            <dd class="col-sm-5 mb-2">Puntaje</dd>
+            <dt class="col-sm-7 mb-2"><span class="badge {% if object.estado == 'Finalizada' %}badge-success{% else %}badge-warning{% endif %}">{{ object.estado }}</span></dt>
+            {% if resultado %}
+            {% for r in resultado %}
+            <dd class="col-sm-5 mb-2">Fecha de solicitud</dd>
+            <dt class="col-sm-7 mb-2">{{ r.creado|date:"d/m/Y" }}</dt>
+            {% endfor %}
+            {% else %}
+            <h6>Sin índices.</h6>
+            {% endif %}
+            <dd class="col-sm-5 mb-2">Puntaje maximo posible</dd>
+            <dt class="col-sm-7 mb-2">{{foto_ivi.puntaje}}</dt>
+            <dd class="col-sm-5 mb-2">Criterios presentes</dd>
+            <dt class="col-sm-7 mb-2">{{cantidad}}</dt>
+            <dd class="col-sm-5 mb-2">Criterios modificables</dd>
+            <dt class="col-sm-7 mb-2">{{modificables}}</dt>
+            <dd class="col-sm-5 mb-2">Puntaje modificable</dd>
+            <dt class="col-sm-7 mb-2">{{object.turno_postula}}</dt>
+            {% if object.modificado_por %}
+            <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Modificado por {{object.modificado_por}} - {{object.modificado|date:'d/m/Y'}}</dd>
+            {% endif %}
+          </dl>
+        </div>
+      </div>
+    </div>
+    <!-- /  -->
+
+    <!-- 
     <div class="col-sm-4 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
@@ -149,7 +190,7 @@ CDIF Pre-admisiones
       </div>
     </div>
   </div>
-  <!-- /  -->
+  -->
 
   <!-- Datos grupo familiar -->
   <div class="col-12">
