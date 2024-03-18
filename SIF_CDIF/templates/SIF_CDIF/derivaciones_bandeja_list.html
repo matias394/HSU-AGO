@@ -62,14 +62,25 @@
     <div class="card card-primary card-outline">
       <div class="card-header mt-2">
         <h3 class="card-title">Bandeja de derivaciones</h3>
-        
+        <div class="card-tools">
+          <form method="GET">
+          <div class="input-group input-group-sm">
+            <input type="text" class="form-control" placeholder="Buscar" name="busqueda">
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-lg btn-primary">
+                <i class="fa fa-search"></i>
+            </button>
+            </div>
+          </div>
+        </form>
+        </div>
       </div>
 
       <div class="card-body p-0">
         <div class="mailbox-controls">
         </div>
         <div class="table-responsive mailbox-messages">
-          <table class="table table-hover table-striped table-sm projects tabladt2" id="tabla-derivaciones">
+          <table class="table table-hover table-striped table-sm" id="tabla-derivaciones">
             <thead>
               <tr>
                 <td>Fecha</td>
@@ -139,7 +150,7 @@
 
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   $(document).ready(function () {
     // Agregar un evento de clic a cada elemento del menú
@@ -164,7 +175,7 @@
       }
     });
   });
-</script>
+</script>-->
 {% endblock content %}
 
 {% block customJS %}

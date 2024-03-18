@@ -124,6 +124,7 @@ CDLE Pre-admisiones
           </div>
         </div>
         <div class="card-body">
+          {% if criterios_total %}
           <dl class="row mb-0">
             <dd class="col-sm-8 mb-2">Cantidad total de criterios</dd>
             <dt class="col-sm-4 mb-2"><span class="badge badge-warning float-center">{{ criterios_total }}</span></dt>
@@ -134,6 +135,9 @@ CDLE Pre-admisiones
             <dd class="col-sm-8 mb-2">Criterios combinables presentes</dd>
             <dt class="col-sm-4 mb-2">{{ cant_combinables }}</dt>
           </dl>
+          {% else %}
+          <h6>Sin índices.</h6>
+          {% endif %}
         </div>
       </div>
     </div>
