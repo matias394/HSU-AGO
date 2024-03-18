@@ -234,3 +234,11 @@ CRISPY_CLASS_CONVERTERS = {
     'dateinput': "form-control",
     'fileinput': "custom-file-input",
 }
+
+# PROGRAMAS VARIABLES GLOBALES
+PROG_MILD = 24
+PROG_CDIF = 23
+PROG_CDLE = 25
+PROG_PDV = 26
+PROG_MA = 30
+PROG_SL = 21

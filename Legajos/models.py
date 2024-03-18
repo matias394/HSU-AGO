@@ -18,8 +18,8 @@ class Legajos(models.Model):
     apellido = models.CharField(max_length=250)
     nombre = models.CharField(max_length=250)
     fecha_nacimiento = models.DateField()
-    tipo_doc = models.CharField(max_length=50, choices=CHOICE_TIPO_DOC, verbose_name="Tipo documento")
-    documento = models.PositiveIntegerField(validators=[MinValueValidator(3000000), MaxValueValidator(100000000)])
+    tipo_doc = models.CharField(max_length=50, choices=CHOICE_TIPO_DOC, verbose_name="Tipo documento", null=True, blank=True)
+    documento = models.PositiveIntegerField(validators=[MinValueValidator(3000000), MaxValueValidator(100000000)], null=True, blank=True)
     sexo = models.CharField(max_length=50, choices=CHOICE_SEXO)
     nacionalidad = models.CharField(max_length=50, choices=CHOICE_NACIONALIDAD, null=True, blank=True)
     estado_civil = models.CharField(max_length=50, choices=CHOICE_ESTADO_CIVIL, null=True, blank=True)
@@ -45,7 +45,7 @@ class Legajos(models.Model):
         return f"{self.apellido}, {self.nombre}"
 
     def validate_unique(self, exclude=None):
-        qs = Legajos.objects.filter(tipo_doc=self.tipo_doc, documento=self.documento)
+        qs = Legajos.objects.filter(tipo_doc=self.tipo_doc, documento=self.documento, apellido=self.apellido, nombre=self.nombre, fecha_nacimiento=self.fecha_nacimiento)
 
         if self.pk:
             qs = qs.exclude(pk=self.pk)

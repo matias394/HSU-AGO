@@ -8,7 +8,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class LegajosForm(forms.ModelForm):
     foto = forms.ImageField(required=False, label="Foto Legajo", validators=[MaxSizeFileValidator(max_file_size=2)])
     documento = forms.IntegerField(
-        required=True,
+        required=False,
         validators=[MinValueValidator(3000000), MaxValueValidator(100000000)],
         widget=forms.NumberInput(),
     )
@@ -17,10 +17,12 @@ class LegajosForm(forms.ModelForm):
         cleaned_data = super().clean()
         tipo_doc = cleaned_data.get('tipo_doc')
         documento = cleaned_data.get('documento')
+        apellido = cleaned_data.get('apellido')
+        nombre = cleaned_data.get('nombre')
         fecha_nacimiento = cleaned_data.get('fecha_nacimiento')
 
         # Validación de campo unico, combinación de DNI + Tipo DNI
-        if tipo_doc and documento and Legajos.objects.filter(tipo_doc=tipo_doc, documento=documento).exists():
+        if tipo_doc and documento and fecha_nacimiento and apellido and nombre and Legajos.objects.filter(tipo_doc=tipo_doc, documento=documento, apellido=apellido, nombre=nombre, fecha_nacimiento=fecha_nacimiento).exists():
             self.add_error('documento', "Ya existe un legajo con ese TIPO y NÚMERO de documento.")
         # validación de fecha de nacimiento
         if fecha_nacimiento and fecha_nacimiento > date.today():
@@ -45,7 +47,7 @@ class LegajosForm(forms.ModelForm):
 class LegajosUpdateForm(forms.ModelForm):
     foto = forms.ImageField(required=False, label="Foto Legajo", validators=[MaxSizeFileValidator(max_file_size=2)])
     documento = forms.IntegerField(
-        required=True,
+        required=False,
         validators=[MinValueValidator(3000000), MaxValueValidator(100000000)],
         widget=forms.NumberInput(),
     )
@@ -95,7 +97,7 @@ class NuevoLegajoFamiliarForm(forms.ModelForm):
     conviven = forms.ChoiceField(choices=CHOICE_SINO, required=True)
     cuidador_principal = forms.ChoiceField(choices=CHOICE_SINO, required=True)
     documento = forms.IntegerField(
-        required=True,
+        required=False,
         validators=[MinValueValidator(3000000), MaxValueValidator(100000000)],
         widget=forms.NumberInput(),
     )

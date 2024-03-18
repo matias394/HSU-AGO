@@ -63,14 +63,16 @@
       <div class="card-header mt-2">
         <h3 class="card-title">Bandeja de derivaciones</h3>
         <div class="card-tools">
+          <form method="GET">
           <div class="input-group input-group-sm">
-            <input type="text" class="form-control" placeholder="Buscar">
+            <input type="text" class="form-control" placeholder="Buscar" name="busqueda">
             <div class="input-group-append">
-              <div class="btn btn-primary">
-                <i class="fas fa-search"></i>
-              </div>
+              <button type="submit" class="btn btn-lg btn-primary">
+                <i class="fa fa-search"></i>
+            </button>
             </div>
           </div>
+        </form>
         </div>
       </div>
 
@@ -147,10 +149,8 @@
   </div>
 
 </div>
-{% endblock content %}
 
-{% block customJS %}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   $(document).ready(function () {
     // Agregar un evento de clic a cada elemento del menú
@@ -175,6 +175,8 @@
       }
     });
   });
-</script>
+</script>-->
+{% endblock content %}
 
+{% block customJS %}
 {% endblock %}
