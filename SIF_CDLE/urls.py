@@ -42,7 +42,7 @@ urlpatterns = [
     path('CDLE/intervenciones/crear/<pk>', login_required(CDLEIntervencionesCreateView.as_view()), name='CDLE_intervenciones_crear'),
     path('CDLE/intervenciones/ver/<pk>', login_required(CDLEIntervencionesLegajosListView.as_view()), name='CDLE_intervenciones_legajos_listar'),
     path('CDLE/intervenciones/listar/', login_required(CDLEIntervencionesListView.as_view()), name='CDLE_intervenciones_listar'),
-    path('CDLE/intervencion/ver/<pk>', login_required(CDLEIntervencionesDetail.as_view()), name='CDLE_intervencion_ver'),
+    path('CDLE/intervenciones/ver/<pk>', login_required(CDLEIntervencionesDetail.as_view()), name='CDLE_intervencion_ver'),
     path('CDLE/intervenciones/editar/<pk>', login_required(CDLEIntervencionesUpdateView.as_view()), name='CDLE_intervencion_editar'),
     path('CDLE/intervenciones/borrar/<pk>', login_required(CDLEIntervencionesDeleteView.as_view()), name='CDLE_intervencion_borrar'),
 
