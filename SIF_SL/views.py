@@ -12,6 +12,7 @@ from django.db.models import Sum, F, ExpressionWrapper, IntegerField, Count, Max
 import uuid
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
+from django.conf import settings
 
 
 # # Create your views here.
@@ -52,12 +53,21 @@ class SLDerivacionesBuscarListView(TemplateView, PermisosMixin):
 class SLDerivacionesListView(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_SL/derivaciones_bandeja_list.html"
-    queryset = LegajosDerivaciones.objects.filter(fk_programa=21)
+    queryset = LegajosDerivaciones.objects.filter(fk_programa=settings.PROG_SL)
 
     def get_context_data(self, **kwargs):
         context = super(SLDerivacionesListView, self).get_context_data(**kwargs)
 
-        model = LegajosDerivaciones.objects.filter(fk_programa=21)
+        model = self.queryset
+
+        query = self.request.GET.get("busqueda")
+
+        if query:
+            object_list = LegajosDerivaciones.objects.filter((Q(fk_legajo__apellido__iexact=query) | Q(fk_legajo__nombre__iexact=query)) & Q(fk_programa=settings.PROG_SL)).distinct()
+            context["object_list"] = object_list
+            model = object_list
+            if not object_list:
+                messages.warning(self.request, ("La búsqueda no arrojó resultados."))
 
         context["todas"] = model
         context["pendientes"] = model.filter(estado="Pendiente")
@@ -74,7 +84,7 @@ class SLDerivacionesDetailView(PermisosMixin, DetailView):
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
-        legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=21).first()
+        legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=settings.PROG_SL).first()
         ivi = SL_IndiceIVI.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
         resultado = ivi.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ivi__puntaje')).order_by('-creado')
         context["pk"] = pk
@@ -90,7 +100,7 @@ class SLDerivacionesRechazo(PermisosMixin, CreateView):
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
-        legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=21).first()
+        legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=settings.PROG_SL).first()
         context["object"] = legajo
         return context
     

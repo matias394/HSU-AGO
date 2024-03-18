@@ -12,6 +12,7 @@ from django.db.models import Sum, F, ExpressionWrapper, IntegerField, Count, Max
 import uuid
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.conf import settings
 
 
 # # Create your views here.
@@ -52,12 +53,21 @@ class CDIFDerivacionesBuscarListView(TemplateView, PermisosMixin):
 class CDIFDerivacionesListView(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_CDIF/derivaciones_bandeja_list.html"
-    queryset = LegajosDerivaciones.objects.filter(fk_programa=23)
+    queryset = LegajosDerivaciones.objects.filter(fk_programa=settings.PROG_CDIF)
 
     def get_context_data(self, **kwargs):
         context = super(CDIFDerivacionesListView, self).get_context_data(**kwargs)
 
-        model = LegajosDerivaciones.objects.filter(fk_programa=23)
+        model = self.queryset
+
+        query = self.request.GET.get("busqueda")
+
+        if query:
+            object_list = LegajosDerivaciones.objects.filter((Q(fk_legajo__apellido__iexact=query) | Q(fk_legajo__nombre__iexact=query)) & Q(fk_programa=settings.PROG_CDIF)).distinct()
+            context["object_list"] = object_list
+            model = object_list
+            if not object_list:
+                messages.warning(self.request, ("La búsqueda no arrojó resultados."))
 
         context["todas"] = model
         context["pendientes"] = model.filter(estado="Pendiente")
@@ -74,7 +84,7 @@ class CDIFDerivacionesDetailView(PermisosMixin, DetailView):
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
-        legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=23).first()
+        legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=settings.PROG_CDIF).first()
         ivi = CDIF_IndiceIVI.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
         resultado = ivi.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ivi__puntaje')).order_by('-creado')
         context["pk"] = pk
@@ -90,7 +100,7 @@ class CDIFDerivacionesRechazo(PermisosMixin, CreateView):
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
-        legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=23).first()
+        legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=settings.PROG_CDIF).first()
         context["object"] = legajo
         return context
     
@@ -149,7 +159,7 @@ class CDIFPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
         legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
-        centros = Vacantes.objects.filter(fk_programa_id=23)
+        centros = Vacantes.objects.filter(fk_programa_id=settings.PROG_CDIF)
         context["pk"] = pk
         context["legajo"] = legajo
         context["familia"] = familia
@@ -213,7 +223,7 @@ class CDIFPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin)
         legajo = LegajosDerivaciones.objects.filter(pk=pk.fk_derivacion_id).first()
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
-        centros = Vacantes.objects.filter(fk_programa_id=23)
+        centros = Vacantes.objects.filter(fk_programa_id=settings.PROG_CDIF)
 
         context["pk"] = pk.fk_derivacion_id
         context["legajo"] = legajo
@@ -312,7 +322,7 @@ class CDIFPreAdmisionesBuscarListView(PermisosMixin, TemplateView):
         mostrar_btn_resetear = False
         query = self.request.GET.get("busqueda")
         if query:
-            object_list = CDIF_PreAdmision.objects.filter(Q(fk_legajo__apellido__iexact=query) | Q(fk_legajo__documento__iexact=query), fk_derivacion__fk_programa_id=23).exclude(estado__in=['Rechazada','Aceptada']).distinct()
+            object_list = CDIF_PreAdmision.objects.filter(Q(fk_legajo__apellido__iexact=query) | Q(fk_legajo__documento__iexact=query), fk_derivacion__fk_programa_id=settings.PROG_CDIF).exclude(estado__in=['Rechazada','Aceptada']).distinct()
             #object_list = Legajos.objects.filter(Q(apellido__iexact=query) | Q(documento__iexact=query))
             if not object_list:
                 messages.warning(self.request, ("La búsqueda no arrojó resultados."))
@@ -893,7 +903,7 @@ class CDIFVacantesListView(PermisosMixin, ListView):
     context_object_name = 'organizaciones'
     
     def get_queryset(self):
-        organizaciones = Vacantes.objects.filter(fk_programa=23)
+        organizaciones = Vacantes.objects.filter(fk_programa=settings.PROG_CDIF)
         data = []
 
         for organizacion in organizaciones:
@@ -1147,7 +1157,7 @@ class CDIFAdmisionesBuscarListView(PermisosMixin, TemplateView):
         mostrar_btn_resetear = False
         query = self.request.GET.get("busqueda")
         if query:
-            object_list = CDIF_Admision.objects.filter(Q(fk_preadmi__fk_legajo__apellido__iexact=query) | Q(fk_preadmi__fk_legajo__documento__iexact=query), fk_preadmi__fk_derivacion__fk_programa_id=23).exclude(estado__in=['Rechazada','Aceptada']).distinct()
+            object_list = CDIF_Admision.objects.filter(Q(fk_preadmi__fk_legajo__apellido__iexact=query) | Q(fk_preadmi__fk_legajo__documento__iexact=query), fk_preadmi__fk_derivacion__fk_programa_id=settings.PROG_CDIF).exclude(estado__in=['Rechazada','Aceptada']).distinct()
             if not object_list:
                 messages.warning(self.request, ("La búsqueda no arrojó resultados."))
 
