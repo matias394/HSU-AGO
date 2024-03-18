@@ -108,6 +108,9 @@ class LegajosDetailView(DetailView):
 
         count_intervenciones = LegajosDerivaciones.objects.filter(fk_legajo_id=pk).count()
         
+        
+        derivaciones = LegajosDerivaciones.objects.filter(fk_legajo_id=pk)
+        
 
         # Obtener todas las categorías con la cantidad de alertas en cada una
         categorias_con_alertas = legajo_alertas.values(
@@ -212,6 +215,7 @@ class LegajosDetailView(DetailView):
         context["historial_alertas"] = True if HistorialLegajoAlertas.objects.filter(fk_legajo=pk).exists() else False
         context["datos_json"] = datos_json
         context['count_intervenciones'] = count_intervenciones
+        context['derivaciones'] = derivaciones
         return context
 
 

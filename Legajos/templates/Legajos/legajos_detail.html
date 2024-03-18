@@ -542,7 +542,17 @@
                                 <i class="fas fa-minus"></i>
                             </button>
                         </div>
+                        {% comment %} <div class="card-tools">
+                            <a href="{% url 'legajosdimensiones_ver' object.id  %}"
+                                class="ml-3 mr-2">Ver
+                                detalles</a>
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div> {% endcomment %}
+                    
                     </div>
+                    
                     <div class="card-body card-comments">
                         <div class="row my-sm-4 pb-sm-1">
                             <!-- <div class="col embed-responsive embed-responsive-16by9"> -->
@@ -921,12 +931,12 @@
                                 <div class="events-wrapper">
                                     <div class="events" style="width: 500px;">
                                         <ol>
-                                            <li><a href="#0" data-date="01/01/2020" class="older-event selected" style="left: 0px;">01/01/2020</a></li>
-                                            <li><a href="#0" data-date="02/01/2020" style="left: 0px;">01/02/2020</a></li>
-                                            <li><a href="#0" data-date="03/01/2020" style="left: 0px;">01/03/2020</a></li>
-                                            <li><a href="#0" data-date="04/01/2020" style="left: 0px;">03/03/2020</a></li>
-                                            <li><a href="#0" data-date="06/01/2020" style="left: 0px;">10/07/2020</a></li>
-                                            <li><a href="#0" data-date="08/01/2020" style="left: 0px;">04/02/2021</a></li>
+                                            <li><a href="#0" data-date="01/01/2020" class="older-event selected" style="left: 0px;">{{derivacion.fecha_creado}}</a></li>
+                                            <li><a href="#0" data-date="02/01/2020" style="left: 0px;">{{derivacion.fecha_creado}}</a></li>
+                                            <li><a href="#0" data-date="03/01/2020" style="left: 0px;">{{derivacion.fecha_creado}}</a></li>
+                                            <li><a href="#0" data-date="04/01/2020" style="left: 0px;">{{derivacion.fecha_creado}}</a></li>
+                                            <li><a href="#0" data-date="06/01/2020" style="left: 0px;">{{derivacion.fecha_creado}}</a></li>
+                                            <li><a href="#0" data-date="08/01/2020" style="left: 0px;">{{derivacion.fecha_creado}}</a></li>
                                         </ol>
                                         <span class="filling-line" aria-hidten="true" style="transform: scaleX(0.281506);"></span>
                                     </div>
@@ -940,69 +950,67 @@
                                 <!-- .cd-timeline-navigation -->
                             </div>
                             <!-- .timeline -->
+                        {% for derivacion in derivaciones %}
                             <div class="events-content pb-2 pb-sm-0">
                                 <ol class="pb-0 mb-0">
                                     <li class="selected" data-date="01/01/2020">
                                         <h5 class="text-bold"> 
-                                            DDA <span class="badge badge-secondary">Ingreso</span> <br> 
-                                            <small>01/01/2020</small>
+                                          {{derivacion.fk_programa}}<span class="badge badge-secondary">{{derivacion.estado}}</span> <br> 
+                                            <small>{{derivacion.fecha_creado}}</small>
                                             </h4>
                                             <hr>
-                                            <p>En CIC B° Mitre se detecta a los niños de la familia en situación de escolaridad irregular y falta de controles médicos. 
-                                                Además se evidencian signos de violencia de género en la madre de familia.
-                                            </p>
+                                            <p>{{derivacion.detalles}}
+                                            </p> 
                                     </li>
                                     <li data-date="02/01/2020" class="">
                                         <h5 class="text-bold">
-                                            Asistencia habitacional <span class="badge badge-secondary">Ingreso</span><br>
-                                            <small>01/02/2020</small>
+                                            {{derivacion.fk_programa}} <span class="badge badge-secondary">{{derivacion.estado}}</span><br>
+                                            <small>{{derivacion.fecha_creado}}</small>
                                         </h5>
                                         <hr>
-                                        <p>Debido a falta de higiene en el terreno y vivienda el programa Asistencia habitacionall, realiza el saneamiento del mismo.
-                                            
+                                        <p>{{derivacion.detalles}}
                                         </p>
                                     </li>
                                     <li data-date="03/01/2020" >
                                         <br>
                                         <h5 class="text-bold">
-                                            Incendios <span class="badge badge-secondary">Ingreso</span><br>
-                                            <small>01/03/2020</small>
+                                            {{derivacion.fk_programa}} <span class="badge badge-secondary">{{derivacion.estado}}</span><br>
+                                            <small>{{derivacion.fecha_creado}}</small>
                                             </h4>
                                             <hr>
-                                            <p>Luego del saneamiento de terreno se poduce un incendio en la vivienda, 
-                                                hecho por lo cual el programa de incendios interviene en los meses posteriores para ayudar en la reconstrucción del hogar.
+                                            <p>{{derivacion.detalles}}
                                             </p>
                                     </li>
                                     <li data-date="04/01/2020">
                                         <h5 class="text-bold">
-                                            Asistencia alimentaria <span class="badge badge-secondary">Ingreso</span> <br>
-                                            <small>03/03/2020</small>
+                                            {{derivacion.fk_programa}} <span class="badge badge-secondary">{{derivacion.estado}}</span> <br>
+                                            <small>{{derivacion.fecha_creado}}</small>
                                             </h4>
                                             <hr>
-                                            <p>Durante todo el aislamiento social preventivo y obligatorio el municipio asiste a la familia con entrega de alimentos. 
+                                            <p>{{derivacion.detalles}} 
                                             </p>
                                     </li>
                                     <li data-date="06/01/2020">
                                         <h5 class="text-bold"> 
-                                            Camino de la embarazada <span class="badge badge-secondary">Ingreso</span> <br>
-                                            <small>10/07/2020</small>
+                                            {{derivacion.fk_programa}} <span class="badge badge-secondary">{{derivacion.estado}}</span> <br>
+                                            <small>{{derivacion.fecha_creado}}</small>
                                             </h4>
                                             <hr>
-                                            <p>Se detecta el embarazo de Jesica Baez, menor, de 15 años de edad.
-                                                 A partir de esto se articula con todas las áreas de asistencia, y se la incluye al programa Camino de la embrazada
+                                            <p>{{derivacion.detalles}}
                                             </p>
                                     </li>
                                     <li data-date="08/01/2021">
                                         <h5 class="text-bold"> 
-                                            Camino de la embarazada <span class="badge badge-secondary">Egreso</span> <br>
-                                            <small>04/02/2021</small>
+                                            {{derivacion.fk_programa}} <span class="badge badge-secondary">{{derivacion.estado}}</span> <br>
+                                            <small>{{derivacion.fecha_creado}}</small>
                                             </h4>
                                             <hr>
-                                            <p>Nacimiento de Zoe Rivera, hija de Jesica Baez y Bautista Rivera. La niña fue ingresada al programa 1000 Días
+                                            <p>{{derivacion.detalles}}
                                             </p>
                                     </li>
                                 </ol>
                             </div>
+                        {% endfor %}
                         </div>
 
                     </div>
