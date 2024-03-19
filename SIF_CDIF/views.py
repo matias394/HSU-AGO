@@ -271,12 +271,21 @@ class CDIFPreAdmisionesDetailView(PermisosMixin, DetailView):
         legajo = LegajosDerivaciones.objects.filter(pk=pk.fk_derivacion_id).first()
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         ivi = CDIF_IndiceIVI.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
+        criterio = CDIF_IndiceIVI.objects.filter(fk_preadmi_id=pk, tipo="Ingreso")
+        foto_ivi = CDIF_Foto_IVI.objects.filter(fk_preadmi_id=pk, tipo="Ingreso").first()
         resultado = ivi.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ivi__puntaje')).order_by('-creado')
         context["ivi"] = ivi
         context["resultado"] = resultado
+        context["cantidad"] = criterio.count()
         context["legajo"] = legajo
+        context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["familia"] = familia
+        context['maximo'] = foto_ivi.puntaje_max
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable='SI').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         return context
+
+    
     
     def post(self, request, *args, **kwargs):
         if 'finalizar_preadm' in request.POST:
