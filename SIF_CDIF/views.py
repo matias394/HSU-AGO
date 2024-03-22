@@ -856,54 +856,6 @@ class CDIFInactivaAdmisionDetail(PermisosMixin, DetailView):
         return context
 
 
-class CDIFVacantesListVew(PermisosMixin, ListView):
-    permission_required = "Usuarios.rol_admin"
-    model = Vacantes
-    template_name = 'SIF_CDIF/vacantes_list.html'
-    context_object_name = 'organizaciones'
-    
-    def get_queryset(self):
-        organizaciones = Vacantes.objects.values_list('nombre', flat=True).distinct()
-        data = []
-
-
-        for organizacion in organizaciones:
-            organizacion_data = {'organizacion': organizacion}
-
-            # Calcular la cantidad de vacantes por sala agrupadas
-            for sala_group in [['manianabb', 'tardebb'], ['maniana2', 'tarde2'], ['maniana3', 'tarde3']]:
-                total_vacantes = Vacantes.objects.filter(nombre=organizacion).aggregate(
-                    total=Sum(F(sala_group[0]) + F(sala_group[1]))
-                )['total'] or 0
-
-                asignadas = CDIF_VacantesOtorgadas.objects.filter(
-                    fk_organismo__nombre=organizacion,
-                    salashort__in=sala_group
-                ).count()
-
-                disponibles = CDIF_Admision.objects.filter(
-                    fk_preadmi__centro_postula__nombre=organizacion,
-                    fk_preadmi__sala_short__in=sala_group,
-                    estado_vacante='Lista de espera'
-                ).count()
-
-                organizacion_data['_'.join(sala_group) + '_total'] = total_vacantes
-                organizacion_data['_'.join(sala_group) + '_asignadas'] = asignadas
-                organizacion_data['_'.join(sala_group) + '_disponibles'] = disponibles
-
-            # Calcular los totales de vacantes, asignadas y disponibles por organización
-            total_vacantes_org = sum([organizacion_data['_'.join(sala_group) + '_total'] for sala_group in [['manianabb', 'tardebb'], ['maniana2', 'tarde2'], ['maniana3', 'tarde3']]])
-            total_asignadas_org = sum([organizacion_data['_'.join(sala_group) + '_asignadas'] for sala_group in [['manianabb', 'tardebb'], ['maniana2', 'tarde2'], ['maniana3', 'tarde3']]])
-            total_disponibles_org = sum([organizacion_data['_'.join(sala_group) + '_disponibles'] for sala_group in [['manianabb', 'tardebb'], ['maniana2', 'tarde2'], ['maniana3', 'tarde3']]])
-
-            organizacion_data['total_vacantes'] = total_vacantes_org
-            organizacion_data['total_asignadas'] = total_asignadas_org
-            organizacion_data['total_disponibles'] = total_disponibles_org
-
-            data.append(organizacion_data)
-
-        return data
-
 
 class CDIFVacantesListView(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"
