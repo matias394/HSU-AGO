@@ -56,7 +56,7 @@
           <dd class="col-sm-3 mb-2">Generado por</dd>
           <dt class="col-sm-9 mb-2">{{foto_ivi.creado_por}}</dt>
           <dd class="col-sm-3 mb-2">Observaciones</dd>
-          <dt class="col-sm-9 mb-2">{{foto_ivi.observaciones}}</dt>
+          <dt class="col-sm-9 mb-2">{{foto_ivi.observaciones|default_if_none:'-'}}</dt>
         </dl>
       </div>
     </div>
