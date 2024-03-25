@@ -271,21 +271,26 @@ class CDIFPreAdmisionesDetailView(PermisosMixin, DetailView):
         legajo = LegajosDerivaciones.objects.filter(pk=pk.fk_derivacion_id).first()
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         ivi = CDIF_IndiceIVI.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
-        criterio = CDIF_IndiceIVI.objects.filter(fk_preadmi_id=pk, tipo="Ingreso")
-        foto_ivi = CDIF_Foto_IVI.objects.filter(fk_preadmi_id=pk, tipo="Ingreso").first()
         resultado = ivi.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ivi__puntaje')).order_by('-creado')
         context["ivi"] = ivi
         context["resultado"] = resultado
-        context["cantidad"] = criterio.count()
         context["legajo"] = legajo
-        context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["familia"] = familia
-        context['maximo'] = foto_ivi.puntaje_max
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable='SI').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
-        return context
 
-    
+
+        criterio = CDIF_IndiceIVI.objects.filter(fk_preadmi_id=pk, tipo="Ingreso")
+        foto_ivi = CDIF_Foto_IVI.objects.filter(fk_preadmi_id=pk, tipo="Ingreso").first()
+        if criterio :
+            context["criterio"] = criterio
+            context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+            context["cantidad"] = criterio.count()
+            context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
+            context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+            context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
+        if foto_ivi:
+            context["foto_ivi"] = foto_ivi
+            context['maximo'] = foto_ivi.puntaje_max
+        return context
     
     def post(self, request, *args, **kwargs):
         if 'finalizar_preadm' in request.POST:
@@ -497,6 +502,7 @@ class CDIFIndiceIviUpdateView (PermisosMixin, UpdateView):
                 base.fk_preadmi_id = pk
                 base.presencia = True
                 base.programa = "CDIF"
+                base.tipo = "Ingreso"
                 base.clave = clave
                 base.save()
         
@@ -509,8 +515,8 @@ class CDIFIndiceIviUpdateView (PermisosMixin, UpdateView):
         foto.puntaje_max = puntaje_maximo
         #foto.crit_modificables = crit_modificables
         #foto.crit_presentes = crit_presentes
-        #foto.tipo = "Ingreso"
-        #foto.clave = clave
+        foto.tipo = "Ingreso"
+        foto.clave = clave
         foto.modificado_por_id = self.request.user.id
         foto.save()
 
@@ -545,8 +551,8 @@ class CDIFIndiceIviDetailView(PermisosMixin, DetailView):
         context["criterio"] = criterio
         context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable='SI').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         #context['maximo'] = foto_ivi.puntaje_max
         return context
@@ -574,8 +580,8 @@ class CDIFPreAdmisiones3DetailView(PermisosMixin, DetailView):
         context["foto_ivi"] = foto_ivi
         context["puntaje"] = foto_ivi.puntaje
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable='SI').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
         return context
@@ -639,8 +645,8 @@ class CDIFAdmisionesDetailView(PermisosMixin, DetailView):
         context["foto_ivi"] = foto_ivi
         context["puntaje"] = foto_ivi.puntaje
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable='SI').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
         
@@ -705,8 +711,8 @@ class CDIFVacantesAdmision(PermisosMixin, CreateView):
         context["foto_ivi"] = foto_ivi
         context["puntaje"] = foto_ivi.puntaje
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable='SI').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
         
@@ -779,8 +785,8 @@ class CDIFVacantesAdmisionCambio(PermisosMixin, CreateView):
         context["observaciones"] = foto_ivi
         context["puntaje"] = foto_ivi.puntaje
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable='SI').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
         context["vo"] = vacante_otorgada
@@ -862,9 +868,11 @@ class CDIFVacantesListView(PermisosMixin, ListView):
     model = Vacantes
     template_name = 'SIF_CDIF/vacantes_list.html'
     context_object_name = 'organizaciones'
-    
+
     def get_queryset(self):
+
         organizaciones = Vacantes.objects.filter(fk_programa=settings.PROG_CDIF)
+
         data = []
 
         for organizacion in organizaciones:
@@ -909,8 +917,6 @@ class CDIFVacantesListView(PermisosMixin, ListView):
             data.append(organizacion_data)
 
         return data
-
-
 
     
     #def get_context_data(self, **kwargs):
@@ -983,7 +989,7 @@ class CDIFIntervencionesCreateView(PermisosMixin, CreateView):
         base.creado_por_id = self.request.user.id
         base.save()
 
-        return redirect('CDIF_intervencion_ver', pk=self.object.id)
+        return redirect('CDIF_intervencion_ver', self.object.id)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

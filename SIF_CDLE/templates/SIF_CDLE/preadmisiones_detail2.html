@@ -27,19 +27,8 @@ CDLE Pre-admisiones
   <!-- botones -->
   <div class="col-12 my-3 d-print-none">
     <div class="btn-toolbar" role="toolbar">
-    {% if object.estado == 'En proceso' %}
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit" name="finalizar_preadm" class="btn btn-primary mr-1" >Finalizar</button>
-    </form>
-    <a href="{% url 'CDLE_preadmisiones_editar' object.pk %}" class="btn btn-secondary mr-1">Editar</a>
-    <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
-    <a href="{% url 'CDLE_preadmisiones_eliminar' object.pk %}" class="btn btn-danger mr-1 mt-2 mt-sm-0">Eliminar</a>
-    {% endif %}
+    <a href="{% url 'CDLE_preadmisiones_ver' object.pk %}" class="btn btn-secondary mr-1">Volver</a>
     {% if object.estado == 'Finalizada' %}
-    {% if object.ivi == 'NO' %}
-    <a href="{% url 'CDLE_indiceivi_crear' object.pk %}" class="btn btn-primary mr-1">Generar IVI</a>
-    {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     {% endif %}
     </div>

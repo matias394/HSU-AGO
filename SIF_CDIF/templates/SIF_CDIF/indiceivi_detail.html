@@ -28,8 +28,14 @@
   <!-- botones -->
   <div class="col-12 my-3 mx-2 d-print-none">
     <!-- <a href="{% url 'admisiones_historial'%}" class="btn btn-primary mr-1">Ver admisiones</a> -->
-    <a href="{% url 'CDIF_vacantes_form' object.id %}" class="btn btn-primary mr-1">Otorgar Vacante</a>
-   <!--  <a href="{% url 'CDIF_indiceivi_editar' object.id %}" class="btn btn-secondary mr-1">Editar</a>-->
+    <!--<a href="{% url 'CDIF_vacantes_form' object.id %}" class="btn btn-primary mr-1">Otorgar Vacante</a>-->
+    {% if object.admitido == 'NO' and object.ivi == 'SI'%}
+    <button type="submit" name="admitir" class="btn btn-primary mr-1" form="admitirForm">Admitir</button>
+    <form method="post" action="{% url 'CDIF_preadmisiones_ver3' object.id %}" id="admitirForm" class="d-inline">
+      {% csrf_token %}
+    </form>
+    {% endif %}
+    <a href="{% url 'CDIF_indiceivi_editar' object.id %}" class="btn btn-secondary mr-1">Editar</a>
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
   </div>
 </div>
