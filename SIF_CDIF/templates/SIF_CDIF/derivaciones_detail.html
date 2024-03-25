@@ -58,15 +58,11 @@ Derivaciones
             <dt class="col-sm-9 mb-2"><span class="badge badge-gb-color">{{object.importancia}}</span></dt>
             <dd class="col-sm-3 mb-2">Alertas</dt>
             <dt class="col-sm-9 mb-2">
-              {% if object.m2m_alertas.all %}
               <ul class="mb-1">
                 {% for o in object.m2m_alertas.all %}
                 <li>{{o.nombre}}</li>
                 {% endfor %}
               </ul>
-                {% else %}
-                -
-                {% endif %}
             </dt>
             <dd class="col-sm-3 mb-2">Organismos interviniendo</dt>
             <dt class="col-sm-9 mb-2">
@@ -79,7 +75,7 @@ Derivaciones
               {% endif %}
             </dt>
             <dd class="col-sm-3 mb-2">Observaciones</dt>
-            <dt class="col-sm-9 mb-2">{{object.detalles|default_if_none:'-'}}</dt>
+            <dt class="col-sm-9 mb-2">{{object.detalles}}</dt>
             <dd class="col-sm-3 mb-2 mt-2">Archivos adjuntos</dd>
             <dt class="col-sm-9 mb-2 mt-2">
               <ul class="list-unstyled mb-1">

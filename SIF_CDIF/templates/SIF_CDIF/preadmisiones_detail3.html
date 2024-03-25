@@ -11,7 +11,7 @@ Pre-admisiones
 
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right">
-  <li class="breadcrumb-item"><a href="" title="Ver listado de admisiones">Admisiones</a></li>
+  <li class="breadcrumb-item"><a href="" title="Ver listado de admisiones">CDIF Pre-admisiones</a></li>
   <li class="breadcrumb-item "><a href={% url 'legajos_ver' object.fk_legajo_id %} title="Ver legajo">{{object.fk_legajo}}</a></li>
   <li class="breadcrumb-item active">Detalle</li>
 </ol>
@@ -26,10 +26,12 @@ Pre-admisiones
   
   <div class="col-12 my-3 mx-2 d-print-none">
     <div class="btn-toolbar" role="toolbar">
-    <form method="post">
-      {% csrf_token %}
-       <button type="submit" name="admitir" class="btn btn-primary mr-1" >Admitir</button>
-  </form>
+      {% if object.admitido == 'NO' and object.ivi == 'SI'%}
+      <button type="submit" name="admitir" class="btn btn-primary mr-1" form="admitirForm">Admitir</button>
+      <form method="post" action="{% url 'CDIF_preadmisiones_ver3' object.id %}" id="admitirForm" class="d-inline">
+        {% csrf_token %}
+      </form>
+      {% endif %}
      <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
   </div>
 </div>

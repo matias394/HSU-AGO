@@ -1,6 +1,6 @@
 from django import forms
 from .validators import MaxSizeFileValidator
-
+from django.conf import settings
 from .models import *
 
 
@@ -121,8 +121,15 @@ class CDIF_VacantesOtorgadasForm (forms.ModelForm):
             'motivo':'Motivo principal',
             'detalles':'Detalles',
         }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Filtra las opciones del campo criterio_modificable aquí
+        self.fields['fk_organismo'].queryset = Vacantes.objects.filter(fk_programa=settings.PROG_CDIF)
 
 class CDIF_IntervencionesForm (forms.ModelForm):
+        
     class Meta:
         model = CDIF_Intervenciones
         fields = '__all__'
@@ -141,7 +148,7 @@ class CDIF_IntervencionesForm (forms.ModelForm):
         super().__init__(*args, **kwargs)
         
         # Filtra las opciones del campo criterio_modificable aquí
-        self.fields['criterio_modificable'].queryset = Criterios_IVI.objects.filter(modificable = "SI")
+        self.fields['criterio_modificable'].queryset = Criterios_IVI.objects.filter(modificable = "Si")
 
 class CDIF_OpcionesResponsablesForm (forms.ModelForm):
     class Meta:

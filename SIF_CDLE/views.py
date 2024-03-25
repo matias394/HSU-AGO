@@ -239,8 +239,8 @@ class CDLEPreAdmisionesDetailView(PermisosMixin, DetailView):
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         ivi = CDLE_IndiceIVI.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
         ingreso = CDLE_IndiceIngreso.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
-        resultado = ivi.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ivi__puntaje')).order_by('-creado')
-        resultado_ingreso = ingreso.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ingreso__puntaje')).order_by('-creado')
+        resultado = ivi.filter(tipo='Ingreso').values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ivi__puntaje')).order_by('-creado')
+        resultado_ingreso = ingreso.filter(tipo='Ingreso').values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ingreso__puntaje')).order_by('-creado')
         context["ivi"] = ivi
         context["ingreso"] = ingreso
         context['criterios_total'] = ingreso.count()
@@ -443,7 +443,7 @@ class CDLEIndiceIngresoUpdateView (PermisosMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         pk=self.kwargs["pk"]
         preadmi = CDLE_PreAdmision.objects.filter(pk=pk).first()
-        CDLE_foto = CDLE_Foto_IVI.objects.filter(fk_preadmi_id=pk).first()
+        CDLE_foto = CDLE_Foto_Ingreso.objects.filter(fk_preadmi_id=pk).first()
         clave = CDLE_foto.clave
         indices_ingreso = CDLE_IndiceIngreso.objects.filter(clave=clave)
         #CDLE_foto.delete()
@@ -456,11 +456,12 @@ class CDLEIndiceIngresoUpdateView (PermisosMixin, UpdateView):
                 criterio_ingreso = Criterios_Ingreso.objects.filter(id=f).first()
                 # Sumar el valor de f al total_puntaje
                 total_puntaje += int(criterio_ingreso.puntaje)
-                base = CDLE_IndiceIVI()
+                base = CDLE_IndiceIngreso()
                 base.fk_criterios_ingreso_id = f
                 base.fk_legajo_id = preadmi.fk_legajo_id
                 base.fk_preadmi_id = pk
                 base.presencia = True
+                base.tipo = "Ingreso"
                 base.programa = "CDLE"
                 base.clave = clave
                 base.save()
@@ -474,8 +475,8 @@ class CDLEIndiceIngresoUpdateView (PermisosMixin, UpdateView):
         foto.puntaje_max = puntaje_maximo
         #foto.crit_modificables = crit_modificables
         #foto.crit_presentes = crit_presentes
-        #foto.tipo = "Ingreso"
-        #foto.clave = clave
+        foto.tipo = "Ingreso"
+        foto.clave = clave
         foto.modificado_por_id = self.request.user.id
         foto.save()
 
@@ -512,7 +513,7 @@ class CDLEIndiceIngresoDetailView(PermisosMixin, DetailView):
         context["cantidad"] = criterio.count()
         context["cant_combinables"] = criterio.filter(fk_criterios_ingreso__tipo='Criterios combinables para el ingreso').count()
         context["cant_sociales"] = criterio.filter(fk_criterios_ingreso__tipo='Criterios sociales para el ingreso').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ingreso__modificable='SI').aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ingreso__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ingreso__tipo='Ajustes').count()
         #context['maximo'] = foto_ingreso.puntaje_max
        
@@ -643,6 +644,7 @@ class CDLEIndiceIviUpdateView (PermisosMixin, UpdateView):
                 base.fk_preadmi_id = pk
                 base.presencia = True
                 base.programa = "CDLE"
+                base.tipo = "Ingreso"
                 base.clave = clave
                 base.save()
         
@@ -691,8 +693,8 @@ class CDLEIndiceIviDetailView(PermisosMixin, DetailView):
         context["criterio"] = criterio
         context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable='Si').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable='Si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         #context['maximo'] = foto_ivi.puntaje_max
         return context
@@ -725,8 +727,8 @@ class CDLEPreAdmisiones3DetailView(PermisosMixin, DetailView):
         context["puntaje_ingreso"] = foto_ingreso.puntaje
         context["cantidad"] = criterio.count()
         context["cantidad_ingreso"] = criterio_ingreso.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable='SI').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
         context['maximo_ingreso'] = foto_ingreso.puntaje_max
@@ -800,8 +802,8 @@ class CDLEAdmisionesDetailView(PermisosMixin, DetailView):
         context["foto_ivi"] = foto_ivi
         context["puntaje"] = foto_ivi.puntaje
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable='SI').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
         
