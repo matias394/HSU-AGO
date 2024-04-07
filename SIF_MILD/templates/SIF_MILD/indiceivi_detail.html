@@ -29,7 +29,9 @@
   <div class="col-12 my-3 mx-2 d-print-none">
     <!-- <a href="{% url 'admisiones_historial'%}" class="btn btn-primary mr-1">Ver admisiones</a> -->
     <a href="{% url 'MILD_preadmisiones_ver3' object.id %}" class="btn btn-primary mr-1">Volver pre-admisión</a>
+    {% if object.admitido == 'NO' and object.ivi == 'SI'%}
     <a href="{% url 'MILD_indiceivi_editar' object.id %}" class="btn btn-secondary mr-1">Editar</a>
+    {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
   </div>
 </div>

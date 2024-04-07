@@ -511,7 +511,7 @@ class MILDIndiceIngresoDetailView(PermisosMixin, DetailView):
         context["cantidad"] = criterio.count()
         context["cant_sanitarios"] = criterio.filter(fk_criterios_ingreso__tipo='Criterios sanitarios para el ingreso').count()
         context["cant_sociales"] = criterio.filter(fk_criterios_ingreso__tipo='Criterios sociales para el ingreso').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ingreso__modificable='SI').aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ingreso__modificable__iexact='SI').aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ingreso__tipo='Ajustes').count()
         #context['maximo'] = foto_ingreso.puntaje_max
         return context
