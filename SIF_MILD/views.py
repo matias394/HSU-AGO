@@ -689,8 +689,8 @@ class MILDIndiceIviDetailView(PermisosMixin, DetailView):
         context["criterio"] = criterio
         context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__iexact='Si').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__iexact='Si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__iexact='SI').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__iexact='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         #context['maximo'] = foto_ivi.puntaje_max
         return context
