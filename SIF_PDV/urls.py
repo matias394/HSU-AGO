@@ -19,6 +19,12 @@ urlpatterns = [
     path('PDV/preadmisiones/listar', login_required(PDVPreAdmisionesListView.as_view()), name='PDV_preadmisiones_listar'),
     path('PDV/preadmisiones/buscar', login_required(PDVPreAdmisionesBuscarListView.as_view()), name='PDV_preadmisiones_buscar'),
     path('PDV/preadmisiones/eliminar/<pk>', login_required(PDVPreAdmisionesDeleteView.as_view()), name='PDV_preadmisiones_eliminar'),
+    # Indice Ingreso
+    path('PDV/criterios_ingreso/crear', login_required(PDVCriteriosIngresoCreateView.as_view()), name='PDV_criterios_ingreso_crear'),
+    path('PDV/indice_ingreso/crear/<pk>', login_required(PDVIndiceIngresoCreateView.as_view()), name='PDV_indiceingreso_crear'),
+    #path('PDV/indice_ivi_egreso/crear/<pk>', login_required(PDVIndiceIviEgresoCreateView.as_view()), name='PDV_indiceiviegreso_crear'),
+    path('PDV/indice_ingreso/ver/<pk>', login_required(PDVIndiceIngresoDetailView.as_view()), name='PDV_indiceingreso_ver'),
+    path('PDV/indice_ingreso/editar/<pk>', login_required(PDVIndiceIngresoUpdateView.as_view()), name='PDV_indiceingreso_editar'),
     # IVI
     path('PDV/criterios_ivi/crear', login_required(PDVCriteriosIVICreateView.as_view()), name='PDV_criterios_ivi_crear'),
     path('PDV/indice_ivi/crear/<pk>', login_required(PDVIndiceIviCreateView.as_view()), name='PDV_indiceivi_crear'),
