@@ -4,6 +4,7 @@ from Legajos.models import *
 from django.core.validators import MinValueValidator, MaxValueValidator
 from .choices import *
 from django.urls import *
+from SIF_CDLE.models import Criterios_Ingreso
 
 # Create your models here.
 
@@ -125,6 +126,7 @@ class PDV_PreAdmision (models.Model):
     vinculo4 = models.CharField(max_length=150, null=True, blank=True)
     vinculo5 = models.CharField(max_length=150, null=True, blank=True)
     ivi = models.CharField(max_length=150, null=True, blank=True)
+    indice_ingreso = models.CharField(max_length=150, null=True, blank=True)
     admitido = models.CharField(max_length=150, null=True, blank=True)
     creado_por = models.ForeignKey(Usuarios, related_name='PDV_PreAdm_creado_por', on_delete=models.CASCADE, blank=True, null=True)
     modificado_por = models.ForeignKey(Usuarios, related_name='PDV_PreAdm_modificado_por', on_delete=models.CASCADE, blank=True, null=True)
@@ -173,7 +175,33 @@ class PDV_Foto_IVI(models.Model):
     autogestion = models.CharField(max_length=50, choices=CHOICE_GESTION, null=False, blank=False, default='No')
     anticonceptivo = models.CharField(max_length=50, choices=CHOICE_CONCEPTIVO, null=False, blank=False, default='No')
     calificacion = models.CharField(max_length=50, choices=CHOICE_CALIFICAR, null=False, blank=False, default='No')
-    
+
+
+class PDV_IndiceIngreso(models.Model):
+    fk_criterios_ingreso = models.ForeignKey(Criterios_Ingreso, on_delete=models.CASCADE)
+    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, null=True, blank=True)
+    fk_preadmi = models.ForeignKey(PDV_PreAdmision, on_delete=models.CASCADE, null=True, blank=True)
+    presencia = models.BooleanField (default=False, null=True, blank=True)
+    tipo = models.CharField (max_length=350, null=True, blank=True)
+    programa = models.CharField(max_length=150, choices=CHOICE_NOSI, null=True, blank=True)
+    clave = models.CharField (max_length=350, null=True, blank=True)
+    creado = models.DateField(auto_now_add=True, null=True, blank=True)
+    modificado = models.DateField(auto_now=True, null=True, blank=True)
+
+class PDV_Foto_Ingreso(models.Model):
+    fk_preadmi = models.ForeignKey(PDV_PreAdmision, on_delete=models.CASCADE, null=True, blank=True)
+    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, null=True, blank=True)
+    puntaje = models.SmallIntegerField(null=True, blank=True) 
+    puntaje_max = models.SmallIntegerField(null=True, blank=True)
+    crit_modificables = models.SmallIntegerField(null=True, blank=True)
+    crit_presentes = models.SmallIntegerField(null=True, blank=True)
+    observaciones = models.CharField(max_length=350, null=True, blank=True)
+    tipo = models.CharField (max_length=350, null=True, blank=True)
+    clave = models.CharField (max_length=350, null=True, blank=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='PDV_Ingreso_creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='PDV_Ingreso_modificado_por', on_delete=models.CASCADE, blank=True, null=True)
+    creado = models.DateField(auto_now_add=True, null=True, blank=True)
+    modificado = models.DateField(auto_now=True, null=True, blank=True)
  
 class PDV_Vacantes(models.Model):
     fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, null=True, blank=True)

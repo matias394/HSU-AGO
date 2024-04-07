@@ -2,6 +2,7 @@ from django import forms
 from .validators import MaxSizeFileValidator
 
 from .models import *
+from SIF_CDLE.models import Criterios_Ingreso
 
 
 class PDV_PreadmisionesForm (forms.ModelForm):
@@ -79,10 +80,26 @@ class PDV_PreadmisionesForm (forms.ModelForm):
             'taller_postula':'',
         }
 
-    def __init__(self, *args, **kwargs):
-        super(PDV_PreadmisionesForm, self).__init__(*args, **kwargs)
-        programa_id_especifico = 26  # El ID del programa específico que quieres filtrar
-        self.fields['centro_postula'].queryset = Vacantes.objects.filter(fk_programa=programa_id_especifico)
+class criterios_Ingreso (forms.ModelForm):
+    class Meta:
+        model = Criterios_Ingreso
+        fields = '__all__'
+        widgets = {}
+        labels = {}
+
+class PDV_IndiceIngresoForm (forms.ModelForm):
+    class Meta:
+        model = PDV_IndiceIngreso
+        fields = '__all__'
+        widgets = {}
+        labels = {}
+
+class PDV_IndiceIngresoHistorialForm (forms.ModelForm):
+    class Meta:
+        model = PDV_Foto_Ingreso
+        fields = '__all__'
+        widgets = {}
+        labels = {}
 
 class criterios_IVI (forms.ModelForm):
     class Meta:
