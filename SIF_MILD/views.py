@@ -718,8 +718,8 @@ class MILDPreAdmisiones3DetailView(PermisosMixin, DetailView):
         context["puntaje_ingreso"] = foto_ingreso.puntaje
         context["cantidad"] = criterio.count()
         context["cantidad_ingreso"] = criterio_ingreso.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable='SI').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__iexact='SI').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__iexact='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
         context['maximo_ingreso'] = foto_ingreso.puntaje_max
@@ -793,8 +793,8 @@ class MILDAdmisionesDetailView(PermisosMixin, DetailView):
         context["foto_ivi"] = foto_ivi
         context["puntaje"] = foto_ivi.puntaje
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable='SI').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__iexact='SI').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__iexact='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
         
