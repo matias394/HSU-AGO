@@ -67,11 +67,11 @@ Derivaciones
             <dd class="col-sm-3 mb-2">Organismos interviniendo</dt>
             <dt class="col-sm-9 mb-2">
               <ul class="mb-1">
-                <li>{{object.fk_organismo}}</li>
+                <li>{{object.fk_organismo|default_if_none:"-" }}</li>
               </ul>
             </dt>
             <dd class="col-sm-3 mb-2">Observaciones</dt>
-            <dt class="col-sm-9 mb-2">{{object.detalles}}</dt>
+            <dt class="col-sm-9 mb-2">{{object.detalles|default_if_none:"-" }}</dt>
             <dd class="col-sm-3 mb-2 mt-2">Archivos adjuntos</dd>
             <dt class="col-sm-9 mb-2 mt-2">
               <ul class="list-unstyled mb-1">

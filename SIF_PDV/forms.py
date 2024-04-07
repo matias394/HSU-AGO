@@ -79,6 +79,11 @@ class PDV_PreadmisionesForm (forms.ModelForm):
             'taller_postula':'',
         }
 
+    def __init__(self, *args, **kwargs):
+        super(PDV_PreadmisionesForm, self).__init__(*args, **kwargs)
+        programa_id_especifico = 26  # El ID del programa específico que quieres filtrar
+        self.fields['centro_postula'].queryset = Vacantes.objects.filter(fk_programa=programa_id_especifico)
+
 class criterios_IVI (forms.ModelForm):
     class Meta:
         model = Criterios_IVI
