@@ -43,11 +43,11 @@
               <dt class="col-sm-2 font-weight-normal">Programa: </dt>
               <dd class="col-sm-10 font-weight-bold">{{object.fk_programa}}</dd>
               <dt class="col-sm-2 font-weight-normal">Calle:</dt>
-              <dd class="col-sm-10 font-weight-bold"> {{object.fk_organismo.calle}} </dd>
+              <dd class="col-sm-10 font-weight-bold"> {{object.fk_organismo.calle|default_if_none:"-" }} </dd>
               <dt class="col-sm-2 font-weight-normal">Número: </dt>
-              <dd class="col-sm-10 font-weight-bold">{{object.fk_organismo.altura}}</dd>
+              <dd class="col-sm-10 font-weight-bold">{{object.fk_organismo.altura|default_if_none:"-" }}</dd>
               <dt class="col-sm-2 font-weight-normal">Barrio: </dt>
-              <dd class="col-sm-10 font-weight-bold">{{object.fk_organismo.barrio}}</dd>
+              <dd class="col-sm-10 font-weight-bold">{{object.fk_organismo.barrio|default_if_none:"-" }}</dd>
             </dl>
           </div>
         </div>

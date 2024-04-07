@@ -34,8 +34,8 @@
     <form method="post" action="{% url 'CDIF_preadmisiones_ver3' object.id %}" id="admitirForm" class="d-inline">
       {% csrf_token %}
     </form>
-    {% endif %}
     <a href="{% url 'CDIF_indiceivi_editar' object.id %}" class="btn btn-secondary mr-1">Editar</a>
+    {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
   </div>
 </div>

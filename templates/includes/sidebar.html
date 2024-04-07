@@ -232,7 +232,7 @@
 		</li>
 		<li class="nav-item">
 			<a href="{% url 'CDIF_admisiones_listar' %}"
-				class="nav-link  {% if '/admisiones' in pagina_actual %}active{% endif %}{% if '/asignado_admisiones' in pagina_actual %}active{% endif %} ">
+				class="nav-link  {% if '/admisiones' in pagina_actual %}active{% endif %}{% if '/asignado_admisiones' in pagina_actual %}active{% endif %} {% if '/inactiva_admisiones' in pagina_actual %}active{% endif %}">
 				<i class="nav-icon fas fa-id-badge"></i>
 				<p>Admisiones</p>
 			</a>
@@ -286,7 +286,7 @@
 		</li>
 		<li class="nav-item">
 			<a href="{% url 'CDLE_admisiones_listar' %}"
-				class="nav-link  {% if '/admisiones' in pagina_actual %}active{% endif %}{% if '/asignado_admisiones' in pagina_actual %}active{% endif %} ">
+				class="nav-link  {% if '/admisiones' in pagina_actual %}active{% endif %}{% if '/asignado_admisiones' in pagina_actual %}active{% endif %} {% if '/inactiva_admisiones' in pagina_actual %}active{% endif %}">
 				<i class="nav-icon fas fa-id-badge"></i>
 				<p>Admisiones</p>
 			</a>

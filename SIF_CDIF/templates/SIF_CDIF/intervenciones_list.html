@@ -49,7 +49,7 @@ Intervenciones
             <tr>
               <td> {{ i.creado|date:'d/m/Y' }} </td>
               <td>{{i.fk_admision.fk_preadmi.centro_postula}}</td>
-              <td> {{i.creado_por}} </td>
+              <td> {% if i.creado_por %}{{i.creado_por}}{% else %}{{i.modificado_por}}{% endif %} </td>
               <td>{{i.fk_admision.fk_preadmi.fk_legajo}}</td>
               <td>{{i.fk_admision.fk_preadmi.fk_legajo.documento}}</td>
               <td> {{i.criterio_modificable}}</td>

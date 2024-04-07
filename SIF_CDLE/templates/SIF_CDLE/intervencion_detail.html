@@ -56,7 +56,7 @@ Intervenciones
           <dd class="col-sm-3 mb-2">Fecha</dd>
           <dt class="col-sm-9 mb-2">{{object.creado}}</dt>
           <dd class="col-sm-3 mb-2">Usuarios intervinientes</dd>
-          <dt class="col-sm-9 mb-2">{{object.creado_por}}</dt>
+          <dt class="col-sm-9 mb-2">{% if object.creado_por %}{{object.creado_por}}{% else %}{{object.modificado_por}}{% endif %}</dt>
           <dd class="col-sm-3 mb-2">Criterio</dd>
           <dt class="col-sm-9 mb-2">{{object.criterio_modificable}}</dt>
           <dd class="col-sm-3 mb-2">Gestión sobre el criterio</dd>
@@ -118,8 +118,6 @@ Intervenciones
           <dt class="col-sm-7 mb-2">{{object.fk_admision.creado|date:'d/m/Y'}}</dt>
           <dd class="col-sm-5 mb-2">Acompañante</dd>
           <dt class="col-sm-7 mb-2">{{object.fk_admision.fk_preadmi.acompaniante}}</dt>
-          <dd class="col-sm-5 mb-2">Madrina</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_admision.fk_preadmi.madrina}}</dt>
         </dl>
       </div>
     </div>
