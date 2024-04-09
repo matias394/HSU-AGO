@@ -616,6 +616,10 @@ class PDVIndiceIviCreateView (PermisosMixin, CreateView):
         context["object"] = object
         context["criterio"] = criterio
         context['form2'] = PDV_IndiceIviHistorialForm()
+        context['CHOICE_CONCEPTIVO'] = CHOICE_CONCEPTIVO
+        context['CHOICE_CALIFICAR'] = CHOICE_CALIFICAR
+        context['CHOICE_VALORACION'] = CHOICE_VALORACION
+        context['CHOICE_GESTION'] = CHOICE_GESTION
         return context
     
     def post(self, request, *args, **kwargs):
@@ -689,6 +693,10 @@ class PDVIndiceIviUpdateView (PermisosMixin, UpdateView):
         context["observaciones"] = observaciones.observaciones
         context["criterio"] = Criterios_IVI.objects.all()
         context['form2'] = PDV_IndiceIviHistorialForm()
+        context['CHOICE_CONCEPTIVO'] = CHOICE_CONCEPTIVO
+        context['CHOICE_CALIFICAR'] = CHOICE_CALIFICAR
+        context['CHOICE_VALORACION'] = CHOICE_VALORACION
+        context['CHOICE_GESTION'] = CHOICE_GESTION
         return context
     
     def post(self, request, *args, **kwargs):
