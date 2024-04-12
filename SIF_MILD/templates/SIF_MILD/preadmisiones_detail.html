@@ -73,8 +73,6 @@
             <dt class="col-sm-7 mb-2">{{object.creado_por}}</dt>
             <dd class="col-sm-5 mb-2">Acompañante</dd>
             <dt class="col-sm-7 mb-2">{{object.acompaniante}}</dt>
-            <dd class="col-sm-5 mb-2">Madrina</dd>
-            <dt class="col-sm-7 mb-2">{{object.madrina}}</dt>
             {% if object.modificado_por %}
             <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Modificado por {{object.modificado_por}} - {{object.modificado|date:'d/m/Y'}}</dd>
             {% endif %}
@@ -123,16 +121,20 @@
           </div>
         </div>
         <div class="card-body">
+          {% if resultado_ingreso %}
           <dl class="row mb-0">
             <dd class="col-sm-8 mb-2">Aplica</dd>
             <dt class="col-sm-4 mb-2">{% if cant_sanitarios >= 1 or cant_sociales >= 5 %}<span class="badge bg-success"> SI {% else %} <span class="badge bg-danger"> NO {% endif %}</span></dt>
             <dd class="col-sm-8 mb-2">Fecha del índice</dd>
-            <dt class="col-sm-4 mb-2">{{legajo.fk_legajo.fecha_nacimiento|date:'d/m/Y'}}</dt>
+            <dt class="col-sm-4 mb-2">{{ resultado_ingreso.creado|date:'d/m/Y'}}</dt>
             <dd class="col-sm-8 mb-2">Criterios sociales presentes</dd>
             <dt class="col-sm-4 mb-2">{{ cant_sociales }}</dt>
             <dd class="col-sm-8 mb-2">Criterios sanitarios presentes</dd>
             <dt class="col-sm-4 mb-2">{{ cant_sanitarios }}</dt>
           </dl>
+          {% else %}
+          <h6>Sin índices.</h6>
+          {% endif %}
         </div>
       </div>
     </div>

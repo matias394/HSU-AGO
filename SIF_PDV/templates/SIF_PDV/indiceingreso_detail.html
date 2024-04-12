@@ -28,10 +28,8 @@
   <!-- botones -->
   <div class="col-12 my-3 mx-2 d-print-none">
     <!-- <a href="{% url 'admisiones_historial'%}" class="btn btn-primary mr-1">Ver admisiones</a> -->
-    <a href="{% url 'MILD_preadmisiones_ver3' object.id %}" class="btn btn-primary mr-1">Volver pre-admisión</a>
-    {% if object.admitido == 'NO' and object.ivi == 'SI'%}
-    <a href="{% url 'MILD_indiceivi_editar' object.id %}" class="btn btn-secondary mr-1">Editar</a>
-    {% endif %}
+    <a href="{% url 'PDV_preadmisiones_ver' object.id %}" class="btn btn-primary mr-1">Volver pre-admisión</a>
+    <a href="{% url 'PDV_indiceingreso_editar' object.id %}" class="btn btn-secondary mr-1">Editar</a>
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
   </div>
 </div>
@@ -48,17 +46,17 @@
       <div class="card-body">
         <dl class="row mb-0">
           <dd class="col-sm-3 mb-2">Índice</dd>
-          <dt class="col-sm-9 mb-2">Índice de vulnerabilidad infantil (IVI)</dt>
+          <dt class="col-sm-9 mb-2">Índice de ingreso</dt>
           <dd class="col-sm-3 mb-2">Tipo</dd>
-          <dt class="col-sm-9 mb-2">{{foto_ivi.tipo}}</dt>
+          <dt class="col-sm-9 mb-2">{{foto_ingreso.tipo}}</dt>
           <dd class="col-sm-3 mb-2">Fecha</dd>
-          <dt class="col-sm-9 mb-2">{{foto_ivi.creado|date:'d/m/Y'}}</dt>
+          <dt class="col-sm-9 mb-2">{{foto_ingreso.creado|date:'d/m/Y'}}</dt>
           <dd class="col-sm-3 mb-2">Para el programa</dd>
-          <dt class="col-sm-9 mb-2">MILD</dt>
+          <dt class="col-sm-9 mb-2">PDV</dt>
           <dd class="col-sm-3 mb-2">Generado por</dd>
-          <dt class="col-sm-9 mb-2">{{foto_ivi.creado_por}}</dt>
+          <dt class="col-sm-9 mb-2">{{foto_ingreso.creado_por}}</dt>
           <dd class="col-sm-3 mb-2">Observaciones</dd>
-          <dt class="col-sm-9 mb-2">{{foto_ivi.observaciones}}</dt>
+          <dt class="col-sm-9 mb-2">{{foto_ingreso.observaciones}}</dt>
         </dl>
       </div>
     </div>
@@ -89,15 +87,7 @@
   <!-- Detalle puntajes del indice -->
   <div class="col-sm-4">
     <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-warning">{{foto_ivi.puntaje}}</span>
-      <div class="info-box-content h5 my-0">
-        <span class="info-box-text">Puntaje</span>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-4">
-    <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-secondary">{{cantidad}}</span>
+      <span class="info-box-icon bg-warning">{{cantidad}}</span>
       <div class="info-box-content h5 my-0">
         <span class="info-box-text">Criterios presentes</span>
       </div>
@@ -105,33 +95,17 @@
   </div>
   <div class="col-sm-4">
     <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-secondary"> {{modificables}}</span>
+      <span class="info-box-icon bg-secondary">{{cant_combinables}}</span>
       <div class="info-box-content h5 my-0">
-        <span class="info-box-text">Criterios modificables</span>
+        <span class="info-box-text">Criterios combinables</span>
       </div>
     </div>
   </div>
   <div class="col-sm-4">
     <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-secondary"> {{foto_ivi.puntaje_max}}</span>
+      <span class="info-box-icon bg-secondary">{{cant_sociales}}</span>
       <div class="info-box-content h5 my-0">
-        <span class="info-box-text"> Puntaje máximo posible</span>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-4">
-    <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-secondary"> {{mod_puntaje.total|default:"0"}}</span>
-      <div class="info-box-content h5 my-0">
-        <span class="info-box-text"> Puntaje modificable total</span>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-4">
-    <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-secondary"> {{ajustes}}</span>
-      <div class="info-box-content h5 my-0">
-        <span class="info-box-text"> Ajustes</span>
+        <span class="info-box-text">Criterios sociales</span>
       </div>
     </div>
   </div>
@@ -147,62 +121,52 @@
         <thead>
           <tr>
             <th>Criterio</th>
-            <th class="text-center px-1" width="8%">Puntaje</th>
-            <th class="text-center px-1" width="8%">Modificable</th>
           </tr>
         </thead>
         <tbody>
 
           <tr>
-            <td colspan="3" class="text-center bg-secondary py-1">Madre o Cuidador principal
+            <td colspan="3" class="text-center bg-secondary py-1">Criteros autónomos de ingreso
             </td>
           </tr>
           {% for c in criterio %}
-          {% if c.fk_criterios_ivi.tipo == 'Madre o Cuidador principal' %}
+          {% if c.fk_criterios_ingreso.tipo == 'Criteros autónomos de ingreso' %}
           <tr>
-              <td>{{c.fk_criterios_ivi.criterio}}</td>
-              <td class="text-center">{{c.fk_criterios_ivi.puntaje}}</td>
-              <td class="text-center"><span class=" badge {% if c.fk_criterios_ivi.modificable == 'No' %}badge-primary {% else %}badge-info {% endif %}px-2">{{c.fk_criterios_ivi.modificable}}</span></td>
+              <td>{{c.fk_criterios_ingreso.criterio}}</td>
           </tr>
 
           {% endif %}
           {% endfor %}
           <tr>
-            <td colspan="3" class="text-center bg-secondary py-1">Bebé, niño o niña</td>
+            <td colspan="3" class="text-center bg-secondary py-1">Motivo de falta de control o control insuficiente</td>
           </tr>
           {% for c in criterio %}
-          {% if c.fk_criterios_ivi.tipo == 'Bebé, niño o niña' %}
+          {% if c.fk_criterios_ingreso.tipo == 'Motivo de falta de control o control insuficiente' %}
           <tr>
-              <td>{{c.fk_criterios_ivi.criterio}}</td>
-              <td class="text-center">{{c.fk_criterios_ivi.puntaje}}</td>
-              <td class="text-center"><span class=" badge {% if c.fk_criterios_ivi.modificable == 'No' %}badge-primary {% else %}badge-info {% endif %}px-2">{{c.fk_criterios_ivi.modificable}}</span></td>
+              <td>{{c.fk_criterios_ingreso.criterio}}</td>
           </tr>
 
           {% endif %}
           {% endfor %}
           <tr>
-            <td colspan="3" class="text-center bg-secondary py-1">Familia
+            <td colspan="3" class="text-center bg-secondary py-1">Criterios combinables para el ingreso
             </td>
           </tr>
           {% for c in criterio %}
-          {% if c.fk_criterios_ivi.tipo == 'Familia' %}
+          {% if c.fk_criterios_ingreso.tipo == 'Criterios combinables para el ingreso' %}
           <tr>
-              <td>{{c.fk_criterios_ivi.criterio}}</td>
-              <td class="text-center">{{c.fk_criterios_ivi.puntaje}}</td>
-              <td class="text-center"><span class=" badge {% if c.fk_criterios_ivi.modificable == 'No' %}badge-primary {% else %}badge-info {% endif %}px-2">{{c.fk_criterios_ivi.modificable}}</span></td>
+              <td>{{c.fk_criterios_ingreso.criterio}}</td>
           </tr>
 
           {% endif %}
           {% endfor %}
           <tr>
-            <td colspan="3" class="text-center bg-secondary py-1">Ajustes</td>
+            <td colspan="3" class="text-center bg-secondary py-1">Criterios sociales para el ingreso</td>
           </tr>
           {% for c in criterio %}
-          {% if c.fk_criterios_ivi.tipo == 'Ajustes' %}
+          {% if c.fk_criterios_ingreso.tipo == 'Criterios sociales para el ingreso' %}
           <tr>
-              <td>{{c.fk_criterios_ivi.criterio}}</td>
-              <td class="text-center">{{c.fk_criterios_ivi.puntaje}}</td>
-              <td class="text-center"><span class=" badge {% if c.fk_criterios_ivi.modificable == 'No' %}badge-primary {% else %}badge-info {% endif %}px-2">{{c.fk_criterios_ivi.modificable}}</span></td>
+              <td>{{c.fk_criterios_ingreso.criterio}}</td>
           </tr>
 
           {% endif %}
@@ -217,7 +181,7 @@
 <div class="row mt-4 d-print-none">
   <div class="col-12 mx-2">
     <div class="form-group  d-flex justify-content-between">
-      <a href="{% url 'MILD_preadmisiones_listar' %}" class="btn btn-secondary">Volver</a>
+      <a href="{% url 'PDV_preadmisiones_listar' %}" class="btn btn-secondary">Volver</a>
     </div>
   </div>
 </div>

@@ -175,8 +175,16 @@ CHOICE_TIPO_IVI=[
     (None, ''),
     ('AUTOVALORACION', 'AUTOVALORACION'),
     ('AUTOGESTION', 'AUTOGESTION'),
-    
 ]
+
+CHOICE_TIPO_INGRESO=[
+    (None, ''),
+    ('Criteros autónomos de ingreso', 'Criteros autónomos de ingreso'),
+    ('Motivo de falta de control o control insuficiente', 'Motivo de falta de control o control insuficiente'),
+    ('Criterios combinables de ingreso', 'Criterios combinables de ingreso'),
+    ('Criterios sociales para el ingreso', 'Criterios sociales para el ingreso'),
+]
+
 CHOICE_NOSI=[
     (None, ''),
     ('SI', 'SI'),

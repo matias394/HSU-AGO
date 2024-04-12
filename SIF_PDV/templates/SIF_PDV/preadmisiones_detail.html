@@ -37,8 +37,11 @@ PDV Pre-admisiones
     <a href="{% url 'PDV_preadmisiones_eliminar' object.pk %}" class="btn btn-danger mr-1 mt-2 mt-sm-0">Eliminar</a>
     {% endif %}
     {% if object.estado == 'Finalizada' %}
-    {% if object.ivi == 'NO' %}
-    <a href="{% url 'PDV_indiceivi_crear' object.pk %}" class="btn btn-primary mr-1">Generar índice</a>
+    {% if object.indice_ingreso == 'NO' %}
+    <a href="{% url 'PDV_indiceingreso_crear' object.pk %}" class="btn btn-primary mr-1">Generar índice ingreso</a>
+    {% endif %}
+    {% if object.ivi == 'NO' and object.indice_ingreso == 'SI' %}
+    <a href="{% url 'PDV_indiceivi_crear' object.pk %}" class="btn btn-primary mr-1">Generar IVI</a>
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     {% endif %}
@@ -50,13 +53,13 @@ PDV Pre-admisiones
 
 
     <!-- Datos de Admisión -->
-    <div class="col-sm-4 pb-3">
+    <div class="col-sm-3 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
-          <h3 class="card-title">Detalle pre-admisión</h3>  
-          <div class="card-tools d-inline">
+          <h3 class="card-title">Detalle pre-admisión</h3>
+          <div class="card-tools">
             <a href="{% url 'PDV_preadmisiones_ver2' object.pk %}" class="ml-3 mr-2">Ver detalle</a>
-            <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
+            <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
               <i class="fas fa-minus"></i>
             </button>
           </div>
@@ -69,10 +72,10 @@ PDV Pre-admisiones
             <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
             <dd class="col-sm-5 mb-2">Solicitud creada por</dd>
             <dt class="col-sm-7 mb-2">{{object.creado_por}}</dt>
-            <dd class="col-sm-5 mb-2">Taller solicitado</dd>
-            <dt class="col-sm-7 mb-2">{{object.centro_postula}}</dt>
-            <dd class="col-sm-5 mb-2">Centro solicitado</dd>
-            <dt class="col-sm-7 mb-2">{{object.taller_postula}}</dt>
+            <dd class="col-sm-5 mb-2">Acompañante</dd>
+            <dt class="col-sm-7 mb-2">{{object.acompaniante}}</dt>
+            {% comment %} <dd class="col-sm-5 mb-2">Madrina</dd>
+            <dt class="col-sm-7 mb-2">{{object.madrina}}</dt> {% endcomment %}
             {% if object.modificado_por %}
             <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Modificado por {{object.modificado_por}} - {{object.modificado|date:'d/m/Y'}}</dd>
             {% endif %}
@@ -83,7 +86,7 @@ PDV Pre-admisiones
     <!-- /  -->
 
     <!-- Datos de legajo -->
-    <div class="col-sm-4 pb-3">
+    <div class="col-sm-3 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
           <h3 class="card-title">Detalle Legajo</h3>
@@ -110,7 +113,7 @@ PDV Pre-admisiones
     <!-- /  -->
 
     <!-- Detalle de Ingreso -->
-    <div class="col-sm-4 pb-3">
+    <div class="col-sm-3 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
           <h3 class="card-title">Detalle índice de ingreso</h3>
@@ -121,30 +124,25 @@ PDV Pre-admisiones
           </div>
         </div>
         <div class="card-body">
+          {% if criterios_total %}
           <dl class="row mb-0">
-              <dd class="col-sm-8 mb-2">Falta de autogestión</dd>
-              <dt class="col-sm-4 mb-2" id="autogestion">
-                  {% if foto_ivi %}{{ foto_ivi.autogestion }}{% endif %}
-              </dt>
-              <dd class="col-sm-8 mb-2">Falta de autovaloración</dd>
-              <dt class="col-sm-4 mb-2" id="autovaloracion">
-                  {% if foto_ivi %}{{ foto_ivi.autovaloracion }}{% endif %}
-              </dt>
-      
-              <dd class="col-sm-8 mb-2">Fecha</dd>
-              <dt class="col-sm-4 mb-2">{{ legajo.fk_legajo.fecha_nacimiento|date:'d/m/Y' }}</dt>
-              <dd class="col-sm-8 mb-2">Observaciones</dd>
-              <dt class="col-sm-4 mb-2">
-                  {% if foto_ivi %}{{ foto_ivi.observaciones }}{% endif %}
-              </dt>
+            <dd class="col-sm-8 mb-2">Cantidad total de criterios</dd>
+            <dt class="col-sm-4 mb-2"><span class="badge badge-warning float-center">{{ criterios_total }}</span></dt>
+            <dd class="col-sm-8 mb-2">Fecha del índice</dd>
+            <dt class="col-sm-4 mb-2">{{legajo.fk_legajo.fecha_nacimiento|date:'d/m/Y'}}</dt>
+            <dd class="col-sm-8 mb-2">Criterios sociales presentes</dd>
+            <dt class="col-sm-4 mb-2">{{ cant_sociales }}</dt>
+            <dd class="col-sm-8 mb-2">Criterios combinables presentes</dd>
+            <dt class="col-sm-4 mb-2">{{ cant_combinables }}</dt>
           </dl>
-      </div>
-      
+          {% else %}
+          <h6>Sin índices.</h6>
+          {% endif %}
+        </div>
       </div>
     </div>
     <!-- /  -->
 
-    <!-- Datos de Indice 
     <div class="col-sm-3 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
@@ -182,7 +180,7 @@ PDV Pre-admisiones
       </div>
     </div>
   </div>
- -->
+  <!-- /  -->
 
   <!-- Datos grupo familiar -->
   <div class="col-12">

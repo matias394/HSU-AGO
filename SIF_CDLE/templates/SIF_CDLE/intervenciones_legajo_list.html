@@ -83,8 +83,6 @@ Intervenciones
               <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
               <dd class="col-sm-5 mb-2">Acompañante </dd>
               <dt class="col-sm-7 mb-2">{{object.fk_preadmi.acompaniante}}</dt>
-              <dd class="col-sm-5 mb-2">Madrina</dd>
-              <dt class="col-sm-7 mb-2">{{object.fk_preadmi.madrina}}</dt>
             </dl>
           </div>
       </div>
@@ -146,7 +144,7 @@ Intervenciones
                 {% for i in intervenciones %}
               <tr>
                 <td> {{i.creado|date:'d/m/Y' }} </td>
-                <td> {{i.creado_por}} </td>
+                <td> {% if i.creado_por %}{{i.creado_por}}{% else %}{{i.modificado_por}}{% endif %} </td>
                 <td> {{i.criterio_modificable}}</td>
                 <td> {{i.impacto}}</td>
                 <td> {{i.accion}}</td>
