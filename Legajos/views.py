@@ -45,6 +45,20 @@ class LegajosReportesListView(ListView):
     template_name = "Legajos/legajos_reportes.html"
     model = Legajos
 
+    
+    def get_context_data(self, **kwargs):
+        organismos = Organismos.objects.all()
+        programas = Programas.objects.all()
+        derivaciones = LegajosDerivaciones.objects.all()
+
+
+        context = super().get_context_data(**kwargs)
+        context['organismos'] = organismos
+        context['programas'] = programas
+        context['derivaciones'] = derivaciones
+        context[CHOICE_ESTADO_DERIVACION]
+        return context   
+    
     # Funcion de busqueda
 
     def get_queryset(self):
