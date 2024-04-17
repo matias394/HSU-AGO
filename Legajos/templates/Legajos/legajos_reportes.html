@@ -29,7 +29,7 @@
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label>Programa</label>
-                        <select class="select2 w-100">
+                        <select name="data_programa" class="select2 w-100">
                             <option disabled selected></option>
                             {% for programa in programas %}
                             <option>{{programa.nombre}}</option>
@@ -40,7 +40,7 @@
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label>Organismo</label>
-                        <select class="select2 w-100">
+                        <select name="data_organismo" class="select2 w-100">
                             <option disabled selected></option>
                             {% for organismo in organismos %}
                             <option>{{organismo.nombre}}</option>
@@ -51,10 +51,10 @@
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label>Estado</label>
-                        <select class="select2 w-100">
+                        <select name="data_estado" class="select2 w-100">
                             <option disabled selected></option>
-                            {% for derivacion in derivaciones %}
-                            <option>{{derivacion.estado}}</option>
+                            {% for clave,valor in estados %}
+                            <option>{{valor}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -62,12 +62,13 @@
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label>Desde</label>
-                        <select class="select2 w-100">
+                        {% comment %} <select class="select2 w-100">
                             <option disabled selected></option>
                             {% for derivacion in derivaciones %}
                             <option>{{derivacion.fecha_creado}}</option>
                             {% endfor %}
-                        </select>
+                        </select> {% endcomment %}
+                        <input type="date" name="data_fecha_derivacion" required="" class="select2 w-100 form-control" id="fecha_derivacion">
                     </div>
                 </div>  
             </div>

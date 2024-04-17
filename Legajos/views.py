@@ -40,7 +40,6 @@ logger = logging.getLogger('django')
 
 # region ############################################################### LEGAJOS
 
-
 class LegajosReportesListView(ListView):
     template_name = "Legajos/legajos_reportes.html"
     model = Legajos
@@ -49,23 +48,34 @@ class LegajosReportesListView(ListView):
     def get_context_data(self, **kwargs):
         organismos = Organismos.objects.all()
         programas = Programas.objects.all()
-        derivaciones = LegajosDerivaciones.objects.all()
+        # derivaciones = LegajosDerivaciones.objects.all()
 
 
         context = super().get_context_data(**kwargs)
         context['organismos'] = organismos
         context['programas'] = programas
-        context['derivaciones'] = derivaciones
-        context[CHOICE_ESTADO_DERIVACION]
+        # context['derivaciones'] = derivaciones
+        context['estados'] = CHOICE_ESTADO_DERIVACION
         return context   
     
     # Funcion de busqueda
 
-    def get_queryset(self):
-        query = self.request.GET.get("busqueda")
+    def get_queryset(self): 
+        # query = self.request.GET.get("busqueda")
+        query = self.request.GET.dict()
 
         if query:
-            object_list = self.model.objects.filter(Q(nombre__icontains=query) | Q(apellido__icontains=query) | Q(documento__icontains=query)).distinct()
+            derivaciones = LegajosDerivaciones.objects.select_related('fk_legajo')
+            # TODO: Resolver como filtrar la query que devuelve el innerjoin con legajo
+            print(derivaciones.query)
+            # print(query)
+            object_list = derivaciones.filter(
+                Q(Legajos_legajos_nombre__icontains=query.get('busqueda')) | 
+                Q(Legajos_legajos_apellido__icontains=query.get('busqueda')) | 
+                Q(Legajos_legajos_documento__icontains=query.get('busqueda'))
+                # and Q(documento__icontains=query.get('busqueda'))
+                ).distinct()
+            
 
             if object_list.count() == 0:
                 messages.warning(self.request, ("La búsqueda no arrojó resultados."))
