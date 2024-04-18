@@ -49,8 +49,6 @@ class LegajosReportesListView(ListView):
     def get_context_data(self, **kwargs):
         organismos = Organismos.objects.all()
         programas = Programas.objects.all()
-
-
         context = super().get_context_data(**kwargs)
         context['organismos'] = organismos
         context['programas'] = programas
@@ -59,52 +57,35 @@ class LegajosReportesListView(ListView):
     
     # Funcion de busqueda
     def get_queryset(self): 
-        query = self.request.GET.get("busqueda")
-
-        if query:
-            object_list = LegajosDerivaciones.objects.filter(
-                Q(fk_legajo__nombre__icontains=query) | 
-                Q(fk_legajo__apellido__icontains=query) | 
-                Q(fk_legajo__documento__icontains=query) | 
-                Q(fk_legajo__sexo__icontains=query)
-            ).distinct()
-
-            if not object_list.exists():
+        nombre_completo_legajo = self.request.GET.get("busqueda")
+        data_organismo = self.request.GET.get("data_organismo")
+        data_programa = self.request.GET.get("data_programa")
+        data_estado = self.request.GET.get("data_estado")
+        data_fecha_desde = self.request.GET.get("data_fecha_derivacion")
+        object_list = LegajosDerivaciones.objects.all()
+        
+        if data_programa and data_organismo : object_list = object_list.filter(
+                fk_programa=data_programa,
+                fk_organismo=data_organismo
+            )
+        
+        elif data_programa : object_list = object_list.filter(fk_programa=data_programa)
+        elif data_organismo: object_list = object_list.filter(fk_organismo=data_organismo)
+        
+        if nombre_completo_legajo or nombre_completo_legajo == '':
+            object_list = object_list.filter(
+                Q(fk_legajo__nombre__icontains=nombre_completo_legajo) | 
+                Q(fk_legajo__apellido__icontains=nombre_completo_legajo) | 
+                Q(fk_legajo__documento__icontains=nombre_completo_legajo)
+            )
+        
+        if data_estado : object_list = object_list.filter(estado=data_estado)
+        if data_fecha_desde : object_list = object_list.filter(fecha_creado__gte=data_fecha_desde)
+        if not object_list.exists():
                 messages.warning(self.request, "La búsqueda no arrojó resultados.")
-
-        else:
-            object_list = self.model.objects.all()
-
-        return object_list
-
-
-
-    # def get_queryset(self): 
-    #     # query = self.request.GET.get("busqueda")
-    #     query = self.request.GET.dict()
-
-    #     if query:
-    #         derivaciones = LegajosDerivaciones.objects.select_related('fk_legajo').all()
-    #         # Resolver como filtrar la query que devuelve el innerjoin con legajo
-    #         print(derivaciones.query)
-    #         # print(query)
-    #         object_list = derivaciones.filter(
-    #             Q(fk_legajo_fk_legajo__icontains=query.get('busqueda')) | 
-    #             Q(fk_legajo_legajos_apellido__icontains=query.get('busqueda')) | 
-    #             Q(fk_legajo_legajos_fk_programa__icontains=query.get('busqueda')) |
-    #             Q(fk_legajo_legajos_documento__icontains=query.get('busqueda'))
-    #             # and Q(documento__icontains=query.get('busqueda'))
-    #             ).distinct()
-            
-
-    #         if object_list.count() == 0:
-    #             messages.warning(self.request, ("La búsqueda no arrojó resultados."))
-
-    #     else:
-    #         object_list = self.model.objects.all()
-
-    #     return object_list
-
+                return object_list
+        
+        return object_list.distinct()
 
 class LegajosListView(TemplateView):
     template_name = "Legajos/legajos_list.html"
@@ -129,6 +110,7 @@ class LegajosListView(TemplateView):
             mostrar_btn_resetear = True
             mostrar_resultados = True
 
+        
         context["mostrar_resultados"] = mostrar_resultados
         context["mostrar_btn_resetear"] = mostrar_btn_resetear
         context["object_list"] = object_list

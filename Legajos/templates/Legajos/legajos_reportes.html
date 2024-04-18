@@ -32,7 +32,7 @@
                         <select name="data_programa" class="select2 w-100">
                             <option disabled selected></option>
                             {% for programa in programas %}
-                            <option>{{programa.nombre}}</option>
+                            <option value={{programa.id}} >{{programa.nombre}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -43,7 +43,7 @@
                         <select name="data_organismo" class="select2 w-100">
                             <option disabled selected></option>
                             {% for organismo in organismos %}
-                            <option>{{organismo.nombre}}</option>
+                            <option value={{organismo.id}} >{{organismo.nombre}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -68,7 +68,7 @@
                             <option>{{derivacion.fecha_creado}}</option>
                             {% endfor %}
                         </select> {% endcomment %}
-                        <input type="date" name="data_fecha_derivacion" class="select2 w-100 form-control" id="fecha_derivacion">
+                        <input selected type="date" name="data_fecha_derivacion" class="select2 w-100 form-control" id="fecha_derivacion">
                     </div>
                 </div>  
             </div>
