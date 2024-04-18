@@ -28,6 +28,7 @@ from django.shortcuts import get_object_or_404
 from .models import *
 from .forms import *
 from .choices import *
+from django.conf import settings
 import json
 
 # Configurar el locale para usar el idioma español
@@ -42,48 +43,67 @@ logger = logging.getLogger('django')
 
 class LegajosReportesListView(ListView):
     template_name = "Legajos/legajos_reportes.html"
-    model = Legajos
-
+    model = LegajosDerivaciones
+    
     
     def get_context_data(self, **kwargs):
         organismos = Organismos.objects.all()
         programas = Programas.objects.all()
-        # derivaciones = LegajosDerivaciones.objects.all()
 
 
         context = super().get_context_data(**kwargs)
         context['organismos'] = organismos
         context['programas'] = programas
-        # context['derivaciones'] = derivaciones
         context['estados'] = CHOICE_ESTADO_DERIVACION
         return context   
     
     # Funcion de busqueda
-
     def get_queryset(self): 
-        # query = self.request.GET.get("busqueda")
-        query = self.request.GET.dict()
+        query = self.request.GET.get("busqueda")
 
         if query:
-            derivaciones = LegajosDerivaciones.objects.select_related('fk_legajo')
-            # TODO: Resolver como filtrar la query que devuelve el innerjoin con legajo
-            print(derivaciones.query)
-            # print(query)
-            object_list = derivaciones.filter(
-                Q(Legajos_legajos_nombre__icontains=query.get('busqueda')) | 
-                Q(Legajos_legajos_apellido__icontains=query.get('busqueda')) | 
-                Q(Legajos_legajos_documento__icontains=query.get('busqueda'))
-                # and Q(documento__icontains=query.get('busqueda'))
-                ).distinct()
-            
+            object_list = LegajosDerivaciones.objects.filter(
+                Q(fk_legajo__nombre__icontains=query) | 
+                Q(fk_legajo__apellido__icontains=query) | 
+                Q(fk_legajo__documento__icontains=query) | 
+                Q(fk_legajo__sexo__icontains=query)
+            ).distinct()
 
-            if object_list.count() == 0:
-                messages.warning(self.request, ("La búsqueda no arrojó resultados."))
+            if not object_list.exists():
+                messages.warning(self.request, "La búsqueda no arrojó resultados.")
 
         else:
             object_list = self.model.objects.all()
 
         return object_list
+
+
+
+    # def get_queryset(self): 
+    #     # query = self.request.GET.get("busqueda")
+    #     query = self.request.GET.dict()
+
+    #     if query:
+    #         derivaciones = LegajosDerivaciones.objects.select_related('fk_legajo').all()
+    #         # Resolver como filtrar la query que devuelve el innerjoin con legajo
+    #         print(derivaciones.query)
+    #         # print(query)
+    #         object_list = derivaciones.filter(
+    #             Q(fk_legajo_fk_legajo__icontains=query.get('busqueda')) | 
+    #             Q(fk_legajo_legajos_apellido__icontains=query.get('busqueda')) | 
+    #             Q(fk_legajo_legajos_fk_programa__icontains=query.get('busqueda')) |
+    #             Q(fk_legajo_legajos_documento__icontains=query.get('busqueda'))
+    #             # and Q(documento__icontains=query.get('busqueda'))
+    #             ).distinct()
+            
+
+    #         if object_list.count() == 0:
+    #             messages.warning(self.request, ("La búsqueda no arrojó resultados."))
+
+    #     else:
+    #         object_list = self.model.objects.all()
+
+    #     return object_list
 
 
 class LegajosListView(TemplateView):
