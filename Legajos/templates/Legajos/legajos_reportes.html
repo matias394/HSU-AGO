@@ -108,8 +108,8 @@
                             <th>Nombre</th>
                             <th>Documento</th>
                             <th>Sexo</th>
-                            <th>Fecha de nacimiento</th>
-                            <th>Edad</th>
+                            <th>Programa</th>
+                            <th>Centro</th>
                             <th>Estado</th>
                             <th style="width: 15%" class="notexport"> </th>
                         </tr>
@@ -117,25 +117,20 @@
                     <tbody>
                         {% for o in object_list %}
                         <tr>
-                            <td><a href="{% url 'legajos_ver' o.id %}" class="font-weight-bold" title="Ver detalles">
-                                {{o}}</a></td>
-                            <td>{{o.tipo_doc}} {{o.documento}}</td>
-                            <td>{{o.sexo}}</td>
-                            <td>{{o.fecha_nacimiento|date:'d/m/Y'}}</td>
-                            <td>{{o.edad}} </td>
-                            <td > 
-                                {% if o.estado  %}
-                                <span class="text-success font-weight-bold">Activo</span>
-                                {% else %}
-                                <span class="text-danger font-weight-bold">Inactivo</span>
-                                {% endif %}
-                              </td>
+                            <td><a href="{% url 'legajos_ver' o.fk_legajo.id %}" class="font-weight-bold" title="Ver detalles">
+                                {{o.fk_legajo}}</a></td>
+                            <td>{{o.tipo_doc}} {{o.fk_legajo.documento}} </td>
+                            <td>{{o.fk_legajo.sexo}}</td>
+                            <td>{{o.fk_programa}}</td>
+                            <td>{{o.fk_organismo}}</td>
+                            <td > {{o.estado}} </td>
+                            
                             <td class="project-actions text-right"> 
                                 {%if perms.Usuarios.rol_admin%} 
                                 <div class="btn-group" role="group"> 
-                                    <a href="{% url 'legajos_ver' o.id %}" class="btn btn-primary btn-sm ver">Ver</a> 
-                                    <a href="{% url 'legajos_editar' o.id %}" class="btn btn-primary btn-sm editar">Editar</a> 
-                                    <a href="{% url 'legajos_eliminar' o.id %}" class="btn btn-danger btn-sm eliminar">Eliminar</a> 
+                                    <a href="{% url 'legajos_ver' o.fk_legajo.id %}" class="btn btn-primary btn-sm ver">Ver</a> 
+                                    <a href="{% url 'legajos_editar' o.fk_legajo.id %}" class="btn btn-primary btn-sm editar">Editar</a> 
+                                    <a href="{% url 'legajos_eliminar' o.fk_legajo.id %}" class="btn btn-danger btn-sm eliminar">Eliminar</a> 
                                     </div>
                                 {%endif%}
                             </td>
