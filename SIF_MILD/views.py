@@ -639,6 +639,7 @@ class MILDIndiceIviUpdateView (PermisosMixin, UpdateView):
                 base.fk_criterios_ivi_id = f
                 base.fk_legajo_id = preadmi.fk_legajo_id
                 base.fk_preadmi_id = pk
+                base.tipo = "Ingreso"
                 base.presencia = True
                 base.programa = "MILD"
                 base.clave = clave
