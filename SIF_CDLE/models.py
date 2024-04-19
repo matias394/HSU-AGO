@@ -119,7 +119,7 @@ class CDLE_PreAdmision (models.Model):
     fum =  models.DateField(verbose_name='Fecha última mestruación', null=True, blank=True)
     sem_embarazo = models.IntegerField(choices=CHOICE_1to40, null=True, blank=True, verbose_name='Semanas de embarazo')
     fpp =  models.DateField(verbose_name='FPP', null=True, blank=True)
-    centro_controla = models.CharField(max_length=250, verbose_name='Centro de salud que se controla o controlará', null=True, blank=True, choices=CHOICE_CENTRO_CONTROL)
+    centro_controla = models.CharField(max_length=250, verbose_name='Centro de salud que se controla', null=True, blank=True, choices=CHOICE_CENTRO_CONTROL)
     primer_control = models.IntegerField(choices=CHOICE_4to40, null=True, blank=True, verbose_name='¿Semana del primer control?')
     primer_embarazo = models.BooleanField(verbose_name='¿Es tu primer embarazo?', null=True, blank=True)
     libreta_sanitaria = models.BooleanField(verbose_name='¿Tiene libreta sanitaria?', null=True, blank=True)

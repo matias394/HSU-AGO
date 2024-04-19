@@ -26,10 +26,12 @@ Pre-admisiones
   <!-- botones -->
   <div class="col-12 my-3 mx-2 d-print-none">
     <div class="btn-toolbar" role="toolbar">
+      {% if object.admitido == 'NO' and object.ivi == 'SI'%}
     <form method="post">
       {% csrf_token %}
       <button type="submit" name="admitir" class="btn btn-primary mr-1" >Admitir</button>
-  </form>
+    </form>
+    {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
   </div>
 </div>

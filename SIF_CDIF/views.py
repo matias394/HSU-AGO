@@ -209,6 +209,13 @@ class CDIFPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
         base.save()
 
         return HttpResponseRedirect(reverse('CDIF_preadmisiones_ver', args=[self.object.pk]))
+    
+    def form_invalid(self, form):
+        for field, errors in form.errors.items():
+            label = form.fields[field].label
+            for error in errors:
+                messages.error(self.request, f"Error en el campo '{label}': {error}")
+        return super().form_invalid(form)
 
 class CDIFPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin):
     permission_required = "Usuarios.rol_admin"

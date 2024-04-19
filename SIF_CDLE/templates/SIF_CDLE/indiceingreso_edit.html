@@ -72,7 +72,7 @@
                                 <td>{{c.criterio}}</td>
                                 <td class="text-center px-0">
                                     <div class="icheck-primary d-inline">
-                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}">
+                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}" {% for a in activos %}{% if a.fk_criterios_ingreso_id == c.id %} checked {% endif %}{% endfor %}>
                                         <label for="{{c.id}}"></label>
                                     </div>
                                 </td>
@@ -88,7 +88,7 @@
                                 <td>{{c.criterio}}</td>
                                 <td class="text-center px-0">
                                     <div class="icheck-primary d-inline">
-                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}">
+                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}" {% for a in activos %}{% if a.fk_criterios_ingreso_id == c.id %} checked {% endif %}{% endfor %}>
                                         <label for="{{c.id}}"></label>
                                     </div>
                                 </td>
@@ -104,7 +104,7 @@
                                 <td>{{c.criterio}}</td>
                                 <td class="text-center px-0">
                                     <div class="icheck-primary d-inline">
-                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}">
+                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}"  {% for a in activos %}{% if a.fk_criterios_ingreso_id == c.id %} checked {% endif %}{% endfor %}>
                                         <label for="{{c.id}}"></label>
                                     </div>
                                 </td>
@@ -120,7 +120,7 @@
                                 <td>{{c.criterio}}</td>
                                 <td class="text-center px-0">
                                     <div class="icheck-primary d-inline">
-                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}">
+                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}"  {% for a in activos %}{% if a.fk_criterios_ingreso_id == c.id %} checked {% endif %}{% endfor %}>
                                         <label for="{{c.id}}"></label>
                                     </div>
                                 </td>
@@ -141,7 +141,7 @@
 
             <div class="mt-4 mx-2">
                 <button class="btn btn-primary mr-1" type="submit">Confirmar</button>
-                <a href="{% url 'CDLE_preadmisiones_ver' object.id%}" class="btn btn-secondary">Cancelar</a>
+                <a href="{% url 'CDLE_indiceingreso_ver' object.id%}" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>
     </div>

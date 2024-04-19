@@ -74,9 +74,9 @@ class CDIF_PreadmisionesForm (forms.ModelForm):
             'fk_legajo_3':'',
             'fk_legajo_4':'',
             'fk_legajo_5':'',
-            'centro_postula':'',
-            'sala_postula':'',
-            'turno_postula':'',
+            'centro_postula':'Centro al que postula',
+            'sala_postula':'Sala a la que postula',
+            'turno_postula':'Turno al que postula',
         }
 
 class criterios_IVI (forms.ModelForm):

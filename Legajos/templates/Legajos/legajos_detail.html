@@ -186,7 +186,7 @@
             </div>
             {% endif %}
         </div>
-
+        <!-- <<<<<<<<<<<< EN DESARROLLO >>>>>>>>>>>>>>>>>>>>>>
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title font-weight-bold">Intervenciones en grupo familiar</h3>
@@ -214,17 +214,6 @@
                         </div>
 
                     </div>
-
-                    <!-- <div class="col-md-4">
-                                <ul class="chart-legend clearfix">
-                                    <li><i class="far fa-circle text-danger"></i> CDIF</li>
-                                    <li><i class="far fa-circle text-success"></i> CDLE</li>
-                                    <li><i class="far fa-circle text-warning"></i> PDV</li>
-                                    <li><i class="far fa-circle text-info"></i> 1000D</li>
-                                    <li><i class="far fa-circle text-primary"></i> Módulos</li>
-                                    <li><i class="far fa-circle text-secondary"></i> Bolsones</li>
-                                </ul>
-                            </div> -->
 
                 </div>
 
@@ -255,7 +244,8 @@
                 </ul>
             </div>
         </div>
-
+    -->
+    <!-- <<<<<<<<<<<<<<<<<<<< EN DESARROLLO >>>>>>>>>>>>>>
         <div class="card ">
             <div class="card-header">
                 <h3 class="card-title font-weight-bold">Indices</h3>
@@ -299,7 +289,7 @@
             </div>
 
         </div>
-
+    -->
         <div class="card ">
             <div class="card-header">
                 <h3 class="card-title font-weight-bold"> Imágenes</h3>
@@ -565,7 +555,7 @@
                 </div>
             </div>
             <div class="col-sm-3 pb-sm-3">
-                <div class="row mx-0 mx-sm-1  h-100 ">
+                <div class="row mx-0 mx-sm-1 ">
                     <div class="small-box bg-olive col-12 mb-0 px-0">
                         <div class="inner">
                             <h3> {{count_intervenciones}}</h3>
@@ -577,6 +567,7 @@
                         <a href="{% url 'programas_intervencion' object.id  %}" class="small-box-footer">Ver
                             más <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
+                    <!-- <<<<<<<<<<<<< EN DESARROLLO >>>>>>>>>>>>>>>>
                     <div class="small-box bg-purple col-12 my-2 px-0">
                         <div class="inner">
                             <h3>21</h3>
@@ -599,7 +590,7 @@
                         <a href="{% url 'intervenciones_salud' object.id  %}" class="small-box-footer">Ver
                             más <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
-
+                -->
                 </div>
             </div>
         </div>
@@ -910,7 +901,7 @@
                 </div>
             </div>
         </div>
-
+<!-- <<<<<<<<<<<<<<<< EN DESARROLLO >>>>>>>>>>>>>>>>>>>>>
         <div class="row">
             <div class="col-12">
                 <div class="card card-collapse">
@@ -924,7 +915,6 @@
                     </div>
                     <div class="card-body bg-light p-0">
 
-                        <!-- comienzo timeline -->
 
                         <div class="cd-horizontal-timeline loaded">
                             <div class="timeline ">
@@ -940,16 +930,16 @@
                                         </ol>
                                         <span class="filling-line" aria-hidten="true" style="transform: scaleX(0.281506);"></span>
                                     </div>
-                                    <!-- .events -->
+                                    
                                 </div>
-                                <!-- .events-wrapper -->
+                                
                                 <ul class="cd-timeline-navigation">
                                     <li><a href="#0" class="prev inactive">Prev</a></li>
                                     <li><a href="#0" class="next">Next</a></li>
                                 </ul>
-                                <!-- .cd-timeline-navigation -->
+                                
                             </div>
-                            <!-- .timeline -->
+                            
                         {% for derivacion in derivaciones %}
                             <div class="events-content pb-2 pb-sm-0">
                                 <ol class="pb-0 mb-0">
@@ -1017,6 +1007,8 @@
                 </div>
             </div>
         </div>
+    -->
+
         {% if datos_json %}
         <div class="row d-none d-sm-inline">
             <div class="col-12">
