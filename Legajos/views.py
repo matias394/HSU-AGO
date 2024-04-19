@@ -28,6 +28,7 @@ from django.shortcuts import get_object_or_404
 from .models import *
 from .forms import *
 from .choices import *
+from django.conf import settings
 import json
 
 # Configurar el locale para usar el idioma español
@@ -40,27 +41,51 @@ logger = logging.getLogger('django')
 
 # region ############################################################### LEGAJOS
 
-
 class LegajosReportesListView(ListView):
     template_name = "Legajos/legajos_reportes.html"
-    model = Legajos
-
+    model = LegajosDerivaciones
+    
+    
+    def get_context_data(self, **kwargs):
+        organismos = Organismos.objects.all()
+        programas = Programas.objects.all()
+        context = super().get_context_data(**kwargs)
+        context['organismos'] = organismos
+        context['programas'] = programas
+        context['estados'] = CHOICE_ESTADO_DERIVACION
+        return context   
+    
     # Funcion de busqueda
-
-    def get_queryset(self):
-        query = self.request.GET.get("busqueda")
-
-        if query:
-            object_list = self.model.objects.filter(Q(nombre__icontains=query) | Q(apellido__icontains=query) | Q(documento__icontains=query)).distinct()
-
-            if object_list.count() == 0:
-                messages.warning(self.request, ("La búsqueda no arrojó resultados."))
-
-        else:
-            object_list = self.model.objects.all()
-
-        return object_list
-
+    def get_queryset(self): 
+        nombre_completo_legajo = self.request.GET.get("busqueda")
+        data_organismo = self.request.GET.get("data_organismo")
+        data_programa = self.request.GET.get("data_programa")
+        data_estado = self.request.GET.get("data_estado")
+        data_fecha_desde = self.request.GET.get("data_fecha_derivacion")
+        object_list = LegajosDerivaciones.objects.all()
+        
+        if data_programa and data_organismo : object_list = object_list.filter(
+                fk_programa=data_programa,
+                fk_organismo=data_organismo
+            )
+        
+        elif data_programa : object_list = object_list.filter(fk_programa=data_programa)
+        elif data_organismo: object_list = object_list.filter(fk_organismo=data_organismo)
+        
+        if nombre_completo_legajo or nombre_completo_legajo == '':
+            object_list = object_list.filter(
+                Q(fk_legajo__nombre__icontains=nombre_completo_legajo) | 
+                Q(fk_legajo__apellido__icontains=nombre_completo_legajo) | 
+                Q(fk_legajo__documento__icontains=nombre_completo_legajo)
+            )
+        
+        if data_estado : object_list = object_list.filter(estado=data_estado)
+        if data_fecha_desde : object_list = object_list.filter(fecha_creado__gte=data_fecha_desde)
+        if not object_list.exists():
+                messages.warning(self.request, "La búsqueda no arrojó resultados.")
+                return object_list
+        
+        return object_list.distinct()
 
 class LegajosListView(TemplateView):
     template_name = "Legajos/legajos_list.html"
@@ -85,6 +110,7 @@ class LegajosListView(TemplateView):
             mostrar_btn_resetear = True
             mostrar_resultados = True
 
+        
         context["mostrar_resultados"] = mostrar_resultados
         context["mostrar_btn_resetear"] = mostrar_btn_resetear
         context["object_list"] = object_list

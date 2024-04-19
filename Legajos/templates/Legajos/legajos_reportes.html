@@ -26,78 +26,51 @@
     <div class="row">
         <div class="col-md-10 m-auto">
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <div class="form-group">
-                        <label>Localidad</label>
-                        <select class="select2 w-100">
+                        <label>Programa</label>
+                        <select name="data_programa" class="select2 w-100">
                             <option disabled selected></option>
-                            <option>Localidad</option>
-                            <option>Localidad</option>
-                            <option>Localidad</option>
-                            <option>Localidad</option>
+                            {% for programa in programas %}
+                            <option value={{programa.id}} >{{programa.nombre}}</option>
+                            {% endfor %}
                         </select>
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <div class="form-group">
-                        <label>Barrio</label>
-                        <select class="select2 w-100">
+                        <label>Organismo</label>
+                        <select name="data_organismo" class="select2 w-100">
                             <option disabled selected></option>
-                            <option>Barrio</option>
-                            <option>Barrio</option>
-                            <option>Barrio</option>
-                            <option>Barrio</option>
+                            {% for organismo in organismos %}
+                            <option value={{organismo.id}} >{{organismo.nombre}}</option>
+                            {% endfor %}
                         </select>
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <div class="form-group">
-                        <label>Circuito</label>
-                        <select class="select2 w-100">
+                        <label>Estado</label>
+                        <select name="data_estado" class="select2 w-100">
                             <option disabled selected></option>
-                            <option>Circuito</option>
-                            <option>Circuito</option>
-                            <option>Circuito</option>
-                            <option>Circuito</option>
+                            {% for clave,valor in estados %}
+                            <option>{{valor}}</option>
+                            {% endfor %}
                         </select>
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <div class="form-group">
-                        <label>Otro</label>
-                        <select class="select2 w-100">
+                        <label>Desde</label>
+                        {% comment %} <select class="select2 w-100">
                             <option disabled selected></option>
-                            <option>Otro</option>
-                            <option>Otro</option>
-                            <option>Otro</option>
-                            <option>Otro</option>
-                        </select>
+                            {% for derivacion in derivaciones %}
+                            <option>{{derivacion.fecha_creado}}</option>
+                            {% endfor %}
+                        </select> {% endcomment %}
+                        <input selected type="date" name="data_fecha_derivacion" class="select2 w-100 form-control" id="fecha_derivacion">
                     </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label>Otro</label>
-                        <select class="select2 w-100">
-                            <option disabled selected></option>
-                            <option>Otro</option>
-                            <option>Otro</option>
-                            <option>Otro</option>
-                            <option>Otro</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label>Otro</label>
-                        <select class="select2 w-100">
-                            <option disabled selected></option>
-                            <option>Otro</option>
-                            <option>Otro</option>
-                            <option>Otro</option>
-                            <option>Otro</option>
-                        </select>
-                    </div>
-                </div>
+                </div>  
             </div>
             <div class="row mt-3">
                 <div class="col-12">                    
@@ -114,6 +87,8 @@
                     </div>
                 </div>
             </div>
+        
+        
         </div>
     </div>
 </form>
@@ -133,8 +108,8 @@
                             <th>Nombre</th>
                             <th>Documento</th>
                             <th>Sexo</th>
-                            <th>Fecha de nacimiento</th>
-                            <th>Edad</th>
+                            <th>Programa</th>
+                            <th>Centro</th>
                             <th>Estado</th>
                             <th style="width: 15%" class="notexport"> </th>
                         </tr>
@@ -142,25 +117,20 @@
                     <tbody>
                         {% for o in object_list %}
                         <tr>
-                            <td><a href="{% url 'legajos_ver' o.id %}" class="font-weight-bold" title="Ver detalles">
-                                {{o}}</a></td>
-                            <td>{{o.tipo_doc}} {{o.documento}}</td>
-                            <td>{{o.sexo}}</td>
-                            <td>{{o.fecha_nacimiento|date:'d/m/Y'}}</td>
-                            <td>{{o.edad}} </td>
-                            <td > 
-                                {% if o.estado  %}
-                                <span class="text-success font-weight-bold">Activo</span>
-                                {% else %}
-                                <span class="text-danger font-weight-bold">Inactivo</span>
-                                {% endif %}
-                              </td>
+                            <td><a href="{% url 'legajos_ver' o.fk_legajo.id %}" class="font-weight-bold" title="Ver detalles">
+                                {{o.fk_legajo}}</a></td>
+                            <td>{{o.tipo_doc}} {{o.fk_legajo.documento}} </td>
+                            <td>{{o.fk_legajo.sexo}}</td>
+                            <td>{{o.fk_programa}}</td>
+                            <td>{{o.fk_organismo}}</td>
+                            <td > {{o.estado}} </td>
+                            
                             <td class="project-actions text-right"> 
                                 {%if perms.Usuarios.rol_admin%} 
                                 <div class="btn-group" role="group"> 
-                                    <a href="{% url 'legajos_ver' o.id %}" class="btn btn-primary btn-sm ver">Ver</a> 
-                                    <a href="{% url 'legajos_editar' o.id %}" class="btn btn-primary btn-sm editar">Editar</a> 
-                                    <a href="{% url 'legajos_eliminar' o.id %}" class="btn btn-danger btn-sm eliminar">Eliminar</a> 
+                                    <a href="{% url 'legajos_ver' o.fk_legajo.id %}" class="btn btn-primary btn-sm ver">Ver</a> 
+                                    <a href="{% url 'legajos_editar' o.fk_legajo.id %}" class="btn btn-primary btn-sm editar">Editar</a> 
+                                    <a href="{% url 'legajos_eliminar' o.fk_legajo.id %}" class="btn btn-danger btn-sm eliminar">Eliminar</a> 
                                     </div>
                                 {%endif%}
                             </td>
