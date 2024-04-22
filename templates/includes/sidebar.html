@@ -192,7 +192,7 @@
 
 {%if perms.Usuarios.programa_Legajo%}
 <li class="nav-item">
-	<a href="{% url 'legajos_listar' %}" class="nav-link {% if 'legajos/busqueda' in pagina_actual %}active{% endif %}">
+	<a href="{% url 'legajos_listar' %}" class="nav-link {% if 'legajos/listar' in pagina_actual %}active{% endif %}">
 		<i class="nav-icon fas fa-user"></i>
 		<p>Legajos</p>
 	</a>
@@ -201,7 +201,7 @@
 
 {%if perms.Usuarios.programa_Reporte%}
 <li class="nav-item">
-	<a href="{% url 'legajos_reportes' %}" class="nav-link ">
+	<a href="{% url 'legajos_reportes' %}" class="nav-link  {% if 'legajos/reportes' in pagina_actual %}active{% endif %}">
 		<i class="nav-icon fas fa-clipboard"></i>
 		<p>Reportes</p>
 	</a>

@@ -17,6 +17,9 @@ from .mixins import PermisosMixin
 from .models import *
 from .forms import *
 
+import requests
+
+
 
 #region---------------------------------------------------------------------------------------USUARIOS
 from django.http import JsonResponse
@@ -32,34 +35,47 @@ def set_dark_mode(request):
         user.usuarios.save()
         return JsonResponse({'status': 'ok'})
     
-
 class UsuariosLogoutView(LogoutView):
     template_name='login.html'
 
     def get_next_page(self):
-        next_page = super(UsuariosLogoutView, self).get_next_page()
-        messages.add_message(
-            self.request, messages.SUCCESS,
-            '¡Has cerrado sesión con éxito!'
-        )
+        next_page = super().get_next_page()
+
+        # Obtener el username del usuario desde la sesión
+        username = self.request.session.get('username')
+        print("Username:", username)
+
+        # Enviar una solicitud al endpoint de logout
+        logout_url = 'https://auth-ad-srv.msm.gov.ar/api/logout'
+        logout_data = {'username': username}
+        logout_response = requests.post(logout_url, data=logout_data, verify=False)
+
+        if logout_response.status_code == 200:
+            # Si la solicitud de logout es exitosa, mostrar un mensaje al usuario
+            #messages.add_message(
+            #    self.request, messages.SUCCESS,
+            #    '¡Has cerrado sesión con éxito!'
+            #)
+            None
+        elif logout_response.status_code == 401:
+            # Manejar el caso en el que las credenciales sean inválidas
+            #messages.add_message(
+            #    self.request, messages.ERROR,
+            #    'Credenciales inválidas al intentar cerrar sesión. Por favor, inténtalo de nuevo.'
+            #)
+            None
+        else:
+            # Manejar otros códigos de estado de error
+            #messages.add_message(
+            #    self.request, messages.ERROR,
+            #    'Error al cerrar sesión. Por favor, inténtalo de nuevo.'
+            #)
+            None
+
         return next_page
 
 class UsuariosLoginView(LoginView):
     template_name='login.html'
-
-    def form_valid(self, form):
-        """
-        Security check complete. Log the user in.
-        Según el rol redirecciona a determinada pagina.
-        Por default es Inicio.        
-        """
-        user=form.get_user()
-        auth_login(self.request, user)
-        permisos= user.get_all_permissions()
-        if 'rol_directivo' or 'rol_admin'in permisos:
-            return redirect('dashboard')
-        else:
-            return redirect('legajos_listar')
 
 
 class UsuariosListView(PermisosMixin, ListView ):    
