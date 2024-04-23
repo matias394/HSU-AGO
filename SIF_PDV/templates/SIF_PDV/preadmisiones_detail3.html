@@ -26,10 +26,12 @@ Pre-admisiones
   <!-- botones -->
   <div class="col-12 my-3 mx-2 d-print-none">
     <div class="btn-toolbar" role="toolbar">
+      {% if object.admitido == 'NO' and object.ivi == 'SI'%}
     <form method="post">
       {% csrf_token %}
       <button type="submit" name="admitir" class="btn btn-primary mr-1" >Admitir</button>
-  </form>
+    </form>
+    {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
   </div>
 </div>
@@ -39,7 +41,7 @@ Pre-admisiones
 
 
     <!-- Datos de pre-admisión -->
-    <div class="col-sm-4 pb-3">
+    <div class="col-sm-3 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
           <h3 class="card-title">Detalle Pre-admisión</h3>
@@ -57,10 +59,10 @@ Pre-admisiones
             <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
             <dd class="col-sm-5 mb-2">Solicitud creada por</dd>
             <dt class="col-sm-7 mb-2">{{object.creado_por}}</dt>
-            <dd class="col-sm-5 mb-2">Taller solicitado</dd>
-            <dt class="col-sm-7 mb-2">{{object.centro_postula}}</dt>
-            <dd class="col-sm-5 mb-2">Centro solicitado</dd>
-            <dt class="col-sm-7 mb-2">{{object.taller_postula}}</dt>
+            <dd class="col-sm-5 mb-2">Acompañante</dd>
+            <dt class="col-sm-7 mb-2">{{object.acompaniante}}</dt>
+            {% comment %} <dd class="col-sm-5 mb-2">Madrina</dd>
+            <dt class="col-sm-7 mb-2">{{object.madrina}}</dt> {% endcomment %}
             {% if object.modificado_por %}
             <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Modificado por {{object.modificado_por}} -
               {{object.modificado|date:'d/m/Y'}}
@@ -73,7 +75,7 @@ Pre-admisiones
     <!-- /  -->
 
     <!-- Datos de legajo -->
-    <div class="col-sm-4 pb-3">
+    <div class="col-sm-3 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
           <h3 class="card-title">Detalle Legajo</h3>
@@ -98,18 +100,38 @@ Pre-admisiones
       </div>
     </div>
     <!-- /  -->
-
-    <!-- Datos de Indice -->
-    <div class="col-sm-4 pb-3">
+    <!-- Detalle de Ingreso -->
+    <div class="col-sm-3 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
-          <h3 class="card-title">Detalle índice</h3>
-          <div class="card-tools d-inline">
-            <a href="{% url 'PDV_indiceivi_ver' object.id %}" class="ml-3 mr-2">Ver detalles</a>
-            <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
+          <h3 class="card-title">Detalle índice de ingreso</h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
               <i class="fas fa-minus"></i>
             </button>
           </div>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dd class="col-sm-7 mb-2">Cantidad total de criterios</dd>
+            <dt class="col-sm-5 mb-2"><span class="badge badge-warning float-center">{{ criterios_total }}</span></dt>
+            <dd class="col-sm-7 mb-2">Fecha del índice</dd>
+            <dt class="col-sm-5 mb-2">{{foto_ingreso.creado|date:'d/m/Y'}}</dt>
+            <dd class="col-sm-7 mb-2">Autovaloración</dd>
+            <dt class="col-sm-5 mb-2">{{ cant_autovaloracion }}</dt>
+            <dd class="col-sm-7 mb-2">Autogestión</dd>
+            <dt class="col-sm-5 mb-2">{{ cant_autogestion }}</dt>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <!-- /  -->
+
+    <!-- Datos de Indice -->
+    <div class="col-sm-3 pb-3">
+      <div class="card card-outline card-primary h-100 mb-0">
+        <div class="card-header">
+          <h3 class="card-title">Detalle IVI de ingreso</h3>
         </div>
         <div class="card-body pb-1">
           <dl class="row mb-0">
@@ -135,6 +157,7 @@ Pre-admisiones
   </div>
   <!-- /  -->
 
+
  <!-- Datos grupo familiar -->
  <div class="col-12">
     <div class="card card-outline card-primary">
@@ -153,11 +176,13 @@ Pre-admisiones
           <dd class="col-sm-3 mb-2">Nombre</dd>
           <dt class="col-sm-9 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_1_id %}" title="Ver legajo">{{object.fk_legajo_1}}</a> </dt>
           <dd class="col-sm-3 mb-2">Vínculo</dd>
+          <dt class="col-sm-9 mb-2">
           {% for f in familia %}
           {% if f.fk_legajo_1 == object.fk_legajo_1 %}
-          <dt class="col-sm-9 mb-2">{{f.vinculo_inverso}}</dt>
+          {{f.vinculo_inverso|default_if_none:"-"}}
           {% endif %}
           {% endfor %}
+          </dt>
           <dd class="col-sm-3 mb-2">Documento</dd>
           <dt class="col-sm-9 mb-2">{{object.fk_legajo_1.tipo_doc}}  {{object.fk_legajo_1.documento}}</dt>
           <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
@@ -258,7 +283,7 @@ Pre-admisiones
 <div class="row mt-4 d-print-none">
   <div class="col-12 mx-2">
     <div class="form-group  d-flex justify-content-between">
-      <a href="{% url 'preadmisiones_list' %}" class="btn btn-secondary">Volver</a>
+      <a href="{% url 'PDV_preadmisiones_listar' %}" class="btn btn-secondary">Volver</a>
     </div>
   </div>
 </div>

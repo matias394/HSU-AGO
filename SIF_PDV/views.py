@@ -13,7 +13,6 @@ import uuid
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.conf import settings
-from SIF_CDLE.models import Criterios_Ingreso
 
 
 # # Create your views here.
@@ -252,8 +251,8 @@ class PDVPreAdmisionesDetailView(PermisosMixin, DetailView):
         context["ivi"] = ivi
         context["ingreso"] = ingreso
         context['criterios_total'] = ingreso.count()
-        context["cant_combinables"] = ingreso.filter(fk_criterios_ingreso__tipo='Criterios combinables para el ingreso').count()
-        context["cant_sociales"] = ingreso.filter(fk_criterios_ingreso__tipo='Criterios sociales para el ingreso').count() 
+        context["cant_autogestion"] = ingreso.filter(fk_criterios_ingreso__tipo='AUTOGESTION').count()
+        context["cant_autovaloracion"] = ingreso.filter(fk_criterios_ingreso__tipo='AUTOVALORACION').count() 
         context["autonomos"] = ingreso.filter(fk_criterios_ingreso__tipo='Criteros autónomos de ingreso').all()
         context["resultado"] = resultado
         context["resultado_ingreso"] = resultado_ingreso
@@ -410,6 +409,7 @@ class PDVPreAdmisionesDeleteView(PermisosMixin, DeleteView):
             self.object.delete()
             return redirect(self.success_url)
         
+     
 class PDVCriteriosIngresoCreateView(PermisosMixin, CreateView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_PDV/criterios_ingreso_form.html"
@@ -580,8 +580,8 @@ class PDVIndiceIngresoDetailView(PermisosMixin, DetailView):
         context["criterio"] = criterio
         context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
         context["cantidad"] = criterio.count()
-        context["cant_combinables"] = criterio.filter(fk_criterios_ingreso__tipo='Criterios combinables para el ingreso').count()
-        context["cant_sociales"] = criterio.filter(fk_criterios_ingreso__tipo='Criterios sociales para el ingreso').count()
+        context["cant_autogestion"] = criterio.filter(fk_criterios_ingreso__tipo='AUTOGESTION').count()
+        context["cant_autovaloracion"] = criterio.filter(fk_criterios_ingreso__tipo='AUTOVALORACION').count()
         context["mod_puntaje"] = criterio.filter(fk_criterios_ingreso__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ingreso__tipo='Ajustes').count()
         #context['maximo'] = foto_ingreso.puntaje_max
@@ -793,16 +793,26 @@ class PDVPreAdmisiones3DetailView(PermisosMixin, DetailView):
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         criterio = PDV_IndiceIVI.objects.filter(fk_preadmi_id=pk, tipo="Ingreso")
         foto_ivi = PDV_Foto_IVI.objects.filter(fk_preadmi_id= pk, tipo="Ingreso").first()
+        criterio_ingreso = PDV_IndiceIngreso.objects.filter(fk_preadmi_id=pk, tipo="Ingreso")
+        foto_ingreso = PDV_Foto_Ingreso.objects.filter(fk_preadmi_id= pk, tipo="Ingreso").first()
 
         context["legajo"] = legajo
         context["familia"] = familia
         context["foto_ivi"] = foto_ivi
+        context["foto_ingreso"] = foto_ingreso
         context["puntaje"] = foto_ivi.puntaje
+        context["puntaje_ingreso"] = foto_ingreso.puntaje
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__iexact='SI').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__iexact='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["cantidad_ingreso"] = criterio_ingreso.count()
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
+        context['maximo_ingreso'] = foto_ingreso.puntaje_max
+        context['criterios_total'] = criterio_ingreso.count()
+        context["autonomos"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='AUTOVALORACION').all()
+        context["cant_autogestion"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='AUTOGESTION').count()
+        context["cant_autovaloracion"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='AUTOVALORACION').count() 
         return context
     
     def post(self, request, *args, **kwargs):
@@ -880,19 +890,6 @@ class PDVVacantesAdmision(PermisosMixin, CreateView):
     def form_valid(self, form):
         fk_organismo2 = form.cleaned_data['fk_organismo2']
         fk_organismo = form.cleaned_data['fk_organismo']
-        turno = form.cleaned_data['turno']
-        # if sala == 'Bebe' and turno == 'Mañana':
-        #     form.instance.salashort = 'manianabb'
-        # elif sala == 'Bebe' and turno == 'Tarde':
-        #     form.instance.salashort = 'tardebb'
-        # elif sala == '2' and turno == 'Mañana':
-        #     form.instance.salashort = 'maniana2'
-        # elif sala == '2' and turno == 'Tarde':
-        #     form.instance.salashort = 'tarde2'
-        # elif sala == '3' and turno == 'Mañana':
-        #     form.instance.salashort = 'maniana3'
-        # elif sala == '3' and turno == 'Tarde':
-        #     form.instance.salashort = 'tarde3'
         self.object = form.save()
     
         base1 = PDV_Admision.objects.filter(pk=self.kwargs["pk"]).first()
@@ -953,21 +950,6 @@ class PDVVacantesAdmisionCambio(PermisosMixin, CreateView):
             # sala = form.cleaned_data['sala']
             fk_organismo2 = form.cleaned_data['fk_organismo2']
             fk_organismo = form.cleaned_data['fk_organismo']
-            turno = form.cleaned_data['turno']
-            
-
-            # if sala == 'Bebe' and turno == 'Mañana':
-            #     form.instance.salashort = 'manianabb'
-            # elif sala == 'Bebe' and turno == 'Tarde':
-            #     form.instance.salashort = 'tardebb'
-            # elif sala == '2' and turno == 'Mañana':
-            #     form.instance.salashort = 'maniana2'
-            # elif sala == '2' and turno == 'Tarde':
-            #     form.instance.salashort = 'tarde2'
-            # elif sala == '3' and turno == 'Mañana':
-            #     form.instance.salashort = 'maniana3'
-            # elif sala == '3' and turno == 'Tarde':
-            #     form.instance.salashort = 'tarde3'
             self.object = form.save()
 
         
@@ -1024,6 +1006,7 @@ class PDVAsignadoAdmisionDetail(PermisosMixin, DetailView):
 
         preadmi = PDV_PreAdmision.objects.filter(pk=admi.fk_preadmi_id).first()
         criterio = PDV_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
+        criterio_ingreso = PDV_IndiceIngreso.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
         criterio2 = PDV_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
         observaciones = PDV_Foto_IVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso").first()
         observaciones2 = PDV_Foto_IVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso").first()
@@ -1047,6 +1030,7 @@ class PDVAsignadoAdmisionDetail(PermisosMixin, DetailView):
         context["movimientosVO"] = movimientosVO
         context["intervenciones_count"] = intervenciones.count()
         context["intervenciones_last"] = intervenciones_last
+        context["cant_ingreso"] = criterio_ingreso.count()
         
         return context
 
@@ -1332,6 +1316,7 @@ class PDVIndiceIviEgresoCreateView (PermisosMixin, CreateView):
         criterio = Criterios_IVI.objects.all()
         context["object"] = object
         context["criterio"] = criterio
+        context["admi"] = admi
         context['form2'] = PDV_IndiceIviHistorialForm()
         return context
     

@@ -1,8 +1,7 @@
 from django import forms
 from .validators import MaxSizeFileValidator
-
+from django.conf import settings
 from .models import *
-from SIF_CDLE.models import Criterios_Ingreso
 
 
 class PDV_PreadmisionesForm (forms.ModelForm):
@@ -105,20 +104,15 @@ class criterios_IVI (forms.ModelForm):
     class Meta:
         model = Criterios_IVI
         fields = '__all__'
-        widgets = {
-            'autovaloracion': forms.Select(choices=CHOICE_VALORACION),
-            'autogestion': forms.Select(choices=CHOICE_GESTION),
-        }
+        widgets = {}
         labels = {}
+
 
 class PDV_IndiceIviForm (forms.ModelForm):
     class Meta:
         model = PDV_IndiceIVI
         fields = '__all__'
-        widgets = {
-            'autovaloracion': forms.Select(choices=CHOICE_VALORACION),
-            'autogestion': forms.Select(choices=CHOICE_GESTION),
-        }
+        widgets = {}
         labels = {}
 
 class PDV_IndiceIviHistorialForm (forms.ModelForm):
@@ -133,24 +127,27 @@ class PDV_VacantesOtorgadasForm (forms.ModelForm):
     class Meta:
         model = PDV_VacantesOtorgadas
         fields = '__all__'
-        exclude = ['sala']
+        exclude = ['sala','turno']
         widgets = {
             'fecha_ingreso': forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
-            'turno': forms.Select(choices=[('', ''), ('Mañana', 'Mañana'), ('Tarde', 'Tarde')]),
             'fecha_egreso': forms.DateInput(attrs={'type': 'date','required':'required'}, format="%Y-%m-%d"),
-            'motivo': forms.Select(choices=[('', ''),('Cambio de ciclo', 'Cambio de ciclo'), ('Cambio de turno', 'Cambio de turno'), ('Cambio de centro', 'Cambio de centro')]),
+            'motivo': forms.Select(choices=[('', ''),('Cambio de taller', 'Cambio de taller'), ('Cambio de centro', 'Cambio de centro')]),
             'detalles': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
             
         }
         labels = {
             'fk_organismo2':'Centro al que ingresa',
             'fk_organismo':'Taller al que ingresa',
-            'turno':'Turno al que ingresa',
             'educador':'Educador/a',
             'fecha_egreso':'Fecha de egreso*',
             'motivo':'Motivo principal',
             'detalles':'Detalles',
         }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Filtra las opciones del campo criterio_modificable aquí
+        self.fields['fk_organismo'].queryset = Vacantes.objects.filter(fk_programa=settings.PROG_PDV)
 
 class PDV_IntervencionesForm (forms.ModelForm):
     class Meta:
@@ -171,7 +168,7 @@ class PDV_IntervencionesForm (forms.ModelForm):
         super().__init__(*args, **kwargs)
         
         # Filtra las opciones del campo criterio_modificable aquí
-        self.fields['criterio_modificable'].queryset = Criterios_IVI.objects.filter(modificable = "Si")
+        self.fields['criterio_modificable'].queryset = Criterios_IVI.objects.filter(modificable = "SI")
 
 class PDV_OpcionesResponsablesForm (forms.ModelForm):
     class Meta:
