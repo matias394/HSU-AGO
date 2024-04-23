@@ -64,10 +64,10 @@
                         <tbody>
 
                             <tr>
-                                <td colspan="4" class="text-center bg-secondary py-1">Criteros autónomos de ingreso</td>
+                                <td colspan="4" class="text-center bg-secondary py-1">Autovaloración</td>
                             </tr>
                             {% for c in criterio %}
-                            {% if c.tipo == 'Criteros autónomos de ingreso' %}
+                            {% if c.tipo == 'Autovaloracion' %}
                             <tr>
                                 <td>{{c.criterio}}</td>
                                 <td class="text-center px-0">
@@ -80,42 +80,10 @@
                             {% endif %}
                             {% endfor %}
                             <tr>
-                                <td colspan="4" class="text-center bg-secondary py-1">Motivo de falta de control o control insuficiente</td>
+                                <td colspan="4" class="text-center bg-secondary py-1">Autogestión</td>
                             </tr>
                             {% for c in criterio %}
-                            {% if c.tipo == 'Motivo de falta de control o control insuficiente' %}
-                            <tr>
-                                <td>{{c.criterio}}</td>
-                                <td class="text-center px-0">
-                                    <div class="icheck-primary d-inline">
-                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}">
-                                        <label for="{{c.id}}"></label>
-                                    </div>
-                                </td>
-                            </tr>
-                            {% endif %}
-                            {% endfor %}
-                            <tr>
-                                <td colspan="4" class="text-center bg-secondary py-1">Criterios combinables de ingreso</td>
-                            </tr>
-                            {% for c in criterio %}
-                            {% if c.tipo == 'Criterios combinables para el ingreso' %}
-                            <tr>
-                                <td>{{c.criterio}}</td>
-                                <td class="text-center px-0">
-                                    <div class="icheck-primary d-inline">
-                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}">
-                                        <label for="{{c.id}}"></label>
-                                    </div>
-                                </td>
-                            </tr>
-                            {% endif %}
-                            {% endfor %}
-                            <tr>
-                                <td colspan="4" class="text-center bg-secondary py-1">Criterios sociales para el ingreso</td>
-                            </tr>
-                            {% for c in criterio %}
-                            {% if c.tipo == 'Criterios sociales para el ingreso' %}
+                            {% if c.tipo == 'Autogestion' %}
                             <tr>
                                 <td>{{c.criterio}}</td>
                                 <td class="text-center px-0">

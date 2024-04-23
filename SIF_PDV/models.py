@@ -4,7 +4,7 @@ from Legajos.models import *
 from django.core.validators import MinValueValidator, MaxValueValidator
 from .choices import *
 from django.urls import *
-from SIF_CDLE.models import Criterios_Ingreso
+
 
 # Create your models here.
 
@@ -176,6 +176,14 @@ class PDV_Foto_IVI(models.Model):
     anticonceptivo = models.CharField(max_length=50, choices=CHOICE_CONCEPTIVO, null=False, blank=False, default='No')
     calificacion = models.CharField(max_length=50, choices=CHOICE_CALIFICAR, null=False, blank=False, default='No')
 
+class Criterios_Ingreso(models.Model):
+    criterio =  models.CharField(max_length=250, null=False, blank=False)
+    tipo =  models.CharField(max_length=250, choices=CHOICE_TIPO_INGRESO, null=False, blank=False)
+    puntaje =  models.SmallIntegerField(null=False, blank=False)
+    modificable =  models.CharField(max_length=50, choices=CHOICE_NOSI, null=False, blank=False)
+    
+    def __str__(self):
+        return self.criterio
 
 class PDV_IndiceIngreso(models.Model):
     fk_criterios_ingreso = models.ForeignKey(Criterios_Ingreso, on_delete=models.CASCADE)
