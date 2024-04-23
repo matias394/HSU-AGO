@@ -15,6 +15,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.core.files.base import ContentFile
+from django.core.serializers import serialize
 from PIL import Image
 from io import BytesIO  # Import BytesIO
 from django.http import JsonResponse,HttpResponse
@@ -135,8 +136,12 @@ class LegajosDetailView(DetailView):
         count_intervenciones = LegajosDerivaciones.objects.filter(fk_legajo_id=pk).count()
         
         
-        derivaciones = LegajosDerivaciones.objects.filter(fk_legajo_id=pk)
-        
+        derivaciones = LegajosDerivaciones.objects.filter(fk_legajo_id=pk).order_by('fecha_creado')
+        for derivacion in derivaciones:
+            if derivacion.fecha_creado: derivacion.fecha_creado = datetime.strftime(derivacion.fecha_creado,'%d/%m/%Y') 
+            if derivacion.fecha_rechazo: derivacion.fecha_rechazo = datetime.strftime(derivacion.fecha_rechazo,'%d/%m/%Y')
+            if derivacion.fecha_modificado: derivacion.fecha_modificado = datetime.strftime(derivacion.fecha_modificado,'%d/%m/%Y')
+            if not derivacion.detalles : derivacion.detalles = 'Sin detalles'
 
         # Obtener todas las categorías con la cantidad de alertas en cada una
         categorias_con_alertas = legajo_alertas.values(
