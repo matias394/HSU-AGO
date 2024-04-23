@@ -95,17 +95,17 @@
   </div>
   <div class="col-sm-4">
     <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-secondary">{{cant_combinables}}</span>
+      <span class="info-box-icon bg-secondary">{{cant_autovaloracion}}</span>
       <div class="info-box-content h5 my-0">
-        <span class="info-box-text">Criterios combinables</span>
+        <span class="info-box-text">Autovaloración</span>
       </div>
     </div>
   </div>
   <div class="col-sm-4">
     <div class="info-box mb-2 ">
-      <span class="info-box-icon bg-secondary">{{cant_sociales}}</span>
+      <span class="info-box-icon bg-secondary">{{cant_autogestion}}</span>
       <div class="info-box-content h5 my-0">
-        <span class="info-box-text">Criterios sociales</span>
+        <span class="info-box-text">Autogestión</span>
       </div>
     </div>
   </div>
@@ -126,11 +126,11 @@
         <tbody>
 
           <tr>
-            <td colspan="3" class="text-center bg-secondary py-1">Criteros autónomos de ingreso
+            <td colspan="3" class="text-center bg-secondary py-1">Autovaloración
             </td>
           </tr>
           {% for c in criterio %}
-          {% if c.fk_criterios_ingreso.tipo == 'Criteros autónomos de ingreso' %}
+          {% if c.fk_criterios_ingreso.tipo == 'AUTOVALORACION' %}
           <tr>
               <td>{{c.fk_criterios_ingreso.criterio}}</td>
           </tr>
@@ -138,40 +138,16 @@
           {% endif %}
           {% endfor %}
           <tr>
-            <td colspan="3" class="text-center bg-secondary py-1">Motivo de falta de control o control insuficiente</td>
+            <td colspan="3" class="text-center bg-secondary py-1">Autogestión</td>
           </tr>
           {% for c in criterio %}
-          {% if c.fk_criterios_ingreso.tipo == 'Motivo de falta de control o control insuficiente' %}
+          {% if c.fk_criterios_ingreso.tipo == 'AUTOGESTION' %}
           <tr>
               <td>{{c.fk_criterios_ingreso.criterio}}</td>
           </tr>
 
           {% endif %}
           {% endfor %}
-          <tr>
-            <td colspan="3" class="text-center bg-secondary py-1">Criterios combinables para el ingreso
-            </td>
-          </tr>
-          {% for c in criterio %}
-          {% if c.fk_criterios_ingreso.tipo == 'Criterios combinables para el ingreso' %}
-          <tr>
-              <td>{{c.fk_criterios_ingreso.criterio}}</td>
-          </tr>
-
-          {% endif %}
-          {% endfor %}
-          <tr>
-            <td colspan="3" class="text-center bg-secondary py-1">Criterios sociales para el ingreso</td>
-          </tr>
-          {% for c in criterio %}
-          {% if c.fk_criterios_ingreso.tipo == 'Criterios sociales para el ingreso' %}
-          <tr>
-              <td>{{c.fk_criterios_ingreso.criterio}}</td>
-          </tr>
-
-          {% endif %}
-          {% endfor %}
-
         </tbody>
       </table>
     </div>

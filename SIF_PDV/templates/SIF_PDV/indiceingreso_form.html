@@ -6,7 +6,7 @@
 <ol class="breadcrumb float-sm-right ">
     <li class="breadcrumb-item">Índices</li>
     <li class="breadcrumb-item"><a href="{% url 'legajos_ver' object.fk_legajo.id %}" title="Ver legajo">{{object.fk_legajo}}</a></li>
-        {%if request.resolver_match.url_name == "CDLE_indiceingreso_editar" %}
+        {%if request.resolver_match.url_name == "PDV_indiceingreso_editar" %}
         <li class="breadcrumb-item active">Editar</li>
         {% else %}
         <li class="breadcrumb-item active">Agregar</li>
@@ -67,7 +67,7 @@
                                 <td colspan="4" class="text-center bg-secondary py-1">Autovaloración</td>
                             </tr>
                             {% for c in criterio %}
-                            {% if c.tipo == 'Autovaloracion' %}
+                            {% if c.tipo == 'AUTOVALORACION' %}
                             <tr>
                                 <td>{{c.criterio}}</td>
                                 <td class="text-center px-0">
@@ -83,7 +83,7 @@
                                 <td colspan="4" class="text-center bg-secondary py-1">Autogestión</td>
                             </tr>
                             {% for c in criterio %}
-                            {% if c.tipo == 'Autogestion' %}
+                            {% if c.tipo == 'AUTOGESTION' %}
                             <tr>
                                 <td>{{c.criterio}}</td>
                                 <td class="text-center px-0">
@@ -109,7 +109,7 @@
 
             <div class="mt-4 mx-2">
                 <button class="btn btn-primary mr-1" type="submit">Confirmar</button>
-                <a href="{% url 'CDLE_preadmisiones_ver' object.id%}" class="btn btn-secondary">Cancelar</a>
+                <a href="{% url 'PDV_preadmisiones_ver' object.id%}" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>
     </div>

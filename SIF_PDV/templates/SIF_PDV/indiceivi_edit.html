@@ -40,169 +40,101 @@
 <div class="row">
     <div class="col">
         <form class="needs-validation" novalidate method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="clave" id="clave" value="{{clave}}"> 
             <!-- Security token -->
             {% csrf_token %}
             <div class="card card-primary card-outline">
                 <div class="card-header">
                     <h3 class="card-title">
-                        Criterios Presentes
+                        Índice de vulnerabilidad infantil (IVI)
                     </h3>
                 </div>
+
                 <div class="card-body table-responsive p-2">
                     <table class="table table-head-fixed table-bordered">
                         <thead>
                             <tr>
                                 <th>Criterio</th>
-
-                                <th class="text-center px-1" width="12%">Presencia</th>
+                                <th class="text-center px-1" width="7%">Puntaje</th>
+                                <th class="text-center px-1" width="7%">Modificable</th>
+                                <th class="text-center px-1" width="7%">Presencia</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td colspan="4" class="text-center bg-secondary py-1">AUTOVALORACION
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Utilizas algún método anticonceptivo?</td>
 
-                                <td class="text-center px-0">
-                                    <div class="form-group col-sm-12">
-                                        <div class="input-group">
-                                            <select name="anticonceptivo" class="form-control">
-                                                {% for choice in CHOICE_CONCEPTIVO %}
-                                                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
+                            <tr>
+                                <td colspan="4" class="text-center bg-secondary py-1">Madre o Cuidador principal
                                 </td>
                             </tr>
+                            {% for c in criterio %}
+                            {% if c.tipo == 'Madre o Cuidador principal' %}
                             <tr>
-                                <td>¿Identificas que habilidades tenés?</td>
+                                <td>{{c.criterio}}</td>
+                                <td class="text-center">{{c.puntaje}}</td>
+                                <td class="text-center"><span class=" badge badge-primary px-2">{{c.modificable}}</span></td>
                                 <td class="text-center px-0">
                                     <div class="icheck-primary d-inline">
-                                        <input type="checkbox" id="checkboxPrimary3">
-                                        <label for="checkboxPrimary3">
-
-                                        </label>
+                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}" {% for a in activos %}{% if a.fk_criterios_ivi_id == c.id %} checked {% endif %}{% endfor %}>
+                                        <label for="{{c.id}}"></label>
                                     </div>
                                 </td>
                             </tr>
+                            {% endif %}
+                            {% endfor %}
                             <tr>
-                                <td>¿Podes poner límites a los vÍnculos no sanos?</td>
-
+                                <td colspan="4" class="text-center bg-secondary py-1">Bebé, niño o niña</td>
+                            </tr>
+                            {% for c in criterio %}
+                            {% if c.tipo == 'Bebé, niño o niña' %}
+                            <tr>
+                                <td>{{c.criterio}}</td>
+                                <td class="text-center">{{c.puntaje}}</td>
+                                <td class="text-center"><span class=" badge badge-primary px-2">{{c.modificable}}</span></td>
                                 <td class="text-center px-0">
                                     <div class="icheck-primary d-inline">
-                                        <input type="checkbox" id="checkboxPrimary4">
-                                        <label for="checkboxPrimary4">
-
-                                        </label>
+                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}" {% for a in activos %}{% if a.fk_criterios_ivi_id == c.id %} checked {% endif %}{% endfor %}>
+                                        <label for="{{c.id}}"></label>
                                     </div>
                                 </td>
                             </tr>
+                            {% endif %}
+                            {% endfor %}
                             <tr>
-                                <td>¿Solicitas turno para tus contróles ginecológicos?</td>
-
+                                <td colspan="4" class="text-center bg-secondary py-1">Familia</td>
+                            </tr>
+                            {% for c in criterio %}
+                            {% if c.tipo == 'Familia' %}
+                            <tr>
+                                <td>{{c.criterio}}</td>
+                                <td class="text-center">{{c.puntaje}}</td>
+                                <td class="text-center"><span class=" badge badge-primary px-2">{{c.modificable}}</span></td>
                                 <td class="text-center px-0">
                                     <div class="icheck-primary d-inline">
-                                        <input type="checkbox" id="checkboxPrimary5">
-                                        <label for="checkboxPrimary5">
-                                        </label>
+                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}" {% for a in activos %}{% if a.fk_criterios_ivi_id == c.id %} checked {% endif %}{% endfor %}>
+                                        <label for="{{c.id}}"></label>
                                     </div>
                                 </td>
                             </tr>
+                            {% endif %}
+                            {% endfor %}
                             <tr>
-                                <td>¿Que calificación te pondrías como madre?</td>
-
-                                <td class="text-center px-0">
-                                    <div class="form-group col-sm-12">
-                                        <div class="input-group">
-                                            <select name="calificacion" class="form-control">
-                                                {% for choice in CHOICE_CALIFICAR %}
-                                                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
+                                <td colspan="4" class="text-center bg-secondary py-1">Ajustes</td>
                             </tr>
+                            {% for c in criterio %}
+                            {% if c.tipo == 'Ajustes' %}
                             <tr>
-                                <td>Mujer con falta de autovaloracion</td>
-                                <td class="text-center px-0">
-                                    <div class="form-group col-sm-12">
-                                        <div class="input-group">
-                                            <select name="autovaloracion" class="form-control">
-                                                {% for choice in CHOICE_VALORACION %}
-                                                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                                <td colspan="4" class="text-center bg-secondary py-1">AUTOGESTION</td>
-                            </tr>
-                            <tr>
-                                <td>¿Tuviste o tenés experiencia laboral?</td>
-
+                                <td>{{c.criterio}}</td>
+                                <td class="text-center">{{c.puntaje}}</td>
+                                <td class="text-center"><span class=" badge badge-primary px-2">{{c.modificable}}</span></td>
                                 <td class="text-center px-0">
                                     <div class="icheck-primary d-inline">
-                                        <input type="checkbox" id="checkboxPrimary6">
-                                        <label for="checkboxPrimary6">
-
-                                        </label>
+                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}" {% for a in activos %}{% if a.fk_criterios_ivi_id == c.id %} checked {% endif %}{% endfor %}>
+                                        <label for="{{c.id}}"></label>
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>En el ambito familiar, ¿Quien toma las decisiones?</td>
-
-                                <td class="text-center px-0">
-                                    <div class="form-group col-sm-12">
-                                        <select id="id_nombre3" name="nombre3" class="form-control">
-                                            <option value="Vos sola">Vos sola</option>
-                                            <option value="Vos con tu pareja">Vos con tu pareja</option>
-                                            <option value="Tu pareja sola">Tu pareja sola</option>
-
-                                        </select>
-                                    </div>
-
-                                </td>
-
-                            </tr>
-                            <tr>
-                                <dt class="col-sm-4 mb-2" id="respuestaDetalle"></dt>
-                            </tr>
-                            <tr>
-                                <td>Frente a las dificultades </td>
-
-
-                                <td class="text-center px-0">
-                                    <div class="form-group col-sm-12">
-                                        <select id="id_nombre4" name="nombre4" class="form-control">
-                                            <option value="Te paralizás">Te paralizás</option>
-                                            <option value="Enfrentás-Buscás ayuda">Enfrentás</option>
-                                            <option value="Buscás ayuda">Buscás ayuda</option>
-                                            <option value="Te deprimís">Te deprimís</option>
-                                        </select>
-                                    </div>
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Mujer con falta de autogestión</td>
-                                <td class="text-center px-0">
-                                    <div class="form-group col-sm-12">
-                                        <div class="input-group">
-                                            <select name="autogestion" class="form-control">
-                                                {% for choice in CHOICE_GESTION %}
-                                                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
+                            {% endif %}
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -210,20 +142,18 @@
                 <div class="col-12 mt-5 mb-3">
                     <div class="form-group">
                         <label>Observaciones</label>
-                        <textarea class="form-control" rows="3" placeholder="" id="observaciones_id"
-                            name="observaciones"></textarea>
+                        <textarea class="form-control" rows="3" placeholder="" id="observaciones_id" name="observaciones">{{observaciones}}</textarea>
                     </div>
                 </div>
             </div>
 
             <div class="mt-4 mx-2">
                 <button class="btn btn-primary mr-1" type="submit">Confirmar</button>
-                <a href="{% url 'derivaciones_bandeja' %}" class="btn btn-secondary">Cancelar</a>
+                <a href="{% url 'PDV_indiceivi_ver' object.pk %}" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>
     </div>
 </div>
-
 {% endblock %}
 
 {% block customJS %}

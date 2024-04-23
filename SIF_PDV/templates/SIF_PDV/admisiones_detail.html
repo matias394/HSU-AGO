@@ -90,12 +90,10 @@ Admisiones
           <dt class="col-sm-7 mb-2"><span class="badge badge-warning">{{object.estado_vacante}}</span></dt>
           <dd class="col-sm-5 mb-2">Fecha de vacante</dd>
           <dt class="col-sm-7 mb-2">-</dt>
-          <dd class="col-sm-5 mb-2">Centro </dd>
+          <dd class="col-sm-5 mb-2">Taller </dd>
           <dt class="col-sm-7 mb-2">{{object.fk_preadmi.centro_postula}}</dt>
-          <dd class="col-sm-5 mb-2">Sala</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.sala_postula}}</dt>
-          <dd class="col-sm-5 mb-2">Turno</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.turno_postula}}</dt>
+          <dd class="col-sm-5 mb-2">Centro</dd>
+          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.taller_postula}}</dt>
         </dl>
       </div>
     </div>
@@ -108,7 +106,7 @@ Admisiones
       <div class="card-header">
         <h3 class="card-title">Detalle IVI de ingreso</h3>
         <div class="card-tools d-inline">
-          <a href="{% url 'PDV_indiceivi_ver' object.fk_preadmi.id %}" class="ml-3 mr-2">Ver detalles</a>
+          {% comment %}<a href="{% url 'PDV_indiceivi_ver' object.fk_preadmi.id %}" class="ml-3 mr-2">Ver detalles</a>{% endcomment %}
           <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
             <i class="fas fa-minus"></i>
           </button>
