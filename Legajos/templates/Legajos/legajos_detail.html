@@ -901,10 +901,20 @@
                 </div>
             </div>
         </div>
-<!-- <<<<<<<<<<<<<<<< EN DESARROLLO >>>>>>>>>>>>>>>>>>>>>
+
+
+        {% comment %} 
+                        -------- Vista de Hitos de Abordaje ----------
+                        Ticket: HSU-279
+                        Jira: https://icoreicore.atlassian.net/browse/HSU-279 
+        {% endcomment %}
         <div class="row">
             <div class="col-12">
+                {% if derivaciones %}
                 <div class="card card-collapse">
+                {% else %}
+                <div class="card card-collapse collapsed-card">
+                {% endif %}
                     <div class="card-header border-transparent">
                         <h3 class="card-title font-weight-bold">Hitos de abordaje</h3>
                         <div class="card-tools">
@@ -915,99 +925,64 @@
                     </div>
                     <div class="card-body bg-light p-0">
 
-
+                        {% if derivaciones %}
+                        
                         <div class="cd-horizontal-timeline loaded">
                             <div class="timeline ">
                                 <div class="events-wrapper">
-                                    <div class="events" style="width: 500px;">
+                                    <div class="events">
                                         <ol>
-                                            <li><a href="#0" data-date="01/01/2020" class="older-event selected" style="left: 0px;">{{derivacion.fecha_creado}}</a></li>
-                                            <li><a href="#0" data-date="02/01/2020" style="left: 0px;">{{derivacion.fecha_creado}}</a></li>
-                                            <li><a href="#0" data-date="03/01/2020" style="left: 0px;">{{derivacion.fecha_creado}}</a></li>
-                                            <li><a href="#0" data-date="04/01/2020" style="left: 0px;">{{derivacion.fecha_creado}}</a></li>
-                                            <li><a href="#0" data-date="06/01/2020" style="left: 0px;">{{derivacion.fecha_creado}}</a></li>
-                                            <li><a href="#0" data-date="08/01/2020" style="left: 0px;">{{derivacion.fecha_creado}}</a></li>
+                                            {% for derivacion in derivaciones %}
+                                            {% comment %} <li><a href="#0" data-date="01/01/2020" class="older-event selected">{{derivacion.fecha_creado}}</a></li> {% endcomment %}
+                                            <li><a data-date={{derivacion.fecha_creado}}>{{derivacion.fecha_creado}}</a></li>
+                                            {% endfor %}
                                         </ol>
-                                        <span class="filling-line" aria-hidten="true" style="transform: scaleX(0.281506);"></span>
+                                        <span class="filling-line" aria-hidden="true"></span>
                                     </div>
                                     
                                 </div>
                                 
                                 <ul class="cd-timeline-navigation">
-                                    <li><a href="#0" class="prev inactive">Prev</a></li>
-                                    <li><a href="#0" class="next">Next</a></li>
+                                    <li><a class="prev">Prev</a></li>
+                                    <li><a class="next">Next</a></li>
                                 </ul>
                                 
                             </div>
                             
-                        {% for derivacion in derivaciones %}
+                        
                             <div class="events-content pb-2 pb-sm-0">
                                 <ol class="pb-0 mb-0">
-                                    <li class="selected" data-date="01/01/2020">
-                                        <h5 class="text-bold"> 
-                                          {{derivacion.fk_programa}}<span class="badge badge-secondary">{{derivacion.estado}}</span> <br> 
-                                            <small>{{derivacion.fecha_creado}}</small>
-                                            </h4>
-                                            <hr>
-                                            <p>{{derivacion.detalles}}
-                                            </p> 
-                                    </li>
-                                    <li data-date="02/01/2020" class="">
-                                        <h5 class="text-bold">
-                                            {{derivacion.fk_programa}} <span class="badge badge-secondary">{{derivacion.estado}}</span><br>
-                                            <small>{{derivacion.fecha_creado}}</small>
-                                        </h5>
-                                        <hr>
-                                        <p>{{derivacion.detalles}}
-                                        </p>
-                                    </li>
-                                    <li data-date="03/01/2020" >
-                                        <br>
-                                        <h5 class="text-bold">
-                                            {{derivacion.fk_programa}} <span class="badge badge-secondary">{{derivacion.estado}}</span><br>
-                                            <small>{{derivacion.fecha_creado}}</small>
-                                            </h4>
-                                            <hr>
-                                            <p>{{derivacion.detalles}}
-                                            </p>
-                                    </li>
-                                    <li data-date="04/01/2020">
-                                        <h5 class="text-bold">
-                                            {{derivacion.fk_programa}} <span class="badge badge-secondary">{{derivacion.estado}}</span> <br>
-                                            <small>{{derivacion.fecha_creado}}</small>
-                                            </h4>
-                                            <hr>
-                                            <p>{{derivacion.detalles}} 
-                                            </p>
-                                    </li>
-                                    <li data-date="06/01/2020">
-                                        <h5 class="text-bold"> 
-                                            {{derivacion.fk_programa}} <span class="badge badge-secondary">{{derivacion.estado}}</span> <br>
-                                            <small>{{derivacion.fecha_creado}}</small>
-                                            </h4>
-                                            <hr>
-                                            <p>{{derivacion.detalles}}
-                                            </p>
-                                    </li>
-                                    <li data-date="08/01/2021">
-                                        <h5 class="text-bold"> 
-                                            {{derivacion.fk_programa}} <span class="badge badge-secondary">{{derivacion.estado}}</span> <br>
-                                            <small>{{derivacion.fecha_creado}}</small>
-                                            </h4>
-                                            <hr>
-                                            <p>{{derivacion.detalles}}
-                                            </p>
-                                    </li>
+                                    {% for derivacion in derivaciones %}
+                                        {% if forloop.first %}
+                                            <li class="selected" data-date={{derivacion.fecha_creado}}>
+                                        {% else %}
+                                            <li class="" data-date={{derivacion.fecha_creado}}>
+                                        {% endif %}
+                                                <div>
+                                                    <h5 class="text-bold"> {{derivacion.fk_programa}} </h5>
+                                                    <span class="badge badge-secondary">{{derivacion.estado}}</span>
+                                                </div>
+                                                <small>{{derivacion.fecha_creado}}</small>
+                                                <hr>
+                                                <p>{{derivacion.detalles}}</p> 
+                                                
+                                            </li>
+                                        
+                                    {% endfor %}
                                 </ol>
                             </div>
-                        {% endfor %}
+                    
                         </div>
+                        {% else %}
+                            <div class="col-12 text-center">
+                                <h6 class="text-center text-muted py-3">Sin datos</h6>
+                            </div>
+                        {% endif %}
 
                     </div>
                 </div>
             </div>
         </div>
-    -->
 
         {% if datos_json %}
         <div class="row d-none d-sm-inline">
