@@ -4,50 +4,8 @@ from Legajos.models import *
 from django.core.validators import MinValueValidator, MaxValueValidator
 from .choices import *
 from django.urls import *
-from SIF_CDLE.models import Criterios_Ingreso
 
-# Create your models here.
 
-#class legajo_PDV (models.Model):
-#    fk_programa = models.ForeignKey(Programas, on_delete=models.CASCADE)
-#    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE)
-#    nombre = models.CharField(max_length=100, unique=True)
-#    estado = models.BooleanField(default=True)
-#    observaciones = models.CharField(max_length=300, null=True, blank=True)
-#    #creado_por = models.ForeignKey(Usuarios, related_name='PDV_creado_por', on_delete=models.CASCADE, blank=True, null=True)
-#    #modificado_por = models.ForeignKey(Usuarios, related_name='PDV_modificado_por', on_delete=models.CASCADE, blank=True, null=True)
-#    creado = models.DateField(auto_now_add=True)
-#    modificado = models.DateField(auto_now=True)
-#
-#    def __str__(self):
-#        return self.nombre
-#
-#    def clean(self):
-#        self.nombre = self.nombre.capitalize()
-#
-#    class Meta:
-#        ordering = ['nombre']
-#        verbose_name = 'Programa'
-#        verbose_name_plural = "Programas"
-#
-#    def get_absolute_url(self):
-#        return reverse('programas_ver', kwargs={'pk': self.pk})
-    
-#class Centros (models.Model):
-#    nombre = models.CharField(max_length=250, null=False, blank=False)
-#    sala = models.CharField(max_length=250, null=False, blank=False)
-#    disponibles = models.IntegerField(null=False, blank=False)
-#
-#    def __str__(self):
-#        return self.nombre
-#
-#    def clean(self):
-#        self.nombre = self.nombre.capitalize()
-#
-#    class Meta:
-#        ordering = ['nombre']
-#        verbose_name = 'Centro'
-#        verbose_name_plural = "Centros"
 
 class PDV_PreAdmision (models.Model):
     fk_derivacion = models.ForeignKey(LegajosDerivaciones, on_delete=models.CASCADE)
@@ -140,7 +98,6 @@ class Criterios_IVI(models.Model):
     tipo =  models.CharField(max_length=250, choices=CHOICE_TIPO_IVI, null=False, blank=False)
     puntaje =  models.SmallIntegerField(null=False, blank=False)
     modificable =  models.CharField(max_length=50, choices=CHOICE_NOSI, null=False, blank=False)
-    observaciones = models.CharField(max_length=350, null=True, blank=True)
     
     def __str__(self):
         return self.criterio
@@ -176,6 +133,14 @@ class PDV_Foto_IVI(models.Model):
     anticonceptivo = models.CharField(max_length=50, choices=CHOICE_CONCEPTIVO, null=False, blank=False, default='No')
     calificacion = models.CharField(max_length=50, choices=CHOICE_CALIFICAR, null=False, blank=False, default='No')
 
+class Criterios_Ingreso(models.Model):
+    criterio =  models.CharField(max_length=250, null=True, blank=True)
+    tipo =  models.CharField(max_length=250, choices=CHOICE_TIPO_INGRESO, null=True, blank=True)
+    puntaje =  models.SmallIntegerField(null=True, blank=True)
+    modificable =  models.CharField(max_length=50, choices=CHOICE_NOSI, null=True, blank=True)
+    
+    def __str__(self):
+        return self.criterio
 
 class PDV_IndiceIngreso(models.Model):
     fk_criterios_ingreso = models.ForeignKey(Criterios_Ingreso, on_delete=models.CASCADE)

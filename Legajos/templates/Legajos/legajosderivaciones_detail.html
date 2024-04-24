@@ -66,11 +66,11 @@ Derivaciones
             <dt class="col-sm-3 font-weight-normal">Teléfono del usuario</dt>
             <dd class="col-sm-9 font-weight-bold">{{object.fk_usuario.usuarios.telefono|default_if_none:'-'}}</dd>
             <dt class="col-sm-3 font-weight-normal">Email del usuario</dt>
-            <dd class="col-sm-9 font-weight-bold">{{object.fk_usuario.email}}</dd>
+            <dd class="col-sm-9 font-weight-bold">{{object.fk_usuario.email|default_if_none:'-'}}</dd>
             <dt class="col-sm-3 font-weight-normal">Organismo relacionado</dt>
             <dd class="col-sm-9 font-weight-bold">{{object.fk_organismo|default_if_none:'-'}}</dd>
             <dt class="col-sm-3 font-weight-normal">Observaciones</dt>
-            <dd class="col-sm-9 font-weight-bold">{{object.detalles}}</dd>
+            <dd class="col-sm-9 font-weight-bold">{{object.detalles|default_if_none:'-'}}</dd>
             {% if object.archivos %}
             <dt class="col-sm-3 font-weight-normal">Archivos adjuntos</dt>
             <dd class="col-sm-9 font-weight-bold"><a href="{{ object.archivos.url}}" target="_blank">
@@ -80,9 +80,9 @@ Derivaciones
             <dt class="col-sm-3 font-weight-normal">Fecha de rechazo</dt>
             <dd class="col-sm-9 font-weight-bold">{{object.fecha_rechazo|date:"d/m/Y"}}</dd>
             <dt class="col-sm-3 font-weight-normal">Motivo de rechazo</dt>
-            <dd class="col-sm-9 font-weight-bold">{{object.motivo_rechazo}}</dd>
+            <dd class="col-sm-9 font-weight-bold">{{object.motivo_rechazo|default_if_none:'-'}}</dd>
             <dt class="col-sm-3 font-weight-normal">Observaciones de rechazo</dt>
-            <dd class="col-sm-9 font-weight-bold">{{object.obs_rechazo}}</dd>
+            <dd class="col-sm-9 font-weight-bold">{{object.obs_rechazo|default_if_none:'-'}}</dd>
             {% endif %}
           </dl>
 

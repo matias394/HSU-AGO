@@ -69,7 +69,6 @@ Intervenciones
         <div class="card-header">
           <h3 class="card-title">Detalle Admisión</h3>
           <div class="card-tools d-inline">
-            <a href="{% url 'preadmisiones_detail' %}" class="ml-3 mr-2">Ver pre-admisión</a>
             <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
               <i class="fas fa-minus"></i>
             </button>
@@ -85,14 +84,10 @@ Intervenciones
               <dt class="col-sm-7 mb-2"><span class="badge badge-success">{{lastvo.estado_vacante}}</span></dt>
               <dd class="col-sm-5 mb-2">Fecha de vacante</dd>
               <dt class="col-sm-7 mb-2">{{lastvo.fecha_ingreso|date:'d/m/Y'}}</dt>
-              <dd class="col-sm-5 mb-2">Centro actual </dd>
+              <dd class="col-sm-5 mb-2">Taller actual </dd>
               <dt class="col-sm-7 mb-2">{{lastvo.fk_organismo}}</dt>
-              <dd class="col-sm-5 mb-2">Sala actual</dd>
-              <dt class="col-sm-7 mb-2">{{lastvo.sala}}</dt>
-              <dd class="col-sm-5 mb-2">Turno actual</dd>
-              <dt class="col-sm-7 mb-2">{{lastvo.turno}}</dt>
-              <dd class="col-sm-5 mb-2">Educador/a actual</dd>
-              <dt class="col-sm-7 mb-2">{{lastvo.educador}}</dt>
+              <dd class="col-sm-5 mb-2">Centro actual</dd>
+              <dt class="col-sm-7 mb-2">{{lastvo.fk_organismo2}}</dt>
             </dl>
           </div>
       </div>
@@ -179,7 +174,7 @@ Intervenciones
 <div class="row mt-4 d-print-none">
   <div class="col-12 mx-2">
     <div class="form-group  d-flex justify-content-between">
-      <a href="{% url 'admisiones_list' %}" class="btn btn-secondary">Volver</a>
+      <a href="{% url 'PDV_asignado_admisiones_ver' object.pk %}" class="btn btn-secondary">Volver</a>
     </div>
   </div>
 </div>

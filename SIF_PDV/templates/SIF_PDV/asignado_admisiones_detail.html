@@ -89,18 +89,12 @@ Admisiones
           <dt class="col-sm-7 mb-2"><span class="badge badge-success">{{lastvo.estado_vacante}}</span></dt>
           <dd class="col-sm-5 mb-2">Fecha de vacante</dd>
           <dt class="col-sm-7 mb-2">{{lastvo.fecha_ingreso|date:'d/m/Y'}}</dt>-->
-          <dd class="col-sm-5 mb-2">Centro actual </dd>
-          <dt class="col-sm-7 mb-2">{{lastvo.fk_organismo}}</dt>
           <dd class="col-sm-5 mb-2">Taller actual </dd>
-          <dt class="col-sm-7 mb-2"></dt>
+          <dt class="col-sm-7 mb-2">{{lastvo.fk_organismo}}</dt>
+          <dd class="col-sm-5 mb-2">Centro actual </dd>
+          <dt class="col-sm-7 mb-2">{{lastvo.fk_organismo2}}</dt>
           <dd class="col-sm-5 mb-2">Valor indice de ingreso</dd>
           <dt class="col-sm-7 mb-2"><span class=" badge badge-warning">{{puntaje.total}}</span></dt>
-       <!--  <dd class="col-sm-5 mb-2">Sala actual</dd>
-          <dt class="col-sm-7 mb-2">{{lastvo.sala}}</dt>
-          <dd class="col-sm-5 mb-2">Turno actual</dd>
-          <dt class="col-sm-7 mb-2">{{lastvo.turno}}</dt>
-          <dd class="col-sm-5 mb-2">Educador/a actual</dd>
-          <dt class="col-sm-7 mb-2">{{lastvo.educador}}</dt>-->
         </dl>
       </div>
     </div>
@@ -112,9 +106,9 @@ Admisiones
     <div class="row h-100">
       <div class="col-12">
         <div class="info-box py-3">
-          <span class="info-box-icon bg-warning">Si</span><!-- sacamos puntaje.total -->
+          <span class="info-box-icon bg-warning">{{ cant_ingreso }}</span><!-- sacamos puntaje.total -->
           <div class="info-box-content">
-            <span class="info-box-text">Falta de autovaloración</span>
+            <span class="info-box-text">Criterios de Ingreso</span>
             <span class="info-box-number h6">{{observaciones.creado|date:'d/m/Y'}}</span>
           </div>
         </div>
@@ -130,9 +124,9 @@ Admisiones
       </div>
       <div class="col-12">
         <div class="info-box py-3">
-          <span class="info-box-icon bg-warning">Si</span><!-- sacamos puntaje2.total -->
+          <span class="info-box-icon bg-warning">{{puntaje.total}}</span><!-- sacamos puntaje2.total -->
           <div class="info-box-content">
-            <span class="info-box-text">Falta de autogestión</span>
+            <span class="info-box-text">IVI de Ingreso</span>
             <span class="info-box-number h6">{{observaciones2.creado|date:'d/m/Y'}}</span>
           </div>
         </div>
@@ -140,123 +134,6 @@ Admisiones
     </div>
   </div>
   <!-- / -->
-
-  <!-- evolucion de impacto sobre criterios -->
-  <!-- 
-  <div class="col-12 mt-3">
-    <div class="card card-primary card-outline">
-      <div class="card-header">
-        <h3 class="card-title">Evolución de impacto </h3>
-        <div class="card-tools d-inline">
-          <span class="badge badge-success description-percentage h6 my-0 mx-2"><i class="fas fa-caret-up"></i>
-            5%</span>
-          <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
-            <i class="fas fa-minus"></i>
-          </button>
-        </div>
-      </div>
-      <div class="card-body table-responsive p-0">
-        <table class="table table-head-fixed table-bordered">
-          <thead>
-            <tr>
-              <th>Criterios modificables</th>
-              <th class="text-center px-1" width="6%">Puntaje</th>
-              <th class="text-center px-1" width="10%">Intervenciones</th>
-              <th class="text-center px-1" width="10%">Impacto</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for c in criterio %}
-            {% if c.fk_criterios_ivi.tipo == 'Madre o Cuidador principal' and c.fk_criterios_ivi.modificable == "Si"%}
-            <tr>
-              <td colspan="4" class="text-center bg-secondary py-1">Madre o Cuidador principal
-              </td>
-            </tr>
-            {% endif %}
-            {% endfor %}
-            {% for c in criterio %}
-            {% if c.fk_criterios_ivi.modificable == "Si" %}
-            {% if c.fk_criterios_ivi.tipo == 'Madre o Cuidador principal' %}
-            <tr>
-                <td>{{c.fk_criterios_ivi.criterio}}</td>
-                <td class="text-center">{{c.fk_criterios_ivi.puntaje}}</td>
-                <td class="text-center"></td>
-                <td class="text-center"><span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span></td>
-            </tr>
-  
-            {% endif %}
-            {% endif %}
-            {% endfor %}
-            {% for c in criterio %}
-            {% if c.fk_criterios_ivi.tipo == 'Bebé, niño o niña' and c.fk_criterios_ivi.modificable == "Si"%}
-            <tr>
-              <td colspan="4" class="text-center bg-secondary py-1">Bebé, niño o niña
-              </td>
-            </tr>
-            {% endif %}
-            {% endfor %}
-            {% for c in criterio %}
-            {% if c.fk_criterios_ivi.modificable == "Si" %}
-            {% if c.fk_criterios_ivi.tipo == 'Bebé, niño o niña' %}
-            <tr>
-                <td>{{c.fk_criterios_ivi.criterio}}</td>
-                <td class="text-center">{{c.fk_criterios_ivi.puntaje}}</td>
-                <td class="text-center"></td>
-                <td class="text-center"><span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span></td>
-            </tr>
-  
-            {% endif %}
-            {% endif %}
-            {% endfor %}
-            {% for c in criterio %}
-            {% if c.fk_criterios_ivi.tipo == 'Familia' and c.fk_criterios_ivi.modificable == "Si"%}
-            <tr>
-              <td colspan="4" class="text-center bg-secondary py-1">Familia
-              </td>
-            </tr>
-            {% endif %}
-            {% endfor %}
-            {% for c in criterio %}
-            {% if c.fk_criterios_ivi.modificable == "Si" %}
-            {% if c.fk_criterios_ivi.tipo == 'Familia' %}
-            <tr>
-                <td>{{c.fk_criterios_ivi.criterio}}</td>
-                <td class="text-center">{{c.fk_criterios_ivi.puntaje}}</td>
-                <td class="text-center"></td>
-                <td class="text-center"><span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span></td>
-            </tr>
-  
-            {% endif %}
-            {% endif %}
-            {% endfor %}
-            {% for c in criterio %}
-            {% if c.fk_criterios_ivi.tipo == 'Ajustes' and c.fk_criterios_ivi.modificable == "Si"%}
-            <tr>
-              <td colspan="4" class="text-center bg-secondary py-1">Ajustes
-              </td>
-            </tr>
-            {% endif %}
-            {% endfor %}
-            {% for c in criterio %}
-            {% if c.fk_criterios_ivi.modificable == "Si" %}
-            {% if c.fk_criterios_ivi.tipo == 'Ajustes' %}
-            <tr>
-                <td>{{c.fk_criterios_ivi.criterio}}</td>
-                <td class="text-center">{{c.fk_criterios_ivi.puntaje}}</td>
-                <td class="text-center"></td>
-                <td class="text-center"><span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span></td>
-            </tr>
-  
-            {% endif %}
-            {% endif %}
-            {% endfor %}
-  
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-   -->
 
   <!-- historial de vacantes -->
   <div class="col-12 mt-3">
@@ -274,10 +151,8 @@ Admisiones
           <thead>
             <tr>
               <th>Ingreso</th>
-              <th>Centro</th>
               <th>Taller</th>
-              <th>Turno</th>
-              {% comment %} <th>Educadora</th> {% endcomment %}   
+              <th>Centro</th>
               <th>Egreso</th>
               <th>Motivo</th>
             </tr>
@@ -288,8 +163,6 @@ Admisiones
               <td>{{e.fecha_ingreso|date:'d/m/Y'}}</td>
               <td>{{e.fk_organismo}}</td>
               <td>{{e.fk_organismo2}}</td>
-              <td>{{e.turno}}</td>
-              {% comment %} <td>{{e.educador}}</td> {% endcomment %}
               <td>{{e.fecha_egreso|date:'d/m/Y'|default:"-"}}</td>
               <td>{{e.motivo|default:"-"}}</td>
             </tr>
