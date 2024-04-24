@@ -1074,18 +1074,21 @@ class PDVVacantesListView(PermisosMixin, ListView):
     
     
     def get_queryset(self):
-        # org = Vacantes.objects.values_list('fk_organismo', flat=True).distinct()
-        # organizaciones = Organismos.objects.filter(id__in=org)
-        organizaciones = Vacantes.objects.values_list('fk_organismo', flat=True).distinct()
-        organizaciones = Organismos.objects.filter(id__in=organizaciones)
+        organizaciones = Vacantes.objects.filter(fk_programa=settings.PROG_PDV)
         data = []
 
         for organizacion in organizaciones:
-            organizacion_data = {'organizacion': organizacion}
+            organizacion_data = {'nombre': organizacion.nombre,
+                                 'organismo': organizacion.fk_organismo.nombre,
+                                 'calle' :organizacion.fk_organismo.calle,
+                                 'numero' :organizacion.fk_organismo.altura,
+                                 'barrio' :organizacion.fk_organismo.barrio,
+                                 'id' : organizacion.pk
+                                }  
 
             # Calcular la cantidad de vacantes por sala agrupadas
             for sala_group in [['manianabb', 'tardebb'], ['maniana2', 'tarde2'], ['maniana3', 'tarde3']]:
-                total_vacantes = Vacantes.objects.filter(fk_organismo=organizacion).aggregate(
+                total_vacantes = Vacantes.objects.filter(nombre=organizacion).aggregate(
                     total=Sum(F(sala_group[0]) + F(sala_group[1]))
                 )['total'] or 0
 
@@ -1117,16 +1120,47 @@ class PDVVacantesListView(PermisosMixin, ListView):
 
         return data
     
-    #def get_context_data(self, **kwargs):
-    #    context = super().get_context_data(**kwargs)
-    #    context['organizaciones'] = self.get_queryset()
-    #    print(context)
-    #    return context
 
 class PDVVacantesDetailView (PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_PDV/vacantes_detail.html"
     model = Vacantes
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        organizacion = Vacantes.objects.filter(pk=self.kwargs["pk"])
+        asig_manianabb = PDV_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="Bebes", turno= "Mañana", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
+        asig_tardebb = PDV_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="Bebes", turno= "Tarde", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
+        asig_maniana2 = PDV_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="2", turno= "Mañana", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
+        asig_tarde2 = PDV_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="2", turno= "Tarde", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
+        asig_maniana3 = PDV_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="3", turno= "Mañana", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
+        asig_tarde3 = PDV_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="3", turno= "Tarde", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
+        esp_manianabb = PDV_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="manianabb",estado_vacante='Lista de espera').count()
+        esp_tardebb = PDV_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="tardebb",estado_vacante='Lista de espera').count()
+        esp_maniana2 = PDV_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="maniana2",estado_vacante='Lista de espera').count()
+        esp_tarde2 = PDV_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="tarde2",estado_vacante='Lista de espera').count()
+        esp_maniana3 = PDV_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="maniana3",estado_vacante='Lista de espera').count()
+        esp_tarde3 =  PDV_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="tarde3",estado_vacante='Lista de espera').count()
+
+        admi = PDV_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], fk_admision__estado ="Activa", estado_vacante = "Asignada")
+        admi2 = PDV_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"], estado ="Activa", estado_vacante = "Lista de espera")
+        
+        context["object"] = Vacantes.objects.get(pk=self.kwargs["pk"])
+        context["asig_manianabb"] = asig_manianabb
+        context["asig_tardebb"] = asig_tardebb
+        context["asig_maniana2"] = asig_maniana2
+        context["asig_tarde2"] = asig_tarde2
+        context["asig_maniana3"] = asig_maniana3
+        context["asig_tarde3"] = asig_tarde3
+        context["esp_manianabb"] = esp_manianabb
+        context["esp_tardebb"] = esp_tardebb
+        context["esp_maniana2"] = esp_maniana2
+        context["esp_tarde2"] = esp_tarde2
+        context["esp_maniana3"] = esp_maniana3
+        context["esp_tarde3"] = esp_tarde3
+        context["admi"] = admi
+        context["admi2"] = admi2
+        return context
     
 
 class PDVIntervencionesCreateView(PermisosMixin, CreateView):
