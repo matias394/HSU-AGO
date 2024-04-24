@@ -80,7 +80,7 @@ Admisiones
           <dt class="col-sm-7 mb-2"><span class="text-{% if object.estado == "Inactiva" %}danger{% else %}success{% endif %} font-weight-bold">{{object.estado}}</span></dt>
           <dd class="col-sm-5 mb-2">Fecha de admisión</dd>
           <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
-          <dd class="col-sm-5 mb-2">Acompañante de entrevista </dd>
+          <dd class="col-sm-5 mb-2">Acompañante de entrevista</dd>
           <dt class="col-sm-7 mb-2">{{object.fk_preadmi.acompaniante}}</dt>
           <dd class="col-sm-5 mb-2">Acompañante asignado</dd>
           <dt class="col-sm-7 mb-2">{{object.fk_preadmi.madrina}}</dt>
