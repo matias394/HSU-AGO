@@ -135,14 +135,21 @@ class LegajosDetailView(DetailView):
 
         count_intervenciones = LegajosDerivaciones.objects.filter(fk_legajo_id=pk).count()
         
-        
+        # Ajusta las fechas para el detalle de hito de abordaje
         derivaciones = LegajosDerivaciones.objects.filter(fk_legajo_id=pk).order_by('fecha_creado')
         for derivacion in derivaciones:
             if derivacion.fecha_creado: derivacion.fecha_creado = datetime.strftime(derivacion.fecha_creado,'%d/%m/%Y') 
             if derivacion.fecha_rechazo: derivacion.fecha_rechazo = datetime.strftime(derivacion.fecha_rechazo,'%d/%m/%Y')
             if derivacion.fecha_modificado: derivacion.fecha_modificado = datetime.strftime(derivacion.fecha_modificado,'%d/%m/%Y')
             if not derivacion.detalles : derivacion.detalles = 'Sin detalles'
-
+        
+        #Por cada familiar, agrega la cantidad total de intervenciones.
+        familiares_fk1 = LegajoGrupoFamiliar.objects.filter(fk_legajo_1=pk).all()
+        familiares_fk2 = LegajoGrupoFamiliar.objects.filter(fk_legajo_2=pk).all()
+        intervenciones1 = [{'familiar': familiar, 'intervenciones' : LegajosDerivaciones.objects.filter(fk_legajo_id=familiar.fk_legajo_2.id).count()} for familiar in familiares_fk1]
+        intervenciones2 = [{'familiar': familiar, 'intervenciones' : LegajosDerivaciones.objects.filter(fk_legajo_id=familiar.fk_legajo_2.id).count()} for familiar in familiares_fk2]
+        intervenciones = intervenciones1 + intervenciones2
+        
         # Obtener todas las categorías con la cantidad de alertas en cada una
         categorias_con_alertas = legajo_alertas.values(
             'fk_alerta__fk_categoria'
@@ -229,8 +236,8 @@ class LegajosDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         emoji_nacionalidad = EMOJIS_BANDERAS.get(context['object'].nacionalidad, '')
         context['emoji_nacionalidad'] = emoji_nacionalidad
-        context["familiares_fk1"] = LegajoGrupoFamiliar.objects.filter(fk_legajo_1=pk)
-        context["familiares_fk2"] = LegajoGrupoFamiliar.objects.filter(fk_legajo_2=pk)
+        context["familiares_fk1"] = familiares_fk1
+        context["familiares_fk2"] = familiares_fk2
         context["count_familia"] = context["familiares_fk1"].count() + context["familiares_fk2"].count()
         context['files_img'] = LegajosArchivos.objects.filter(fk_legajo=pk, tipo="Imagen")
         context['files_docs'] = LegajosArchivos.objects.filter(fk_legajo=pk, tipo="Documento")
@@ -246,6 +253,7 @@ class LegajosDetailView(DetailView):
         context["historial_alertas"] = True if HistorialLegajoAlertas.objects.filter(fk_legajo=pk).exists() else False
         context["datos_json"] = datos_json
         context['count_intervenciones'] = count_intervenciones
+        context['familiar_intervenciones'] = intervenciones
         context['derivaciones'] = derivaciones
         return context
 

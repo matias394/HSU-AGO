@@ -186,10 +186,14 @@
             </div>
             {% endif %}
         </div>
-        <!-- <<<<<<<<<<<< EN DESARROLLO >>>>>>>>>>>>>>>>>>>>>>
+        {% comment %} 
+                        -------- Detalles de Programas en intervención ----------
+                        Ticket: HSU-320
+                        Jira: https://icoreicore.atlassian.net/browse/HSU-320
+        {% endcomment %}
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title font-weight-bold">Intervenciones en grupo familiar</h3>
+                <h3 class="card-title font-weight-bold">Programas en intervención</h3>
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
                         <i class="fas fa-minus"></i>
@@ -199,52 +203,44 @@
             <div class="card-body bg-light">
                 <div class="row">
                     <div class="col-12">
-                        <div class="chart-responsive">
-                            <div class="chartjs-size-monitor">
-                                <div class="chartjs-size-monitor-expand">
-                                    <div class=""></div>
-                                </div>
-                                <div class="chartjs-size-monitor-shrink">
-                                    <div class=""></div>
-                                </div>
+                    <div class="chart-responsive">
+                        <div class="chartjs-size-monitor">
+                            <div class="chartjs-size-monitor-expand">
+                                <div class=""></div>
                             </div>
-                            <canvas id="pieChart" height="105" width="210"
-                                style="display: block; height: 94px; width: 188px;"
-                                class="chartjs-render-monitor"></canvas>
+                            <div class="chartjs-size-monitor-shrink">
+                                <div class=""></div>
+                            </div>
                         </div>
-
+                        <canvas id="pieChart" height="105" width="210"
+                            style="display: block; height: 94px; width: 188px;"
+                            class="chartjs-render-monitor"></canvas>
                     </div>
 
                 </div>
 
             </div>
 
+        </div>
+
             <div class="card-footer p-0">
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item">
-                        {% for f in familiares_fk1 %}
-                        <a href="{% url 'legajos_ver' f.fk_legajo_2_id %}"  class="nav-link">
-                            <span class="username">{{f.fk_legajo_2}}</span>
-                            <span class="float-right text-danger">
-                                20</span>
+                        {% for f in familiar_intervenciones %}
+                        <a href="{% url 'legajos_ver' f.familiar.fk_legajo_2_id %}"  class="nav-link">
+                            {% if f.familiar.fk_legajo_2_id == object.id %}
+                                <span class="username">{{f.familiar.fk_legajo_1}}</span>
+                            {% else %}
+                                <span class="username">{{f.familiar.fk_legajo_2}}</span>
+                            {% endif %}
+                            <span class="float-right text-danger">{{f.intervenciones}}</span>
                         </a>
-                    
-                    {% empty %}
-                    {% endfor %}
-                    {% for f in familiares_fk2 %}
-                    
-                        <a href="{% url 'legajos_ver' f.fk_legajo_1_id %}"  class="nav-link">
-                            <span class="username">{{f.fk_legajo_1}}</span>
-                            <span class="float-right text-success">18
-                            </span>
-                        </a>
-                    </li>
-                    {% empty %}
-                    {% endfor %}
+                        {% empty %}
+                        {% endfor %}
                 </ul>
             </div>
         </div>
-    -->
+
     <!-- <<<<<<<<<<<<<<<<<<<< EN DESARROLLO >>>>>>>>>>>>>>
         <div class="card ">
             <div class="card-header">
@@ -1145,23 +1141,17 @@
         // Get context with jQuery - using jQuery's .get() method.
         var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
         var pieData = {
-            labels: [
-                'Santiago Baez',
-                'Jessica Baez',
-                'Catalina Villalba',
-                'Morena Baez',
-                'Rocio Baez',
-                'Ricardo Baez',
-                'Salomé Baez',
-                'Jorge Baez',
-                'Zoe Rivera',
-                'Hermindo Baez',
-                'Bautista Rivera',
-                'Martín Baez',
+            labels: [{% for item in familiar_intervenciones %} 
+            "{{item.familiar.fk_legajo_2}}",
+            {% endfor %}
             ],
             datasets: [
                 {
-                    data: [20, 18, 11, 11, 11, 11, 11, 9, 7, 6, 6, 4],
+                    data: [
+                    {% for item in familiar_intervenciones %}
+                    {{item.intervenciones}},
+                    {% endfor %}
+                    ],
                     backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#3c8dbc', '#ff851b', '#6610f2','#6c757d','#01ff70','#f012be','#3d9970','#3c8dbc','#e83e8c']
                 }
             ]
