@@ -73,7 +73,7 @@ CDLE Pre-admisiones
             <dd class="col-sm-5 mb-2">Solicitud creada por</dd>
             <dt class="col-sm-7 mb-2">{{object.creado_por}}</dt>
             <dd class="col-sm-5 mb-2">Acompañante</dd>
-            <dt class="col-sm-7 mb-2">{{object.acompaniante}}</dt>
+            <dt class="col-sm-7 mb-2">{{object.acompaniante|default_if_none:'-'}}</dt>
             {% comment %} <dd class="col-sm-5 mb-2">Madrina</dd>
             <dt class="col-sm-7 mb-2">{{object.madrina}}</dt> {% endcomment %}
             {% if object.modificado_por %}
