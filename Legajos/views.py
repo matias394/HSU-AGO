@@ -163,6 +163,9 @@ class LegajosDetailView(DetailView):
         # Obtener todas las categorías completas
         categorias_completas = CategoriaAlertas.objects.filter(id__in=ids_categorias).order_by('nombre')
 
+        #Obtener historial de indices IVI
+        historial_ivi = HistorialLegajoIndices.objects.filter(fk_legajo_id=pk).all().order_by('-id')[:3]
+
         # Verificar si categorias_completas no es None antes de aplicar el slicing
         if categorias_completas is not None:
             # Obtener solo los primeros 8 nombres de categorías (o menos si hay menos de 8)
@@ -251,6 +254,7 @@ class LegajosDetailView(DetailView):
         context["count_media"] = LegajoAlertas.objects.filter(fk_legajo=pk, fk_alerta__gravedad="Importante").count()
         context["count_baja"] = LegajoAlertas.objects.filter(fk_legajo=pk, fk_alerta__gravedad="Precaución").count()
         context["historial_alertas"] = True if HistorialLegajoAlertas.objects.filter(fk_legajo=pk).exists() else False
+        context["historial_ivi"] = historial_ivi
         context["datos_json"] = datos_json
         context['count_intervenciones'] = count_intervenciones
         context['familiar_intervenciones'] = intervenciones
