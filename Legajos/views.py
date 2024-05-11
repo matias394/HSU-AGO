@@ -1,5 +1,6 @@
 import os
 from django.http import HttpResponseRedirect
+import requests
 from django.views.generic import (
     CreateView,
     ListView,
@@ -30,6 +31,7 @@ from .models import *
 from .forms import *
 from .choices import *
 from django.conf import settings
+from .models import IntercepcionSaludPersona
 import json
 
 # Configurar el locale para usar el idioma español
@@ -1234,13 +1236,58 @@ class intervencionesSaludView(TemplateView):
     template_name = "Legajos/intervenciones_salud.html"
     model = Legajos
 
+    def get_token_salud(self):
+        auth = requests.post(
+            url='http://172.20.30.145:3000/v1/auth',
+            headers={
+                'Content-type':'application/json',
+            },
+            data=json.dumps({
+                "user": "AP1_s4lud",
+                "password": "5118a)iCb-vfUNz"
+            })
+        ).json()
+        return auth['access_token']
 
+    def get_data_salud(self, legajo : Legajos):
+        salud = requests.get(
+            url='http://172.20.30.145:3000/v1/person',
+            headers={
+                'Content-type':'application/json',
+                'Authorization':f'Bearer {self.get_token_salud()}'
+            },
+            json={
+                "document_type": legajo.tipo_doc,
+                "document_number": str(legajo.documento),
+                "gender": legajo.sexo[0]
+            }
+        ).json()
+        return salud
+    
+    def conteo_turnos(self,saludResponse):
+        contadores = {
+            'finalizadas' : 0,
+            'pendientes' : 0,
+            'ausentes' : 0,
+            'reprogramado' : 0,
+        }
+        for turno in saludResponse['indicators']['turns']:
+            fechaturno = datetime.fromisoformat(turno['date'])
+            fecha_reprogramada = datetime.fromisoformat(turno['rescheduledDate'])
+            expiroFecha = datetime.today() > fechaturno
+            contadores['finalizadas'] += int(True if turno['attend'] else False)
+            contadores['ausentes'] += int(True if expiroFecha and not turno['attend'] and not turno['rescheduled'] else False)
+            contadores['pendientes'] += int(True if not expiroFecha and not turno['attend'] else False)
+            contadores['reprogramado'] += int(True if fecha_reprogramada > fechaturno else False)
+        return contadores
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
         legajo = Legajos.objects.filter(pk=self.kwargs["pk"]).first()
-
+        salud = self.get_data_salud(legajo)
         context["legajo"] = legajo
+        context["salud"] = salud
+        context['contadores'] = self.conteo_turnos(salud)
         
         return context
 
