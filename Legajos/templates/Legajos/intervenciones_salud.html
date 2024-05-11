@@ -158,6 +158,53 @@ Intervenciones de salud
                   </div>
               </div>
             {% endif %}
+
+
+            {% if salud.indicators.pediatricControls.value %}
+              <div class="col-md-3 col-sm-6 col-12">
+                  <div class="callout callout-danger h-100 pb-0">
+                      <h6 class="font-weight-bold">
+                        <i class="fas fa-exclamation-triangle px-1"></i>
+                        Falta de controles pediátricos
+                      </h6>
+                  </div>
+              </div>
+            {% endif %}
+
+            {% if salud.indicators.dentalControls.value %}
+              <div class="col-md-3 col-sm-6 col-12">
+                  <div class="callout callout-danger h-100 pb-0">
+                      <h6 class="font-weight-bold">
+                        <i class="fas fa-exclamation-triangle px-1"></i>
+                        Falta de controles dentales
+                      </h6>
+                  </div>
+              </div>
+            {% endif %}
+
+            {% if salud.indicators.ophthalmologicalControls.value %}
+              <div class="col-md-3 col-sm-6 col-12">
+                  <div class="callout callout-danger h-100 pb-0">
+                      <h6 class="font-weight-bold">
+                        <i class="fas fa-exclamation-triangle px-1"></i>
+                        Falta de controles oftalmológicos
+                      </h6>
+                  </div>
+              </div>
+            {% endif %}
+
+            {% if salud.indicators.gynecologicalControls.value %}
+              <div class="col-md-3 col-sm-6 col-12">
+                  <div class="callout callout-danger h-100 pb-0">
+                      <h6 class="font-weight-bold">
+                        <i class="fas fa-exclamation-triangle px-1"></i>
+                        Falta de controles ginecológicos
+                      </h6>
+                  </div>
+              </div>
+            {% endif %}
+
+            
           </div>
       </div>
   </div>
