@@ -540,4 +540,43 @@ class Vacantes(models.Model):
 #         return reverse('formularios_ver', kwargs={'pk': self.pk})
 
 
-# # endregion ---------------------FIN INDICES DE VULNERABILIDAD---------------------------------------------------
+# # endregion ---------------------FIN INDICES DE VULNERABILIDAD-------------------------------------------------
+
+class SL_Equipos (models.Model):
+    nombre = models.CharField(max_length=40, unique=True)
+    observaciones = models.CharField(max_length=300, null=True, blank=True)
+    estado = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.nombre
+
+    def clean(self):
+        self.nombre = self.nombre.capitalize()
+
+    class Meta:
+        ordering = ['nombre']
+        verbose_name = 'Equipo'
+        verbose_name_plural = "Equipos"
+
+    def get_absolute_url(self):
+        return reverse('slequipos_ver', kwargs={'pk': self.pk})
+    
+class SL_IndicesVulnerabilidad (models.Model):
+    nombre = models.CharField(max_length=40, unique=True)
+    puntaje = models.PositiveSmallIntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)], help_text='Permite valores entre 0 y 10.',)
+    estado = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.nombre
+
+    def clean(self):
+        self.nombre = self.nombre.capitalize()
+
+    class Meta:
+        ordering = ['nombre']
+        verbose_name = 'Indice'
+        verbose_name_plural = "Indices"
+
+    def get_absolute_url(self):
+        return reverse('slindicesvulnerabilidad_ver', kwargs={'pk': self.pk})
+

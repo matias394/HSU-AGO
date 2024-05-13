@@ -138,6 +138,20 @@
 				<p>Equipos</p>
 			</a>
 		</li>
+		<li class="nav-item">
+			<a href="{% url 'slequipos_listar' %}"
+				class="nav-link {% if 'configuracion/sl_equipos' in pagina_actual%}active{% endif %}">
+				<i class="fas fa-arrow-alt-circle-right nav-icon"></i>
+				<p>Servicio Local Equipos</p>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="{% url 'slindicesvulnerabilidad_listar' %}"
+				class="nav-link {% if 'configuracion/sl_indicesvulnerabilidad' in pagina_actual%}active{% endif %}">
+				<i class="fas fa-arrow-alt-circle-right nav-icon"></i>
+				<p>Servicio Local Indice Vulnerabilidad</p>
+			</a>
+		</li>
 		<!-- <li class="nav-item">
 			<a href="{% url 'acciones_listar' %}"
 				class="nav-link {% if 'configuracion/acciones' in pagina_actual%}active{% endif %}">
@@ -418,39 +432,39 @@
 	<ul class="nav nav-treeview">
 		<li class="nav-item">
 			<a href="{% url 'SL_derivaciones_listar' %}"
-				class="nav-link {% if 'derivaciones' in pagina_actual %}active{% endif %}">
+				class="nav-link {% if 'SL/derivaciones' in pagina_actual %}active{% endif %}">
 				<i class="nav-icon fas fa-inbox"></i>
 				<p>Derivaciones</p>
 			</a>
 		</li>
 		<li class="nav-item">
 			<a href="{% url 'SL_preadmisiones_listar' %}"
-				class="nav-link  {% if 'preadmisiones' in pagina_actual %}active{% endif %}">
+				class="nav-link  {% if 'SL/preadmisiones' in pagina_actual %}active{% endif %}">
 				<i class="nav-icon fas fa-tasks"></i>
 				<p>Pre-admisiones</p>
 			</a>
 		</li>
 		<li class="nav-item">
 			<a href="{% url 'SL_admisiones_listar' %}"
-				class="nav-link  {% if '/admisiones' in pagina_actual %}active{% endif %}{% if '/asignado_admisiones' in pagina_actual %}active{% endif %} ">
+				class="nav-link  {% if 'SL/admisiones' in pagina_actual %}active{% endif %}{% if '/asignado_admisiones' in pagina_actual %}active{% endif %} ">
 				<i class="nav-icon fas fa-id-badge"></i>
 				<p>Admisiones</p>
 			</a>
 		</li>
 		<li class="nav-item">
 			<a href="{%url 'SL_intervenciones_listar' %}"
-				class="nav-link {% if 'intervenciones' in pagina_actual %}active{% endif %}">
+				class="nav-link {% if 'SL/intervenciones' in pagina_actual %}active{% endif %}">
 				<i class="nav-icon fas fa-people-arrows"></i>
 				<p>Intervenciones</p>
 			</a>
 		</li>
-		<!--<li class="nav-item">
-			<a href="{% url 'intervenciones_list' %}"
-				class="nav-link {% if 'intervenciones_list' in pagina_actual %}active{% endif %}">
-				<i class="nav-icon fas fa-clipboard"></i>
-				<p>Reportes CDIF</p>
+		<li class="nav-item">
+			<a href="{%url 'sl_equipodesignado_list' %}"
+				class="nav-link {% if 'SL/equipos' in pagina_actual %}active{% endif %}">
+				<i class="nav-icon fas fa-people-arrows"></i>
+				<p>Equipos</p>
 			</a>
-		</li>-->
+		</li>
 	</ul>
 </li>
 {%endif%}

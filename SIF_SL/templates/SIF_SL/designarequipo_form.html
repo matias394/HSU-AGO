@@ -1,0 +1,79 @@
+{% extends "includes/base.html" %};
+{% load static %};
+
+{% block title %}
+Servicio Local designar equipo
+{%endblock %};
+
+{% block titulo-pagina %}
+Servicio Local Equipo
+{% endblock %};
+
+{% block breadcrumb %}
+<ol class="breadcrumb float-sm-right">
+  <li class="breadcrumb-item">Servicio Local designar equipo</li>
+  <li class="breadcrumb-item "><a href="{% url 'legajos_ver' 55 %}" title="Ver legajo">{{object.fk_derivacion}}</a></li>
+  <li class="breadcrumb-item active">Crear</li>
+</ol>
+{% endblock %};
+
+{% block menu-adicional %}
+{% endblock %};
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+<div class="row">
+  <div class="col">
+    <form class="needs-validation" novalidate method="POST">
+      <input type="hidden" value="{{object.id}}" name="fk_preadmi" id="id_fk_preadmi">
+      <input type="hidden" value="{{object.fk_expediente_id}}" name="fk_expediente" id="id_fk_expediente">
+      <!-- Security token -->
+      {% csrf_token %}
+      <div class="card card-primary card-outline">
+        <div class="card-header">
+          <h3 class="card-title">
+            {%if request.resolver_match.url_name == "SL_designarequipo_editar" %} 
+            Editar
+            {% else %}
+            Designar
+            {% endif %}
+            Equipo
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-4"></div>
+            <div class="col-4">
+              <div class="form-group">
+                {{form.fk_equipo | as_crispy_field}}
+              </div>
+            </div>
+            <div class="col-4"></div>
+          </div>
+          <div class="row text-center"><div class="col"><button type="button" class="btn btn-sm btn-secondary" onclick="selectRandomOption()">Random</button></div></div>
+        </div>
+      </div>
+
+      <div class="mt-4 mx-2">
+        <button type="submit" class="btn btn-primary mr-1">Confirmar</button>
+        <a href="{% url 'SL_preadmisiones_ver' object.id %}" class="btn btn-secondary">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+{% endblock content%}
+
+{% block customJS %}
+<script>
+  function selectRandomOption() {
+      var select = document.getElementById("id_fk_equipo");
+      var optionsCount = select.options.length;
+      var randomIndex = Math.floor(Math.random() * (optionsCount - 1)) + 1; // Evita seleccionar la opción vacía
+      select.selectedIndex = randomIndex;
+  }
+</script>
+{% endblock customJS%}

@@ -34,10 +34,8 @@ Intervenciones
           <thead>
             <tr>
               <th>Fecha</th>
-              <th>SL</th>
               <th>Usuario</th>
               <th>Legajo</th>
-              <th>Documento</th>
               <th>Criterio</th>
               <th>Gestión</th>
               <th>Acción realizada</th>
@@ -48,10 +46,8 @@ Intervenciones
             {% for i in intervenciones %}
             <tr>
               <td> {{ i.creado|date:'d/m/Y' }} </td>
-              <td>{{i.fk_admision.fk_preadmi.centro_postula}}</td>
               <td> {{i.creado_por}} </td>
-              <td>{{i.fk_admision.fk_preadmi.fk_legajo}}</td>
-              <td>{{i.fk_admision.fk_preadmi.fk_legajo.documento}}</td>
+              <td>{{i.fk_admision.fk_preadmi.fk_derivacion.fk_legajo}}</td>
               <td> {{i.criterio_modificable}}</td>
               <td> {{i.impacto}}</td>
               <td> {{i.accion}}</td>

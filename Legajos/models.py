@@ -381,7 +381,7 @@ class HistorialLegajoAlertas(models.Model):
 # y en aquellos que permiten la mejora del puntaje [permite_mejora=True] permitir agregar un valor.
 
 
-# class HistorialLegajoIndices(models.Model):
+class HistorialLegajoIndices(models.Model):
     '''
 
     Guardado de historial de cada instancia de ejecucion de un índices de vulnerabilidad asociado a un Legajo.
@@ -397,45 +397,40 @@ class HistorialLegajoAlertas(models.Model):
     y una valoración automática del mismo que va en el campo [riesgo] (escala a definir).
     '''
 
-    # fecha = models.DateField(auto_now_add=True)
-    # fk_indice = models.ForeignKey(Indices, on_delete=models.CASCADE)
-    # fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE)
-    # criterios_presentes = models.ManyToManyField(IndiceCriterios, through='LegajoIndiceCriterio')
-    # puntaje_total = models.PositiveSmallIntegerField(null=True, blank=True)
-    # riesgo = models.CharField(max_length=10, choices=CHOICE_NIVEL, null=True)
-    # observaciones = models.CharField(max_length=300, null=True, blank=True)
+    fecha = models.DateField(auto_now_add=True)
+    fk_indice = models.ForeignKey(Indices, on_delete=models.CASCADE)
+    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE)
+    criterios_presentes = models.ManyToManyField(IndiceCriterios, through='LegajoIndiceCriterio')
+    puntaje_total = models.PositiveSmallIntegerField(null=True, blank=True)
+    riesgo = models.CharField(max_length=10, choices=CHOICE_NIVEL, null=True)
+    observaciones = models.CharField(max_length=300, null=True, blank=True)
 
-    # def __str__(self):
-    #     return self.fk_legajo
+    def __str__(self):
+        return self.fk_legajo
 
-    # class Meta:
-    #     verbose_name = 'HistorialLegajoIndice'
-    #     verbose_name_plural = 'HistorialesLegajoIndices'
+    class Meta:
+        verbose_name = 'HistorialLegajoIndice'
+        verbose_name_plural = 'HistorialesLegajoIndices'
 
-    # def get_absolute_url(self):
-    #     return reverse('historiallegajoindice_ver', kwargs={'pk': self.pk})
+    def get_absolute_url(self):
+        return reverse('historiallegajoindice_ver', kwargs={'pk': self.pk})
 
 
-# class LegajoIndiceCriterio(models.Model):
-#     '''
-
-#     Guardado de los valores cargados en cada instancia de ejecución de un índice para un legajo determinado.
-#     '''
-
-#     fk_HistLegIndice = models.ForeignKey(HistorialLegajoIndices, related_name='+', on_delete=models.CASCADE)
-#     fk_IndiceCriterio = models.ForeignKey(IndiceCriterios, related_name='+', on_delete=models.CASCADE)
-#     puntos_mejora = models.PositiveSmallIntegerField(null=True, blank=True)
-
-#     def __str__(self):
-#         return f"Historial: {self.fk_HistLegIndice} - Criterio: {self.fk_IndiceCriterio}"
-
-#     class Meta:
-#         ordering = ['fk_HistLegIndice']
-#         verbose_name = 'LegajoIndiceCriterio'
-#         verbose_name_plural = 'LegajoIndicesCriterios'
-
-#     def get_absolute_url(self):
-#         return reverse('legajoindicecriterio_ver', kwargs={'pk': self.pk})
+class LegajoIndiceCriterio(models.Model):
+     '''
+     Guardado de los valores cargados en cada instancia de ejecución de un índice para un legajo determinado.
+     '''
+     fk_HistLegIndice = models.ForeignKey(HistorialLegajoIndices, related_name='+', on_delete=models.CASCADE)
+     fk_IndiceCriterio = models.ForeignKey(IndiceCriterios, related_name='+', on_delete=models.CASCADE)
+     puntos_mejora = models.PositiveSmallIntegerField(null=True, blank=True)
+     def __str__(self):
+         return f"Historial: {self.fk_HistLegIndice} - Criterio: {self.fk_IndiceCriterio}"
+     class Meta:
+         ordering = ['fk_HistLegIndice']
+         verbose_name = 'LegajoIndiceCriterio'
+         verbose_name_plural = 'LegajoIndicesCriterios'
+     def get_absolute_url(self):
+         return reverse('legajoindicecriterio_ver', kwargs={'pk': self.pk})
 
 
 # endregion-----------FIN LEGAJOS/ INDICES DE VULNERABILIDAD-------------------------------------------------------------------------
