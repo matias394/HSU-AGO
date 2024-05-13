@@ -531,3 +531,108 @@ class LegajosArchivos(models.Model):
     def __str__(self):
         return f"Archivo {self.id} del legajo {self.fk_legajo}"
 
+
+
+# region ---------------------------- Intervenciones Salud ----------------------------
+
+from typing import Union, Any
+
+@dataclass
+class SaludIndicatorsGynecologicalControls:
+  value: bool
+  quantity: int
+  lastTurn: str
+  turnCodigo: int
+
+@dataclass
+class SaludIndicatorsOphthalmologicalControls:
+  value: bool
+  quantity: int
+  lastTurn: str
+  turnCodigo: int
+
+@dataclass
+class SaludIndicatorsDentalControls:
+  value: bool
+  quantity: int
+  lastTurn: str
+  turnCodigo: int
+
+@dataclass
+class SaludIndicatorsPediatricControls:
+  value: bool
+  quantity: int
+  lastTurn: None
+  turnCodigo: None
+
+@dataclass
+class SaludIndicatorsPregnancy:
+  value: bool
+  minor: None
+  risk: None
+  numberOfControls: int
+  lastTurn: None
+  turnCodigo: None
+
+@dataclass
+class SaludIndicatorsTurns:
+  date: str
+  specialty: Union[str,None]
+  attend: bool
+  rescheduled: bool
+  rescheduledDate: str
+  turnCodigo: int
+
+@dataclass
+class SaludIndicatorsMedicalCenters:
+  name: str
+  lastTurn: str
+  turnCodigo: int
+
+@dataclass
+class SaludIndicatorsMedicalControls:
+  quantity: int
+  lastTurn: str
+  turnCodigo: int
+
+@dataclass
+class SaludIndicatorsCatastrophicSickness:
+  value: bool
+
+@dataclass
+class SaludIndicatorsMentalProblems:
+  value: bool
+
+@dataclass
+class SaludIndicatorsSubstanceUse:
+  value: bool
+  lastTurn: None
+  turnCodigo: None
+
+@dataclass
+class SaludIndicators:
+  substanceUse: SaludIndicatorsSubstanceUse
+  mentalProblems: SaludIndicatorsMentalProblems
+  catastrophicSickness: SaludIndicatorsCatastrophicSickness
+  medicalControls: SaludIndicatorsMedicalControls
+  medicalCenters: list[SaludIndicatorsMedicalCenters]
+  turns: list[SaludIndicatorsTurns]
+  pregnancy: SaludIndicatorsPregnancy
+  pediatricControls: SaludIndicatorsPediatricControls
+  dentalControls: SaludIndicatorsDentalControls
+  ophthalmologicalControls: SaludIndicatorsOphthalmologicalControls
+  gynecologicalControls: SaludIndicatorsGynecologicalControls
+
+@dataclass
+class SaludPerson:
+  document_number: str
+  document_type: str
+  gender: str
+  persCodigo: int
+
+@dataclass
+class IntercepcionSaludPersona:
+  person: SaludPerson
+  indicators: SaludIndicators
+
+# endregion
