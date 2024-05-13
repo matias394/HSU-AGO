@@ -743,44 +743,45 @@ class CDIFVacantesAdmisionCambio(PermisosMixin, CreateView):
     form_class = CDIF_VacantesOtorgadasForm
 
     def form_valid(self, form):
-        if form.cleaned_data['fecha_egreso'] == None:
-            messages.error(self.request, 'El campo fecha de egreso es requerido.')
-            return super().form_invalid(form) 
-        else:
-            pk = self.kwargs["pk"]
-            vacante_anterior = CDIF_VacantesOtorgadas.objects.filter(fk_admision_id=pk).last()
-            vacante_anterior.estado_vacante = "Cambiado"
-            vacante_anterior.save()
+        # if form.cleaned_data['fecha_egreso'] == None:
+        #     messages.error(self.request, 'El campo fecha de egreso es requerido.')
+        #     return super().form_invalid(form) 
+        # else:
+        pk = self.kwargs["pk"]
+        vacante_anterior = CDIF_VacantesOtorgadas.objects.filter(fk_admision_id=pk).last()
+        vacante_anterior.estado_vacante = "Cambiado"
+        vacante_anterior.fecha_egreso = date.today()
+        vacante_anterior.save()
 
-            form.evento = "CambioVacante"
-            sala = form.cleaned_data['sala']
-            turno = form.cleaned_data['turno']
-            if sala == 'Bebes' and turno == 'Mañana':
-                form.instance.salashort = 'manianabb'
-            elif sala == 'Bebes' and turno == 'Tarde':
-                form.instance.salashort = 'tardebb'
-            elif sala == '2' and turno == 'Mañana':
-                form.instance.salashort = 'maniana2'
-            elif sala == '2' and turno == 'Tarde':
-                form.instance.salashort = 'tarde2'
-            elif sala == '3' and turno == 'Mañana':
-                form.instance.salashort = 'maniana3'
-            elif sala == '3' and turno == 'Tarde':
-                form.instance.salashort = 'tarde3'
-            self.object = form.save()
+        form.evento = "CambioVacante"
+        sala = form.cleaned_data['sala']
+        turno = form.cleaned_data['turno']
+        if sala == 'Bebes' and turno == 'Mañana':
+            form.instance.salashort = 'manianabb'
+        elif sala == 'Bebes' and turno == 'Tarde':
+            form.instance.salashort = 'tardebb'
+        elif sala == '2' and turno == 'Mañana':
+            form.instance.salashort = 'maniana2'
+        elif sala == '2' and turno == 'Tarde':
+            form.instance.salashort = 'tarde2'
+        elif sala == '3' and turno == 'Mañana':
+            form.instance.salashort = 'maniana3'
+        elif sala == '3' and turno == 'Tarde':
+            form.instance.salashort = 'tarde3'
+        self.object = form.save()
 
+    
+        # --------- HISTORIAL ---------------------------------
         
-            # --------- HISTORIAL ---------------------------------
-            
-            legajo = CDIF_Admision.objects.filter(pk=pk).first()
-            base = CDIF_Historial()
-            base.fk_legajo_id = legajo.fk_preadmi.fk_legajo.id
-            base.fk_legajo_derivacion_id = legajo.fk_preadmi.fk_derivacion_id
-            base.fk_preadmi_id = legajo.fk_preadmi.pk
-            base.fk_admision_id = pk
-            base.movimiento = "CAMBIO VACANTE"
-            base.creado_por_id = self.request.user.id
-            base.save()
+        legajo = CDIF_Admision.objects.filter(pk=pk).first()
+        base = CDIF_Historial()
+        base.fk_legajo_id = legajo.fk_preadmi.fk_legajo.id
+        base.fk_legajo_derivacion_id = legajo.fk_preadmi.fk_derivacion_id
+        base.fk_preadmi_id = legajo.fk_preadmi.pk
+        base.fk_admision_id = pk
+        base.movimiento = "CAMBIO VACANTE"
+        base.creado_por_id = self.request.user.id
+        base.save()
 
         return redirect('CDIF_asignado_admisiones_ver', legajo.id)
     
