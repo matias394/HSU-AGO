@@ -10,11 +10,11 @@
 
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"><a href="{% url 'CDIF_derivaciones_listar'%}"
+    <li class="breadcrumb-item"><a href="{% url 'UMI_derivaciones_listar'%}"
             title="Ver listado de Pre-admisiones">Pre-admisiones</a></li>
     <li class="breadcrumb-item "><a href="{% url 'legajos_ver' legajo.fk_legajo.id %}"
             title="Ver legajo">{{legajo.fk_legajo}}</a></li>
-            {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+            {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
             <li class="breadcrumb-item active">Editar</li>
             {% else %}
             <li class="breadcrumb-item active">Agregar</li>
@@ -38,7 +38,7 @@
                             <span class="bs-stepper-label">Madre o cuidador principal</span>
                         </button>
                     </div>
-                    <div class="line"></div>
+                    <!--<div class="line"></div>-->
                     <div class="step" data-target="#cuidador-secundario">
                         <button type="button" class="step-trigger" role="tab" aria-controls="cuidador-secundario"
                             id="cuidador-secundario-trigger">
@@ -46,7 +46,7 @@
                             <span class="bs-stepper-label">Padre o apoyo en la crianza</span>
                         </button>
                     </div>
-                    <div class="line"></div>
+                    <!--<div class="line"></div>-->
                     <div class="step" data-target="#convivientes">
                         <button type="button" class="step-trigger" role="tab" aria-controls="convivientes"
                             id="convivientes-trigger">
@@ -54,22 +54,38 @@
                             <span class="bs-stepper-label">Otros convivientes</span>
                         </button>
                     </div>
-                    <div class="line"></div>
-                    <div class="step" data-target="#info-centro">
-                        <button type="button" class="step-trigger" role="tab" aria-controls="info-centro"
-                            id="info-centro-trigger">
+                    <!--<div class="line"></div>-->
+                    <div class="step" data-target="#info-embarazos">
+                        <button type="button" class="step-trigger" role="tab" aria-controls="info-embarazos"
+                            id="info-embarazos-trigger">
                             <span class="bs-stepper-circle">4</span>
-                            <span class="bs-stepper-label">Información de la postulación</span>
+                            <span class="bs-stepper-label">Embarazo</span>
+                        </button>
+                    </div>
+                    <!--<div class="line"></div>-->
+                    <div class="step" data-target="#info-controles">
+                        <button type="button" class="step-trigger" role="tab" aria-controls="info-controles"
+                            id="info-controles-trigger">
+                            <span class="bs-stepper-circle">5</span>
+                            <span class="bs-stepper-label">Controles del embarazo</span>
+                        </button>
+                    </div>
+                    <!--<div class="line"></div>-->
+                    <div class="step" data-target="#info-acompaniante">
+                        <button type="button" class="step-trigger" role="tab" aria-controls="info-acompaniante"
+                            id="info-controles-trigger">
+                            <span class="bs-stepper-circle">6</span>
+                            <span class="bs-stepper-label">Acompañante</span>
                         </button>
                     </div>
                 </div>
                 <div class="card-body py-0 px-2 mt-5">
-                    <form novalidate method="POST" enctype="multipart/form-data" class="needs-validation">
+                    <form novalidate method="POST" enctype="multipart/form-data">
                         <!-- Security token -->
                         {% csrf_token %}
                         <input type="hidden" id="id_fk_derivacion" name="fk_derivacion" value={{pk}}>
                         <input type="hidden" id="id_fk_legajo" name="fk_legajo" value={{legajo.fk_legajo.id}}>
-                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                         <input type="hidden" id="id_modificado_por" name="modificado_por" value={{ user.id }}>
                         {% else %}
                         <input type="hidden" id="id_creado_por" name="creado_por" value={{ user.id }}>
@@ -96,7 +112,7 @@
                                                         <label>Madre o cuidador principal</label>
                                                         <select name="fk_legajo_1" class="form-control custom-select" id="id_fk_legajo_1">
                                                             <option value=""></option>
-                                                            {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                            {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                             <option value="{{object.fk_legajo_1.id}}" selected>{{object.fk_legajo_1}}</option>
                                                             {% endif %}
                                                             {% for f in familia %}
@@ -110,7 +126,7 @@
                                                     <div class="col-sm-3 form-group">
                                                         <label>Vínculo</label>
                                                         <input type="text" class="form-control" id="vinculo1" name="vinculo1" 
-                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.vinculo1}}"
                                                         {% endif %}
                                                         readonly>
@@ -118,7 +134,7 @@
                                                     <div class="col-sm-3 form-group">
                                                         <label>Tipo de documento</label>
                                                         <input type="text" class="form-control" id="tipo_doc"
-                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.fk_legajo_1.tipo_doc}}"
                                                         {% endif %}
                                                         readonly>
@@ -126,7 +142,7 @@
                                                     <div class="col-sm-3 form-group">
                                                         <label>Numero documento</label>
                                                         <input type="text" class="form-control" id="documento" 
-                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.fk_legajo_1.documento}}"
                                                         {% endif %}
                                                         readonly>
@@ -302,7 +318,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="{% url 'CDIF_derivaciones_listar' %}"
+                            <a href="{% url 'UMI_derivaciones_listar' %}"
                                 class="btn btn-secondary float-left mb-3 mt-5">Cancelar</a>
                                 <a class="btn btn-primary float-right mb-3 mt-5 " onclick="stepper.next()">Continuar</a>
                         </div>
@@ -327,7 +343,7 @@
                                                         <label>Padre o apoyo en la crianza</label>
                                                         <select name="fk_legajo_2" class="form-control custom-select" id="id_fk_legajo_2">
                                                             <option value="" selected=""></option>
-                                                            {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                            {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                             <option value="{{object.fk_legajo_2.id}}" selected>{{object.fk_legajo_2}}</option>
                                                             {% endif %}
                                                             {% for f in familia %}
@@ -341,21 +357,21 @@
                                                     <div class="col-sm-3 form-group">
                                                         <label>Vínculo</label>
                                                         <input type="text" class="form-control" id="vinculo2" name="vinculo2" 
-                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.vinculo2}}"
                                                         {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Tipo de documento</label>
                                                         <input type="text" class="form-control" id="tipo_doc2" 
-                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.fk_legajo_2.tipo_doc}}"
                                                         {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Numero documento</label>
                                                         <input type="text" class="form-control" id="documento2" 
-                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.fk_legajo_2.documento}}"
                                                         {% endif %}readonly>
                                                     </div>
@@ -469,7 +485,7 @@
                                                         <label>Conviviente</label>
                                                         <select name="fk_legajo_3" class="form-control custom-select" id="id_fk_legajo_3">
                                                             <option value="" selected=""></option>
-                                                            {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                            {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                             <option value="{{object.fk_legajo_3.id}}" selected>{{object.fk_legajo_3}}</option>
                                                             {% endif %}
                                                             {% for f in familia %}
@@ -483,21 +499,21 @@
                                                     <div class="col-sm-3 form-group">
                                                         <label>Vínculo</label>
                                                         <input type="text" class="form-control" id="vinculo3" name="vinculo3" 
-                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.vinculo3}}"
                                                         {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Tipo de documento</label>
                                                         <input type="text" class="form-control" id="tipo_doc3" 
-                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.fk_legajo_3.tipo_doc}}"
                                                         {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Numero documento</label>
                                                         <input type="text" class="form-control" id="documento3" 
-                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.fk_legajo_3.documento}}"
                                                         {% endif %}readonly>
                                                     </div>
@@ -572,7 +588,7 @@
                                                         <label>Conviviente</label>
                                                         <select name="fk_legajo_4" class="form-control custom-select" id="id_fk_legajo_4">
                                                             <option value="" selected=""></option>
-                                                            {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                            {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                             <option value="{{object.fk_legajo_4.id}}" selected>{{object.fk_legajo_4}}</option>
                                                             {% endif %}
                                                             {% for f in familia %}
@@ -586,21 +602,21 @@
                                                     <div class="col-sm-3 form-group">
                                                         <label>Vínculo</label>
                                                         <input type="text" class="form-control" id="vinculo4" name="vinculo4" 
-                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.vinculo4}}"
                                                         {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Tipo de documento</label>
                                                         <input type="text" class="form-control" id="tipo_doc4" 
-                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.fk_legajo_4.tipo_doc}}"
                                                         {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Numero documento</label>
                                                         <input type="text" class="form-control" id="documento4" 
-                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.fk_legajo_4.documento}}"
                                                         {% endif %}readonly>
                                                     </div>
@@ -675,7 +691,7 @@
                                                         <label>Conviviente</label>
                                                         <select name="fk_legajo_5" class="form-control custom-select" id="id_fk_legajo_5">
                                                             <option value="" selected=""></option>
-                                                            {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                            {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                             <option value="{{object.fk_legajo_5.id}}" selected>{{object.fk_legajo_5}}</option>
                                                             {% endif %}
                                                             {% for f in familia %}
@@ -689,21 +705,21 @@
                                                     <div class="col-sm-3 form-group">
                                                         <label>Vínculo</label>
                                                         <input type="text" class="form-control" id="vinculo5" name="vinculo5" 
-                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.vinculo5}}"
                                                         {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Tipo de documento</label>
                                                         <input type="text" class="form-control" id="tipo_doc5" 
-                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.fk_legajo_5.tipo_doc}}"
                                                         {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Numero documento</label>
                                                         <input type="text" class="form-control" id="documento5" 
-                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.fk_legajo_5.documento}}"
                                                         {% endif %}readonly>
                                                     </div>
@@ -762,32 +778,283 @@
                             <a class="btn btn-primary float-right mb-3 mt-5 " onclick="stepper.next()">Continuar</a>
                         </div>
 
-                        <div id="info-centro" class="content" role="tabpanel" aria-labelledby="info-centro-trigger">
+                        <div id="info-embarazos" class="content" role="tabpanel" aria-labelledby="info-embarazos-trigger">
+                            <div class="col-12 mt-3">
+                                <div class="card ">
+                                    <div class="card-header">
+                                        <div class="card-title font-weight-bold">
+                                            Datos embarazo
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-12 ">
                             <div class="form-row">
-                                <div class="col-sm-3 form-group">
-                                    <label for="id_centro_postula">Centro al que postula *</label>
-                                    <select name="centro_postula" class="form-control custom-select {% if messages %}is-invalid{% endif %}" id="id_centro_postula" required>
-                                        <option value="" selected=""></option>
-                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                        <option value="{{object.centro_postula.id}}" selected>{{object.centro_postula}}</option>
-                                        {% endif %}
-                                        {% for c in centros %}
-                                        <option value="{{c.id}}">{{c.nombre}}</option>
-                                        {% endfor %}
-                                      </select>
-                                    {% comment %} <p id="error_1_id_centro_postula" class="invalid-feedback"><strong>Este campo es obligatorio.</strong></p> {% endcomment %}
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        {{form.fum| as_crispy_field}}
+                                    </div>
                                 </div>
-                                <div class="col-sm-3 form-group">
-                                    {{form.sala_postula| as_crispy_field}}
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        {{form.sem_embarazo| as_crispy_field}}
+                                    </div>
                                 </div>
-                                <div class="col-sm-3 form-group">
-                                    {{form.turno_postula| as_crispy_field}}
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        {{form.fpp| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        {{form.centro_controla| as_crispy_field}}
+                                    </div>
                                 </div>
                             </div>
-                            <a class="btn btn-secondary float-left mb-3 mt-5 " onclick="stepper.previous()">Volver</a>
-                            <button type="submit" class="btn btn-primary float-right mb-3 mt-5">Confirmar</button>
+
+                            <div class="form-row mt-3">
+                                <div class="col-sm-3">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.test_embarazo| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        {{form.primer_control| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.primer_embarazo| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.libreta_sanitaria| as_crispy_field}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row mt-3">
+                                <div class="col-sm-3">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.metodos_anticonceptivos| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        {{form.cuales_met_anticon_conoces| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.utilizabas_alguno| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        {{form.cual_usabas| as_crispy_field}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                            <div class="form-row mt-3">
+                                <div class="col-sm-4">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.sifilis_anterior| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.sifilis_ahora| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.sifilis_tratamiento_pareja| as_crispy_field}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row mt-3">
+                                <div class="col-sm-3">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.consumio_drogas| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.drogas_ahora| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.alcohol_ahora| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.sospecha_consumo| as_crispy_field}}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+                            <a class="btn btn-secondary float-left mb-3 mt-5 " onclick="stepper.previous()">Volver</a>
+                            <a class="btn btn-primary float-right mb-3 mt-5 " onclick="stepper.next()">Continuar</a>
+                        </div>
+
+                        <div id="info-controles" class="content" role="tabpanel" aria-labelledby="info-controles-trigger">
+                            <div class="col-12 mt-3">
+                                <div class="card ">
+                                    <div class="card-header">
+                                        <div class="card-title font-weight-bold">
+                                            Controles del embarazo
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-12 ">
+                            <div class="form-row flex justify-content-center">
+                                <div class="col-sm-4 pl-5 pr-5">
+                                    <div class="form-group">
+                                        {{form.embarazo_controlado| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 pl-5 pr-5">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.comienza_control| as_crispy_field}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row mt-3 bg-dark p-3">
+                                Primer Trimestre
+                            </div>
+                            <div class="form-row mt-3 pl-5 pr-5">
+                                <div class="col-sm-4">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.prim_trim_control_obstetra| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.prim_trim_estudios_labo| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.prim_trim_estudios_eco| as_crispy_field}}
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-row mt-3 pl-5 pr-5">
+                                <div class="col-sm-4">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.prim_trim_estudios_pap| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.prim_trim_estudios_grupo_factor| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.prim_trim_control_odonto| as_crispy_field}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row mt-3 bg-dark p-3">
+                                Segundo Trimestre
+                            </div>
+                            <div class="form-row mt-3 pl-5 pr-5">
+                                <div class="col-sm-4">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.seg_trim_control_obsetra| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.seg_trim_control_fetal| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.seg_trim_p75| as_crispy_field}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row mt-3 bg-dark p-3">
+                                Tercer Trimestre
+                            </div>
+                            <div class="form-row mt-3 pl-5 pr-5">
+                                <div class="col-sm-4">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.ter_trim_control_rutina| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.ter_trim_monitoreo_fetal| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group mt-4 pt-2">
+                                        {{form.ter_trim_electro_cardio| as_crispy_field}}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <a class="btn btn-secondary float-left mb-3 mt-5 " onclick="stepper.previous()">Volver</a>
+        <a class="btn btn-primary float-right mb-3 mt-5 " onclick="stepper.next()">Continuar</a>
+                    </div>
+                    <div id="info-acompaniante" class="content" role="tabpanel" aria-labelledby="info-acompaniante-trigger">
+                        <div class="col-12 mt-3">
+                            <div class="card ">
+                                <div class="card-header">
+                                    <div class="card-title font-weight-bold">
+                                        Acompañante
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12 ">
+                        <div class="form-row flex justify-content-center">
+                            <div class="col-sm-4 pl-5 pr-5">
+                                <div class="form-group">
+                                    {{form.acompaniante| as_crispy_field}}
+                                </div>
+                            </div>
+                            {% comment %} <div class="col-sm-4 pl-5 pr-5">
+                                <div class="form-group">
+                                    {{form.madrina| as_crispy_field}}
+                                </div>
+                            </div> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <a class="btn btn-secondary float-left mb-3 mt-5 " onclick="stepper.previous()">Volver</a>
+    <button type="submit" class="btn btn-primary float-right mb-3 mt-5">Confirmar</button>
+
+                </div>
                 </form>
                 </div>
             </div>
@@ -938,37 +1205,4 @@
     });
 });
 </script>
-<script>
-    // Disable form submissions if there are invalid fields
-    (function () {
-        'use strict';
-        window.addEventListener('load', function () {
-          // Get the forms we want to add validation styles to
-          var forms = document.getElementsByClassName('needs-validation');
-          // Loop over them and prevent submission
-          var validation = Array.prototype.filter.call(forms, function (form) {
-            form.addEventListener('submit', function (event) {
-              var invalidFields = form.querySelectorAll(':invalid');
-              if (invalidFields.length > 0) {
-                // Si hay campos inválidos, detener la propagación del evento
-                event.preventDefault();
-                event.stopPropagation();
-      
-                // Iterar sobre los campos inválidos y agregar mensajes de obligatoriedad
-                invalidFields.forEach(function (field) {
-                  if (field.hasAttribute('required')) {
-                    // Agregar un mensaje de obligatoriedad para los campos requeridos
-                    var errorMessage = document.createElement('div');
-                    errorMessage.className = 'invalid-feedback';
-                    errorMessage.innerHTML = 'Este campo es obligatorio.';
-                    field.parentNode.appendChild(errorMessage);
-                  }
-                });
-              }
-              form.classList.add('was-validated');
-            }, false);
-          });
-        }, false);
-      })();
-</script> 
 {% endblock %}
