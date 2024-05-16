@@ -1,5 +1,5 @@
 from django.views.generic import CreateView,ListView,DetailView,UpdateView,DeleteView,TemplateView, FormView
-from Legajos.models import LegajosDerivaciones
+from Legajos.models import LegajosDerivaciones,HistorialLegajoIndices
 from Legajos.forms import DerivacionesRechazoForm, LegajosDerivacionesForm
 from django.db.models import Q
 from .models import *
@@ -13,7 +13,6 @@ import uuid
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.conf import settings
-
 
 # # Create your views here.
 #derivaciones = LegajosDerivaciones.objects.filter(m2m_programas__nombr__iexact="CDLE")
@@ -376,6 +375,7 @@ class CDLEIndiceIngresoCreateView (PermisosMixin, CreateView):
         nombres_campos = request.POST.keys()
         puntaje_maximo = Criterios_Ingreso.objects.aggregate(total=Sum('puntaje'))['total']
         total_puntaje = 0
+        historico = HistorialLegajoIndices()
         for f in nombres_campos:
             if f.isdigit():
                 criterio_ingreso = Criterios_Ingreso.objects.filter(id=f).first()
@@ -388,6 +388,7 @@ class CDLEIndiceIngresoCreateView (PermisosMixin, CreateView):
                 base.tipo = "Ingreso"
                 base.presencia = True
                 base.programa = "CDLE"
+                historico.programa = base.programa
                 base.clave = clave
                 base.save()
         
@@ -403,6 +404,16 @@ class CDLEIndiceIngresoCreateView (PermisosMixin, CreateView):
         foto.tipo = "Ingreso"
         foto.clave = clave
         foto.creado_por_id = self.request.user.id
+        
+        historico.observaciones = foto.observaciones
+        historico.fk_legajo_id = preadmi.fk_legajo_id
+        historico.puntaje = total_puntaje
+        historico.puntaje_total = total_puntaje
+        historico.puntaje_max = puntaje_maximo
+        historico.tipo = "Ingreso"
+        historico.clave = clave
+
+        historico.save()
         foto.save()
 
         preadmi.indice_ingreso = "SI"
@@ -451,6 +462,7 @@ class CDLEIndiceIngresoUpdateView (PermisosMixin, UpdateView):
         nombres_campos = request.POST.keys()
         puntaje_maximo = Criterios_Ingreso.objects.aggregate(total=Sum('puntaje'))['total']
         total_puntaje = 0
+        historico = HistorialLegajoIndices()
         for f in nombres_campos:
             if f.isdigit():
                 criterio_ingreso = Criterios_Ingreso.objects.filter(id=f).first()
@@ -463,6 +475,7 @@ class CDLEIndiceIngresoUpdateView (PermisosMixin, UpdateView):
                 base.presencia = True
                 base.tipo = "Ingreso"
                 base.programa = "CDLE"
+                historico.programa = base.programa
                 base.clave = clave
                 base.save()
         
@@ -478,6 +491,16 @@ class CDLEIndiceIngresoUpdateView (PermisosMixin, UpdateView):
         foto.tipo = "Ingreso"
         foto.clave = clave
         foto.modificado_por_id = self.request.user.id
+
+        historico.observaciones = foto.observaciones
+        historico.fk_legajo_id = preadmi.fk_legajo_id
+        historico.puntaje = total_puntaje
+        historico.puntaje_total = total_puntaje
+        historico.puntaje_max = puntaje_maximo
+        historico.tipo = "Ingreso"
+        historico.clave = clave
+
+        historico.save()
         foto.save()
 
         #---------HISTORIAL---------------------------------
@@ -557,6 +580,7 @@ class CDLEIndiceIviCreateView (PermisosMixin, CreateView):
         nombres_campos = request.POST.keys()
         puntaje_maximo = Criterios_IVI.objects.aggregate(total=Sum('puntaje'))['total']
         total_puntaje = 0
+        historico = HistorialLegajoIndices()
         for f in nombres_campos:
             if f.isdigit():
                 criterio_ivi = Criterios_IVI.objects.filter(id=f).first()
@@ -569,6 +593,7 @@ class CDLEIndiceIviCreateView (PermisosMixin, CreateView):
                 base.tipo = "Ingreso"
                 base.presencia = True
                 base.programa = "CDLE"
+                historico.programa = base.programa
                 base.clave = clave
                 base.save()
         
@@ -584,6 +609,17 @@ class CDLEIndiceIviCreateView (PermisosMixin, CreateView):
         foto.tipo = "Ingreso"
         foto.clave = clave
         foto.creado_por_id = self.request.user.id
+        
+        historico.observaciones = foto.observaciones
+        historico.fk_legajo_id = preadmi.fk_legajo_id
+        historico.puntaje = total_puntaje
+        historico.puntaje_total = total_puntaje
+        historico.puntaje_max = puntaje_maximo
+        historico.tipo = "Ingreso"
+        historico.clave = clave
+
+        historico.save()
+        
         foto.save()
 
         preadmi.ivi = "SI"
@@ -633,6 +669,7 @@ class CDLEIndiceIviUpdateView (PermisosMixin, UpdateView):
         nombres_campos = request.POST.keys()
         puntaje_maximo = Criterios_IVI.objects.aggregate(total=Sum('puntaje'))['total']
         total_puntaje = 0
+        historico = HistorialLegajoIndices()
         for f in nombres_campos:
             if f.isdigit():
                 criterio_ivi = Criterios_IVI.objects.filter(id=f).first()
@@ -644,6 +681,7 @@ class CDLEIndiceIviUpdateView (PermisosMixin, UpdateView):
                 base.fk_preadmi_id = pk
                 base.presencia = True
                 base.programa = "CDLE"
+                historico.programa = base.programa
                 base.tipo = "Ingreso"
                 base.clave = clave
                 base.save()
@@ -660,6 +698,16 @@ class CDLEIndiceIviUpdateView (PermisosMixin, UpdateView):
         #foto.tipo = "Ingreso"
         #foto.clave = clave
         foto.modificado_por_id = self.request.user.id
+        
+        historico.observaciones = foto.observaciones
+        historico.fk_legajo_id = preadmi.fk_legajo_id
+        historico.puntaje = total_puntaje
+        historico.puntaje_total = total_puntaje
+        historico.puntaje_max = puntaje_maximo
+        historico.tipo = "Ingreso"
+        historico.clave = clave
+
+        historico.save()
         foto.save()
 
         #---------HISTORIAL---------------------------------
@@ -1076,6 +1124,7 @@ class CDLEIndiceIviEgresoCreateView (PermisosMixin, CreateView):
         nombres_campos = request.POST.keys()
         puntaje_maximo = Criterios_IVI.objects.aggregate(total=Sum('puntaje'))['total']
         total_puntaje = 0
+        historico = HistorialLegajoIndices()
         for f in nombres_campos:
             if f.isdigit():
                 criterio_ivi = Criterios_IVI.objects.filter(id=f).first()
@@ -1088,6 +1137,7 @@ class CDLEIndiceIviEgresoCreateView (PermisosMixin, CreateView):
                 base.tipo = "Egreso"
                 base.presencia = True
                 base.programa = "CDLE"
+                historico.programa = base.programa
                 base.clave = clave
                 base.save()
 
@@ -1103,6 +1153,17 @@ class CDLEIndiceIviEgresoCreateView (PermisosMixin, CreateView):
         foto.tipo = "Egreso"
         foto.clave = clave
         foto.creado_por_id = self.request.user.id
+        
+        historico.observaciones = foto.observaciones
+        historico.fk_legajo_id = preadmi.fk_legajo_id
+        historico.puntaje = total_puntaje
+        historico.puntaje_total = total_puntaje
+        historico.puntaje_max = puntaje_maximo
+        historico.tipo = "Egreso"
+        historico.clave = clave
+
+        historico.save()
+        
         foto.save()
 
         admi.estado = "Inactiva"

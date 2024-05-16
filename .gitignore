@@ -83,7 +83,7 @@ target/
 *.pot
 *.pyc
 __pycache__/
-local_settings.py
+settings.py
 
 .env
 .venv
@@ -99,4 +99,5 @@ logs/
 .venv/
 Pipfile
 Virtuales/
+
 

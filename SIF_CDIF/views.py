@@ -13,7 +13,7 @@ import uuid
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.conf import settings
-
+from Legajos.models import HistorialLegajoIndices,HistoricoIVI
 
 # # Create your views here.
 #derivaciones = LegajosDerivaciones.objects.filter(m2m_programas__nombr__iexact="CDIF")
@@ -422,6 +422,7 @@ class CDIFIndiceIviCreateView (PermisosMixin, CreateView):
         nombres_campos = request.POST.keys()
         puntaje_maximo = Criterios_IVI.objects.aggregate(total=Sum('puntaje'))['total']
         total_puntaje = 0
+        historico = HistorialLegajoIndices()
         for f in nombres_campos:
             if f.isdigit():
                 criterio_ivi = Criterios_IVI.objects.filter(id=f).first()
@@ -434,9 +435,9 @@ class CDIFIndiceIviCreateView (PermisosMixin, CreateView):
                 base.tipo = "Ingreso"
                 base.presencia = True
                 base.programa = "CDIF"
+                historico.programa = base.programa
                 base.clave = clave
                 base.save()
-        
         # total_puntaje contiene la suma de los valores de F
         foto = CDIF_Foto_IVI()
         foto.observaciones = request.POST.get('observaciones', '')
@@ -449,6 +450,16 @@ class CDIFIndiceIviCreateView (PermisosMixin, CreateView):
         foto.tipo = "Ingreso"
         foto.clave = clave
         foto.creado_por_id = self.request.user.id
+        
+        historico.observaciones = foto.observaciones
+        historico.fk_legajo_id = preadmi.fk_legajo_id
+        historico.puntaje = total_puntaje
+        historico.puntaje_total = total_puntaje
+        historico.puntaje_max = puntaje_maximo
+        historico.tipo = "Ingreso"
+        historico.clave = clave
+
+        historico.save()
         foto.save()
 
         preadmi.ivi = "SI"
@@ -732,44 +743,45 @@ class CDIFVacantesAdmisionCambio(PermisosMixin, CreateView):
     form_class = CDIF_VacantesOtorgadasForm
 
     def form_valid(self, form):
-        if form.cleaned_data['fecha_egreso'] == None:
-            messages.error(self.request, 'El campo fecha de egreso es requerido.')
-            return super().form_invalid(form) 
-        else:
-            pk = self.kwargs["pk"]
-            vacante_anterior = CDIF_VacantesOtorgadas.objects.filter(fk_admision_id=pk).last()
-            vacante_anterior.estado_vacante = "Cambiado"
-            vacante_anterior.save()
+        # if form.cleaned_data['fecha_egreso'] == None:
+        #     messages.error(self.request, 'El campo fecha de egreso es requerido.')
+        #     return super().form_invalid(form) 
+        # else:
+        pk = self.kwargs["pk"]
+        vacante_anterior = CDIF_VacantesOtorgadas.objects.filter(fk_admision_id=pk).last()
+        vacante_anterior.estado_vacante = "Cambiado"
+        vacante_anterior.fecha_egreso = date.today()
+        vacante_anterior.save()
 
-            form.evento = "CambioVacante"
-            sala = form.cleaned_data['sala']
-            turno = form.cleaned_data['turno']
-            if sala == 'Bebes' and turno == 'Mañana':
-                form.instance.salashort = 'manianabb'
-            elif sala == 'Bebes' and turno == 'Tarde':
-                form.instance.salashort = 'tardebb'
-            elif sala == '2' and turno == 'Mañana':
-                form.instance.salashort = 'maniana2'
-            elif sala == '2' and turno == 'Tarde':
-                form.instance.salashort = 'tarde2'
-            elif sala == '3' and turno == 'Mañana':
-                form.instance.salashort = 'maniana3'
-            elif sala == '3' and turno == 'Tarde':
-                form.instance.salashort = 'tarde3'
-            self.object = form.save()
+        form.evento = "CambioVacante"
+        sala = form.cleaned_data['sala']
+        turno = form.cleaned_data['turno']
+        if sala == 'Bebes' and turno == 'Mañana':
+            form.instance.salashort = 'manianabb'
+        elif sala == 'Bebes' and turno == 'Tarde':
+            form.instance.salashort = 'tardebb'
+        elif sala == '2' and turno == 'Mañana':
+            form.instance.salashort = 'maniana2'
+        elif sala == '2' and turno == 'Tarde':
+            form.instance.salashort = 'tarde2'
+        elif sala == '3' and turno == 'Mañana':
+            form.instance.salashort = 'maniana3'
+        elif sala == '3' and turno == 'Tarde':
+            form.instance.salashort = 'tarde3'
+        self.object = form.save()
 
+    
+        # --------- HISTORIAL ---------------------------------
         
-            # --------- HISTORIAL ---------------------------------
-            
-            legajo = CDIF_Admision.objects.filter(pk=pk).first()
-            base = CDIF_Historial()
-            base.fk_legajo_id = legajo.fk_preadmi.fk_legajo.id
-            base.fk_legajo_derivacion_id = legajo.fk_preadmi.fk_derivacion_id
-            base.fk_preadmi_id = legajo.fk_preadmi.pk
-            base.fk_admision_id = pk
-            base.movimiento = "CAMBIO VACANTE"
-            base.creado_por_id = self.request.user.id
-            base.save()
+        legajo = CDIF_Admision.objects.filter(pk=pk).first()
+        base = CDIF_Historial()
+        base.fk_legajo_id = legajo.fk_preadmi.fk_legajo.id
+        base.fk_legajo_derivacion_id = legajo.fk_preadmi.fk_derivacion_id
+        base.fk_preadmi_id = legajo.fk_preadmi.pk
+        base.fk_admision_id = pk
+        base.movimiento = "CAMBIO VACANTE"
+        base.creado_por_id = self.request.user.id
+        base.save()
 
         return redirect('CDIF_asignado_admisiones_ver', legajo.id)
     
@@ -1175,6 +1187,7 @@ class CDIFIndiceIviEgresoCreateView (PermisosMixin, CreateView):
         nombres_campos = request.POST.keys()
         puntaje_maximo = Criterios_IVI.objects.aggregate(total=Sum('puntaje'))['total']
         total_puntaje = 0
+        historico = HistorialLegajoIndices()
         for f in nombres_campos:
             if f.isdigit():
                 criterio_ivi = Criterios_IVI.objects.filter(id=f).first()
@@ -1187,6 +1200,7 @@ class CDIFIndiceIviEgresoCreateView (PermisosMixin, CreateView):
                 base.tipo = "Egreso"
                 base.presencia = True
                 base.programa = "CDIF"
+                historico.programa = base.programa
                 base.clave = clave
                 base.save()
 
@@ -1202,6 +1216,17 @@ class CDIFIndiceIviEgresoCreateView (PermisosMixin, CreateView):
         foto.tipo = "Egreso"
         foto.clave = clave
         foto.creado_por_id = self.request.user.id
+        
+        historico.observaciones = foto.observaciones
+        historico.fk_legajo_id = preadmi.fk_legajo_id
+        historico.puntaje = total_puntaje
+        historico.puntaje_total = total_puntaje
+        historico.puntaje_max = puntaje_maximo
+        historico.tipo = "Egreso"
+        historico.clave = clave
+
+        historico.save()
+        
         foto.save()
 
         admi.estado = "Inactiva"

@@ -10,11 +10,11 @@
 
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"><a href="{% url 'CDLE_derivaciones_listar'%}"
+    <li class="breadcrumb-item"><a href="{% url 'UMI_derivaciones_listar'%}"
             title="Ver listado de Pre-admisiones">Pre-admisiones</a></li>
     <li class="breadcrumb-item "><a href="{% url 'legajos_ver' legajo.fk_legajo.id %}"
             title="Ver legajo">{{legajo.fk_legajo}}</a></li>
-            {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+            {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
             <li class="breadcrumb-item active">Editar</li>
             {% else %}
             <li class="breadcrumb-item active">Agregar</li>
@@ -85,7 +85,7 @@
                         {% csrf_token %}
                         <input type="hidden" id="id_fk_derivacion" name="fk_derivacion" value={{pk}}>
                         <input type="hidden" id="id_fk_legajo" name="fk_legajo" value={{legajo.fk_legajo.id}}>
-                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                         <input type="hidden" id="id_modificado_por" name="modificado_por" value={{ user.id }}>
                         {% else %}
                         <input type="hidden" id="id_creado_por" name="creado_por" value={{ user.id }}>
@@ -112,7 +112,7 @@
                                                         <label>Madre o cuidador principal</label>
                                                         <select name="fk_legajo_1" class="form-control custom-select" id="id_fk_legajo_1">
                                                             <option value=""></option>
-                                                            {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                                                            {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                             <option value="{{object.fk_legajo_1.id}}" selected>{{object.fk_legajo_1}}</option>
                                                             {% endif %}
                                                             {% for f in familia %}
@@ -126,7 +126,7 @@
                                                     <div class="col-sm-3 form-group">
                                                         <label>Vínculo</label>
                                                         <input type="text" class="form-control" id="vinculo1" name="vinculo1" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.vinculo1}}"
                                                         {% endif %}
                                                         readonly>
@@ -134,7 +134,7 @@
                                                     <div class="col-sm-3 form-group">
                                                         <label>Tipo de documento</label>
                                                         <input type="text" class="form-control" id="tipo_doc"
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.fk_legajo_1.tipo_doc}}"
                                                         {% endif %}
                                                         readonly>
@@ -142,7 +142,7 @@
                                                     <div class="col-sm-3 form-group">
                                                         <label>Numero documento</label>
                                                         <input type="text" class="form-control" id="documento" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.fk_legajo_1.documento}}"
                                                         {% endif %}
                                                         readonly>
@@ -318,7 +318,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="{% url 'CDLE_derivaciones_listar' %}"
+                            <a href="{% url 'UMI_derivaciones_listar' %}"
                                 class="btn btn-secondary float-left mb-3 mt-5">Cancelar</a>
                                 <a class="btn btn-primary float-right mb-3 mt-5 " onclick="stepper.next()">Continuar</a>
                         </div>
@@ -343,7 +343,7 @@
                                                         <label>Padre o apoyo en la crianza</label>
                                                         <select name="fk_legajo_2" class="form-control custom-select" id="id_fk_legajo_2">
                                                             <option value="" selected=""></option>
-                                                            {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                                                            {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                             <option value="{{object.fk_legajo_2.id}}" selected>{{object.fk_legajo_2}}</option>
                                                             {% endif %}
                                                             {% for f in familia %}
@@ -357,21 +357,21 @@
                                                     <div class="col-sm-3 form-group">
                                                         <label>Vínculo</label>
                                                         <input type="text" class="form-control" id="vinculo2" name="vinculo2" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.vinculo2}}"
                                                         {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Tipo de documento</label>
                                                         <input type="text" class="form-control" id="tipo_doc2" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.fk_legajo_2.tipo_doc}}"
                                                         {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Numero documento</label>
                                                         <input type="text" class="form-control" id="documento2" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.fk_legajo_2.documento}}"
                                                         {% endif %}readonly>
                                                     </div>
@@ -485,7 +485,7 @@
                                                         <label>Conviviente</label>
                                                         <select name="fk_legajo_3" class="form-control custom-select" id="id_fk_legajo_3">
                                                             <option value="" selected=""></option>
-                                                            {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                                                            {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                             <option value="{{object.fk_legajo_3.id}}" selected>{{object.fk_legajo_3}}</option>
                                                             {% endif %}
                                                             {% for f in familia %}
@@ -499,21 +499,21 @@
                                                     <div class="col-sm-3 form-group">
                                                         <label>Vínculo</label>
                                                         <input type="text" class="form-control" id="vinculo3" name="vinculo3" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.vinculo3}}"
                                                         {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Tipo de documento</label>
                                                         <input type="text" class="form-control" id="tipo_doc3" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.fk_legajo_3.tipo_doc}}"
                                                         {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Numero documento</label>
                                                         <input type="text" class="form-control" id="documento3" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.fk_legajo_3.documento}}"
                                                         {% endif %}readonly>
                                                     </div>
@@ -588,7 +588,7 @@
                                                         <label>Conviviente</label>
                                                         <select name="fk_legajo_4" class="form-control custom-select" id="id_fk_legajo_4">
                                                             <option value="" selected=""></option>
-                                                            {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                                                            {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                             <option value="{{object.fk_legajo_4.id}}" selected>{{object.fk_legajo_4}}</option>
                                                             {% endif %}
                                                             {% for f in familia %}
@@ -602,21 +602,21 @@
                                                     <div class="col-sm-3 form-group">
                                                         <label>Vínculo</label>
                                                         <input type="text" class="form-control" id="vinculo4" name="vinculo4" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.vinculo4}}"
                                                         {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Tipo de documento</label>
                                                         <input type="text" class="form-control" id="tipo_doc4" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.fk_legajo_4.tipo_doc}}"
                                                         {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Numero documento</label>
                                                         <input type="text" class="form-control" id="documento4" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.fk_legajo_4.documento}}"
                                                         {% endif %}readonly>
                                                     </div>
@@ -691,7 +691,7 @@
                                                         <label>Conviviente</label>
                                                         <select name="fk_legajo_5" class="form-control custom-select" id="id_fk_legajo_5">
                                                             <option value="" selected=""></option>
-                                                            {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                                                            {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                             <option value="{{object.fk_legajo_5.id}}" selected>{{object.fk_legajo_5}}</option>
                                                             {% endif %}
                                                             {% for f in familia %}
@@ -705,21 +705,21 @@
                                                     <div class="col-sm-3 form-group">
                                                         <label>Vínculo</label>
                                                         <input type="text" class="form-control" id="vinculo5" name="vinculo5" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.vinculo5}}"
                                                         {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Tipo de documento</label>
                                                         <input type="text" class="form-control" id="tipo_doc5" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.fk_legajo_5.tipo_doc}}"
                                                         {% endif %}readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Numero documento</label>
                                                         <input type="text" class="form-control" id="documento5" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                                                        {%if request.resolver_match.url_name == "UMI_preadmisiones_editar" %}
                                                         value="{{object.fk_legajo_5.documento}}"
                                                         {% endif %}readonly>
                                                     </div>
@@ -871,7 +871,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
-                                    <div class="form-group pt-2">
+                                    <div class="form-group mt-4 pt-2">
                                         {{form.sifilis_tratamiento_pareja| as_crispy_field}}
                                     </div>
                                 </div>

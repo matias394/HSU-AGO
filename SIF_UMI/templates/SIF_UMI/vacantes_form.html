@@ -12,8 +12,8 @@ Vacantes
 
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right">
-  <li class="breadcrumb-item"><a href="{% url 'CDIF_vacantes_listar'%}" title="Ver lisatdo de vacantes">Vacantes</a></li>
-  <li class="breadcrumb-item "><a href="{% url 'legajos_ver' object.fk_preadmi.fk_legajo.id %}" title="Ver legajo">{{object.fk_preadmi.fk_legajo }}</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'UMI_vacantes_listar'%}" title="Ver lisatdo de vacantes">Vacantes</a></li>
+  <li class="breadcrumb-item "><a href="{% url 'legajos_ver' object.fk_preadmi.fk_legajo.id %}" title="Ver legajo">{{object.fk_preadmi.fk_legajo}}</a></li>
   <li class="breadcrumb-item active">Detalle</li>
 </ol>
 {% endblock %};
@@ -26,10 +26,10 @@ Vacantes
 <div class="row">
 
   <!-- Datos de Admisión -->
-  <div class="col-sm-8 pb-3">
+  <div class="col-sm-4 pb-3">
     <div class="card card-outline card-primary h-100 mb-0">
       <div class="card-header">
-        <h3 class="card-title">Detalle Vacante actual</h3>
+        <h3 class="card-title">Detalle Admisión</h3>
         <div class="card-tools d-inline">
           <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
             <i class="fas fa-minus"></i>
@@ -39,7 +39,7 @@ Vacantes
       <div class="card-body pb-2">
         <dl class="row mb-0">
           <dd class="col-sm-5 mb-2">Estado</dd>
-          <dt class="col-sm-7 mb-2"><span class="badge badge-warning">{{vo.estado_vacante}}</span></dt>
+          <dt class="col-sm-7 mb-2"><span class="badge badge-warning">{{object.estado_vacante}}</span></dt>
           <dd class="col-sm-5 mb-2">Fecha de solicitud</dd>
           <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
           <dd class="col-sm-5 mb-2">Solicitud creada por</dd>
@@ -83,11 +83,44 @@ Vacantes
   </div>
   <!-- /  -->
 
+  <!-- Datos de Indice -->
+  <div class="col-sm-4 pb-3">
+    <div class="card card-outline card-primary h-100 mb-0">
+      <div class="card-header">
+        <h3 class="card-title">Detalle IVI de ingreso</h3>
+        <div class="card-tools d-inline">
+          <a href="{% url 'UMI_indiceivi_ver' object.fk_preadmi.id %}" class="ml-3 mr-2">Ver detalles</a>
+          <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
+            <i class="fas fa-minus"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card-body pb-1">
+        <dl class="row mb-0">
+          <dd class="col-sm-7 mb-2">Puntaje</dd>
+          <dt class="col-sm-5 mb-2"><span class=" badge badge-warning">{{puntaje}}</span></dt>
+          <dd class="col-sm-7 mb-2">Fecha del índice</dd>
+          <dt class="col-sm-5 mb-2">{{foto_ivi.creado|date:'d/m/Y'}}</dt>
+          <dd class="col-sm-7 mb-2">Puntaje máximo posible</dd>
+          <dt class="col-sm-5 mb-2">{{maximo}}</dt>
+          <dd class="col-sm-7 mb-2">Criterios presentes</dd>
+          <dt class="col-sm-5 mb-2">{{cantidad}}</dt>
+          <dd class="col-sm-7 mb-2">Criterios modificables</dd>
+          <dt class="col-sm-5 mb-2">{{modificables}}</dt>
+          <dd class="col-sm-7 mb-2">Puntaje modificable</dd>
+          <dt class="col-sm-5 mb-2">{{mod_puntaje.total}}</dt>
+          <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Generado por {{foto_ivi.creado_por}}</dd>
+        </dl>
+      </div>
+
+    </div>
+  </div>
+  <!-- /  -->
+
   <!-- Form -->
   <div class="col">
     <form class="needs-validation" novalidate method="POST" enctype="multipart/form-data">
         <input type="hidden" name="fk_admision" value="{{object.id}}" maxlength="150" class="form-control" id="id_fk_admision">
-        <input type="hidden" name="fk_vacanteotorgada" value="{{vo.id}}" maxlength="150" class="form-control" id="id_fk_vacanteotorgada">
       <!-- Security token -->
       {% csrf_token %}
       <div class="card card-primary card-outline">
@@ -112,17 +145,6 @@ Vacantes
             <div class="col-sm-3 form-group">
                 {{ form.educador| as_crispy_field }}
             </div>
-            <!--div class="col-sm-2 form-group">
-                <div id="div_id_fecha_ingreso" class="form-group">
-                    {{ form.fecha_egreso| as_crispy_field }}
-                </div>
-            </div-->
-            <div class="col-sm-3 form-group">
-                {{ form.motivo| as_crispy_field }}
-              </div>
-              <div class="col-12 form-group">
-                {{ form.detalles| as_crispy_field }}
-              </div>
 
           </div>
         </div>
@@ -130,7 +152,7 @@ Vacantes
 
       <div class="mt-4 mx-2 btn-toolbar" role="toolbar">
         <button type="submit" class="btn btn-primary mr-2">Confirmar</button>
-        <a href="{% url 'CDIF_asignado_admisiones_ver' object.id %}" class="btn btn-secondary">Cancelar</a>
+        <a href="{% url 'UMI_admisiones_ver' object.id %}" class="btn btn-secondary">Cancelar</a>
       </div>
     </form>
   </div>
