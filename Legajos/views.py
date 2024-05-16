@@ -699,6 +699,13 @@ class LegajosDerivacionesCreateView(PermisosMixin, CreateView):
             form.fields["fk_legajo"].initial = pk
             form.fields["fk_usuario"].initial = self.request.user
         return form
+    
+    def form_valid(self, form):
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        # Aquí podrías agregar manejo extra si es necesario, por ejemplo un mensaje de error
+        return super().form_invalid(form)
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]

@@ -118,6 +118,13 @@
                                         <span class="input-group-text"><i class="fas fa-paperclip"></i></span>
                                     </div>
                                 </div>
+                                {% if form.archivos.errors %}
+                                <div class="error">
+                                    {% for error in form.archivos.errors %}
+                                        <p style="color: red;">{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                             </div>
                         </div>
                         <div class="col-12">

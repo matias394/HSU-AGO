@@ -379,6 +379,7 @@ class HistorialLegajoAlertas(models.Model):
 # Tiene que mostrar todos los criterios del indice, permitiendo al usuario marcar aquellos que estan presentes en ese caso
 
 # y en aquellos que permiten la mejora del puntaje [permite_mejora=True] permitir agregar un valor.
+
 from dataclasses import dataclass
 from typing import Optional
 @dataclass
@@ -424,6 +425,7 @@ class HistorialLegajoIndices(models.Model):
     puntaje_total = models.PositiveSmallIntegerField(null=True, blank=True)
     riesgo = models.CharField(max_length=10, choices=CHOICE_NIVEL, null=True)
     observaciones = models.CharField(max_length=300, null=True, blank=True)
+
 
     programa = models.CharField(max_length=50, null=True, blank=True)
     puntaje = models.SmallIntegerField(null=True, blank=True) 

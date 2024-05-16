@@ -12,7 +12,7 @@ Admisiones
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right">
   <li class="breadcrumb-item"><a href="" title="Ver listado de admisiones">Admisiones</a></li>
-  <li class="breadcrumb-item "><a href="{% url 'legajos_ver' object.fk_preadmi.fk_legajo.id %}" title="Ver legajo">{{object.fk_preadmi.fk_legajo}}</a></li>
+  <li class="breadcrumb-item "><a href="{% url 'legajos_ver' object.fk_expediente.fk_derivacion.fk_legajo.id %}" title="Ver legajo">{{object.fk_expediente.fk_derivacion.fk_legajo}}</a></li>
   <li class="breadcrumb-item active">Detalle</li>
 </ol>
 {% endblock %};
@@ -26,8 +26,13 @@ Admisiones
   <!-- botones -->
   <div class="col-12 my-3 mx-2 d-print-none">
     {% if object.estado != "Inactiva" %}
+    <a href="{% url 'SL_intervenciones_crear' object.id %}" class="btn btn-primary mr-1">Agregar intervenciones</a>
+    <a href="{% url 'SL_designarequipo_editar' equipo.id %}" class="btn btn-primary mr-1">Cambiar Equipo</a>
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
+    {% if object.estado != "Inactiva" %}
+    {% comment %}<a href="{% url 'SL_indiceiviegreso_crear' object.id %}" class="btn btn-danger mr-1">Inactivar</a>{% endcomment %}
+    {% endif %}
   </div>
   <!-- ./botones -->
 
@@ -38,25 +43,39 @@ Admisiones
   <div class="col-sm-4 pb-3">
     <div class="card card-outline card-primary h-100 mb-0">
       <div class="card-header">
-        <h3 class="card-title">Detalle Legajo</h3>
+        <h3 class="card-title">Detalle grupo familiar</h3>
         <div class="card-tools d-inline">
-          <a href="{% url 'legajos_ver' object.fk_preadmi.fk_legajo.id %}" class="ml-3 mr-2">Ver detalles</a>
           <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
             <i class="fas fa-minus"></i>
           </button>
         </div>
       </div>
       <div class="card-body">
-        <dl class="row">
-          <dd class="col-sm-5 mb-2">Nombre</dd>
-          <dt class="col-sm-7 mb-2"><a href="{% url 'legajos_ver' object.fk_preadmi.fk_legajo.id %}" title="Ver legajo">{{object.fk_preadmi.fk_legajo}}</a> </dt>
-          <dd class="col-sm-5 mb-2">DNI</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.fk_legajo.documento}}</dt>
-          <dd class="col-sm-5 mb-2">Fecha de nacimiento</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.fk_legajo.fecha_nacimiento|date:'d/m/Y'}}</dt>
-          <dd class="col-sm-5 mb-2">Sexo</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.fk_legajo.sexo}}</dt>
-        </dl>
+        <div class="row">
+          {% if grupo_familiar %}
+          <div class="col-12">
+              <ul class="users-list">
+                  {% for f in grupo_familiar %}
+                  <li>
+                    <a class="users-list-name" href="{% url 'legajos_ver' f.fk_legajo_familiar_id%}">
+                      {% if f.fk_legajo_familiar.foto %}
+                      <img src="{{f.fk_legajo_familiar.foto.url}}" alt="User Image" width="60px">
+                      {%else%}
+                      <img src="{% static 'custom/img/default.png'  %}" alt="User Image" width="60px">
+                      {%endif%}                        
+                      <span class="users-list-date">{{f.fk_legajo_familiar}}</span>
+                    </a>
+                  </li>
+                  {% empty %}
+                  {% endfor %}
+              </ul>
+          </div>
+          {% else %}
+          <div class="card-body bg-light p-0">
+              <h6 class="text-center text-muted py-3">Sin familiares</h6>
+          </div>
+          {% endif %}
+      </div>
       </div>
     </div>
   </div>
@@ -68,7 +87,7 @@ Admisiones
       <div class="card-header">
         <h3 class="card-title">Detalle Admisión</h3>
         <div class="card-tools d-inline">
-          <a href="{% url 'SL_preadmisiones_ver3' object.fk_preadmi.id %}" class="ml-3 mr-2">Ver pre-admisión</a>
+          {% comment %}<a href="{% url 'SL_preadmisiones_ver3' object.fk_preadmi.id %}" class="ml-3 mr-2">Ver pre-admisión</a>{% endcomment %}
           <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
             <i class="fas fa-minus"></i>
           </button>
@@ -76,14 +95,20 @@ Admisiones
       </div>
       <div class="card-body pb-2">
         <dl class="row mb-0">
+          <dd class="col-sm-5 mb-2">Equipo</dd>
+          <dt class="col-sm-7 mb-2">{{equipo.fk_equipo}}</dt>
           <dd class="col-sm-5 mb-2">Estado admisión</dd>
           <dt class="col-sm-7 mb-2"><span class="text-{% if object.estado == "Inactiva" %}danger{% else %}success{% endif %} font-weight-bold">{{object.estado}}</span></dt>
           <dd class="col-sm-5 mb-2">Fecha de admisión</dd>
-          <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
-          <dd class="col-sm-5 mb-2">Acompaniante </dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.acompaniante}}</dt>
-          <dd class="col-sm-5 mb-2">Madrina</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.madrina}}</dt>
+          <dt class="col-sm-7 mb-2">{{object.fecha|date:'d/m/Y'}}</dt>
+          <dd class="col-sm-5 mb-2">Expediente </dd>
+          <dt class="col-sm-7 mb-2">{{object.fk_expediente.expediente}}</dt>
+          <dd class="col-sm-5 mb-2">Organismo</dd>
+          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.organismo}}</dt>
+          <dd class="col-sm-5 mb-2">Motivo ingreso</dd>
+          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.motivo_ingreso}}</dt>
+          <dd class="col-sm-5 mb-2">Referentes</dd>
+          <dt class="col-sm-7 mb-2"><ul>{% for r in referentes %}{% if r.fk_legajo_referente != None %}<li>{{ r.fk_legajo_referente }}</li>{% endif %}{% if r.fk_externo != None %}<li>{{ r.fk_externo }}</li>{% endif %}{% endfor %}</ul></dt>
         </dl>
       </div>
     </div>
@@ -94,30 +119,53 @@ Admisiones
   <div class="col-sm-4 pb-3">
     <div class="card card-outline card-primary h-100 mb-0">
       <div class="card-header">
-        <h3 class="card-title">Detalle IVI de ingreso</h3>
+        <h3 class="card-title">Indicadores</h3>
         <div class="card-tools d-inline">
-          <a href="{% url 'SL_indiceivi_ver' object.fk_preadmi.id %}" class="ml-3 mr-2">Ver detalles</a>
-          <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
+          <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
             <i class="fas fa-minus"></i>
           </button>
         </div>
       </div>
-      <div class="card-body pb-1">
-        <dl class="row mb-0">
-          <dd class="col-sm-7 mb-2">Puntaje</dd>
-          <dt class="col-sm-5 mb-2"><span class=" badge badge-warning">{{puntaje}}</span></dt>
-          <dd class="col-sm-7 mb-2">Fecha del índice</dd>
-          <dt class="col-sm-5 mb-2">{{foto_ivi.creado|date:'d/m/Y'}}</dt>
-          <dd class="col-sm-7 mb-2">Puntaje máximo posible</dd>
-          <dt class="col-sm-5 mb-2">{{maximo}}</dt>
-          <dd class="col-sm-7 mb-2">Criterios presentes</dd>
-          <dt class="col-sm-5 mb-2">{{cantidad}}</dt>
-          <dd class="col-sm-7 mb-2">Criterios modificables</dd>
-          <dt class="col-sm-5 mb-2">{{modificables}}</dt>
-          <dd class="col-sm-7 mb-2">Puntaje modificable</dd>
-          <dt class="col-sm-5 mb-2">{{mod_puntaje.total}}</dt>
-          <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Generado por {{foto_ivi.creado_por}}</dd>
-        </dl>
+      <div class="card-body p-2">
+        <ul class="products-list product-list-in-card pl-2 pr-2">
+          {% if resultado.total != None %}
+          <li class="item p-1">
+            <a href="javascript:void(0)">
+              <div class="product-img h4 p-0">
+                <span class="badge badge-success float-center p-3">{{resultado.total}}</span>
+              </div>
+              <div class="product-info">
+                <span class="product-title">Total</span>
+                <span class="product-description">
+                  Indice de vulnerabilidad
+                </span>
+              </div>
+            </a>
+          </li>
+          {% else %}
+          <h6>Sin índices.</h6>
+          {% endif %}
+        </ul>
+        <p></p> 
+        <ul class="products-list product-list-in-card pl-2 pr-2">
+          {% if intervenciones_count %}
+          <li class="item p-1">
+            <a href="javascript:void(0)">
+              <div class="product-img h4 p-0">
+                <span class="badge badge-success float-center p-3">{{intervenciones_count}}</span>
+              </div>
+              <div class="product-info">
+                <span class="product-title">Total</span>
+                <span class="product-description">
+                  Intervenciones
+                </span>
+              </div>
+            </a>
+          </li>
+          {% else %}
+          <h6>Sin intervenciones.</h6>
+          {% endif %}
+        </ul>           
       </div>
 
     </div>
@@ -125,8 +173,73 @@ Admisiones
   <!-- /  -->
 </div>
 <!-- /  -->
-
-
+    <!-- Archivos -->
+    <div class="col-12">
+      <div class="card card-outline card-primary">
+        <div class="card-header">
+          <h3 class="card-title">Documentacion</h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          {% for a in archivos %}
+          {{a.nombre}}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <!-- ./ -->
+    {% if intervenciones %}
+    <!-- Intervenciones -->
+    <div class="col-12">
+      <div class="card card-outline card-primary">
+        <div class="card-header">
+          <h3 class="card-title">Intervenciones</h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          {% for i in intervenciones %}
+          <table class="table table-bordered table-striped projects tabladt table-sm">
+            <!-- <table class="table table-striped projects"> -->
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Usuario</th>
+                <th>Criterio</th>
+                <th>Gestión</th>
+                <th>Acción realizada</th>
+                <th width="5%" class="notexport"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for i in intervenciones %}
+              <tr>
+                <td> {{ i.creado|date:'d/m/Y' }} </td>
+                <td> {{i.creado_por}} </td>
+                <td> {{i.criterio_modificable}}</td>
+                <td> {{i.impacto}}</td>
+                <td> {{i.accion}}</td>
+                <td class="text-right">
+                  <a href="{% url 'SL_intervencion_ver' i.id %}" class="btn btn-secondary btn-sm ver"
+                    title="Ver detalle">Ver</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <!-- ./ -->
+    {% endif %}
 <div class="row mt-4 d-print-none">
   <div class="col-12 mx-2">
     <div class="form-group  d-flex justify-content-between">

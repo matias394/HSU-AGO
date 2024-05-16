@@ -3,6 +3,7 @@ from datetime import date
 from .models import *
 from .validators import MaxSizeFileValidator
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.conf import settings
 
 
 class LegajosForm(forms.ModelForm):
@@ -166,18 +167,13 @@ class LegajosArchivosForm(forms.ModelForm):
         fields = ['fk_legajo', 'archivo']
 
 
+
 class LegajosDerivacionesForm(forms.ModelForm):
     archivos = forms.FileField(
         widget=forms.ClearableFileInput(
-            attrs={
-                'multiple': True,
-            }
-        ),
-        required=False,
+            attrs={'multiple': True}),
+        required=False
     )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
     class Meta:
         model = LegajosDerivaciones
@@ -185,10 +181,7 @@ class LegajosDerivacionesForm(forms.ModelForm):
         exclude = ['motivo_rechazo', 'obs_rechazo', 'fecha_rechazo']
         widgets = {
             'detalles': forms.Textarea(
-                attrs={
-                    'class': 'form-control',
-                    'rows': 5,
-                }
+                attrs={'class': 'form-control', 'rows': 5}
             ),
         }
         labels = {
@@ -198,6 +191,20 @@ class LegajosDerivacionesForm(forms.ModelForm):
             'fk_programa': 'Derivar a',
             'fk_programa_solicitante': 'Derivar de',
         }
+        
+    def clean(self):
+        cleaned_data = super().clean()
+        fk_programa = cleaned_data.get("fk_programa")
+        detalles = cleaned_data.get("detalles")
+        archivos = self.files.get("archivos")  # Obtiene los archivos directamente desde self.files
+
+        if fk_programa and fk_programa.id == settings.PROG_SL:
+            if not detalles:
+                self.add_error('detalles', 'Este campo es obligatorio cuando el programa es Servicio Local.')
+            if not archivos:
+                self.add_error('archivos', 'Este campo es obligatorio cuando el programa es Servicio Local.')
+
+        return cleaned_data
 
 
 # Dimensiones

@@ -283,3 +283,25 @@ class IndiceCriteriosForm(forms.ModelForm):
 from django.forms.models import inlineformset_factory
 
 IndicesFormset = inlineformset_factory(Indices, IndiceCriterios, form=IndiceCriteriosForm, extra=1, can_delete=True)
+
+
+class SL_Equipos_Form(forms.ModelForm):
+    class Meta:
+        model = SL_Equipos
+        exclude = ()
+        widgets = {
+            'observaciones': forms.Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'rows': 3,
+                }
+            ),
+            'estado': forms.Select(choices=[(True, 'Activo'), (False, 'Inactivo')]),
+        }
+
+class SL_IndicesVulnerabilidadForm(forms.ModelForm):
+    class Meta:
+        model = SL_IndicesVulnerabilidad
+        exclude = ()
+        widgets = {
+        }
