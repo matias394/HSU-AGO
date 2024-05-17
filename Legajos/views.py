@@ -1290,6 +1290,9 @@ class intervencionesSaludView(TemplateView):
             'ausentes' : 0,
             'reprogramado' : 0,
         }
+
+        if not saludResponse.get('indicators'): return contadores
+
         for turno in saludResponse['indicators']['turns']:
             fechaturno = datetime.fromisoformat(turno['date'])
             fecha_reprogramada = datetime.fromisoformat(turno['rescheduledDate'])
