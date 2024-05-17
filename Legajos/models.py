@@ -454,7 +454,6 @@ class LegajosDerivaciones(models.Model):
     importancia = models.CharField(max_length=15, choices=CHOICE_IMPORTANCIA, default="Alta")
     estado = models.CharField(max_length=15, choices=CHOICE_ESTADO_DERIVACION, default="Pendiente")
     m2m_alertas = models.ManyToManyField(CategoriaAlertas, blank=True)
-    archivos = models.FileField(upload_to='legajos/archivos', null=True, blank=True)
     motivo_rechazo = models.CharField(max_length=150, choices=CHOICE_RECHAZO)
     obs_rechazo = models.CharField(max_length=350, null=True, blank=True)
     fecha_rechazo = models.DateField(null=True, blank=True)
@@ -472,7 +471,12 @@ class LegajosDerivaciones(models.Model):
     def get_absolute_url(self):
         return reverse('legajosderivaciones_ver', kwargs={'pk': self.pk})
 
+class LegajosDerivacionesArchivos(models.Model):
+    legajo_derivacion = models.ForeignKey(LegajosDerivaciones, related_name='archivos', on_delete=models.CASCADE)
+    archivo = models.FileField(upload_to='legajos/archivos')
 
+    def __str__(self):
+        return f"Archivo para {self.legajo_derivacion}"
 # endregion
 
 
