@@ -333,6 +333,7 @@ class SLPreAdmisionesDeleteView(PermisosMixin, DeleteView):
         else:
             self.object.delete()
             return redirect(self.success_url)
+
         
 class SLIndiceVulneracionCreateView(PermisosMixin, CreateView):
     permission_required = "Usuarios.rol_admin"
@@ -352,6 +353,7 @@ class SLIndiceVulneracionCreateView(PermisosMixin, CreateView):
         pk=self.kwargs["pk"]
         preadmi = SL_PreAdmision.objects.filter(pk=pk).first()
         nombres_campos = request.POST.keys()
+
         for f in nombres_campos:
             if f.isdigit():
                 base = SL_IndiceVulnerabilidad()
@@ -391,6 +393,7 @@ class SLIndiceVulneracionUpdateView (PermisosMixin, UpdateView):
         borrar = SL_IndiceVulnerabilidad.objects.filter(Q(fk_preadmi_id=pk) | Q(fk_expediente_id=preadmi.fk_expediente_id))
         borrar.delete()
         nombres_campos = request.POST.keys()
+
         for f in nombres_campos:
             if f.isdigit():
                 base = SL_IndiceVulnerabilidad()
@@ -718,7 +721,6 @@ class SLPreAdmisionesDetailView(PermisosMixin, DetailView):
 
 class SLExpedientesListView(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"
-    model = SL_Expedientes
     
     # Funcion de busqueda
 

@@ -1,5 +1,6 @@
 import os
 from django.http import HttpResponseRedirect
+import requests
 from django.views.generic import (
     CreateView,
     ListView,
@@ -30,6 +31,7 @@ from .models import *
 from .forms import *
 from .choices import *
 from django.conf import settings
+from .models import IntercepcionSaludPersona
 import json
 
 # Configurar el locale para usar el idioma español
@@ -163,6 +165,9 @@ class LegajosDetailView(DetailView):
         # Obtener todas las categorías completas
         categorias_completas = CategoriaAlertas.objects.filter(id__in=ids_categorias).order_by('nombre')
 
+        #Obtener historial de indices IVI
+        historial_ivi = HistorialLegajoIndices.objects.filter(fk_legajo_id=pk).all().order_by('-id')[:3]
+
         # Verificar si categorias_completas no es None antes de aplicar el slicing
         if categorias_completas is not None:
             # Obtener solo los primeros 8 nombres de categorías (o menos si hay menos de 8)
@@ -251,6 +256,7 @@ class LegajosDetailView(DetailView):
         context["count_media"] = LegajoAlertas.objects.filter(fk_legajo=pk, fk_alerta__gravedad="Importante").count()
         context["count_baja"] = LegajoAlertas.objects.filter(fk_legajo=pk, fk_alerta__gravedad="Precaución").count()
         context["historial_alertas"] = True if HistorialLegajoAlertas.objects.filter(fk_legajo=pk).exists() else False
+        context["historial_ivi"] = historial_ivi
         context["datos_json"] = datos_json
         context['count_intervenciones'] = count_intervenciones
         context['familiar_intervenciones'] = intervenciones
@@ -1249,13 +1255,58 @@ class intervencionesSaludView(TemplateView):
     template_name = "Legajos/intervenciones_salud.html"
     model = Legajos
 
+    def get_token_salud(self):
+        auth = requests.post(
+            url='http://172.20.30.145:3000/v1/auth',
+            headers={
+                'Content-type':'application/json',
+            },
+            data=json.dumps({
+                "user": "AP1_s4lud",
+                "password": "5118a)iCb-vfUNz"
+            })
+        ).json()
+        return auth['access_token']
 
+    def get_data_salud(self, legajo : Legajos):
+        salud = requests.get(
+            url='http://172.20.30.145:3000/v1/person',
+            headers={
+                'Content-type':'application/json',
+                'Authorization':f'Bearer {self.get_token_salud()}'
+            },
+            json={
+                "document_type": legajo.tipo_doc,
+                "document_number": str(legajo.documento),
+                "gender": legajo.sexo[0]
+            }
+        ).json()
+        return salud
+    
+    def conteo_turnos(self,saludResponse):
+        contadores = {
+            'finalizadas' : 0,
+            'pendientes' : 0,
+            'ausentes' : 0,
+            'reprogramado' : 0,
+        }
+        for turno in saludResponse['indicators']['turns']:
+            fechaturno = datetime.fromisoformat(turno['date'])
+            fecha_reprogramada = datetime.fromisoformat(turno['rescheduledDate'])
+            expiroFecha = datetime.today() > fechaturno
+            contadores['finalizadas'] += int(True if turno['attend'] else False)
+            contadores['ausentes'] += int(True if expiroFecha and not turno['attend'] and not turno['rescheduled'] else False)
+            contadores['pendientes'] += int(True if not expiroFecha and not turno['attend'] else False)
+            contadores['reprogramado'] += int(True if fecha_reprogramada > fechaturno else False)
+        return contadores
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
         legajo = Legajos.objects.filter(pk=self.kwargs["pk"]).first()
-
+        salud = self.get_data_salud(legajo)
         context["legajo"] = legajo
+        context["salud"] = salud
+        context['contadores'] = self.conteo_turnos(salud)
         
         return context
 

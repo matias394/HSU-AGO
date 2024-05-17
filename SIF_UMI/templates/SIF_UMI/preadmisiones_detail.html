@@ -2,17 +2,17 @@
 {% load static %};
 
 {% block title %}
-CDLE Pre-admisiones detalle
+UMI Pre-admisiones detalle
 {%endblock %};
 
 {% block titulo-pagina %}
-CDLE Pre-admisiones
+UMI Pre-admisiones
 {% endblock %};
 
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right">
-  <li class="breadcrumb-item"><a href="{% url 'CDLE_preadmisiones_listar'%}"
-      title="Ver historial de Pre-admisiones">CDLE Pre-admisiones</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'UMI_preadmisiones_listar'%}"
+      title="Ver historial de Pre-admisiones">UMI Pre-admisiones</a></li>
   <li class="breadcrumb-item "><a href="{% url 'legajos_ver' object.fk_derivacion.fk_legajo_id %}" title="Ver legajo">{{object.fk_derivacion}}</a></li>
   <li class="breadcrumb-item active">Detalle</li>
 </ol>
@@ -32,16 +32,16 @@ CDLE Pre-admisiones
         {% csrf_token %}
         <button type="submit" name="finalizar_preadm" class="btn btn-primary mr-1" >Finalizar</button>
     </form>
-    <a href="{% url 'CDLE_preadmisiones_editar' object.pk %}" class="btn btn-secondary mr-1">Editar</a>
+    <a href="{% url 'UMI_preadmisiones_editar' object.pk %}" class="btn btn-secondary mr-1">Editar</a>
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
-    <a href="{% url 'CDLE_preadmisiones_eliminar' object.pk %}" class="btn btn-danger mr-1 mt-2 mt-sm-0">Eliminar</a>
+    <a href="{% url 'UMI_preadmisiones_eliminar' object.pk %}" class="btn btn-danger mr-1 mt-2 mt-sm-0">Eliminar</a>
     {% endif %}
     {% if object.estado == 'Finalizada' %}
     {% if object.indice_ingreso == 'NO' %}
-    <a href="{% url 'CDLE_indiceingreso_crear' object.pk %}" class="btn btn-primary mr-1">Generar índice ingreso</a>
+    <a href="{% url 'UMI_indiceingreso_crear' object.pk %}" class="btn btn-primary mr-1">Generar índice ingreso</a>
     {% endif %}
     {% if object.ivi == 'NO' and object.indice_ingreso == 'SI' %}
-    <a href="{% url 'CDLE_indiceivi_crear' object.pk %}" class="btn btn-primary mr-1">Generar IVI</a>
+    <a href="{% url 'UMI_indiceivi_crear' object.pk %}" class="btn btn-primary mr-1">Generar IVI</a>
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     {% endif %}
@@ -58,7 +58,7 @@ CDLE Pre-admisiones
         <div class="card-header">
           <h3 class="card-title">Detalle pre-admisión</h3>
           <div class="card-tools">
-            <a href="{% url 'CDLE_preadmisiones_ver2' object.pk %}" class="ml-3 mr-2">Ver detalle</a>
+            <a href="{% url 'UMI_preadmisiones_ver2' object.pk %}" class="ml-3 mr-2">Ver detalle</a>
             <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
               <i class="fas fa-minus"></i>
             </button>
@@ -73,7 +73,7 @@ CDLE Pre-admisiones
             <dd class="col-sm-5 mb-2">Solicitud creada por</dd>
             <dt class="col-sm-7 mb-2">{{object.creado_por}}</dt>
             <dd class="col-sm-5 mb-2">Acompañante</dd>
-            <dt class="col-sm-7 mb-2">{{object.acompaniante|default_if_none:'-'}}</dt>
+            <dt class="col-sm-7 mb-2">{{object.acompaniante}}</dt>
             {% comment %} <dd class="col-sm-5 mb-2">Madrina</dd>
             <dt class="col-sm-7 mb-2">{{object.madrina}}</dt> {% endcomment %}
             {% if object.modificado_por %}
@@ -285,7 +285,7 @@ CDLE Pre-admisiones
 <div class="row mt-4 d-print-none">
   <div class="col-12 mx-2">
     <div class="form-group  d-flex justify-content-between">
-      <a href="{% url 'CDLE_preadmisiones_listar' %}" class="btn btn-secondary">Volver</a>
+      <a href="{% url 'UMI_preadmisiones_listar' %}" class="btn btn-secondary">Volver</a>
     </div>
   </div>
 </div>

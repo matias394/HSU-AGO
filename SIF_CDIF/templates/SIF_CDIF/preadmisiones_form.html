@@ -64,7 +64,7 @@
                     </div>
                 </div>
                 <div class="card-body py-0 px-2 mt-5">
-                    <form novalidate method="POST" enctype="multipart/form-data">
+                    <form novalidate method="POST" enctype="multipart/form-data" class="needs-validation">
                         <!-- Security token -->
                         {% csrf_token %}
                         <input type="hidden" id="id_fk_derivacion" name="fk_derivacion" value={{pk}}>
@@ -775,7 +775,7 @@
                                         <option value="{{c.id}}">{{c.nombre}}</option>
                                         {% endfor %}
                                       </select>
-                                     <p id="error_1_id_centro_postula" class="invalid-feedback"><strong>Este campo es obligatorio.</strong></p>
+                                    {% comment %} <p id="error_1_id_centro_postula" class="invalid-feedback"><strong>Este campo es obligatorio.</strong></p> {% endcomment %}
                                 </div>
                                 <div class="col-sm-3 form-group">
                                     {{form.sala_postula| as_crispy_field}}
@@ -938,4 +938,37 @@
     });
 });
 </script>
+<script>
+    // Disable form submissions if there are invalid fields
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+          // Get the forms we want to add validation styles to
+          var forms = document.getElementsByClassName('needs-validation');
+          // Loop over them and prevent submission
+          var validation = Array.prototype.filter.call(forms, function (form) {
+            form.addEventListener('submit', function (event) {
+              var invalidFields = form.querySelectorAll(':invalid');
+              if (invalidFields.length > 0) {
+                // Si hay campos inválidos, detener la propagación del evento
+                event.preventDefault();
+                event.stopPropagation();
+      
+                // Iterar sobre los campos inválidos y agregar mensajes de obligatoriedad
+                invalidFields.forEach(function (field) {
+                  if (field.hasAttribute('required')) {
+                    // Agregar un mensaje de obligatoriedad para los campos requeridos
+                    var errorMessage = document.createElement('div');
+                    errorMessage.className = 'invalid-feedback';
+                    errorMessage.innerHTML = 'Este campo es obligatorio.';
+                    field.parentNode.appendChild(errorMessage);
+                  }
+                });
+              }
+              form.classList.add('was-validated');
+            }, false);
+          });
+        }, false);
+      })();
+</script> 
 {% endblock %}

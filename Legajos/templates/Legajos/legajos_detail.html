@@ -241,7 +241,11 @@
             </div>
         </div>
 
-    <!-- <<<<<<<<<<<<<<<<<<<< EN DESARROLLO >>>>>>>>>>>>>>
+        {% comment %} 
+                        -------- Detalles de Indices IVI ----------
+                        Ticket: HSU-1290
+                        Jira: https://icoreicore.atlassian.net/browse/HSU-1290
+        {% endcomment %}
         <div class="card ">
             <div class="card-header">
                 <h3 class="card-title font-weight-bold">Indices</h3>
@@ -254,28 +258,20 @@
 
             <div class="card-body p-0">
                 <ul class="products-list product-list-in-card pl-2 pr-2">
+                    {% for item in historial_ivi %}
                     <li class="item">
                         <div class="product-img h4">
-                            <span class="badge badge-danger float-center p-3">40</span>
+                            <span class="badge badge-danger float-center p-3">{{item.puntaje_total}}</span>
                         </div>
                         <div class="product-info">
-                            <a href="javascript:void(0)" class="product-title">IVI</a> <span class="badge badge-secondary">Ingreso</span><br>
+                            <a href="javascript:void(0)" class="product-title">IVI</a> <span class="badge badge-secondary">{{item.tipo}}</span><br>
                             <span class="product-description">
-                                CDLE | 10/07/2020
+                                {{item.programa}} | {{item.fecha|date:"d/m/Y"}}
                             </span>
                         </div>
                     </li>
-                    <li class="item">
-                        <div class="product-img h4">
-                            <span class="badge badge-danger float-center p-3">36</span>
-                        </div>
-                        <div class="product-info">
-                            <a href="javascript:void(0)" class="product-title">IVI</a> <span class="badge badge-secondary">Egreso</span><br>
-                            <span class="product-description">
-                                CDLE | 11/06/2023
-                            </span>
-                        </div>
-                    </li>
+                    {% endfor %}
+                    
                 </ul>
                
             </div>
@@ -285,7 +281,7 @@
             </div>
 
         </div>
-    -->
+
         <div class="card ">
             <div class="card-header">
                 <h3 class="card-title font-weight-bold"> Imágenes</h3>
@@ -575,6 +571,7 @@
                         <a href="{% url 'acciones_sociales' object.id  %}" class="small-box-footer">Ver
                             más <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
+                    -->
                     <div class="small-box bg-lightblue col-12 mb-3 mb-sm-0 px-0">
                         <div class="inner">
                             <h3>15</h3>
@@ -586,7 +583,7 @@
                         <a href="{% url 'intervenciones_salud' object.id  %}" class="small-box-footer">Ver
                             más <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
-                -->
+                
                 </div>
             </div>
         </div>

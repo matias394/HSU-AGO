@@ -1,5 +1,5 @@
 from django.views.generic import CreateView,ListView,DetailView,UpdateView,DeleteView,TemplateView, FormView
-from Legajos.models import LegajosDerivaciones
+from Legajos.models import LegajosDerivaciones,HistorialLegajoIndices
 from Legajos.forms import DerivacionesRechazoForm, LegajosDerivacionesForm
 from django.db.models import Q
 from .models import *
@@ -367,6 +367,7 @@ class MAIndiceIngresoCreateView (PermisosMixin, CreateView):
         nombres_campos = request.POST.keys()
         puntaje_maximo = Criterios_Ingreso.objects.aggregate(total=Sum('puntaje'))['total']
         total_puntaje = 0
+        historico = HistorialLegajoIndices()
         for f in nombres_campos:
             if f.isdigit():
                 criterio_ingreso = Criterios_Ingreso.objects.filter(id=f).first()
@@ -379,6 +380,7 @@ class MAIndiceIngresoCreateView (PermisosMixin, CreateView):
                 base.tipo = "Ingreso"
                 base.presencia = True
                 base.programa = "MA"
+                historico.programa = base.programa
                 base.clave = clave
                 base.save()
         
@@ -394,6 +396,16 @@ class MAIndiceIngresoCreateView (PermisosMixin, CreateView):
         foto.tipo = "Ingreso"
         foto.clave = clave
         foto.creado_por_id = self.request.user.id
+
+        historico.observaciones = foto.observaciones
+        historico.fk_legajo_id = preadmi.fk_legajo_id
+        historico.puntaje = total_puntaje
+        historico.puntaje_total = total_puntaje
+        historico.puntaje_max = puntaje_maximo
+        historico.tipo = "Ingreso"
+        historico.clave = clave
+
+        historico.save()
         foto.save()
 
         preadmi.indice_ingreso = "SI"
@@ -442,6 +454,7 @@ class MAIndiceIngresoUpdateView (PermisosMixin, UpdateView):
         nombres_campos = request.POST.keys()
         puntaje_maximo = Criterios_Ingreso.objects.aggregate(total=Sum('puntaje'))['total']
         total_puntaje = 0
+        historico = HistorialLegajoIndices()
         for f in nombres_campos:
             if f.isdigit():
                 criterio_ingreso = Criterios_Ingreso.objects.filter(id=f).first()
@@ -453,6 +466,7 @@ class MAIndiceIngresoUpdateView (PermisosMixin, UpdateView):
                 base.fk_preadmi_id = pk
                 base.presencia = True
                 base.programa = "MA"
+                historico.programa = base.programa
                 base.clave = clave
                 base.save()
         
@@ -468,6 +482,16 @@ class MAIndiceIngresoUpdateView (PermisosMixin, UpdateView):
         #foto.tipo = "Ingreso"
         #foto.clave = clave
         foto.modificado_por_id = self.request.user.id
+
+        historico.observaciones = foto.observaciones
+        historico.fk_legajo_id = preadmi.fk_legajo_id
+        historico.puntaje = total_puntaje
+        historico.puntaje_total = total_puntaje
+        historico.puntaje_max = puntaje_maximo
+        historico.tipo = "Ingreso"
+        historico.clave = clave
+
+        historico.save()
         foto.save()
 
         #---------HISTORIAL---------------------------------
@@ -545,6 +569,7 @@ class MAIndiceIviCreateView (PermisosMixin, CreateView):
         nombres_campos = request.POST.keys()
         puntaje_maximo = Criterios_IVI.objects.aggregate(total=Sum('puntaje'))['total']
         total_puntaje = 0
+        historico = HistorialLegajoIndices()
         for f in nombres_campos:
             if f.isdigit():
                 criterio_ivi = Criterios_IVI.objects.filter(id=f).first()
@@ -557,6 +582,7 @@ class MAIndiceIviCreateView (PermisosMixin, CreateView):
                 base.tipo = "Ingreso"
                 base.presencia = True
                 base.programa = "MA"
+                historico.programa = base.programa
                 base.clave = clave
                 base.save()
         
@@ -572,6 +598,16 @@ class MAIndiceIviCreateView (PermisosMixin, CreateView):
         foto.tipo = "Ingreso"
         foto.clave = clave
         foto.creado_por_id = self.request.user.id
+
+        historico.observaciones = foto.observaciones
+        historico.fk_legajo_id = preadmi.fk_legajo_id
+        historico.puntaje = total_puntaje
+        historico.puntaje_total = total_puntaje
+        historico.puntaje_max = puntaje_maximo
+        historico.tipo = "Ingreso"
+        historico.clave = clave
+
+        historico.save()
         foto.save()
 
         preadmi.ivi = "SI"
@@ -621,6 +657,7 @@ class MAIndiceIviUpdateView (PermisosMixin, UpdateView):
         nombres_campos = request.POST.keys()
         puntaje_maximo = Criterios_IVI.objects.aggregate(total=Sum('puntaje'))['total']
         total_puntaje = 0
+        historico = HistorialLegajoIndices()
         for f in nombres_campos:
             if f.isdigit():
                 criterio_ivi = Criterios_IVI.objects.filter(id=f).first()
@@ -632,6 +669,7 @@ class MAIndiceIviUpdateView (PermisosMixin, UpdateView):
                 base.fk_preadmi_id = pk
                 base.presencia = True
                 base.programa = "MA"
+                historico.programa = base.programa
                 base.clave = clave
                 base.save()
         
@@ -647,6 +685,16 @@ class MAIndiceIviUpdateView (PermisosMixin, UpdateView):
         #foto.tipo = "Ingreso"
         #foto.clave = clave
         foto.modificado_por_id = self.request.user.id
+
+        historico.observaciones = foto.observaciones
+        historico.fk_legajo_id = preadmi.fk_legajo_id
+        historico.puntaje = total_puntaje
+        historico.puntaje_total = total_puntaje
+        historico.puntaje_max = puntaje_maximo
+        historico.tipo = "Ingreso"
+        historico.clave = clave
+
+        historico.save()
         foto.save()
 
         #---------HISTORIAL---------------------------------
@@ -1058,6 +1106,7 @@ class MAIndiceIviEgresoCreateView (PermisosMixin, CreateView):
         nombres_campos = request.POST.keys()
         puntaje_maximo = Criterios_IVI.objects.aggregate(total=Sum('puntaje'))['total']
         total_puntaje = 0
+        historico = HistorialLegajoIndices()
         for f in nombres_campos:
             if f.isdigit():
                 criterio_ivi = Criterios_IVI.objects.filter(id=f).first()
@@ -1070,6 +1119,7 @@ class MAIndiceIviEgresoCreateView (PermisosMixin, CreateView):
                 base.tipo = "Egreso"
                 base.presencia = True
                 base.programa = "MA"
+                historico.programa = base.programa
                 base.clave = clave
                 base.save()
 
@@ -1085,6 +1135,16 @@ class MAIndiceIviEgresoCreateView (PermisosMixin, CreateView):
         foto.tipo = "Egreso"
         foto.clave = clave
         foto.creado_por_id = self.request.user.id
+
+        historico.observaciones = foto.observaciones
+        historico.fk_legajo_id = preadmi.fk_legajo_id
+        historico.puntaje = total_puntaje
+        historico.puntaje_total = total_puntaje
+        historico.puntaje_max = puntaje_maximo
+        historico.tipo = "Egreso"
+        historico.clave = clave
+
+        historico.save()
         foto.save()
 
         admi.estado = "Inactiva"
