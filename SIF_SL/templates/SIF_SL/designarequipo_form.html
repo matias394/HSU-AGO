@@ -29,6 +29,7 @@ Servicio Local Equipo
     <form class="needs-validation" novalidate method="POST">
       <input type="hidden" value="{{object.id}}" name="fk_preadmi" id="id_fk_preadmi">
       <input type="hidden" value="{{object.fk_expediente_id}}" name="fk_expediente" id="id_fk_expediente">
+      <input type="hidden" value="{{object.fk_admi_id}}" name="fk_admi" id="id_fk_admi">
       <!-- Security token -->
       {% csrf_token %}
       <div class="card card-primary card-outline">

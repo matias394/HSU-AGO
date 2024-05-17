@@ -170,8 +170,7 @@ class LegajosArchivosForm(forms.ModelForm):
 
 class LegajosDerivacionesForm(forms.ModelForm):
     archivos = forms.FileField(
-        widget=forms.ClearableFileInput(
-            attrs={'multiple': True}),
+        widget=forms.ClearableFileInput(attrs={'multiple': True}),
         required=False
     )
 
@@ -180,9 +179,7 @@ class LegajosDerivacionesForm(forms.ModelForm):
         fields = '__all__'
         exclude = ['motivo_rechazo', 'obs_rechazo', 'fecha_rechazo']
         widgets = {
-            'detalles': forms.Textarea(
-                attrs={'class': 'form-control', 'rows': 5}
-            ),
+            'detalles': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
         }
         labels = {
             'fk_legajo': 'Legajo',
@@ -191,18 +188,26 @@ class LegajosDerivacionesForm(forms.ModelForm):
             'fk_programa': 'Derivar a',
             'fk_programa_solicitante': 'Derivar de',
         }
-        
+
     def clean(self):
         cleaned_data = super().clean()
         fk_programa = cleaned_data.get("fk_programa")
         detalles = cleaned_data.get("detalles")
-        archivos = self.files.get("archivos")  # Obtiene los archivos directamente desde self.files
+
+        # Verifica si estamos en un caso de actualización
+        if self.instance.pk:
+            archivos_existentes = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=self.instance).exists()
+        else:
+            archivos_existentes = False
+
+        # Obtiene los archivos directamente desde self.files
+        nuevos_archivos = self.files.getlist('archivos')
 
         if fk_programa and fk_programa.id == settings.PROG_SL:
             if not detalles:
                 self.add_error('detalles', 'Este campo es obligatorio cuando el programa es Servicio Local.')
-            if not archivos:
-                self.add_error('archivos', 'Este campo es obligatorio cuando el programa es Servicio Local.')
+            if not nuevos_archivos and not archivos_existentes:
+                self.add_error('archivos', 'Debe adjuntar al menos un archivo.')
 
         return cleaned_data
 

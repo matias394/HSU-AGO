@@ -126,6 +126,22 @@
                                 </div>
                             {% endif %}
                             </div>
+                            {% if archivos_existentes %}
+                            <div>
+                                <strong>Archivos cargados:</strong>
+                                <ul>
+                                    {% for a in archivos_existentes %}
+                                        <li>
+                                            <a href="{{ a.archivo.url }}" target="_blank">{{a.archivo|cut:'legajos/archivos/'}}</a>
+                                            <label>
+                                                <input type="checkbox" name="delete_files" value="{{ a.id }}">
+                                                Eliminar
+                                            </label>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
                         </div>
                         <div class="col-12">
                             <div class="form-group">

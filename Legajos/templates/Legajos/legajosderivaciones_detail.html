@@ -73,8 +73,7 @@ Derivaciones
             <dd class="col-sm-9 font-weight-bold">{{object.detalles|default_if_none:'-'}}</dd>
             {% if object.archivos %}
             <dt class="col-sm-3 font-weight-normal">Archivos adjuntos</dt>
-            <dd class="col-sm-9 font-weight-bold"><a href="{{ object.archivos.url}}" target="_blank">
-                {{object.archivos|cut:'legajos/archivos/'}}</a></dd>
+            <dd class="col-sm-9 font-weight-bold"><ul>{% for a in archivos %}<li><a href="{{ a.archivo.url}}" target="_blank">{{a.archivo|cut:'legajos/archivos/'}}</a></li>{% endfor %}</ul></dd>
             {% endif %}
             {% if object.estado == "Rechazada" %}
             <dt class="col-sm-3 font-weight-normal">Fecha de rechazo</dt>

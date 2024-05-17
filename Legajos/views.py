@@ -730,7 +730,14 @@ class LegajosDerivacionesUpdateView(PermisosMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(id=pk).first()
         context["legajo"] = Legajos.objects.filter(id=legajo.fk_legajo.id).first()
+        context['archivos_existentes'] = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=self.object)
         return context
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        delete_files = self.request.POST.getlist('delete_files')
+        LegajosDerivacionesArchivos.objects.filter(id__in=delete_files).delete()
+        return response
 
 class LegajosDerivacionesHistorial(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"
@@ -785,6 +792,11 @@ class LegajosDerivacionesDetailView(PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
     model = LegajosDerivaciones
 
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs["pk"]
+        context = super().get_context_data(**kwargs)
+        context["archivos"] = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=pk)
+        return context
 
 # endregion
 
