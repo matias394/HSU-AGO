@@ -744,7 +744,7 @@ class CDLEIndiceIviDetailView(PermisosMixin, DetailView):
         context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
         context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
-        #context['maximo'] = foto_ivi.puntaje_max
+        context['maximo'] = foto_ivi.puntaje_max
         return context
     
 class CDLEPreAdmisiones2DetailView(PermisosMixin, DetailView):
@@ -766,7 +766,14 @@ class CDLEPreAdmisiones3DetailView(PermisosMixin, DetailView):
         criterio_ingreso = CDLE_IndiceIngreso.objects.filter(fk_preadmi_id=pk, tipo="Ingreso")
         foto_ivi = CDLE_Foto_IVI.objects.filter(fk_preadmi_id= pk, tipo="Ingreso").first()
         foto_ingreso = CDLE_Foto_Ingreso.objects.filter(fk_preadmi_id= pk, tipo="Ingreso").first()
+        ivi = CDLE_IndiceIVI.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
+        ingreso = CDLE_IndiceIngreso.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
+        resultado = ivi.filter(tipo='Ingreso').values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ivi__puntaje')).order_by('-creado')
+        resultado_ingreso = ingreso.filter(tipo='Ingreso').values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ingreso__puntaje')).order_by('-creado')
 
+
+        context["ivi"] = ivi
+        context["ingreso"] = ingreso
         context["legajo"] = legajo
         context["familia"] = familia
         context["foto_ivi"] = foto_ivi
@@ -780,6 +787,8 @@ class CDLEPreAdmisiones3DetailView(PermisosMixin, DetailView):
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
         context['maximo_ingreso'] = foto_ingreso.puntaje_max
+        context["resultado"] = resultado
+        context["resultado_ingreso"] = resultado_ingreso
         context['criterios_total'] = criterio_ingreso.count()
         context["cant_combinables"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='Criterios combinables para el ingreso').count()
         context["cant_sociales"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='Criterios sociales para el ingreso').count() 
