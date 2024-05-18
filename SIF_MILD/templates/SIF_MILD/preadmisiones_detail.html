@@ -56,9 +56,10 @@
     <div class="col-sm-3 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
-          <h3 class="card-title">Detalle pre-admisión</h3>
-          <div class="card-tools">
-            <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
+          <h3 class="card-title">Detalle Admisión</h3>
+          <div class="card-tools d-inline">
+            <a href="{% url 'MILD_preadmisiones_ver3' object.id %}" class="ml-3 mr-2">Ver pre-admisión</a>
+            <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
               <i class="fas fa-minus"></i>
             </button>
           </div>
@@ -114,7 +115,10 @@
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
           <h3 class="card-title">Detalle índice de ingreso</h3>
-          <div class="card-tools">
+          <div class="card-tools d-inline">
+            {% if resultado %}
+            <a href="{% url 'MILD_indiceivi_ver' object.id %}" class="ml-3 mr-2">Ver detalles</a>
+            {% endif %}
             <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
               <i class="fas fa-minus"></i>
             </button>
@@ -144,7 +148,10 @@
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
           <h3 class="card-title">Detalle IVI de ingreso</h3>
-          <div class="card-tools d-inline">
+          <div class="card-tools">
+            {% if resultado %}
+            <a href="{% url 'MILD_indiceivi_ver' object.id %}" class="ml-3 mr-2">Ver detalles</a>
+            {% endif %}
             <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
               <i class="fas fa-minus"></i>
             </button>
