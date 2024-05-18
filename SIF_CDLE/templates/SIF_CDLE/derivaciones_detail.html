@@ -106,7 +106,7 @@ Derivaciones
             <dd class="col-sm-9 font-weight-bold"><a href="{% url 'legajos_ver' object.fk_legajo.id %}"
                 title="Ver legajo">{{ object.fk_legajo}}</a></dd>
             <dt class="col-sm-3 font-weight-normal">DNI</dt>
-            <dd class="col-sm-9 font-weight-bold">{{ object.fk_legajo.documento}}</dd>
+            <dd class="col-sm-9 font-weight-bold">{{ object.fk_legajo.documento|default_if_none:'Sin Documento'}}</dd>
             <dt class="col-sm-3 font-weight-normal">Fecha de nacimiento</dt>
             <dd class="col-sm-9 font-weight-bold">{{ object.fk_legajo.fecha_nacimiento|date:'d/m/Y'}}</dd>
             <dt class="col-sm-3 font-weight-normal">Sexo</dt>
