@@ -1,3 +1,4 @@
+import environ
 import os
 import logging
 from logging.handlers import TimedRotatingFileHandler
@@ -5,11 +6,10 @@ from datetime import datetime
 from pathlib import Path
 from django.contrib.messages import constants as messages
 from .validators import UppercaseValidator, LowercaseValidator
-import environ
 
 #Levantar variables de entorno desde .env
 env = environ.Env()
-environ.Env.read_env()
+env.read_env(env.str('ENV_PATH', '.env'))
 
 # Obtener la ruta del directorio actual (donde se encuentra este script)
 current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -18,7 +18,7 @@ current_directory = os.path.dirname(os.path.abspath(__file__))
 project_directory = os.path.abspath(os.path.join(current_directory, '..'))
 
 print(f"La ruta del proyecto es: {project_directory}")
-print(f'Ejecutando proyecto en entorno: {env('DJANGO_ENV')}')
+print('Ejecutando proyecto en entorno: '+env('DJANGO_ENV'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
