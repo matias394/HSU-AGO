@@ -66,7 +66,7 @@ SECRET_KEY = 'django-insecure-nkd=f=s!(abn(-tan&ceplfpumy5#j$6v$hl_=5d@q)dni4477
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if env('DJANGO_ENV') != 'produccion' else False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*'] if env('DJANGO_ENV') != 'produccion' else env('SERVERHOST_URL')
 
 
 # Application definition
