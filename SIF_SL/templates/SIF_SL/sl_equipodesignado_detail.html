@@ -1,0 +1,65 @@
+{% extends "includes/base.html" %}
+{% load static %}
+{% block title %}Equipos{% endblock %}
+{% block titulo-pagina %}Equipos{% endblock %};
+{% block breadcrumb %}
+<ol class="breadcrumb float-sm-right ">
+    <li class="breadcrumb-item">Servicio Local </li>
+    <li class="breadcrumb-item active"> {{ object.nombre}}</li>
+</ol>
+{% endblock %};
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="row">
+    
+    <div class="col-12">
+        <div class="card card-outline card-primary h-100">
+            <div class="card-header">
+                <h3 class="card-title">Detalle del {{object.nombre}}</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered table-striped projects tabladt table-sm">
+                  <!-- <table class="table table-striped projects"> -->
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Expediente</th>
+                      <th>Legajo</th>
+                      <th>Creado</th>
+                      <th width="5%" class="notexport"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for i in equipo %}
+                    <tr>
+                      <td> {{ i.creado|date:'d/m/Y' }} </td>
+                      <td> {{i.fk_expediente.expediente}} </td>
+                      <td> {{i.fk_preadmi.fk_derivacion}}</td>
+                      <td> {{i.creado}}</td>
+                      <td class="text-right">
+                        <a href="{% url 'SL_admisiones_ver' i.fk_admi.pk %}" class="btn btn-secondary btn-sm ver"
+                          title="Ver detalle">Ver</a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-4 d-print-none">
+    <div class="col-12 mx-2">
+        <a href="{% url 'sl_equipodesignado_list' %}" class="btn btn-secondary">Volver</a>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+
+{% block customJS %}
+
+{% endblock %}

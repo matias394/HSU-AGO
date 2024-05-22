@@ -40,6 +40,12 @@ CDIF Pre-admisiones
     {% if object.ivi == 'NO' %}
     <a href="{% url 'CDIF_indiceivi_crear' object.pk %}" class="btn btn-primary mr-1">Generar IVI</a>
     {% endif %}
+    {% if object.admitido == 'NO' and object.ivi == 'SI'%}
+    <button type="submit" name="admitir" class="btn btn-primary mr-1" form="admitirForm">Admitir</button>
+    <form method="post" action="{% url 'CDIF_preadmisiones_ver3' object.id %}" id="admitirForm" class="d-inline">
+      {% csrf_token %}
+    </form>
+    {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     {% endif %}
     </div>
@@ -55,6 +61,7 @@ CDIF Pre-admisiones
         <div class="card-header">
           <h3 class="card-title">Detalle pre-admisión</h3>
           <div class="card-tools">
+            <a href="{% url 'CDIF_preadmisiones_ver2' object.pk %}" class="ml-3 mr-2">Ver detalle</a>
             <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
               <i class="fas fa-minus"></i>
             </button>
@@ -110,7 +117,48 @@ CDIF Pre-admisiones
     </div>
     <!-- /  -->
 
-    <!-- Datos de Indice -->
+    <!-- Datos de Admisión -->
+    <div class="col-sm-4 pb-3">
+      <div class="card card-outline card-primary h-100 mb-0">
+        <div class="card-header">
+          <h3 class="card-title">Detalle IVI de ingreso</h3>
+          <div class="card-tools">
+            {% if resultado %}
+            <a href="{% url 'CDIF_indiceivi_ver' object.pk %}" class="ml-3 mr-2">Ver detalle</a>
+            {% endif %}
+            <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body pb-1">
+          {% if resultado %}
+          <dl class="row mb-0">
+            <dd class="col-sm-5 mb-2">Puntaje</dd>
+            <dt class="col-sm-7 mb-2"><span class="badge badge-warning">{{puntaje.total|default:"0"}}</span></dt>
+            
+            {% for r in resultado %}
+            <dd class="col-sm-5 mb-2">Fecha de solicitud</dd>
+            <dt class="col-sm-7 mb-2">{{ r.creado|date:"d/m/Y" }}</dt>
+            {% endfor %}
+            <dd class="col-sm-5 mb-2">Puntaje maximo posible</dd>
+            <dt class="col-sm-7 mb-2">{{maximo}}</dt>
+            <dd class="col-sm-5 mb-2">Criterios presentes</dd>
+            <dt class="col-sm-7 mb-2">{{cantidad}}</dt>
+            <dd class="col-sm-5 mb-2">Criterios modificables</dd>
+            <dt class="col-sm-7 mb-2">{{modificables}}</dt>
+            <dd class="col-sm-5 mb-2">Puntaje modificable</dd>
+            <dt class="col-sm-7 mb-2">{{mod_puntaje.total|default:"0"}}</dt>
+          </dl>
+          {% else %}
+          <h6>Sin índices.</h6>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <!-- /  -->
+
+    <!-- 
     <div class="col-sm-4 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
@@ -148,7 +196,7 @@ CDIF Pre-admisiones
       </div>
     </div>
   </div>
-  <!-- /  -->
+  -->
 
   <!-- Datos grupo familiar -->
   <div class="col-12">

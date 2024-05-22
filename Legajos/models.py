@@ -18,8 +18,8 @@ class Legajos(models.Model):
     apellido = models.CharField(max_length=250)
     nombre = models.CharField(max_length=250)
     fecha_nacimiento = models.DateField()
-    tipo_doc = models.CharField(max_length=50, choices=CHOICE_TIPO_DOC, verbose_name="Tipo documento")
-    documento = models.PositiveIntegerField(validators=[MinValueValidator(3000000), MaxValueValidator(100000000)])
+    tipo_doc = models.CharField(max_length=50, choices=CHOICE_TIPO_DOC, verbose_name="Tipo documento", null=True, blank=True)
+    documento = models.PositiveIntegerField(validators=[MinValueValidator(3000000), MaxValueValidator(100000000)], null=True, blank=True)
     sexo = models.CharField(max_length=50, choices=CHOICE_SEXO)
     nacionalidad = models.CharField(max_length=50, choices=CHOICE_NACIONALIDAD, null=True, blank=True)
     estado_civil = models.CharField(max_length=50, choices=CHOICE_ESTADO_CIVIL, null=True, blank=True)
@@ -36,8 +36,8 @@ class Legajos(models.Model):
     m2m_familiares = models.ManyToManyField('self', through='LegajoGrupoFamiliar', symmetrical=True, blank=True)
     observaciones = models.CharField(max_length=300, blank=True, null=True)
     estado = models.BooleanField(default=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='creado_por', on_delete=models.PROTECT, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='modificado_por', on_delete=models.PROTECT, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='creado_por', on_delete=models.CASCADE, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='modificado_por', on_delete=models.CASCADE, blank=True, null=True)
     creado = models.DateField(auto_now_add=True)
     modificado = models.DateField(auto_now=True)
 
@@ -45,7 +45,7 @@ class Legajos(models.Model):
         return f"{self.apellido}, {self.nombre}"
 
     def validate_unique(self, exclude=None):
-        qs = Legajos.objects.filter(tipo_doc=self.tipo_doc, documento=self.documento)
+        qs = Legajos.objects.filter(tipo_doc=self.tipo_doc, documento=self.documento, apellido=self.apellido, nombre=self.nombre, fecha_nacimiento=self.fecha_nacimiento)
 
         if self.pk:
             qs = qs.exclude(pk=self.pk)
@@ -321,10 +321,10 @@ class LegajoAlertas(models.Model):
     Registro de Alertas de vulnerabilidad asociadas a un Legajo determinado Tanto el alta como la baja se guardan en un historial del alertas.
     '''
 
-    fk_alerta = models.ForeignKey(Alertas, related_name='alerta', on_delete=models.PROTECT)
+    fk_alerta = models.ForeignKey(Alertas, related_name='alerta', on_delete=models.CASCADE)
     fk_legajo = models.ForeignKey(Legajos, related_name='legajo_alerta', on_delete=models.CASCADE)
     fecha_inicio = models.DateField(auto_now=True)
-    creada_por = models.ForeignKey(Usuarios, related_name='creada_por', on_delete=models.PROTECT, blank=True, null=True)
+    creada_por = models.ForeignKey(Usuarios, related_name='creada_por', on_delete=models.CASCADE, blank=True, null=True)
     observaciones = models.CharField(max_length=140, null=True, blank=True)
 
     def __str__(self):
@@ -345,11 +345,11 @@ class HistorialLegajoAlertas(models.Model):
     Guardado de historial de los distintos movimientos (CREACION/ELIMINACION)  de alertas de vulnerabilidad asociadas a un Legajo.
     Se graban a traves funciones detalladas en el archivo signals.py de esta app.
     '''
-    fk_alerta = models.ForeignKey(Alertas, related_name='hist_alerta', on_delete=models.PROTECT)
+    fk_alerta = models.ForeignKey(Alertas, related_name='hist_alerta', on_delete=models.CASCADE)
     fk_legajo = models.ForeignKey(Legajos, related_name='hist_legajo_alerta', on_delete=models.CASCADE)
     observaciones = models.CharField(max_length=140, null=True, blank=True)
-    creada_por = models.ForeignKey(Usuarios, related_name='hist_creada_por', on_delete=models.PROTECT, blank=True, null=True)
-    eliminada_por = models.ForeignKey(Usuarios, related_name='hist_eliminada_por', on_delete=models.PROTECT, blank=True, null=True)
+    creada_por = models.ForeignKey(Usuarios, related_name='hist_creada_por', on_delete=models.CASCADE, blank=True, null=True)
+    eliminada_por = models.ForeignKey(Usuarios, related_name='hist_eliminada_por', on_delete=models.CASCADE, blank=True, null=True)
     fecha_inicio = models.DateField(auto_now=True)
     fecha_fin = models.DateField(null=True, blank=True)
     meses_activa = models.JSONField(default=list, blank=True)  # Campo para almacenar los meses en los que estuvo activa
@@ -380,8 +380,29 @@ class HistorialLegajoAlertas(models.Model):
 
 # y en aquellos que permiten la mejora del puntaje [permite_mejora=True] permitir agregar un valor.
 
+from dataclasses import dataclass
+from typing import Optional
+@dataclass
+class HistoricoIVI:
+    fecha: Optional[date]
+    fk_indice: Optional[Indices]
+    fk_legajo: Optional[Legajos]
+    criterios_presentes: Optional[IndiceCriterios]
+    puntaje_total: Optional[int]
+    riesgo: Optional[str]
+    observaciones: Optional[str]
 
-# class HistorialLegajoIndices(models.Model):
+    puntaje: Optional[int]
+    puntaje_max: Optional[int]
+    crit_modificables: Optional[int]
+    crit_presentes: Optional[int]
+    observaciones: Optional[str]
+    tipo: Optional[str]
+    clave: Optional[str]
+    creado: Optional[date]
+    modificado: Optional[date]
+
+class HistorialLegajoIndices(models.Model):
     '''
 
     Guardado de historial de cada instancia de ejecucion de un índices de vulnerabilidad asociado a un Legajo.
@@ -397,45 +418,60 @@ class HistorialLegajoAlertas(models.Model):
     y una valoración automática del mismo que va en el campo [riesgo] (escala a definir).
     '''
 
-    # fecha = models.DateField(auto_now_add=True)
+    fecha = models.DateField(auto_now_add=True)
     # fk_indice = models.ForeignKey(Indices, on_delete=models.CASCADE)
-    # fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE)
-    # criterios_presentes = models.ManyToManyField(IndiceCriterios, through='LegajoIndiceCriterio')
-    # puntaje_total = models.PositiveSmallIntegerField(null=True, blank=True)
-    # riesgo = models.CharField(max_length=10, choices=CHOICE_NIVEL, null=True)
-    # observaciones = models.CharField(max_length=300, null=True, blank=True)
-
-    # def __str__(self):
-    #     return self.fk_legajo
-
-    # class Meta:
-    #     verbose_name = 'HistorialLegajoIndice'
-    #     verbose_name_plural = 'HistorialesLegajoIndices'
-
-    # def get_absolute_url(self):
-    #     return reverse('historiallegajoindice_ver', kwargs={'pk': self.pk})
+    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, blank=True, null=True)
+    criterios_presentes = models.ManyToManyField(IndiceCriterios, through='LegajoIndiceCriterio')
+    puntaje_total = models.PositiveSmallIntegerField(null=True, blank=True)
+    riesgo = models.CharField(max_length=10, choices=CHOICE_NIVEL, null=True)
+    observaciones = models.CharField(max_length=300, null=True, blank=True)
 
 
-# class LegajoIndiceCriterio(models.Model):
-#     '''
+    programa = models.CharField(max_length=50, null=True, blank=True)
+    puntaje = models.SmallIntegerField(null=True, blank=True) 
+    puntaje_max = models.SmallIntegerField(null=True, blank=True)
+    crit_modificables = models.SmallIntegerField(null=True, blank=True)
+    crit_presentes = models.SmallIntegerField(null=True, blank=True)
+    observaciones = models.CharField(max_length=350, null=True, blank=True)
+    tipo = models.CharField (max_length=350, null=True, blank=True)
+    clave = models.CharField (max_length=350, null=True, blank=True)
+    creado = models.DateField(auto_now_add=True, null=True, blank=True)
+    modificado = models.DateField(auto_now=True, null=True, blank=True)
 
-#     Guardado de los valores cargados en cada instancia de ejecución de un índice para un legajo determinado.
-#     '''
+    def __str__(self):
+        return self.fk_legajo
 
-#     fk_HistLegIndice = models.ForeignKey(HistorialLegajoIndices, related_name='+', on_delete=models.CASCADE)
-#     fk_IndiceCriterio = models.ForeignKey(IndiceCriterios, related_name='+', on_delete=models.CASCADE)
-#     puntos_mejora = models.PositiveSmallIntegerField(null=True, blank=True)
+    class Meta:
+        verbose_name = 'HistorialLegajoIndice'
+        verbose_name_plural = 'HistorialesLegajoIndices'
 
-#     def __str__(self):
-#         return f"Historial: {self.fk_HistLegIndice} - Criterio: {self.fk_IndiceCriterio}"
+    def get_absolute_url(self):
+        return reverse('historiallegajoindice_ver', kwargs={'pk': self.pk})
 
-#     class Meta:
-#         ordering = ['fk_HistLegIndice']
-#         verbose_name = 'LegajoIndiceCriterio'
-#         verbose_name_plural = 'LegajoIndicesCriterios'
+class LegajoPepito(models.Model):
+    nombre = models.CharField(default='Kevin',max_length=200)
 
-#     def get_absolute_url(self):
-#         return reverse('legajoindicecriterio_ver', kwargs={'pk': self.pk})
+
+class LegajoIndiceCriterio(models.Model):
+    '''
+
+    Guardado de los valores cargados en cada instancia de ejecución de un índice para un legajo determinado.
+    '''
+
+    fk_HistLegIndice = models.ForeignKey(HistorialLegajoIndices, related_name='+', on_delete=models.CASCADE)
+    fk_IndiceCriterio = models.ForeignKey(IndiceCriterios, related_name='+', on_delete=models.CASCADE)
+    puntos_mejora = models.PositiveSmallIntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Historial: {self.fk_HistLegIndice} - Criterio: {self.fk_IndiceCriterio}"
+
+    class Meta:
+        ordering = ['fk_HistLegIndice']
+        verbose_name = 'LegajoIndiceCriterio'
+        verbose_name_plural = 'LegajoIndicesCriterios'
+
+    def get_absolute_url(self):
+        return reverse('legajoindicecriterio_ver', kwargs={'pk': self.pk})
 
 
 # endregion-----------FIN LEGAJOS/ INDICES DE VULNERABILIDAD-------------------------------------------------------------------------
@@ -451,17 +487,16 @@ class LegajosDerivaciones(models.Model):
     '''
 
     fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE)
-    fk_programa_solicitante = models.ForeignKey(Programas, related_name='programa_solicitante', on_delete=models.PROTECT)
-    fk_programa = models.ForeignKey(Programas, related_name='programa_derivado', on_delete=models.PROTECT)
-    fk_organismo = models.ForeignKey(Organismos, on_delete=models.PROTECT, null=True, blank=True)
-    detalles = models.CharField(max_length=500)
+    fk_programa_solicitante = models.ForeignKey(Programas, related_name='programa_solicitante', on_delete=models.CASCADE)
+    fk_programa = models.ForeignKey(Programas, related_name='programa_derivado', on_delete=models.CASCADE)
+    fk_organismo = models.ForeignKey(Organismos, on_delete=models.CASCADE, null=True, blank=True)
+    detalles = models.CharField(max_length=500, null=True, blank=True)
     fk_usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     importancia = models.CharField(max_length=15, choices=CHOICE_IMPORTANCIA, default="Alta")
     estado = models.CharField(max_length=15, choices=CHOICE_ESTADO_DERIVACION, default="Pendiente")
     m2m_alertas = models.ManyToManyField(CategoriaAlertas, blank=True)
-    archivos = models.FileField(upload_to='legajos/archivos', null=True, blank=True)
     motivo_rechazo = models.CharField(max_length=150, choices=CHOICE_RECHAZO)
-    obs_rechazo = models.CharField(max_length=350, null=False, blank=False)
+    obs_rechazo = models.CharField(max_length=350, null=True, blank=True)
     fecha_rechazo = models.DateField(null=True, blank=True)
     fecha_creado = models.DateField(auto_now_add=True, null=True, blank=True)
     fecha_modificado = models.DateField(auto_now=True)
@@ -477,7 +512,12 @@ class LegajosDerivaciones(models.Model):
     def get_absolute_url(self):
         return reverse('legajosderivaciones_ver', kwargs={'pk': self.pk})
 
+class LegajosDerivacionesArchivos(models.Model):
+    legajo_derivacion = models.ForeignKey(LegajosDerivaciones, related_name='archivos', on_delete=models.CASCADE)
+    archivo = models.FileField(upload_to='legajos/archivos')
 
+    def __str__(self):
+        return f"Archivo para {self.legajo_derivacion}"
 # endregion
 
 
@@ -497,3 +537,108 @@ class LegajosArchivos(models.Model):
     def __str__(self):
         return f"Archivo {self.id} del legajo {self.fk_legajo}"
 
+
+
+# region ---------------------------- Intervenciones Salud ----------------------------
+
+from typing import Union, Any
+
+@dataclass
+class SaludIndicatorsGynecologicalControls:
+  value: bool
+  quantity: int
+  lastTurn: str
+  turnCodigo: int
+
+@dataclass
+class SaludIndicatorsOphthalmologicalControls:
+  value: bool
+  quantity: int
+  lastTurn: str
+  turnCodigo: int
+
+@dataclass
+class SaludIndicatorsDentalControls:
+  value: bool
+  quantity: int
+  lastTurn: str
+  turnCodigo: int
+
+@dataclass
+class SaludIndicatorsPediatricControls:
+  value: bool
+  quantity: int
+  lastTurn: None
+  turnCodigo: None
+
+@dataclass
+class SaludIndicatorsPregnancy:
+  value: bool
+  minor: None
+  risk: None
+  numberOfControls: int
+  lastTurn: None
+  turnCodigo: None
+
+@dataclass
+class SaludIndicatorsTurns:
+  date: str
+  specialty: Union[str,None]
+  attend: bool
+  rescheduled: bool
+  rescheduledDate: str
+  turnCodigo: int
+
+@dataclass
+class SaludIndicatorsMedicalCenters:
+  name: str
+  lastTurn: str
+  turnCodigo: int
+
+@dataclass
+class SaludIndicatorsMedicalControls:
+  quantity: int
+  lastTurn: str
+  turnCodigo: int
+
+@dataclass
+class SaludIndicatorsCatastrophicSickness:
+  value: bool
+
+@dataclass
+class SaludIndicatorsMentalProblems:
+  value: bool
+
+@dataclass
+class SaludIndicatorsSubstanceUse:
+  value: bool
+  lastTurn: None
+  turnCodigo: None
+
+@dataclass
+class SaludIndicators:
+  substanceUse: SaludIndicatorsSubstanceUse
+  mentalProblems: SaludIndicatorsMentalProblems
+  catastrophicSickness: SaludIndicatorsCatastrophicSickness
+  medicalControls: SaludIndicatorsMedicalControls
+  medicalCenters: list[SaludIndicatorsMedicalCenters]
+  turns: list[SaludIndicatorsTurns]
+  pregnancy: SaludIndicatorsPregnancy
+  pediatricControls: SaludIndicatorsPediatricControls
+  dentalControls: SaludIndicatorsDentalControls
+  ophthalmologicalControls: SaludIndicatorsOphthalmologicalControls
+  gynecologicalControls: SaludIndicatorsGynecologicalControls
+
+@dataclass
+class SaludPerson:
+  document_number: str
+  document_type: str
+  gender: str
+  persCodigo: int
+
+@dataclass
+class IntercepcionSaludPersona:
+  person: SaludPerson
+  indicators: SaludIndicators
+
+# endregion

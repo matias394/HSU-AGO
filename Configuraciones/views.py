@@ -7,6 +7,7 @@ from .models import *
 from .forms import *
 from django.db.models import Q
 from django.urls import reverse_lazy
+from .utils import insertar_programas
 
 # region ############################################################### Secretarías
 
@@ -32,19 +33,19 @@ class SecretariasListView(PermisosMixin, ListView):
 
 
 class SecretariasDetailView(PermisosMixin, DetailView):
-    permission_required = permission_required = ['Usuarios.rol_admin','Usuarios.rol_observador','Usuarios.rol_consultante']
+    permission_required = ['Usuarios.rol_admin','Usuarios.rol_observador','Usuarios.rol_consultante']
     model = Secretarias
 
 
 class SecretariasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = permission_required = 'Usuarios.rol_admin'
+    permission_required = 'Usuarios.rol_admin'
     model = Secretarias
     success_url = reverse_lazy("secretarias_listar")
     success_message = "El registro fue eliminado correctamente"
 
 
 class SecretariasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = permission_required = 'Usuarios.rol_admin'
+    permission_required = 'Usuarios.rol_admin'
     model = Secretarias
     form_class = SecretariasForm
     success_message = "%(nombre)s fue registrado correctamente"
@@ -175,6 +176,7 @@ class OrganismosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 class ProgramasListView(PermisosMixin, ListView):
     permission_required = ['Usuarios.rol_admin','Usuarios.rol_observador','Usuarios.rol_consultante']
     model = Programas
+    template_name = 'programas_list.html'
 
     # Funcion de busqueda
 
@@ -188,6 +190,11 @@ class ProgramasListView(PermisosMixin, ListView):
             object_list = self.model.objects.all()
 
         return object_list
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
 
 
 class ProgramasDetailView(PermisosMixin, DetailView):
@@ -852,3 +859,101 @@ class VacantesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
     model = Vacantes
     form_class = VacantesForm
     success_message = "%(nombre)s fue editado correctamente"
+
+
+# region ############################################################### Servicio Local Equipos
+
+
+class SLEquiposListView(PermisosMixin, ListView):
+    permission_required = ['Usuarios.rol_admin','Usuarios.rol_observador','Usuarios.rol_consultante']
+    model = SL_Equipos
+    
+  
+    
+    # Funcion de busqueda
+
+    def get_queryset(self):
+        query = self.request.GET.get('busqueda')
+
+        if query:
+            object_list = self.model.objects.filter(Q(nombre__icontains=query) | Q(observaciones__icontains=query)).distinct()
+
+        else:
+            object_list = self.model.objects.all()
+
+        return object_list
+
+
+class SLEquiposDetailView(PermisosMixin, DetailView):
+    permission_required = ['Usuarios.rol_admin','Usuarios.rol_observador','Usuarios.rol_consultante']
+    model = SL_Equipos
+
+
+class SLEquiposDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'Usuarios.rol_admin'
+    model = SL_Equipos
+    success_url = reverse_lazy("slequipos_listar")
+    success_message = "El registro fue eliminado correctamente"
+
+
+class SLEquiposCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'Usuarios.rol_admin'
+    model = SL_Equipos
+    form_class = SL_Equipos_Form
+    success_message = "%(nombre)s fue registrado correctamente"
+
+
+class SLEquiposUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'Usuarios.rol_admin'
+    model = SL_Equipos
+    form_class = SL_Equipos_Form
+    success_message = "%(nombre)s fue editado correctamente"
+
+class SLIndicesVulnerabilidadListView(PermisosMixin, ListView):
+    permission_required = ['Usuarios.rol_admin','Usuarios.rol_observador','Usuarios.rol_consultante']
+    model = SL_IndicesVulnerabilidad
+    
+  
+    
+    # Funcion de busqueda
+
+    def get_queryset(self):
+        query = self.request.GET.get('busqueda')
+
+        if query:
+            object_list = self.model.objects.filter(Q(nombre__icontains=query) | Q(observaciones__icontains=query)).distinct()
+
+        else:
+            object_list = self.model.objects.all()
+
+        return object_list
+
+
+class SLIndicesVulnerabilidadDetailView(PermisosMixin, DetailView):
+    permission_required = ['Usuarios.rol_admin','Usuarios.rol_observador','Usuarios.rol_consultante']
+    model = SL_IndicesVulnerabilidad
+
+
+class SLIndicesVulnerabilidadDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
+    permission_required = 'Usuarios.rol_admin'
+    model = SL_IndicesVulnerabilidad
+    success_url = reverse_lazy("slindicesvulnerabilidad_list")
+    success_message = "El registro fue eliminado correctamente"
+
+
+class SLIndicesVulnerabilidadCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
+    permission_required = 'Usuarios.rol_admin'
+    model = SL_IndicesVulnerabilidad
+    form_class = SL_IndicesVulnerabilidadForm
+    success_message = "%(nombre)s fue registrado correctamente"
+
+
+class SLIndicesVulnerabilidadUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
+    permission_required = 'Usuarios.rol_admin'
+    model = SL_IndicesVulnerabilidad
+    form_class = SL_IndicesVulnerabilidadForm
+    success_message = "%(nombre)s fue editado correctamente"
+
+
+
+# endregion

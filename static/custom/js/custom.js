@@ -112,6 +112,56 @@ $(function () {
 		.appendTo(".dataTables_wrapper .col-md-6:eq(0)");
 });
 
+
+$(function () {
+	$(".tabladt2")
+		.DataTable({
+			responsive: true,
+			lengthChange: false,
+			autoWidth: false,
+
+			language: {
+				"decimal": "",
+				"emptyTable": "Sin resultados",
+				"info": "",
+				"infoEmpty": "Mostrando 0 de 0 Entradas",
+				"infoFiltered": "(Filtrado de _MAX_ total entradas)",
+				"infoPostFix": "",
+				"thousands": ",",
+				"lengthMenu": "Mostrar _MENU_ Entradas",
+				"loadingRecords": "Cargando...",
+				"processing": "Procesando...",
+				"search": "",
+				"searchPlaceholder": "Filtrar resultados",
+				"zeroRecords": "<span class='text-muted'>Sin resultados encontrados</span>",
+				"buttons": {
+					"copy": 'Copiar',
+					"print": 'Imprimir',
+					"colvis": 'Columnas',
+				},
+				"paginate": {
+					"first": "Primero",
+					"last": "Ultimo",
+					"next": "Continuar",
+					"previous": "Volver",
+				}
+			},
+			"oTableTools": {
+				"sSwfPath": "/swf/copy_csv_xls_pdf.swf",
+				"aButtons": [
+					{
+						"sExtends": "copy",
+						"sButtonText": "Copiar al portapapeles"
+					}
+				]
+			}
+
+		})
+		.buttons()
+		.container()
+		.appendTo(".dataTables_wrapper .col-md-6:eq(0)");
+});
+
 //cambio color del badge del estado del ticket    
 $('.badge-gb-color').addClass(function () {
 	let dato = $(this).text();

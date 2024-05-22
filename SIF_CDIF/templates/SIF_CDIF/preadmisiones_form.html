@@ -64,7 +64,7 @@
                     </div>
                 </div>
                 <div class="card-body py-0 px-2 mt-5">
-                    <form novalidate method="POST" enctype="multipart/form-data">
+                    <form novalidate method="POST" enctype="multipart/form-data" class="needs-validation">
                         <!-- Security token -->
                         {% csrf_token %}
                         <input type="hidden" id="id_fk_derivacion" name="fk_derivacion" value={{pk}}>
@@ -765,8 +765,8 @@
                         <div id="info-centro" class="content" role="tabpanel" aria-labelledby="info-centro-trigger">
                             <div class="form-row">
                                 <div class="col-sm-3 form-group">
-                                    <label>Centro al que postula</label>
-                                    <select name="centro_postula" class="form-control custom-select" id="id_centro_postula">
+                                    <label for="id_centro_postula">Centro al que postula *</label>
+                                    <select name="centro_postula" class="form-control custom-select {% if messages %}is-invalid{% endif %}" id="id_centro_postula" required>
                                         <option value="" selected=""></option>
                                         {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
                                         <option value="{{object.centro_postula.id}}" selected>{{object.centro_postula}}</option>
@@ -775,13 +775,12 @@
                                         <option value="{{c.id}}">{{c.nombre}}</option>
                                         {% endfor %}
                                       </select>
+                                    {% comment %} <p id="error_1_id_centro_postula" class="invalid-feedback"><strong>Este campo es obligatorio.</strong></p> {% endcomment %}
                                 </div>
                                 <div class="col-sm-3 form-group">
-                                    <label>Sala a la que postula</label>
                                     {{form.sala_postula| as_crispy_field}}
                                 </div>
                                 <div class="col-sm-3 form-group">
-                                    <label>Turno al que postula</label>
                                     {{form.turno_postula| as_crispy_field}}
                                 </div>
                             </div>
@@ -939,4 +938,37 @@
     });
 });
 </script>
+<script>
+    // Disable form submissions if there are invalid fields
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+          // Get the forms we want to add validation styles to
+          var forms = document.getElementsByClassName('needs-validation');
+          // Loop over them and prevent submission
+          var validation = Array.prototype.filter.call(forms, function (form) {
+            form.addEventListener('submit', function (event) {
+              var invalidFields = form.querySelectorAll(':invalid');
+              if (invalidFields.length > 0) {
+                // Si hay campos inválidos, detener la propagación del evento
+                event.preventDefault();
+                event.stopPropagation();
+      
+                // Iterar sobre los campos inválidos y agregar mensajes de obligatoriedad
+                invalidFields.forEach(function (field) {
+                  if (field.hasAttribute('required')) {
+                    // Agregar un mensaje de obligatoriedad para los campos requeridos
+                    var errorMessage = document.createElement('div');
+                    errorMessage.className = 'invalid-feedback';
+                    errorMessage.innerHTML = 'Este campo es obligatorio.';
+                    field.parentNode.appendChild(errorMessage);
+                  }
+                });
+              }
+              form.classList.add('was-validated');
+            }, false);
+          });
+        }, false);
+      })();
+</script> 
 {% endblock %}

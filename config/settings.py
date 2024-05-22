@@ -34,7 +34,23 @@ logging.basicConfig(
     format='%(asctime)s [%(levelname)s] %(message)s',
     handlers=[TimedRotatingFileHandler(log_file, when='MIDNIGHT', backupCount=12, encoding='utf-8'), logging.StreamHandler()],
 )
-
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'Usuarios.middleware': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -71,6 +87,12 @@ INSTALLED_APPS = [
     'Legajos',
     # Programas
     'SIF_CDIF',
+    'SIF_CDLE',
+    'SIF_MILD',
+    'SIF_PDV',
+    'SIF_SL',
+    'SIF_MA',
+    'SIF_UMI',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -80,6 +102,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'Usuarios.middleware.CustomLoginMiddleware', 
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -139,6 +162,23 @@ DATABASES = {
         'CONN_MAX_AGE': 300,
     }
 }
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'hsu-dev',
+#        'USER': 'hsudev',
+#        'PASSWORD': 'hsudevtest',
+#        'HOST': '172.20.30.189',
+#        'PORT': '3306',
+#        'OPTIONS': {
+#            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#            'charset': 'utf8mb4',
+#        },
+#        'CONN_MAX_AGE': 300,
+#    }
+#}
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
@@ -251,3 +291,12 @@ CRISPY_CLASS_CONVERTERS = {
     'dateinput': "form-control",
     'fileinput': "custom-file-input",
 }
+
+# PROGRAMAS VARIABLES GLOBALES
+PROG_MILD = 24
+PROG_CDIF = 23
+PROG_CDLE = 25
+PROG_PDV = 26
+PROG_MA = 30
+PROG_SL = 21
+PROG_UMI = 27

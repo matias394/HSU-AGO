@@ -1,5 +1,6 @@
 import os
 from django.http import HttpResponseRedirect
+import requests
 from django.views.generic import (
     CreateView,
     ListView,
@@ -15,6 +16,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.core.files.base import ContentFile
+from django.core.serializers import serialize
 from PIL import Image
 from io import BytesIO  # Import BytesIO
 from django.http import JsonResponse,HttpResponse
@@ -28,6 +30,8 @@ from django.shortcuts import get_object_or_404
 from .models import *
 from .forms import *
 from .choices import *
+from django.conf import settings
+from .models import IntercepcionSaludPersona
 import json
 
 # Configurar el locale para usar el idioma español
@@ -40,27 +44,51 @@ logger = logging.getLogger('django')
 
 # region ############################################################### LEGAJOS
 
-
 class LegajosReportesListView(ListView):
     template_name = "Legajos/legajos_reportes.html"
-    model = Legajos
-
+    model = LegajosDerivaciones
+    
+    
+    def get_context_data(self, **kwargs):
+        organismos = Organismos.objects.all()
+        programas = Programas.objects.all()
+        context = super().get_context_data(**kwargs)
+        context['organismos'] = organismos
+        context['programas'] = programas
+        context['estados'] = CHOICE_ESTADO_DERIVACION
+        return context   
+    
     # Funcion de busqueda
-
-    def get_queryset(self):
-        query = self.request.GET.get("busqueda")
-
-        if query:
-            object_list = self.model.objects.filter(Q(nombre__icontains=query) | Q(apellido__icontains=query) | Q(documento__icontains=query)).distinct()
-
-            if object_list.count() == 0:
-                messages.warning(self.request, ("La búsqueda no arrojó resultados."))
-
-        else:
-            object_list = self.model.objects.all()
-
-        return object_list
-
+    def get_queryset(self): 
+        nombre_completo_legajo = self.request.GET.get("busqueda")
+        data_organismo = self.request.GET.get("data_organismo")
+        data_programa = self.request.GET.get("data_programa")
+        data_estado = self.request.GET.get("data_estado")
+        data_fecha_desde = self.request.GET.get("data_fecha_derivacion")
+        object_list = LegajosDerivaciones.objects.all()
+        
+        if data_programa and data_organismo : object_list = object_list.filter(
+                fk_programa=data_programa,
+                fk_organismo=data_organismo
+            )
+        
+        elif data_programa : object_list = object_list.filter(fk_programa=data_programa)
+        elif data_organismo: object_list = object_list.filter(fk_organismo=data_organismo)
+        
+        if nombre_completo_legajo or nombre_completo_legajo == '':
+            object_list = object_list.filter(
+                Q(fk_legajo__nombre__icontains=nombre_completo_legajo) | 
+                Q(fk_legajo__apellido__icontains=nombre_completo_legajo) | 
+                Q(fk_legajo__documento__icontains=nombre_completo_legajo)
+            )
+        
+        if data_estado : object_list = object_list.filter(estado=data_estado)
+        if data_fecha_desde : object_list = object_list.filter(fecha_creado__gte=data_fecha_desde)
+        if not object_list.exists():
+                messages.warning(self.request, "La búsqueda no arrojó resultados.")
+                return object_list
+        
+        return object_list.distinct()
 
 class LegajosListView(TemplateView):
     template_name = "Legajos/legajos_list.html"
@@ -85,6 +113,7 @@ class LegajosListView(TemplateView):
             mostrar_btn_resetear = True
             mostrar_resultados = True
 
+        
         context["mostrar_resultados"] = mostrar_resultados
         context["mostrar_btn_resetear"] = mostrar_btn_resetear
         context["object_list"] = object_list
@@ -108,7 +137,21 @@ class LegajosDetailView(DetailView):
 
         count_intervenciones = LegajosDerivaciones.objects.filter(fk_legajo_id=pk).count()
         
-
+        # Ajusta las fechas para el detalle de hito de abordaje
+        derivaciones = LegajosDerivaciones.objects.filter(fk_legajo_id=pk).order_by('fecha_creado')
+        for derivacion in derivaciones:
+            if derivacion.fecha_creado: derivacion.fecha_creado = datetime.strftime(derivacion.fecha_creado,'%d/%m/%Y') 
+            if derivacion.fecha_rechazo: derivacion.fecha_rechazo = datetime.strftime(derivacion.fecha_rechazo,'%d/%m/%Y')
+            if derivacion.fecha_modificado: derivacion.fecha_modificado = datetime.strftime(derivacion.fecha_modificado,'%d/%m/%Y')
+            if not derivacion.detalles : derivacion.detalles = 'Sin detalles'
+        
+        #Por cada familiar, agrega la cantidad total de intervenciones.
+        familiares_fk1 = LegajoGrupoFamiliar.objects.filter(fk_legajo_1=pk).all()
+        familiares_fk2 = LegajoGrupoFamiliar.objects.filter(fk_legajo_2=pk).all()
+        intervenciones1 = [{'familiar': familiar, 'intervenciones' : LegajosDerivaciones.objects.filter(fk_legajo_id=familiar.fk_legajo_2.id).count()} for familiar in familiares_fk1]
+        intervenciones2 = [{'familiar': familiar, 'intervenciones' : LegajosDerivaciones.objects.filter(fk_legajo_id=familiar.fk_legajo_2.id).count()} for familiar in familiares_fk2]
+        intervenciones = intervenciones1 + intervenciones2
+        
         # Obtener todas las categorías con la cantidad de alertas en cada una
         categorias_con_alertas = legajo_alertas.values(
             'fk_alerta__fk_categoria'
@@ -121,6 +164,9 @@ class LegajosDetailView(DetailView):
 
         # Obtener todas las categorías completas
         categorias_completas = CategoriaAlertas.objects.filter(id__in=ids_categorias).order_by('nombre')
+
+        #Obtener historial de indices IVI
+        historial_ivi = HistorialLegajoIndices.objects.filter(fk_legajo_id=pk).all().order_by('-id')[:3]
 
         # Verificar si categorias_completas no es None antes de aplicar el slicing
         if categorias_completas is not None:
@@ -195,8 +241,8 @@ class LegajosDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         emoji_nacionalidad = EMOJIS_BANDERAS.get(context['object'].nacionalidad, '')
         context['emoji_nacionalidad'] = emoji_nacionalidad
-        context["familiares_fk1"] = LegajoGrupoFamiliar.objects.filter(fk_legajo_1=pk)
-        context["familiares_fk2"] = LegajoGrupoFamiliar.objects.filter(fk_legajo_2=pk)
+        context["familiares_fk1"] = familiares_fk1
+        context["familiares_fk2"] = familiares_fk2
         context["count_familia"] = context["familiares_fk1"].count() + context["familiares_fk2"].count()
         context['files_img'] = LegajosArchivos.objects.filter(fk_legajo=pk, tipo="Imagen")
         context['files_docs'] = LegajosArchivos.objects.filter(fk_legajo=pk, tipo="Documento")
@@ -210,8 +256,11 @@ class LegajosDetailView(DetailView):
         context["count_media"] = LegajoAlertas.objects.filter(fk_legajo=pk, fk_alerta__gravedad="Importante").count()
         context["count_baja"] = LegajoAlertas.objects.filter(fk_legajo=pk, fk_alerta__gravedad="Precaución").count()
         context["historial_alertas"] = True if HistorialLegajoAlertas.objects.filter(fk_legajo=pk).exists() else False
+        context["historial_ivi"] = historial_ivi
         context["datos_json"] = datos_json
         context['count_intervenciones'] = count_intervenciones
+        context['familiar_intervenciones'] = intervenciones
+        context['derivaciones'] = derivaciones
         return context
 
 
@@ -246,9 +295,19 @@ class LegajosDeleteView(PermisosMixin, DeleteView):
         # Agregar la lista de nombres de relaciones al contexto
         context['relaciones_existentes'] = relaciones_existentes
         return context
-
+    
     def form_valid(self, form):
         # Obtener el usuario que realiza la eliminación
+        legajo = self.get_object()
+        # Eliminar las instancias relacionadas protegidas (LegajosDerivaciones en este caso)
+        LegajosDerivaciones.objects.filter(fk_legajo=legajo).delete()
+        LegajoAlertas.objects.filter(fk_legajo=legajo).delete()
+        HistorialLegajoAlertas.objects.filter(fk_legajo=legajo).delete()
+
+        #Preguntar por cual hay que buscar para eliminar o si es por ambos
+        LegajoGrupoFamiliar.objects.filter(fk_legajo_1=legajo).delete()
+        LegajoGrupoFamiliar.objects.filter(fk_legajo_2=legajo).delete()
+
         usuario_eliminacion = self.request.user
         legajo = self.get_object()        
 
@@ -640,6 +699,13 @@ class LegajosDerivacionesCreateView(PermisosMixin, CreateView):
             form.fields["fk_legajo"].initial = pk
             form.fields["fk_usuario"].initial = self.request.user
         return form
+    
+    def form_valid(self, form):
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        # Aquí podrías agregar manejo extra si es necesario, por ejemplo un mensaje de error
+        return super().form_invalid(form)
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -664,7 +730,14 @@ class LegajosDerivacionesUpdateView(PermisosMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(id=pk).first()
         context["legajo"] = Legajos.objects.filter(id=legajo.fk_legajo.id).first()
+        context['archivos_existentes'] = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=self.object)
         return context
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        delete_files = self.request.POST.getlist('delete_files')
+        LegajosDerivacionesArchivos.objects.filter(id__in=delete_files).delete()
+        return response
 
 class LegajosDerivacionesHistorial(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"
@@ -719,6 +792,11 @@ class LegajosDerivacionesDetailView(PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
     model = LegajosDerivaciones
 
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs["pk"]
+        context = super().get_context_data(**kwargs)
+        context["archivos"] = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=pk)
+        return context
 
 # endregion
 
@@ -1159,9 +1237,109 @@ class programasIntervencionesView(TemplateView):
         
         return context
 
+class accionesSocialesView(TemplateView):
+    template_name = "Legajos/acciones_sociales.html"
+    model = Legajos
 
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        legajo = Legajos.objects.filter(pk=self.kwargs["pk"]).first()
 
+        context["legajo"] = legajo
+        
+        return context
+
+class intervencionesSaludView(TemplateView):
+    template_name = "Legajos/intervenciones_salud.html"
+    model = Legajos
+
+    def get_token_salud(self):
+        auth = requests.post(
+            url='http://172.20.30.145:3000/v1/auth',
+            headers={
+                'Content-type':'application/json',
+            },
+            data=json.dumps({
+                "user": "AP1_s4lud",
+                "password": "5118a)iCb-vfUNz"
+            })
+        ).json()
+        return auth['access_token']
+
+    def get_data_salud(self, legajo : Legajos):
+        salud = requests.get(
+            url='http://172.20.30.145:3000/v1/person',
+            headers={
+                'Content-type':'application/json',
+                'Authorization':f'Bearer {self.get_token_salud()}'
+            },
+            json={
+                "document_type": legajo.tipo_doc,
+                "document_number": str(legajo.documento),
+                "gender": legajo.sexo[0]
+            }
+        ).json()
+        return salud
+    
+    def conteo_turnos(self,saludResponse):
+        contadores = {
+            'finalizadas' : 0,
+            'pendientes' : 0,
+            'ausentes' : 0,
+            'reprogramado' : 0,
+        }
+
+        if not saludResponse.get('indicators'): return contadores
+
+        for turno in saludResponse['indicators']['turns']:
+            fechaturno = datetime.fromisoformat(turno['date'])
+            fecha_reprogramada = datetime.fromisoformat(turno['rescheduledDate'])
+            expiroFecha = datetime.today() > fechaturno
+            contadores['finalizadas'] += int(True if turno['attend'] else False)
+            contadores['ausentes'] += int(True if expiroFecha and not turno['attend'] and not turno['rescheduled'] else False)
+            contadores['pendientes'] += int(True if not expiroFecha and not turno['attend'] else False)
+            contadores['reprogramado'] += int(True if fecha_reprogramada > fechaturno else False)
+        return contadores
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        legajo = Legajos.objects.filter(pk=self.kwargs["pk"]).first()
+        salud = self.get_data_salud(legajo)
+        context["legajo"] = legajo
+        context["salud"] = salud
+        context['contadores'] = self.conteo_turnos(salud)
+        
+        return context
+
+class indicesView(TemplateView):
+    template_name = "Legajos/indices.html"
+    model = Legajos
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        legajo = Legajos.objects.filter(pk=self.kwargs["pk"]).first()
+
+        context["legajo"] = legajo
+        
+        return context      
+
+class indicesDetalleView(TemplateView):
+    template_name = "Legajos/indices_detalle.html"
+    model = Legajos
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        legajo = Legajos.objects.filter(pk=self.kwargs["pk"]).first()
+
+        context["legajo"] = legajo
+        
+        return context    
 
 
 # endregion ###########################################################

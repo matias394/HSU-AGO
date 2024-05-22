@@ -18,6 +18,13 @@ urlpatterns = [
     path('', include('Inicio.urls')),
     path('', include('Legajos.urls')),
     path('', include('SIF_CDIF.urls')),
+    path('', include('SIF_CDLE.urls')),
+    path('', include('SIF_MILD.urls')),
+    path('', include('SIF_PDV.urls')),
+    path('', include('SIF_SL.urls')),
+    path('', include('SIF_MA.urls')),
+    path('', include('SIF_UMI.urls')),
+
 ]
 
 urlpatterns += staticfiles_urlpatterns()

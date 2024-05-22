@@ -55,6 +55,85 @@
                         <i class="fas fa-minus"></i>
                     </button>
                 </div>
+                <h3 class="card-title font-weight-bold pt-1 mr-3">
+                    Datos Personales
+                </h3>
+            </div>
+
+            
+            <div class="card-body card-comments p-0 pb-1">
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <div class="comment-text">
+                            Nombre
+                            <span class="username">{{object}}</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="comment-text">
+                            Documento
+                            <span class="username">{{object.tipo_doc}} {{object.documento}}</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="comment-text">
+                            Sexo
+                            <span class="username">{{object.sexo}}</span>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <div class="comment-text">
+                            Fecha de nacimiento
+                            <span class="username">{{object.fecha_nacimiento|date:'d/m/Y'}}</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="comment-text">
+                            Nacionalidad
+                            <span class="username">{{object.nacionalidad|default_if_none:"-"}}</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="comment-text">
+                            Estado civil
+                            <span class="username">{{object.estado_civil|default_if_none:"-"}}</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="comment-text">
+                            Teléfono
+                            <span class="username">{{object.telefono|default_if_none:"-"}}</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="comment-text">
+                            Email
+                            <span class="username">{{object.email|default_if_none:"-"}}</span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="comment-text">
+                            Estado
+                            {% if object.estado %}
+                            <span class="username text-success font-weight-bold">Activo</span>
+                            {% else %}
+                            <span class="username text-danger font-weight-bold">Inactivo</span>
+                            {% endif %}
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
 
                 <h3 class="card-title font-weight-bold pt-1 mr-3">
                     Grupo familiar
@@ -107,10 +186,14 @@
             </div>
             {% endif %}
         </div>
-
+        {% comment %} 
+                        -------- Detalles de Programas en intervención ----------
+                        Ticket: HSU-320
+                        Jira: https://icoreicore.atlassian.net/browse/HSU-320
+        {% endcomment %}
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title font-weight-bold">Intervenciones en grupo familiar</h3>
+                <h3 class="card-title font-weight-bold">Programas en intervención</h3>
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
                         <i class="fas fa-minus"></i>
@@ -120,127 +203,49 @@
             <div class="card-body bg-light">
                 <div class="row">
                     <div class="col-12">
-                        <div class="chart-responsive">
-                            <div class="chartjs-size-monitor">
-                                <div class="chartjs-size-monitor-expand">
-                                    <div class=""></div>
-                                </div>
-                                <div class="chartjs-size-monitor-shrink">
-                                    <div class=""></div>
-                                </div>
+                    <div class="chart-responsive">
+                        <div class="chartjs-size-monitor">
+                            <div class="chartjs-size-monitor-expand">
+                                <div class=""></div>
                             </div>
-                            <canvas id="pieChart" height="105" width="210"
-                                style="display: block; height: 94px; width: 188px;"
-                                class="chartjs-render-monitor"></canvas>
+                            <div class="chartjs-size-monitor-shrink">
+                                <div class=""></div>
+                            </div>
                         </div>
-
+                        <canvas id="pieChart" height="105" width="210"
+                            style="display: block; height: 94px; width: 188px;"
+                            class="chartjs-render-monitor"></canvas>
                     </div>
-
-                    <!-- <div class="col-md-4">
-                                <ul class="chart-legend clearfix">
-                                    <li><i class="far fa-circle text-danger"></i> CDIF</li>
-                                    <li><i class="far fa-circle text-success"></i> CDLE</li>
-                                    <li><i class="far fa-circle text-warning"></i> PDV</li>
-                                    <li><i class="far fa-circle text-info"></i> 1000D</li>
-                                    <li><i class="far fa-circle text-primary"></i> Módulos</li>
-                                    <li><i class="far fa-circle text-secondary"></i> Bolsones</li>
-                                </ul>
-                            </div> -->
 
                 </div>
 
             </div>
 
+        </div>
+
             <div class="card-footer p-0">
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item">
-                        <a href="76" class="nav-link">
-                            Santiago Baez
-                            <span class="float-right text-danger">
-                                20</span>
+                        {% for f in familiar_intervenciones %}
+                        <a href="{% url 'legajos_ver' f.familiar.fk_legajo_2_id %}"  class="nav-link">
+                            {% if f.familiar.fk_legajo_2_id == object.id %}
+                                <span class="username">{{f.familiar.fk_legajo_1}}</span>
+                            {% else %}
+                                <span class="username">{{f.familiar.fk_legajo_2}}</span>
+                            {% endif %}
+                            <span class="float-right text-danger">{{f.intervenciones}}</span>
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="69" class="nav-link">
-                            Jessica Baez
-                            <span class="float-right text-success">18
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="80" class="nav-link">
-                            Catalina Villalba
-                            <span class="float-right text-warning"> 11
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="72" class="nav-link">
-                            Morena Baez
-                            <span class="float-right text-primary">11
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="74" class="nav-link">
-                            Rocio Baez
-                            <span class="float-right text-orange">11
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="73" class="nav-link">
-                            Ricardo Baez
-                            <span class="float-right text-info">11
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="75" class="nav-link">
-                            Salomé Baez
-                            <span class="float-right text-secondary">11
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="70" class="nav-link">
-                            Jorge Baez
-                            <span class="float-right text-lime">9
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="77" class="nav-link">
-                            Zoe Rivera
-                            <span class="float-right text-fuchsia">7
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="78" class="nav-link">
-                            Hermindo Baez
-                            <span class="float-right text-olive">6
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="79" class="nav-link">
-                            Bautista Rivera
-                            <span class="float-right text-lightblue">6
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="71" class="nav-link">
-                            Martín Baez
-                            <span class="float-right text-pink">4
-                            </span>
-                        </a>
-                    </li>
+                        {% empty %}
+                        {% endfor %}
                 </ul>
             </div>
         </div>
 
+        {% comment %} 
+                        -------- Detalles de Indices IVI ----------
+                        Ticket: HSU-1290
+                        Jira: https://icoreicore.atlassian.net/browse/HSU-1290
+        {% endcomment %}
         <div class="card ">
             <div class="card-header">
                 <h3 class="card-title font-weight-bold">Indices</h3>
@@ -253,34 +258,26 @@
 
             <div class="card-body p-0">
                 <ul class="products-list product-list-in-card pl-2 pr-2">
+                    {% for item in historial_ivi %}
                     <li class="item">
                         <div class="product-img h4">
-                            <span class="badge badge-danger float-center p-3">40</span>
+                            <span class="badge badge-danger float-center p-3">{{item.puntaje_total}}</span>
                         </div>
                         <div class="product-info">
-                            <a href="javascript:void(0)" class="product-title">IVI</a> <span class="badge badge-secondary">Ingreso</span><br>
+                            <a href="javascript:void(0)" class="product-title">IVI</a> <span class="badge badge-secondary">{{item.tipo}}</span><br>
                             <span class="product-description">
-                                CDLE | 10/07/2020
+                                {{item.programa}} | {{item.fecha|date:"d/m/Y"}}
                             </span>
                         </div>
                     </li>
-                    <li class="item">
-                        <div class="product-img h4">
-                            <span class="badge badge-danger float-center p-3">36</span>
-                        </div>
-                        <div class="product-info">
-                            <a href="javascript:void(0)" class="product-title">IVI</a> <span class="badge badge-secondary">Egreso</span><br>
-                            <span class="product-description">
-                                CDLE | 11/06/2023
-                            </span>
-                        </div>
-                    </li>
+                    {% endfor %}
+                    
                 </ul>
                
             </div>
            
             <div class="card-footer text-center">
-                <a href="{% url 'indices'  %}" class="uppercase">Ver detalles</a>
+                <a href="{% url 'indices' object.id  %}" class="uppercase">Ver detalles</a>
             </div>
 
         </div>
@@ -442,7 +439,7 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-5">
+            {% comment %} <div class="col-sm-5">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title font-weight-bold"> Datos personales</h3>
@@ -517,8 +514,8 @@
                         </ul>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-4">
+            </div> {% endcomment %}
+            <div class="col-sm-9">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title font-weight-bold">Ubicación</h3>
@@ -527,7 +524,17 @@
                                 <i class="fas fa-minus"></i>
                             </button>
                         </div>
+                        {% comment %} <div class="card-tools">
+                            <a href="{% url 'legajosdimensiones_ver' object.id  %}"
+                                class="ml-3 mr-2">Ver
+                                detalles</a>
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div> {% endcomment %}
+                    
                     </div>
+                    
                     <div class="card-body card-comments">
                         <div class="row my-sm-4 pb-sm-1">
                             <!-- <div class="col embed-responsive embed-responsive-16by9"> -->
@@ -540,7 +547,7 @@
                 </div>
             </div>
             <div class="col-sm-3 pb-sm-3">
-                <div class="row mx-0 mx-sm-1  h-100 ">
+                <div class="row mx-0 mx-sm-1 ">
                     <div class="small-box bg-olive col-12 mb-0 px-0">
                         <div class="inner">
                             <h3> {{count_intervenciones}}</h3>
@@ -549,9 +556,10 @@
                         <div class="icon">
                             <i class="ion ion-android-home"></i>
                         </div>
-                        <a href="{% url 'programas_intervencion' object.id  %}" class="small-box-footer">Ver
+                        <a href="{% url 'legajosderivaciones_historial' object.id  %}" class="small-box-footer">Ver
                             más <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
+                    <!-- <<<<<<<<<<<<< EN DESARROLLO >>>>>>>>>>>>>>>>
                     <div class="small-box bg-purple col-12 my-2 px-0">
                         <div class="inner">
                             <h3>21</h3>
@@ -560,9 +568,10 @@
                         <div class="icon">
                             <i class="ion ion-android-home"></i>
                         </div>
-                        <a href="{% url 'acciones_sociales'%}" class="small-box-footer">Ver
+                        <a href="{% url 'acciones_sociales' object.id  %}" class="small-box-footer">Ver
                             más <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
+                    -->
                     <div class="small-box bg-lightblue col-12 mb-3 mb-sm-0 px-0">
                         <div class="inner">
                             <h3>15</h3>
@@ -571,10 +580,10 @@
                         <div class="icon">
                             <i class="ion ion-ios-clock-outline"></i>
                         </div>
-                        <a href="{% url 'intervenciones_salud_HC'%}" class="small-box-footer">Ver
+                        <a href="{% url 'intervenciones_salud' object.id  %}" class="small-box-footer">Ver
                             más <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
-
+                
                 </div>
             </div>
         </div>
@@ -604,7 +613,7 @@
 
                         </ul>
                         <div class="card-tools">
-                            <a href="{% url 'legajosdimensiones_ver' object.dimensionfamilia.id  %}"
+                            <a href="{% url 'legajosdimensiones_ver' object.id  %}"
                                 class="ml-3 mr-2">Ver
                                 detalles</a>
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -886,9 +895,19 @@
             </div>
         </div>
 
+
+        {% comment %} 
+                        -------- Vista de Hitos de Abordaje ----------
+                        Ticket: HSU-279
+                        Jira: https://icoreicore.atlassian.net/browse/HSU-279 
+        {% endcomment %}
         <div class="row">
             <div class="col-12">
+                {% if derivaciones %}
                 <div class="card card-collapse">
+                {% else %}
+                <div class="card card-collapse collapsed-card">
+                {% endif %}
                     <div class="card-header border-transparent">
                         <h3 class="card-title font-weight-bold">Hitos de abordaje</h3>
                         <div class="card-tools">
@@ -899,101 +918,65 @@
                     </div>
                     <div class="card-body bg-light p-0">
 
-                        <!-- comienzo timeline -->
-
+                        {% if derivaciones %}
+                        
                         <div class="cd-horizontal-timeline loaded">
                             <div class="timeline ">
                                 <div class="events-wrapper">
-                                    <div class="events" style="width: 500px;">
+                                    <div class="events">
                                         <ol>
-                                            <li><a href="#0" data-date="01/01/2020" class="older-event selected" style="left: 0px;">01/01/2020</a></li>
-                                            <li><a href="#0" data-date="01/02/2020" style="left: 0px;">01/02/2020</a></li>
-                                            <li><a href="#0" data-date="01/03/2020" style="left: 0px;">01/03/2020</a></li>
-                                            <li><a href="#0" data-date="03/03/2020" style="left: 0px;">03/03/2020</a></li>
-                                            <li><a href="#0" data-date="10/07/2020" style="left: 0px;">10/07/2020</a></li>
-                                            <li><a href="#0" data-date="04/02/2021" style="left: 0px;">04/02/2021</a></li>
+                                            {% for derivacion in derivaciones %}
+                                            {% comment %} <li><a href="#0" data-date="01/01/2020" class="older-event selected">{{derivacion.fecha_creado}}</a></li> {% endcomment %}
+                                            <li><a data-date={{derivacion.fecha_creado}}>{{derivacion.fecha_creado}}</a></li>
+                                            {% endfor %}
                                         </ol>
-                                        <span class="filling-line" aria-hidten="true" style="transform: scaleX(0.281506);"></span>
+                                        <span class="filling-line" aria-hidden="true"></span>
                                     </div>
-                                    <!-- .events -->
+                                    
                                 </div>
-                                <!-- .events-wrapper -->
+                                
                                 <ul class="cd-timeline-navigation">
-                                    <li><a href="#0" class="prev inactive">Prev</a></li>
-                                    <li><a href="#0" class="next">Next</a></li>
+                                    <li><a class="prev">Prev</a></li>
+                                    <li><a class="next">Next</a></li>
                                 </ul>
-                                <!-- .cd-timeline-navigation -->
+                                
                             </div>
-                            <!-- .timeline -->
+                            
+                        
                             <div class="events-content pb-2 pb-sm-0">
                                 <ol class="pb-0 mb-0">
-                                    <li class="selected" data-date="01/01/2020">
-                                        <h5 class="text-bold"> 
-                                            DDA <span class="badge badge-secondary">Ingreso</span> <br> 
-                                            <small>01/01/2020</small>
-                                            </h4>
-                                            <hr>
-                                            <p>En CIC B° Mitre se detecta a los niños de la familia en situación de escolaridad irregular y falta de controles médicos. 
-                                                Además se evidencian signos de violencia de género en la madre de familia.
-                                            </p>
-                                    </li>
-                                    <li data-date="01/02/2020" class="">
-                                        <h5 class="text-bold">
-                                            Asistencia habitacional <span class="badge badge-secondary">Ingreso</span><br>
-                                            <small>01/02/2020</small>
-                                        </h5>
-                                        <hr>
-                                        <p>Debido a falta de higiene en el terreno y vivienda el programa Asistencia habitacionall, realiza el saneamiento del mismo.
-                                            
-                                        </p>
-                                    </li>
-                                    <li data-date="01/03/2020" >
-                                        <br>
-                                        <h5 class="text-bold">
-                                            Incendios <span class="badge badge-secondary">Ingreso</span><br>
-                                            <small>01/03/2020</small>
-                                            </h4>
-                                            <hr>
-                                            <p>Luego del saneamiento de terreno se poduce un incendio en la vivienda, 
-                                                hecho por lo cual el programa de incendios interviene en los meses posteriores para ayudar en la reconstrucción del hogar.
-                                            </p>
-                                    </li>
-                                    <li data-date="03/03/2020">
-                                        <h5 class="text-bold">
-                                            Asistencia alimentaria <span class="badge badge-secondary">Ingreso</span> <br>
-                                            <small>03/03/2020</small>
-                                            </h4>
-                                            <hr>
-                                            <p>Durante todo el aislamiento social preventivo y obligatorio el municipio asiste a la familia con entrega de alimentos. 
-                                            </p>
-                                    </li>
-                                    <li data-date="10/07/2020">
-                                        <h5 class="text-bold"> 
-                                            Camino de la embarazada <span class="badge badge-secondary">Ingreso</span> <br>
-                                            <small>10/07/2020</small>
-                                            </h4>
-                                            <hr>
-                                            <p>Se detecta el embarazo de Jesica Baez, menor, de 15 años de edad.
-                                                 A partir de esto se articula con todas las áreas de asistencia, y se la incluye al programa Camino de la embrazada
-                                            </p>
-                                    </li>
-                                    <li data-date="04/02/2021">
-                                        <h5 class="text-bold"> 
-                                            Camino de la embarazada <span class="badge badge-secondary">Egreso</span> <br>
-                                            <small>04/02/2021</small>
-                                            </h4>
-                                            <hr>
-                                            <p>Nacimiento de Zoe Rivera, hija de Jesica Baez y Bautista Rivera. La niña fue ingresada al programa 1000 Días
-                                            </p>
-                                    </li>
+                                    {% for derivacion in derivaciones %}
+                                        {% if forloop.first %}
+                                            <li class="selected" data-date={{derivacion.fecha_creado}}>
+                                        {% else %}
+                                            <li class="" data-date={{derivacion.fecha_creado}}>
+                                        {% endif %}
+                                                <div>
+                                                    <h5 class="text-bold"> {{derivacion.fk_programa}} </h5>
+                                                    <span class="badge badge-secondary">{{derivacion.estado}}</span>
+                                                </div>
+                                                <small>{{derivacion.fecha_creado}}</small>
+                                                <hr>
+                                                <p>{{derivacion.detalles}}</p> 
+                                                
+                                            </li>
+                                        
+                                    {% endfor %}
                                 </ol>
                             </div>
+                    
                         </div>
+                        {% else %}
+                            <div class="col-12 text-center">
+                                <h6 class="text-center text-muted py-3">Sin datos</h6>
+                            </div>
+                        {% endif %}
 
                     </div>
                 </div>
             </div>
         </div>
+
         {% if datos_json %}
         <div class="row d-none d-sm-inline">
             <div class="col-12">
@@ -1155,23 +1138,17 @@
         // Get context with jQuery - using jQuery's .get() method.
         var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
         var pieData = {
-            labels: [
-                'Santiago Baez',
-                'Jessica Baez',
-                'Catalina Villalba',
-                'Morena Baez',
-                'Rocio Baez',
-                'Ricardo Baez',
-                'Salomé Baez',
-                'Jorge Baez',
-                'Zoe Rivera',
-                'Hermindo Baez',
-                'Bautista Rivera',
-                'Martín Baez',
+            labels: [{% for item in familiar_intervenciones %} 
+            "{{item.familiar.fk_legajo_2}}",
+            {% endfor %}
             ],
             datasets: [
                 {
-                    data: [20, 18, 11, 11, 11, 11, 11, 9, 7, 6, 6, 4],
+                    data: [
+                    {% for item in familiar_intervenciones %}
+                    {{item.intervenciones}},
+                    {% endfor %}
+                    ],
                     backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#3c8dbc', '#ff851b', '#6610f2','#6c757d','#01ff70','#f012be','#3d9970','#3c8dbc','#e83e8c']
                 }
             ]

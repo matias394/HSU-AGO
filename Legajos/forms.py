@@ -3,12 +3,13 @@ from datetime import date
 from .models import *
 from .validators import MaxSizeFileValidator
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.conf import settings
 
 
 class LegajosForm(forms.ModelForm):
     foto = forms.ImageField(required=False, label="Foto Legajo", validators=[MaxSizeFileValidator(max_file_size=2)])
     documento = forms.IntegerField(
-        required=True,
+        required=False,
         validators=[MinValueValidator(3000000), MaxValueValidator(100000000)],
         widget=forms.NumberInput(),
     )
@@ -17,10 +18,12 @@ class LegajosForm(forms.ModelForm):
         cleaned_data = super().clean()
         tipo_doc = cleaned_data.get('tipo_doc')
         documento = cleaned_data.get('documento')
+        apellido = cleaned_data.get('apellido')
+        nombre = cleaned_data.get('nombre')
         fecha_nacimiento = cleaned_data.get('fecha_nacimiento')
 
         # Validación de campo unico, combinación de DNI + Tipo DNI
-        if tipo_doc and documento and Legajos.objects.filter(tipo_doc=tipo_doc, documento=documento).exists():
+        if tipo_doc and documento and fecha_nacimiento and apellido and nombre and Legajos.objects.filter(tipo_doc=tipo_doc, documento=documento, apellido=apellido, nombre=nombre, fecha_nacimiento=fecha_nacimiento).exists():
             self.add_error('documento', "Ya existe un legajo con ese TIPO y NÚMERO de documento.")
         # validación de fecha de nacimiento
         if fecha_nacimiento and fecha_nacimiento > date.today():
@@ -45,7 +48,7 @@ class LegajosForm(forms.ModelForm):
 class LegajosUpdateForm(forms.ModelForm):
     foto = forms.ImageField(required=False, label="Foto Legajo", validators=[MaxSizeFileValidator(max_file_size=2)])
     documento = forms.IntegerField(
-        required=True,
+        required=False,
         validators=[MinValueValidator(3000000), MaxValueValidator(100000000)],
         widget=forms.NumberInput(),
     )
@@ -95,7 +98,7 @@ class NuevoLegajoFamiliarForm(forms.ModelForm):
     conviven = forms.ChoiceField(choices=CHOICE_SINO, required=True)
     cuidador_principal = forms.ChoiceField(choices=CHOICE_SINO, required=True)
     documento = forms.IntegerField(
-        required=True,
+        required=False,
         validators=[MinValueValidator(3000000), MaxValueValidator(100000000)],
         widget=forms.NumberInput(),
     )
@@ -164,30 +167,19 @@ class LegajosArchivosForm(forms.ModelForm):
         fields = ['fk_legajo', 'archivo']
 
 
+
 class LegajosDerivacionesForm(forms.ModelForm):
     archivos = forms.FileField(
-        widget=forms.ClearableFileInput(
-            attrs={
-                'multiple': True,
-            }
-        ),
-        required=False,
+        widget=forms.ClearableFileInput(attrs={'multiple': True}),
+        required=False
     )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
     class Meta:
         model = LegajosDerivaciones
         fields = '__all__'
         exclude = ['motivo_rechazo', 'obs_rechazo', 'fecha_rechazo']
         widgets = {
-            'detalles': forms.Textarea(
-                attrs={
-                    'class': 'form-control',
-                    'rows': 5,
-                }
-            ),
+            'detalles': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
         }
         labels = {
             'fk_legajo': 'Legajo',
@@ -196,6 +188,28 @@ class LegajosDerivacionesForm(forms.ModelForm):
             'fk_programa': 'Derivar a',
             'fk_programa_solicitante': 'Derivar de',
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        fk_programa = cleaned_data.get("fk_programa")
+        detalles = cleaned_data.get("detalles")
+
+        # Verifica si estamos en un caso de actualización
+        if self.instance.pk:
+            archivos_existentes = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=self.instance).exists()
+        else:
+            archivos_existentes = False
+
+        # Obtiene los archivos directamente desde self.files
+        nuevos_archivos = self.files.getlist('archivos')
+
+        if fk_programa and fk_programa.id == settings.PROG_SL:
+            if not detalles:
+                self.add_error('detalles', 'Este campo es obligatorio cuando el programa es Servicio Local.')
+            if not nuevos_archivos and not archivos_existentes:
+                self.add_error('archivos', 'Debe adjuntar al menos un archivo.')
+
+        return cleaned_data
 
 
 # Dimensiones

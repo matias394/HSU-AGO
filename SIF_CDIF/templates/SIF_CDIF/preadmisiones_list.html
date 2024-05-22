@@ -63,7 +63,10 @@
                         <a href="{% url 'CDIF_indiceivi_crear' o.id %}" class="btn btn-primary btn-sm">Agregar IVI</a>
                         {% endif %}
                         {% if o.admitido == 'NO' and o.ivi == 'SI'%}
-                        <a href="{% url 'CDIF_preadmisiones_ver3' o.id %}" class="btn btn-primary btn-sm">Admitir</a>
+                        <button type="submit" name="admitir" class="btn btn-primary btn-sm mr-1" form="admitirForm">Admitir</button>
+                        <form method="post" action="{% url 'CDIF_preadmisiones_ver3' o.id %}" id="admitirForm" class="d-inline">
+                          {% csrf_token %}
+                        </form>
                         {% endif %}
                         <a href="{% url 'CDIF_preadmisiones_ver' o.id %}" class="btn btn-secondary btn-sm">Ver</a>
                         {% endif %}

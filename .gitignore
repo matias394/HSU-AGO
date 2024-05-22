@@ -83,7 +83,7 @@ target/
 *.pot
 *.pyc
 __pycache__/
-local_settings.py
+settings.py
 
 .env
 .venv
@@ -92,10 +92,12 @@ local_settings.py
 media/
 migrations/
 db.sqlite3
+*.sqlite3
 hsu_db.sqlite3
 .vscode/
 logs/
 .venv/
 Pipfile
 Virtuales/
+
 

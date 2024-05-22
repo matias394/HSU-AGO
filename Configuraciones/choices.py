@@ -116,3 +116,5 @@ CHOICE_CRITERIO_ALERTA=[
     ('Importante', 'Importante'),
     ('Precaución', 'Precaución'),
 ]
+
+

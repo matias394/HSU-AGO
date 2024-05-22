@@ -91,4 +91,16 @@ urlpatterns = [
     path('configuracion/vacantes/editar/<pk>', login_required(VacantesUpdateView.as_view()), name='vacantes_editar'),
     path('configuracion/vacantes/eliminar/<pk>', login_required(VacantesDeleteView.as_view()), name='vacantes_eliminar'),
     path('delete-variant/<int:pk>/', delete_variant, name='delete_variant'),
+    # Servicio Local Equipos
+    path('configuracion/sl_equipos/crear', login_required(SLEquiposCreateView.as_view()), name='slequipos_crear'),
+    path('configuracion/sl_equipos/listar', login_required(SLEquiposListView.as_view()), name='slequipos_listar'),
+    path('configuracion/sl_equipos/ver/<pk>', login_required(SLEquiposDetailView.as_view()), name='slequipos_ver'),
+    path('configuracion/sl_equipos/editar/<pk>', login_required(SLEquiposUpdateView.as_view()), name='slequipos_editar'),
+    path('configuracion/sl_equipos/eliminar/<pk>', login_required(SLEquiposDeleteView.as_view()), name='slequipos_eliminar'),
+    # Servicio Local Indices Vulnerabilidad
+    path('configuracion/sl_indicesvulnerabilidad/crear', login_required(SLIndicesVulnerabilidadCreateView.as_view()), name='slindicesvulnerabilidad_crear'),
+    path('configuracion/sl_indicesvulnerabilidad/listar', login_required(SLIndicesVulnerabilidadListView.as_view()), name='slindicesvulnerabilidad_listar'),
+    path('configuracion/sl_indicesvulnerabilidad/ver/<pk>', login_required(SLIndicesVulnerabilidadDetailView.as_view()), name='slindicesvulnerabilidad_ver'),
+    path('configuracion/sl_indicesvulnerabilidad/editar/<pk>', login_required(SLIndicesVulnerabilidadUpdateView.as_view()), name='slindicesvulnerabilidad_editar'),
+    path('configuracion/sl_indicesvulnerabilidad/eliminar/<pk>', login_required(SLIndicesVulnerabilidadDeleteView.as_view()), name='slindicesvulnerabilidad_eliminar'),
 ]

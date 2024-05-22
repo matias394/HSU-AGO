@@ -1,6 +1,6 @@
 from django import forms
 from .validators import MaxSizeFileValidator
-
+from django.conf import settings
 from .models import *
 
 
@@ -74,9 +74,9 @@ class CDIF_PreadmisionesForm (forms.ModelForm):
             'fk_legajo_3':'',
             'fk_legajo_4':'',
             'fk_legajo_5':'',
-            'centro_postula':'',
-            'sala_postula':'',
-            'turno_postula':'',
+            'centro_postula':'Centro al que postula',
+            'sala_postula':'Sala a la que postula',
+            'turno_postula':'Turno al que postula',
         }
 
 class criterios_IVI (forms.ModelForm):
@@ -121,8 +121,15 @@ class CDIF_VacantesOtorgadasForm (forms.ModelForm):
             'motivo':'Motivo principal',
             'detalles':'Detalles',
         }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Filtra las opciones del campo criterio_modificable aquí
+        self.fields['fk_organismo'].queryset = Vacantes.objects.filter(fk_programa=settings.PROG_CDIF)
 
 class CDIF_IntervencionesForm (forms.ModelForm):
+        
     class Meta:
         model = CDIF_Intervenciones
         fields = '__all__'
@@ -141,7 +148,7 @@ class CDIF_IntervencionesForm (forms.ModelForm):
         super().__init__(*args, **kwargs)
         
         # Filtra las opciones del campo criterio_modificable aquí
-        self.fields['criterio_modificable'].queryset = Criterios_IVI.objects.filter(modificable = "SI")
+        self.fields['criterio_modificable'].queryset = Criterios_IVI.objects.filter(modificable__icontains = "si")
 
 class CDIF_OpcionesResponsablesForm (forms.ModelForm):
     class Meta:
