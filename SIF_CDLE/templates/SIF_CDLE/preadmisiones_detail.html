@@ -101,7 +101,7 @@ CDLE Pre-admisiones
             <dd class="col-sm-5 mb-2">Nombre</dd>
             <dt class="col-sm-7 mb-2"><a href="{% url 'legajos_ver' legajo.fk_legajo.id %}" title="Ver legajo"> {{legajo}}</a> </dt>
             <dd class="col-sm-5 mb-2">DNI</dd>
-            <dt class="col-sm-7 mb-2">{{legajo.fk_legajo.documento}}</dt>
+            <dt class="col-sm-7 mb-2">{{legajo.fk_legajo.documento|default_if_none:'Sin Documento'}}</dt>
             <dd class="col-sm-5 mb-2">Fecha de nacimiento</dd>
             <dt class="col-sm-7 mb-2">{{legajo.fk_legajo.fecha_nacimiento|date:'d/m/Y'}}</dt>
             <dd class="col-sm-5 mb-2">Sexo</dd>
@@ -117,7 +117,10 @@ CDLE Pre-admisiones
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
           <h3 class="card-title">Detalle índice de ingreso</h3>
-          <div class="card-tools">
+          <div class="card-tools d-inline">
+            {% if resultado %}
+            <a href="{% url 'CDLE_indiceingreso_ver' object.pk %}" class="ml-3 mr-2">Ver detalles</a>
+            {% endif %}
             <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
               <i class="fas fa-minus"></i>
             </button>
@@ -147,34 +150,37 @@ CDLE Pre-admisiones
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
           <h3 class="card-title">Detalle IVI de ingreso</h3>
-          <div class="card-tools d-inline">
+          <div class="card-tools">
+            {% if resultado %}
+            <a href="{% url 'CDLE_indiceivi_ver' object.pk %}" class="ml-3 mr-2">Ver detalle</a>
+            {% endif %}
             <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
               <i class="fas fa-minus"></i>
             </button>
           </div>
         </div>
         <div class="card-body p-2">
-          <ul class="products-list product-list-in-card pl-2 pr-2">
-            {% if resultado %}
+          {% if resultado %}
+          <dl class="row mb-0">
+            <dd class="col-sm-5 mb-2">Puntaje</dd>
+            <dt class="col-sm-7 mb-2"><span class="badge badge-warning">{{puntaje.total|default:"0"}}</span></dt>
+            
             {% for r in resultado %}
-            <li class="item p-1">
-              <a href="javascript:void(0)">
-                <div class="product-img h4 p-0">
-                  <span class="badge badge-success float-center p-3">{{r.total}}</span>
-                </div>
-                <div class="product-info">
-                  <span class="product-title">IVI</span>
-                  <span class="product-description">
-                    {{r.programa}} | {{ r.creado|date:"d/m/Y" }}
-                  </span>
-                </div>
-              </a>
-            </li>
+            <dd class="col-sm-5 mb-2">Fecha de solicitud</dd>
+            <dt class="col-sm-7 mb-2">{{ r.creado|date:"d/m/Y" }}</dt>
             {% endfor %}
-            {% else %}
-            <h6>Sin índices.</h6>
-            {% endif %}
-          </ul>          
+            <dd class="col-sm-5 mb-2">Puntaje maximo posible</dd>
+            <dt class="col-sm-7 mb-2">{{maximo}}</dt>
+            <dd class="col-sm-5 mb-2">Criterios presentes</dd>
+            <dt class="col-sm-7 mb-2">{{cantidad}}</dt>
+            <dd class="col-sm-5 mb-2">Criterios modificables</dd>
+            <dt class="col-sm-7 mb-2">{{modificables}}</dt>
+            <dd class="col-sm-5 mb-2">Puntaje modificable</dd>
+            <dt class="col-sm-7 mb-2">{{mod_puntaje.total|default:"0"}}</dt>
+          </dl>
+          {% else %}
+          <h6>Sin índices.</h6>
+          {% endif %}         
         </div>
 
       </div>
