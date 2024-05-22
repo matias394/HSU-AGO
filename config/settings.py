@@ -1,4 +1,3 @@
-import environ
 import os
 import logging
 from logging.handlers import TimedRotatingFileHandler
@@ -7,10 +6,6 @@ from pathlib import Path
 from django.contrib.messages import constants as messages
 from .validators import UppercaseValidator, LowercaseValidator
 
-#Levantar variables de entorno desde .env
-env = environ.Env()
-env.read_env(env.str('ENV_PATH', '.env'))
-
 # Obtener la ruta del directorio actual (donde se encuentra este script)
 current_directory = os.path.dirname(os.path.abspath(__file__))
 
@@ -18,7 +13,7 @@ current_directory = os.path.dirname(os.path.abspath(__file__))
 project_directory = os.path.abspath(os.path.join(current_directory, '..'))
 
 print(f"La ruta del proyecto es: {project_directory}")
-print('Ejecutando proyecto en entorno: '+env('DJANGO_ENV'))
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,6 +27,11 @@ os.makedirs(log_dir, exist_ok=True)
 # Nombre del archivo de registro basado en el mes actual
 current_month = datetime.now().strftime('%Y-%m')
 log_file = os.path.join(log_dir, f'app_{current_month}.log')
+
+
+#Levantar variables de entorno desde .env
+print('Ejecutando proyecto en entorno: '+ os.getenv('DJANGO_ENV'))
+
 
 # Configuración de logging
 logging.basicConfig(
@@ -64,9 +64,9 @@ LOGGING = {
 SECRET_KEY = 'django-insecure-nkd=f=s!(abn(-tan&ceplfpumy5#j$6v$hl_=5d@q)dni4477'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True if env('DJANGO_ENV') != 'produccion' else False
+DEBUG = True if os.getenv('DJANGO_ENV') != 'produccion' else False
 
-ALLOWED_HOSTS = ['*'] if env('DJANGO_ENV') != 'produccion' else env('SERVERHOST_URL')
+ALLOWED_HOSTS = ['*'] if os.getenv('DJANGO_ENV') != 'produccion' else os.getenv('SERVERHOST_URL')
 
 
 # Application definition
@@ -148,14 +148,14 @@ DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.sqlite3',
        'NAME': BASE_DIR / 'db.sqlite3',
-    } if env('DJANGO_ENV') != 'produccion' 
+    } if os.getenv('DJANGO_ENV') != 'produccion' 
     else {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': env('DATABASE_NAME'),
-        'USER': env('DATABASE_USER'),
-        'PASSWORD': env('DATABASE_PASSWORD'),
-        'HOST': env('DATABASE_HOST'),
-        'PORT': env('DATABASE_PORT'),
+        'NAME': os.getenv('DATABASE_NAME'),
+        'USER': os.getenv('DATABASE_USER'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        'HOST': os.getenv('DATABASE_HOST'),
+        'PORT': os.getenv('DATABASE_PORT'),
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             'charset': 'utf8mb4',
