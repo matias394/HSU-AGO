@@ -758,7 +758,13 @@ class MILDPreAdmisiones3DetailView(PermisosMixin, DetailView):
         criterio_ingreso = MILD_IndiceIngreso.objects.filter(fk_preadmi_id=pk, tipo="Ingreso")
         foto_ivi = MILD_Foto_IVI.objects.filter(fk_preadmi_id= pk, tipo="Ingreso").first()
         foto_ingreso = MILD_Foto_Ingreso.objects.filter(fk_preadmi_id= pk, tipo="Ingreso").first()
+        ivi = MILD_IndiceIVI.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
+        ingreso = MILD_IndiceIngreso.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
+        resultado = ivi.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ivi__puntaje')).order_by('-creado')
+        resultado_ingreso = ingreso.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ingreso__puntaje')).order_by('-creado')
 
+        context["ivi"] = ivi
+        context["ingreso"] = ingreso
         context["legajo"] = legajo
         context["familia"] = familia
         context["foto_ivi"] = foto_ivi
@@ -772,6 +778,10 @@ class MILDPreAdmisiones3DetailView(PermisosMixin, DetailView):
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
         context['maximo_ingreso'] = foto_ingreso.puntaje_max
+        context["resultado"] = resultado
+        context["resultado_ingreso"] = resultado_ingreso
+        context["legajo"] = legajo
+        context["familia"] = familia
         context['criterios_total'] = criterio_ingreso.count()
         context["cant_sanitarios"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='Criterios sanitarios para el ingreso').count()
         context["cant_sociales"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='Criterios sociales para el ingreso').count() 
