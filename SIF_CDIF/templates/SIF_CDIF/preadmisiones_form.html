@@ -943,32 +943,35 @@
     (function () {
         'use strict';
         window.addEventListener('load', function () {
-          // Get the forms we want to add validation styles to
-          var forms = document.getElementsByClassName('needs-validation');
-          // Loop over them and prevent submission
-          var validation = Array.prototype.filter.call(forms, function (form) {
-            form.addEventListener('submit', function (event) {
-              var invalidFields = form.querySelectorAll(':invalid');
-              if (invalidFields.length > 0) {
-                // Si hay campos inválidos, detener la propagación del evento
-                event.preventDefault();
-                event.stopPropagation();
-      
-                // Iterar sobre los campos inválidos y agregar mensajes de obligatoriedad
-                invalidFields.forEach(function (field) {
-                  if (field.hasAttribute('required')) {
-                    // Agregar un mensaje de obligatoriedad para los campos requeridos
-                    var errorMessage = document.createElement('div');
-                    errorMessage.className = 'invalid-feedback';
-                    errorMessage.innerHTML = 'Este campo es obligatorio.';
-                    field.parentNode.appendChild(errorMessage);
-                  }
-                });
-              }
-              form.classList.add('was-validated');
-            }, false);
-          });
+            // Get the forms we want to add validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    var invalidFields = form.querySelectorAll(':invalid');
+                    if (invalidFields.length > 0) {
+                        // Si hay campos inválidos, detener la propagación del evento
+                        event.preventDefault();
+                        event.stopPropagation();
+          
+                        // Iterar sobre los campos inválidos y agregar mensajes de obligatoriedad
+                        invalidFields.forEach(function (field) {
+                            if (field.hasAttribute('required')) {
+                                // Verificar si el mensaje de error ya existe
+                                if (!field.nextElementSibling || !field.nextElementSibling.classList.contains('invalid-feedback')) {
+                                    // Agregar un mensaje de obligatoriedad para los campos requeridos
+                                    var errorMessage = document.createElement('div');
+                                    errorMessage.className = 'invalid-feedback';
+                                    errorMessage.innerHTML = 'Este campo es obligatorio.';
+                                    field.parentNode.appendChild(errorMessage);
+                                }
+                            }
+                        });
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
         }, false);
-      })();
-</script> 
+    })();
+</script>
 {% endblock %}
