@@ -51,6 +51,7 @@ class Usuarios(models.Model):
             ("programa_1000D", "1000D"),
             ("programa_SL", "SL"),
             ("programa_MA", "MA"),
+            ("programa_UMI", "UMI"),
             ("programa_Reporte", "Reporte"),
             ("programa_Administracion", "Administración"),
             ("programa_Legajo", "Legajo"),
