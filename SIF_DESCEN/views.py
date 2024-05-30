@@ -501,10 +501,10 @@ class DESCENIndiceIviUpdateView (PermisosMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         pk=self.kwargs["pk"]
         preadmi = DESCEN_PreAdmision.objects.filter(pk=pk).first()
-        cdif_foto = DESCEN_Foto_IVI.objects.filter(fk_preadmi_id=pk).first()
-        clave = cdif_foto.clave
+        descen_foto = DESCEN_Foto_IVI.objects.filter(fk_preadmi_id=pk).first()
+        clave = descen_foto.clave
         indices_ivi = DESCEN_IndiceIVI.objects.filter(clave=clave)
-        #cdif_foto.delete()
+        #descen_foto.delete()
         indices_ivi.delete()
         nombres_campos = request.POST.keys()
         puntaje_maximo = Criterios_IVI.objects.aggregate(total=Sum('puntaje'))['total']
