@@ -538,6 +538,7 @@ class CDLEIndiceIngresoDetailView(PermisosMixin, DetailView):
         context["cant_sociales"] = criterio.filter(fk_criterios_ingreso__tipo='Criterios sociales para el ingreso').count()
         context["mod_puntaje"] = criterio.filter(fk_criterios_ingreso__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ingreso__tipo='Ajustes').count()
+        context['fechaActual'] = date.today()
         #context['maximo'] = foto_ingreso.puntaje_max
        
         return context
@@ -745,6 +746,7 @@ class CDLEIndiceIviDetailView(PermisosMixin, DetailView):
         context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
+        context['fechaActual'] = date.today()
         return context
     
 class CDLEPreAdmisiones2DetailView(PermisosMixin, DetailView):

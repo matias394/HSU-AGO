@@ -90,7 +90,7 @@ Pre-admisiones
             <dd class="col-sm-5 mb-2">Nombre</dd>
             <dt class="col-sm-7 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_id %}" title="Ver legajo">{{legajo}}</a> </dt>
             <dd class="col-sm-5 mb-2">DNI</dd>
-            <dt class="col-sm-7 mb-2">{{object.fk_legajo.documento}}</dt>
+            <dt class="col-sm-7 mb-2">{{legajo.fk_legajo.documento|default_if_none:'Sin Documento'}}</dt>
             <dd class="col-sm-5 mb-2">Fecha de nacimiento</dd>
             <dt class="col-sm-7 mb-2">{{object.fk_legajo.fecha_nacimiento|date:'d/m/Y'}}</dt>
             <dd class="col-sm-5 mb-2">Sexo</dd>
