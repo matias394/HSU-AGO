@@ -230,6 +230,7 @@ class VacantesForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['fk_programa'].label = "Programa"
         self.fields['fk_organismo'].label = "Organismo"
+        self.fields['tipo_vacante'].label = "Tipo de vacante"
     class Meta:
         model = Vacantes
         exclude = ()
@@ -241,6 +242,7 @@ class VacantesForm(forms.ModelForm):
                 }
             ),
             'estado': forms.Select(choices=[(True, 'Activo'), (False, 'Inactivo')]),
+            'tipo_vacante': forms.Select(choices=CHOICE_TIPO_VACANTE),
         }
 
         
