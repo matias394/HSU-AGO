@@ -117,4 +117,8 @@ CHOICE_CRITERIO_ALERTA=[
     ('Precaución', 'Precaución'),
 ]
 
+CHOICE_TIPO_VACANTE=[
+    ('Generica', 'Generica'),
+    ('Stock', 'Stock'),
+]
 
