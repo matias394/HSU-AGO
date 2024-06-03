@@ -433,7 +433,7 @@ class Vacantes(models.Model):
         default=0,verbose_name = 'Turno Tarde',
     )
     estado = models.BooleanField(default=True)
-
+    tipo_vacante = models.CharField(default='Generica', max_length=20, choices=CHOICE_TIPO_VACANTE)
 
     def __str__(self):
         return self.nombre
@@ -448,6 +448,28 @@ class Vacantes(models.Model):
 
     def get_absolute_url(self):
         return reverse('vacantes_ver', kwargs={'pk': self.pk})
+
+class StockVacante(models.Model):
+    nombre = models.CharField(max_length=100)
+    cupo = models.IntegerField(null=True, blank=True)
+    observaciones = models.CharField(max_length=300, null=True, blank=True)
+    fk_vacante = models.ForeignKey(Vacantes,on_delete=models.CASCADE, related_name='stockvacantes')
+
+    def __str__(self):
+        return self.nombre
+
+    def clean(self):
+        self.nombre = self.nombre.capitalize()
+
+    class Meta:
+        ordering = ['nombre']
+        verbose_name = 'CupoVancante'
+        verbose_name_plural = "CupoVancantes"
+
+    def get_absolute_url(self):
+        return reverse('cupos_vacantes_ver', kwargs={'pk': self.pk})
+    
+vacante = Vacantes
 
 
 # endregion ---------------------FIN INDICES DE VULNERABILIDAD---------------------------------------------------
