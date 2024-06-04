@@ -245,6 +245,23 @@ class VacantesForm(forms.ModelForm):
             'tipo_vacante': forms.Select(choices=CHOICE_TIPO_VACANTE),
         }
 
+class StockVacantesForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['nombre'].label = "Nombre"
+        self.fields['cupo'].label = "Cupo Maximo"
+        self.fields['observaciones'].label = "Descripcion"
+    class Meta:
+        model = Vacantes
+        exclude = ()
+        widgets = {
+            'observaciones': forms.Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'rows': 3,
+                }
+            ),
+        }
         
 class IndicesForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
