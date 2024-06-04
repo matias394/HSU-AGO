@@ -4,14 +4,14 @@
 {% block titulo-pagina %}Vacantes{% endblock %};
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right">
-  <li class="breadcrumb-item">Configuraciones </li>
-  <li class="breadcrumb-item"><a href="{% url 'vacantes_listar' %}">Vacantes</a></li>
-  <li class="breadcrumb-item active">
-    {%if request.resolver_match.url_name == "vacantes_editar" %}
-    Editar
-    {% else %}
-    Agregar
-    {% endif %}</li>
+    <li class="breadcrumb-item">Configuraciones </li>
+    <li class="breadcrumb-item"><a href="{% url 'vacantes_listar' %}">Vacantes</a></li>
+    <li class="breadcrumb-item active">
+        {%if request.resolver_match.url_name == "vacantes_editar" %}
+        Editar
+        {% else %}
+        Agregar
+        {% endif %}</li>
 </ol>
 {% endblock %};
 {% load crispy_forms_tags %}
@@ -20,138 +20,232 @@
 
 
 <div class="row">
-  <div class="col">
-    <form class="needs-validation" novalidate method="POST">
-      <!-- Security token -->
-      {% csrf_token %}
-      <div class="card card-primary card-outline">
-        <div class="card-header">
-          <h3 class="card-title">
-            {%if request.resolver_match.url_name == "vacantes_editar" %} 
-            Editar
-            {% else %}
-            Agregar
-            {% endif %}
-            Vacante
-          </h3>
-        </div>
-        <div class="card-body">
-          <div class="row">
+    <div class="col">
+        <form class="needs-validation" novalidate method="POST">
+            <!-- Security token -->
+            {% csrf_token %}
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        {%if request.resolver_match.url_name == "vacantes_editar" %}
+                        Editar
+                        {% else %}
+                        Agregar
+                        {% endif %}
+                        Vacante
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
 
-            <div class="col-12">
-              <div class="form-group">
-                {{form.nombre| as_crispy_field}}
-              </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                {{form.nombre| as_crispy_field}}
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-group">
+                                {{form.fk_programa| as_crispy_field}}
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-group">
+                                {{form.fk_organismo| as_crispy_field}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            <div class="form-group mt-4 mr-5 text-left h6 font-weight-bold">
+                                Bebes:
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="form-group">
+                                {{form.manianabb| as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="form-group">
+                                {{form.tardebb| as_crispy_field}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            <div class="form-group  mt-4 mr-5 text-left h6 font-weight-bold">
+                                2 años:
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="form-group">
+                                {{form.maniana2| as_crispy_field}}
+                            </div>
+                        </div>
+
+                        <div class="col-5">
+                            <div class="form-group">
+                                {{form.tarde2| as_crispy_field}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            <div class="form-group  mt-4 mr-5 text-left h6 font-weight-bold">
+                                3 años:
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="form-group">
+                                {{form.maniana3| as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="form-group">
+                                {{form.tarde3| as_crispy_field}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            <div class="form-group  mt-4 mr-5 text-left h6 font-weight-bold">
+                                General:
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="form-group">
+                                {{form.maniana4| as_crispy_field}}
+                            </div>
+                        </div>
+
+                        <div class="col-5">
+                            <div class="form-group">
+                                {{form.tarde4| as_crispy_field}}
+                            </div>
+                        </div>
+
+                        <div class="col-5">
+                            <div class="form-group">
+                                {{form.tipo_vacante| as_crispy_field}}
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                {{form.observaciones| as_crispy_field}}
+                            </div>
+                        </div>
+
+                        <div class="col-12 {%if request.resolver_match.url_name != 'vacantes_editar' %}d-none{%endif%}">
+                            <div class="form-group">
+                                {{form.estado| as_crispy_field}}
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="card-header">
+                    <h3 class="card-title">
+                        Cupos de la vacante
+                    </h3>
+                </div>
+
+                <div class="row ">
+                    <div class="col-12 p-4">
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalcupo">
+                            Agregar nuevo cupo
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="modalcupo" tabindex="-1" aria-labelledby="modalCupo"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalCupo">Agregar nuevo cupo</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        
+                                        <form>
+                                            <label for="nombre_cupo">Nombre</label>
+                                            <input id="nombre_cupo" name="nombre_cupo" type="text">
+
+                                        </form>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <table
+                            class="table table-bordered table-striped projects {%if perms.Usuarios.rol_admin or perms.Usuarios.rol_consultante %} tabladt {%endif%}">
+
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Secretaría</th>
+                                    <th>Descripción</th>
+                                    <th>Estado</th>
+                                    <th style="width: 15%" class="notexport">
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for o in object_list %}
+                                <tr>
+                                    <td><a href="{% url 'subsecretarias_ver' o.id %}"
+                                            class="font-weight-bold">{{o.nombre}}</a></td>
+                                    <td> {{o.fk_secretaria |default_if_none:"-" }}</td>
+                                    <td> {{o.observaciones |default_if_none:"-"|truncatechars:100 }}</td>
+                                    <td>
+                                        {% if o.estado %}
+                                        <span class="text-success font-weight-bold">Activo</span>
+                                        {% else %}
+                                        <span class="text-danger font-weight-bold">Inactivo</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="project-actions text-right">
+                                        {%if perms.Usuarios.rol_admin%}
+                                        <div class="btn-group" role="group">
+                                            <a href="{% url 'subsecretarias_ver' o.id %}"
+                                                class="btn btn-primary btn-sm ver">Ver</a>
+                                            <a href="{% url 'subsecretarias_editar' o.id %}"
+                                                class="btn btn-primary btn-sm editar">Editar</a>
+                                            <a href="{% url 'subsecretarias_eliminar' o.id %}"
+                                                class="btn btn-danger btn-sm eliminar">Eliminar</a>
+                                        </div>
+                                        {%endif%}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
-            <div class="col-12">
-              <div class="form-group">
-                {{form.fk_programa| as_crispy_field}}
-              </div>
+            <div class="mt-4 mx-2">
+                <button type="submit" class="btn btn-primary mr-1">Confirmar</button>
+                <a href="{% url 'vacantes_listar' %}" class="btn btn-secondary">Cancelar</a>
             </div>
-
-            <div class="col-12">
-              <div class="form-group">
-                {{form.fk_organismo| as_crispy_field}}
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-2">
-              <div class="form-group mt-4 mr-5 text-left h6 font-weight-bold">
-                Bebes:
-              </div>
-            </div>
-            <div class="col-5">
-              <div class="form-group">
-                {{form.manianabb| as_crispy_field}}
-              </div>
-            </div>
-            <div class="col-5">
-              <div class="form-group">
-                {{form.tardebb| as_crispy_field}}
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-2">
-              <div class="form-group  mt-4 mr-5 text-left h6 font-weight-bold">
-                2 años:
-              </div>
-            </div>
-            <div class="col-5">
-              <div class="form-group">
-                {{form.maniana2| as_crispy_field}}
-              </div>
-            </div>
-
-            <div class="col-5">
-              <div class="form-group">
-                {{form.tarde2| as_crispy_field}}
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-2">
-              <div class="form-group  mt-4 mr-5 text-left h6 font-weight-bold">
-                3 años:
-              </div>
-            </div>
-            <div class="col-5">
-              <div class="form-group">
-                {{form.maniana3| as_crispy_field}}
-              </div>
-            </div>
-            <div class="col-5">
-              <div class="form-group">
-                {{form.tarde3| as_crispy_field}}
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-2">
-              <div class="form-group  mt-4 mr-5 text-left h6 font-weight-bold">
-                General:
-              </div>
-            </div>
-            <div class="col-5">
-              <div class="form-group">
-                {{form.maniana4| as_crispy_field}}
-              </div>
-            </div>
-
-            <div class="col-5">
-              <div class="form-group">
-                {{form.tarde4| as_crispy_field}}
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <div class="form-group">
-                {{form.observaciones| as_crispy_field}}
-              </div>
-            </div>
-            
-            <div class="col-12 {%if request.resolver_match.url_name != 'vacantes_editar' %}
-            d-none
-            {%endif%} ">
-							<div class="form-group">
-                {{form.estado| as_crispy_field}}
-							</div>
-						</div> 
-            
-
-          </div>
-        </div>
-      </div>
-
-      <div class="mt-4 mx-2">
-        <button type="submit" class="btn btn-primary mr-1">Confirmar</button>
-        <a href="{% url 'vacantes_listar' %}" class="btn btn-secondary">Cancelar</a>
-      </div>
-    </form>
-  </div>
+        </form>
+    </div>
 </div>
 
 
