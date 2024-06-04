@@ -468,8 +468,6 @@ class StockVacante(models.Model):
 
     def get_absolute_url(self):
         return reverse('cupos_vacantes_ver', kwargs={'pk': self.pk})
-    
-vacante = Vacantes
 
 
 # endregion ---------------------FIN INDICES DE VULNERABILIDAD---------------------------------------------------
