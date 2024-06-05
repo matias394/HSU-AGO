@@ -44,5 +44,8 @@ urlpatterns = [
 
     path('SL/equipos/ver/<pk>', login_required(SL_EquiposDesignadosDetailView.as_view()), name='sl_equipodesignado_ver'),
     path('SL/equipos/listar/', login_required(SL_EquiposDesignadosListView.as_view()), name='sl_equipodesignado_list'),
+
+    path('SL/expediente/ver/<pk>', login_required(SL_ExpedienteDetailView.as_view()), name='SL_expediente_ver'),
+    path('SL/expediente/listar/', login_required(SL_ExpedienteListView.as_view()), name='SL_expediente_listar'),
     ]
 

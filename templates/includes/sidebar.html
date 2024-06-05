@@ -445,10 +445,10 @@
 			</a>
 		</li>
 		<li class="nav-item">
-			<a href="{% url 'SL_admisiones_listar' %}"
-				class="nav-link  {% if 'SL/admisiones' in pagina_actual %}active{% endif %}{% if '/asignado_admisiones' in pagina_actual %}active{% endif %} ">
+			<a href="{% url 'SL_expediente_listar' %}"
+				class="nav-link  {% if 'SL/expediente/listar/' in pagina_actual %}active{% endif %}">
 				<i class="nav-icon fas fa-id-badge"></i>
-				<p>Admisiones</p>
+				<p>Expedientes</p>
 			</a>
 		</li>
 		<li class="nav-item">
@@ -478,23 +478,23 @@
 	<ul class="nav nav-treeview">
 		<li class="nav-item">
 			<a href="{% url 'MA_derivaciones_listar' %}"
-				class="nav-link {% if 'derivaciones' in pagina_actual %}active{% endif %}">
+				class="nav-link {% if 'MA/derivaciones' in pagina_actual %}active{% endif %}">
 				<i class="nav-icon fas fa-inbox"></i>
 				<p>Derivaciones</p>
 			</a>
 		</li>
 		<li class="nav-item">
 			<a href="{% url 'MA_preadmisiones_listar' %}"
-				class="nav-link  {% if 'preadmisiones' in pagina_actual %}active{% endif %}">
+				class="nav-link  {% if 'MA/preadmisiones' in pagina_actual %}active{% endif %}">
 				<i class="nav-icon fas fa-tasks"></i>
 				<p>Pre-admisiones</p>
 			</a>
 		</li>
 		<li class="nav-item">
-			<a href="{% url 'MA_admisiones_listar' %}"
-				class="nav-link  {% if '/admisiones' in pagina_actual %}active{% endif %}{% if '/asignado_admisiones' in pagina_actual %}active{% endif %} ">
+			<a href="{% url 'MA_expediente_listar' %}"
+				class="nav-link  {% if 'MA/expediente' in pagina_actual %}active{% endif %}">
 				<i class="nav-icon fas fa-id-badge"></i>
-				<p>Admisiones</p>
+				<p>Expedientes</p>
 			</a>
 		</li>
 		<li class="nav-item">
@@ -504,13 +504,6 @@
 				<p>Intervenciones</p>
 			</a>
 		</li>
-		<!--<li class="nav-item">
-			<a href="{% url 'intervenciones_list' %}"
-				class="nav-link {% if 'intervenciones_list' in pagina_actual %}active{% endif %}">
-				<i class="nav-icon fas fa-clipboard"></i>
-				<p>Reportes CDIF</p>
-			</a>
-		</li>-->
 	</ul>
 </li>
 {%endif%}

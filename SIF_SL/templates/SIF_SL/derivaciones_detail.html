@@ -32,7 +32,7 @@ Derivaciones
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     {% if request.user.id == object.fk_usuario.id and object.estado == 'Pendiente' %}
-    <a href="{% url 'SL_derivaciones_editar' object.id %}" class="btn btn-primary mr-1">Editar</a>
+    <a href="{% url 'legajosderivaciones_editar' object.id %}" class="btn btn-primary mr-1">Editar</a>
     {%endif%}
     {% if request.user.id == object.fk_usuario.id and object.estado == 'Pendiente' %}
     <a href="{% url 'legajosderivaciones_eliminar' object.id %}" class="btn btn-danger mr-1">Eliminar</a>
@@ -79,8 +79,10 @@ Derivaciones
             <dd class="col-sm-3 mb-2 mt-2">Archivos adjuntos</dd>
             <dt class="col-sm-9 mb-2 mt-2">
               <ul class="list-unstyled mb-1">
-                {% if object.archivos %}
-                <li><a href="{{object.archivos.url}}" target="_blank">{{object.archivos|cut:'legajos/archivos/'}}</a></li>
+                {% if archivos %}
+                {% for a in archivos %}
+                <li><a href="{{a.archivo.url}}" target="_blank">{{a.archivo|cut:'legajos/archivos/'}}</a></li>
+                {% endfor %}
                 {% else %}
                 <li>-</li>
                 {% endif %}

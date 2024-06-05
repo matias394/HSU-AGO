@@ -1,0 +1,427 @@
+{% extends "includes/base.html" %};
+{% load static %};
+
+{% block title %}
+Servicio Local Expediente detalle
+{%endblock %};
+
+{% block titulo-pagina %}
+Servicio Local Expediente
+{% endblock %};
+
+{% block breadcrumb %}
+<ol class="breadcrumb float-sm-right">
+  <li class="breadcrumb-item"><a href="{% url 'SL_expediente_listar'%}"
+      title="Ver historial de Pre-admisiones">Expedientes</a></li>
+  <li class="breadcrumb-item ">{{object.expediente}}</li>
+  <li class="breadcrumb-item active">Detalle</li>
+</ol>
+{% endblock %};
+
+{% block menu-adicional %}
+{% endblock %};
+
+{% block content %}
+<!-- card-info -->
+<div class="row">
+  <!-- botones -->
+  <div class="col-12 my-3 d-print-none">
+    <div class="btn-toolbar" role="toolbar">
+    {% if preadmi.estado == 'En proceso' %}
+    <a href="{% url 'SL_indicevulneracion_crear' preadmi.pk %}" class="btn btn-primary mr-1">Agregar indice vulneración</a>
+    {% comment %}<a href="{% url 'SL_preadmisiones_editar' preadmi.pk %}" class="btn btn-secondary mr-1">Editar</a>{% endcomment %}
+    <button type="button" class="btn btn-secondary mr-1" data-toggle="modal" data-target="#modal-documentacion">Agregar documentación</button>
+    <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
+    {% comment %}<a href="{% url 'SL_preadmisiones_eliminar' object.pk %}" class="btn btn-danger mr-1 mt-2 mt-sm-0">Eliminar</a>{% endcomment %}
+    {% endif %}
+    {% if preadmi.estado == 'A efectivizar' %}
+    <a href="{% url 'SL_designarequipo_crear' preadmi.pk %}" class="btn btn-primary mr-1">Designar equipo</a>
+    <a href="{% url 'SL_indicevulneracion_editar' preadmi.pk %}" class="btn btn-secondary mr-1">Editar indice vulneración</a>
+    <button type="button" class="btn btn-secondary mr-1" data-toggle="modal" data-target="#modal-documentacion">Agregar documentación</button>
+    <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
+    {% comment %}<a href="{% url 'SL_preadmisiones_eliminar' object.pk %}" class="btn btn-danger mr-1 mt-2 mt-sm-0">Eliminar</a>{% endcomment %}
+    {% endif %}
+    {% if preadmi.estado == 'Finalizada' %}
+    
+    {% if object.estado != 'Finalizada' %}
+    <a href="{% url 'SL_intervenciones_crear' object.id %}" class="btn btn-primary mr-1">Agregar intervenciones</a>
+    <form method="POST" action="#" class="d-inline">
+      <button type="submit" name="derivacion_ma" class="btn btn-primary mr-1">Derivar a Medias de abrigo</button>
+      {% csrf_token %}
+    </form>
+    <a href="{% url 'SL_designarequipo_editar' equipo.id %}" class="btn btn-secondary mr-1">Cambiar Equipo</a>
+    {% endif %}
+    
+    <button type="button" class="btn btn-secondary mr-1" data-toggle="modal" data-target="#modal-documentacion">Agregar documentación</button>
+    <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
+    {% endif %}
+    </div>
+  </div>
+  <!-- ./botones -->
+
+  <div class="row p-0 m-0 " id="seleccion">
+
+
+    <!-- Datos de Admisión -->
+    <div class="col-sm-4 pb-3">
+      <div class="card card-outline card-primary h-100 mb-0">
+        <div class="card-header">
+          <h3 class="card-title">Detalle Pre-Admisión</h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body pb-1">
+          <dl class="row mb-0">
+            <dd class="col-sm-5 mb-2">Estado</dd>
+            <dt class="col-sm-7 mb-2"><span class="badge {% if preadmi.estado == 'Finalizada' %}badge-success{% else %}badge-warning{% endif %}">{{ preadmi.estado }}</span></dt>
+            <dd class="col-sm-5 mb-2">Fecha de solicitud</dd>
+            <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
+            <dd class="col-sm-5 mb-2">Solicitud creada por</dd>
+            <dt class="col-sm-7 mb-2">{{object.creado_por}}</dt>
+            <dd class="col-sm-5 mb-2">Organismo</dd>
+            <dt class="col-sm-7 mb-2">{{preadmi.organismo}}</dt>
+            <dd class="col-sm-5 mb-2">Motivo de ingreso</dd>
+            <dt class="col-sm-7 mb-2">{{preadmi.motivo_ingreso}}</dt>
+            <dd class="col-sm-5 mb-2">Conocimiento de la situación</dd>
+            <dt class="col-sm-7 mb-2">{{preadmi.conocimiento_situacion}}</dt>
+            <dd class="col-sm-5 mb-2">Referentes</dd>
+            <dt class="col-sm-7 mb-2"><ul>{% for r in referentes %}{% if r.fk_legajo_referente != None %}<li>{{ r.fk_legajo_referente }}</li>{% endif %}{% if r.fk_externo != None %}<li>{{ r.fk_externo }}</li>{% endif %}{% endfor %}</ul></dt>
+            {% if object.modificado_por %}
+            <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Modificado por {{object.modificado_por}} - {{object.modificado|date:'d/m/Y'}}</dd>
+            {% endif %}
+          </dl>
+        </div>
+      </div>
+    </div>
+    <!-- /  -->
+
+    <!-- Datos grupo familiar -->
+    <div class="col-sm-4 pb-3">
+      <div class="card card-outline card-primary h-100 mb-0">
+        <div class="card-header">
+          <h3 class="card-title">Grupo Familiar</h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+              <ul class="users-list">
+                  <li><a class="users-list-name" href="{% url 'legajos_ver' preadmi.fk_derivacion.fk_legajo.id %}">
+                      {% if preadmi.fk_derivacion.fk_legajo.foto %}
+                      <img src="{{preadmi.fk_derivacion.fk_legajo.foto.url}}" alt="User Image" width="60px">
+                      {%else%}
+                      <img src="{% static 'custom/img/default.png'  %}" alt="User Image" width="60px">
+                      {%endif%}                        
+                      <span class="users-list-date">{{preadmi.fk_derivacion.fk_legajo}}</span>
+                  </a>
+                  </li>
+                  {% for f in familia %}
+                  <li>
+                      <a class="users-list-name" href="{% url 'legajos_ver' f.fk_legajo_familiar_id %}">
+                          {% if f.fk_legajo_familiar.foto %}
+                          <img src="{{f.fk_legajo_familiar.foto.url}}" alt="User Image" width="60px">
+                          {%else%}
+                          <img src="{% static 'custom/img/default.png'  %}" alt="User Image" width="60px">
+                          {%endif%}                            
+                          <span class="users-list-date">{{f.fk_legajo_familiar}}</span>
+                      </a>
+                  </li>
+                  {% empty %}
+                  {% endfor %}
+              </ul>
+        </div>
+      </div>
+    </div>
+    <!-- /  -->
+
+    <div class="col-sm-4 pb-3">
+      <div class="card card-outline card-primary h-50 mb-0">
+        <div class="card-header">
+          <h3 class="card-title">Equipo designado</h3>
+          <div class="card-tools d-inline">
+            <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body p-2">
+          <ul class="products-list product-list-in-card pl-2 pr-2">
+            {% if equipo %}
+            <div class="callout">
+              <h5> {{equipo.fk_equipo}}</h5>
+              </div>
+            {% else %}
+            <h6>Sin equipo designado.</h6>
+            {% endif %}
+          </ul>          
+        </div>
+      </div>
+      <div class="card card-outline card-primary h-50 mb-0">
+        <div class="card-header">
+          <h3 class="card-title">Detalle índice vulneracion</h3>
+          <div class="card-tools d-inline">
+            <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body p-2">
+          <ul class="products-list product-list-in-card pl-2 pr-2">
+            {% if resultado.total != None %}
+            <li class="item p-1">
+              <a href="javascript:void(0)">
+                <div class="product-img h4 p-0">
+                  <span class="badge badge-success float-center p-3">{{resultado.total}}</span>
+                </div>
+                <div class="product-info">
+                  <span class="product-title">Total</span>
+                  <span class="product-description">
+                    Indice de vulnerabilidad
+                  </span>
+                </div>
+              </a>
+            </li>
+            {% else %}
+            <h6>Sin índices.</h6>
+            {% endif %}
+          </ul>          
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /  -->
+        <!-- Documentacion -->
+        <div class="col-12">
+          <div class="card card-outline card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Documentación</h3>
+              <div class="card-tools">
+                <ul class="nav nav-pills ml-auto">
+                  <li class="nav-item">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                  </li>
+                  </ul>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="row" id="container-alertas">
+                {% if archivos %}
+                          <ul>{% for a in archivos %}<li><a href="{{ a.archivo.url}}" target="_blank">{{a.archivo|cut:'ServicioLocal/archivos/'}}</a></li>{% endfor %}</ul>
+            {% else %}
+                <div class="col-md-3 col-sm-6 col-12 mb-2">
+                    <h6>Sin archivos</h6>
+                </div>
+            {% endif %}   
+            </div>
+            </div>
+          </div>
+        </div>
+        <!-- ./ -->
+      <!-- Datos Alarmas -->
+      <div class="col-12">
+        <div class="card card-outline card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Alertas</h3>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row" id="container-alertas">
+              {% if legajos_alertas %}
+              {% for a in legajos_alertas %}
+              <div class="col-md-3 col-sm-6 col-12 mb-2">
+                  <div class="callout h-100 pb-0">
+                      <h6 class="font-weight-bold"><i class="fas fa-exclamation-triangle px-1"></i> {{a.fk_alerta}}
+                      </h6>
+                  </div>
+              </div>
+              {% endfor %}
+              {% else %}
+              <div class="col-md-3 col-sm-6 col-12 mb-2">
+                <h6>Sin alertas</h6>
+              </div>
+              {% endif %}   
+          </div>
+          </div>
+        </div>
+      </div>
+      <!-- ./ -->
+      {% if intervenciones %}
+      <!-- Intervenciones -->
+      <div class="col-12">
+        <div class="card card-outline card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Intervenciones</h3>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <table class="table table-striped table-sm">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Usuario</th>
+                  <th>Criterio</th>
+                  <th>Gestión</th>
+                  <th>Acción realizada</th>
+                  <th width="5%" class="notexport"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for i in intervenciones %}
+                <tr>
+                  <td> {{ i.creado|date:'d/m/Y' }} </td>
+                  <td> {{i.creado_por|default_if_none:""}}{{i.modificado_por|default_if_none:""}} </td>
+                  <td> {{i.criterio_modificable}}</td>
+                  <td> {{i.impacto}}</td>
+                  <td> {{i.accion}}</td>
+                  <td class="text-right">
+                    <a href="{% url 'SL_intervencion_editar' i.id %}" class="btn btn-secondary btn-sm">Editar</a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- ./ -->
+      {% endif %}
+
+    <!-- Datos Observaciones de vulneración -->
+    <div class="col-12">
+      <div class="card card-outline card-primary">
+        <div class="card-header">
+          <h3 class="card-title">Observaciones de vulneración</h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          {{preadmi.obs_vulneracion}}
+        </div>
+      </div>
+    </div>
+    <!-- ./ -->
+    <!-- Datos Dinamica familiar -->
+    <div class="col-12">
+      <div class="card card-outline card-primary">
+        <div class="card-header">
+          <h3 class="card-title">Dinamica familiar</h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          {{preadmi.dinamica_familiar}}
+        </div>
+      </div>
+    </div>
+    <!-- ./ -->
+        <!-- Datos Familiares -->
+        {% if grupo_familiar %}
+        <div class="col-12">
+          <div class="card card-outline card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Familiares que integran el expediente.</h3>
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+                {% if grupo_familiar %}
+                <div class="col-12">
+                    <ul class="users-list">
+                        {% for f in grupo_familiar %}
+                        <li>
+                          <a href="{% url 'legajos_ver' f.fk_legajo_familiar_id %}" target="_blank">
+                            {% if f.fk_legajo_familiar.foto %}
+                            <img src="{{f.fk_legajo_familiar.foto.url}}" alt="User Image" width="60px">
+                            {%else%}
+                            <img src="{% static 'custom/img/default.png'  %}" alt="User Image" width="60px">
+                            {%endif%}                        
+                            <span class="users-list-date">{{f.fk_legajo_familiar}}</span>
+                        </li>
+                      </a>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% else %}
+                <div class="card-body bg-light p-0">
+                    <h6 class="text-center text-muted py-3">Sin familiares</h6>
+                </div>
+                {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        <!-- ./ -->
+
+
+<div class="row mt-4 d-print-none">
+  <div class="col-12 mx-2">
+    <div class="form-group  d-flex justify-content-between">
+      <a href="{% url 'SL_preadmisiones_listar' %}" class="btn btn-secondary">Volver</a>
+    </div>
+  </div>
+</div>
+
+<!-- ==============  MODALES ==========-->
+<!-- Agregar documentacion -->
+<div class="modal fade" id="modal-documentacion" tabindex="-1" aria-labelledby="modal-documentacionLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-documentacionLabel">Agregar documentación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="form-group">
+                  <label for="exampleInputFile">Adjuntar archivos</label>
+                  <div class="input-group">
+                      <div class="custom-file">
+                          <input type="file" class="custom-file-input" id="exampleInputFile" multiple
+                              name="archivos" />
+                          <label class="custom-file-label" for="exampleInputFile"></label>
+                      </div>
+                      <div class="input-group-append">
+                          <span class="input-group-text"><i class="fas fa-paperclip"></i></span>
+                      </div>
+                  </div>
+              </div>
+              <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-sm btn-primary" name="agregar_archivos">Agregar</button>
+            </form>
+          </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %};

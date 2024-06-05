@@ -736,8 +736,19 @@ class LegajosDerivacionesUpdateView(PermisosMixin, UpdateView):
     def form_valid(self, form):
         response = super().form_valid(form)
         delete_files = self.request.POST.getlist('delete_files')
-        LegajosDerivacionesArchivos.objects.filter(id__in=delete_files).delete()
+
+        if delete_files:
+            archivos = LegajosDerivacionesArchivos.objects.filter(id__in=delete_files)
+            archivos.delete()
+
+        pk = self.kwargs["pk"]
+        archivos_check = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=pk)
+        if not archivos_check.exists():
+            form.add_error(None, "No hay archivos asociados a este legajo.")
+            return self.form_invalid(form)
+
         return response
+
 
 class LegajosDerivacionesHistorial(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"

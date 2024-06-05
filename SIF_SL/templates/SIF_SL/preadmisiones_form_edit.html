@@ -63,7 +63,7 @@
         <a href="{% url 'SL_derivaciones_listar'%}" title="Ver listado de Pre-admisiones">Pre-admisiones</a>
     </li>
     <li class="breadcrumb-item">
-        <a href="{% url 'legajos_ver' legajo.fk_legajo.id %}" title="Ver legajo">{{legajo.fk_legajo}}</a>
+        <a href="{% url 'legajos_ver' 69 %}" title="Ver legajo">{{legajo.fk_legajo}}</a>
     </li>
     {%if request.resolver_match.url_name == "SL_preadmisiones_editar" %}
     <li class="breadcrumb-item active">Editar</li>
@@ -365,11 +365,11 @@
                                         </div>
                                     {% endif %}
                                     </div>
-                                    {% if archivos_existentes %}
+                                    {% if archivos %}
                                     <div>
                                         <strong>Archivos cargados:</strong>
                                         <ul>
-                                            {% for a in archivos_existentes %}
+                                            {% for a in archivos %}
                                                 <li>
                                                     <a href="{{ a.archivo.url }}" target="_blank">{{a.archivo|cut:'legajos/archivos/'}}</a>
                                                     <label>

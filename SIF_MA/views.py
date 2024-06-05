@@ -13,7 +13,8 @@ import uuid
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.conf import settings
-
+from SIF_SL.models import *
+from datetime import datetime, timedelta
 
 # # Create your views here.
 #derivaciones = LegajosDerivaciones.objects.filter(m2m_programas__nombr__iexact="MA")
@@ -53,18 +54,18 @@ class MADerivacionesBuscarListView(TemplateView, PermisosMixin):
 class MADerivacionesListView(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_MA/derivaciones_bandeja_list.html"
-    queryset = LegajosDerivaciones.objects.filter(fk_programa=settings.PROG_MA)
+    queryset = MA_Derivacion.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super(MADerivacionesListView, self).get_context_data(**kwargs)
 
-        model = LegajosDerivaciones.objects.filter(fk_programa=settings.PROG_MA)
+        model = MA_Derivacion.objects.all()
 
         context["todas"] = model
         context["pendientes"] = model.filter(estado="Pendiente")
         context["aceptadas"] = model.filter(estado="Aceptada")
         context["rechazadas"] = model.filter(estado="Rechazada")
-        context["enviadas"] = model.filter(fk_usuario=self.request.user)
+        context["enviadas"] = model.filter(creado_por=self.request.user.id)
         return context
 
 class MADerivacionesDetailView(PermisosMixin, DetailView):
@@ -76,11 +77,9 @@ class MADerivacionesDetailView(PermisosMixin, DetailView):
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=settings.PROG_MA).first()
-        ivi = MA_IndiceIVI.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
-        resultado = ivi.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ivi__puntaje')).order_by('-creado')
+        archivos = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=pk).all()
         context["pk"] = pk
-        context["ivi"] = ivi
-        context["resultado"] = resultado
+        context["archivos"] = archivos
         return context
 
 class MADerivacionesRechazo(PermisosMixin, CreateView):
@@ -137,86 +136,98 @@ class MADerivacionesUpdateView(PermisosMixin, UpdateView):
         pk = self.kwargs['pk']
         return reverse('MA_derivaciones_ver', kwargs={'pk': pk})
 
-class MAPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin):
+class MAPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_MA/preadmisiones_form.html"
-    model = MA_PreAdmision
-    form_class = MA_PreadmisionesForm
+    form_class = MA_MultiModelForm
     success_message = "Preadmisión creada correctamente"
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
-        legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
-        familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
-        familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
+        legajo = MA_Derivacion.objects.filter(pk=pk).first()
         context["pk"] = pk
         context["legajo"] = legajo
-        context["familia"] = familia
-        context["familia_inversa"] = familia_inversa
         return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.pop('instance', None)  # Eliminamos el argumento 'instance' si está presente
+        return kwargs
 
     def form_valid(self, form):
         pk = self.kwargs["pk"]
-        form.instance.estado = 'En proceso'
-        form.instance.vinculo1 = form.cleaned_data['vinculo1']
-        form.instance.vinculo2 = form.cleaned_data['vinculo2']
-        form.instance.vinculo3 = form.cleaned_data['vinculo3']
-        form.instance.vinculo4 = form.cleaned_data['vinculo4']
-        form.instance.vinculo5 = form.cleaned_data['vinculo5']
-        form.instance.creado_por_id = self.request.user.id
+        fecha_actual = datetime.now()
+        i45 = fecha_actual + timedelta(days=45)
+        i90 = fecha_actual + timedelta(days=90)
+        i135 = fecha_actual + timedelta(days=135)
+        i180 = fecha_actual + timedelta(days=180)
 
-        self.object = form.save()
+        preadmision_data = {
+            'fk_derivacion_id': pk,
+            'fk_legajo': form.cleaned_data['fk_legajo'],
+            'PER': form.cleaned_data['PER'],
+            'juzgado': form.cleaned_data['juzgado'],
+            'REUNA': form.cleaned_data['REUNA'],
+            'familia_abrigadora': form.cleaned_data['familia_abrigadora'],
+            'organismo_municipal': form.cleaned_data['organismo_municipal'],
+            'organismo_zonal': form.cleaned_data['organismo_zonal'],
+            'estado': "En proceso",
+            'creado_por_id' : self.request.user.id,
+            'i45' : i45,
+            'i90' : i90,
+            'i135' : i135,
+            'i180' : i180,
+        }
+        preadmi_instance = MA_PreAdmision.objects.create(**preadmision_data)
 
-        base = LegajosDerivaciones.objects.get(pk=pk)
+        archivos = self.request.FILES.getlist('archivos')
+        for archivo in archivos:
+            preadmi_archivo = MA_Preadmision_Archivos(fk_preadmi=preadmi_instance, archivo=archivo)
+            preadmi_archivo.save()
+
+        base = MA_Derivacion.objects.get(pk=pk)
         base.estado = "Aceptada"
         base.save() 
         
-        #---- Historial--------------
-        legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
-        base = MA_Historial()
-        base.fk_legajo_id = legajo.fk_legajo.id
-        base.fk_legajo_derivacion_id = pk
-        base.fk_preadmi_id = self.object.id
-        base.movimiento = "ACEPTADO A PREADMISION"
-        base.creado_por_id = self.request.user.id
-        base.save()
+        return redirect('MA_expediente_ver', pk=base.pk)
 
-        return HttpResponseRedirect(reverse('MA_preadmisiones_ver', args=[self.object.pk]))
 
-class MAPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin):
+class MAPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin):
     permission_required = "Usuarios.rol_admin"
-    template_name = "SIF_MA/preadmisiones_form.html"
     model = MA_PreAdmision
-    form_class = MA_PreadmisionesForm
-    success_message = "Preadmisión creada correctamente"
+    form_class = MA_MultiModelForm 
+    template_name = 'SIF_MA/preadmisiones_form.html'
+    success_message = "Preadmisión actualizada correctamente"
 
     def get_context_data(self, **kwargs):
-        pk = MA_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
+        pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
-        legajo = LegajosDerivaciones.objects.filter(pk=pk.fk_derivacion_id).first()
-        familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
-        familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
-
-        context["pk"] = pk.fk_derivacion_id
+        legajo = MA_PreAdmision.objects.filter(pk=pk).first()
+        context["pk"] = pk
         context["legajo"] = legajo
-        context["familia"] = familia
-        context["familia_inversa"] = familia_inversa
         return context
 
-    def form_valid(self, form):
-        pk = MA_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
-        form.instance.creado_por_id = pk.creado_por_id
-        form.instance.vinculo1 = form.cleaned_data['vinculo1']
-        form.instance.vinculo2 = form.cleaned_data['vinculo2']
-        form.instance.vinculo3 = form.cleaned_data['vinculo3']
-        form.instance.vinculo4 = form.cleaned_data['vinculo4']
-        form.instance.vinculo5 = form.cleaned_data['vinculo5']
-        form.instance.estado = pk.estado
-        form.instance.modificado_por_id = self.request.user.id
-        self.object = form.save()
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.pop('instance', None) 
+        return kwargs
 
-        return HttpResponseRedirect(reverse('MA_preadmisiones_ver', args=[self.object.pk]))
+    def form_valid(self, form):
+        pk = self.kwargs["pk"]
+
+        preadmi_instance = form.save(commit=False)
+        preadmi_instance.estado = "En proceso"
+        preadmi_instance.creado_por_id = self.request.user.id
+        preadmi_instance.save()
+
+        archivos = self.request.FILES.getlist('archivos')
+        for archivo in archivos:
+            preadmi_archivo = MA_Preadmision_Archivos(fk_preadmi=preadmi_instance, archivo=archivo)
+            preadmi_archivo.save()
+        
+        return redirect('MA_preadmisiones_ver', pk=preadmi_instance.pk)
+
 
 class MAPreAdmisionesDetailView(PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
@@ -227,45 +238,21 @@ class MAPreAdmisionesDetailView(PermisosMixin, DetailView):
         pk = MA_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(pk=pk.fk_derivacion_id).first()
-        familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
-        ivi = MA_IndiceIVI.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
-        ingreso = MA_IndiceIngreso.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
-        resultado = ivi.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ivi__puntaje')).order_by('-creado')
-        resultado_ingreso = ingreso.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ingreso__puntaje')).order_by('-creado')
-        context["ivi"] = ivi
-        context["ingreso"] = ingreso
-        context['criterios_total'] = ingreso.count()
-        context["cant_combinables"] = ingreso.filter(fk_criterios_ingreso__tipo='Criterios combinables para el ingreso').count()
-        context["cant_sociales"] = ingreso.filter(fk_criterios_ingreso__tipo='Criterios sociales para el ingreso').count() 
-        context["autonomos"] = ingreso.filter(fk_criterios_ingreso__tipo='Criteros autónomos de ingreso').all()
-        context["resultado"] = resultado
-        context["resultado_ingreso"] = resultado_ingreso
+        archivos = MA_Preadmision_Archivos.objects.filter(fk_preadmi_id = pk)
+        context["archivos"] = archivos
         context["legajo"] = legajo
-        context["familia"] = familia
         return context
     
     def post(self, request, *args, **kwargs):
         if 'finalizar_preadm' in request.POST:
             # Realiza la actualización del campo aquí
             objeto = self.get_object()
-            objeto.estado = 'Finalizada'
-            objeto.ivi = "NO"
-            objeto.indice_ingreso = "NO"
-            objeto.admitido = "NO"
             objeto.save()
 
-            #---------HISTORIAL---------------------------------
-            pk=self.kwargs["pk"]
-            legajo = MA_PreAdmision.objects.filter(pk=pk).first()
-            base = MA_Historial()
-            base.fk_legajo_id = legajo.fk_legajo.id
-            base.fk_legajo_derivacion_id = legajo.fk_derivacion_id
-            base.fk_preadmi_id = pk
-            base.movimiento = "FINALIZADO PREADMISION"
-            base.creado_por_id = self.request.user.id
-            base.save()
-            # Redirige de nuevo a la vista de detalle actualizada
-            return HttpResponseRedirect(self.request.path_info)
+            admi = MA_Admision(fk_preadmi=objeto)
+            admi.save()
+        
+            return redirect('MA_admisiones_crear', pk=admi.pk)
 
 class MAPreAdmisionesListView(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"
@@ -319,8 +306,6 @@ class MAPreAdmisionesDeleteView(PermisosMixin, DeleteView):
             return redirect("MA_preadmisiones_ver", pk=int(self.object.id))
 
         if self.request.user.id != self.object.creado_por.id:
-            print(self.request.user)
-            print(self.object.creado_por)
             messages.error(
                 self.request,
                 "Solo el usuario que generó esta derivación puede eliminarla.",
@@ -332,468 +317,6 @@ class MAPreAdmisionesDeleteView(PermisosMixin, DeleteView):
             self.object.delete()
             return redirect(self.success_url)
 
-class MACriteriosIngresoCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
-    template_name = "SIF_MA/criterios_ingreso_form.html"
-    model = Criterios_Ingreso
-    form_class = criterios_Ingreso
-
-    def form_valid(self, form):
-        self.object = form.save()
-        return HttpResponseRedirect(reverse('MA_criterios_ingreso_crear'))
-    
-class MAIndiceIngresoCreateView (PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
-    model = Criterios_Ingreso
-    template_name = "SIF_MA/indiceingreso_form.html"
-    form_class = MA_IndiceIngresoForm    
-    
-    def get_context_data(self, **kwargs):
-        pk=self.kwargs["pk"]
-        context = super().get_context_data(**kwargs)
-        object = MA_PreAdmision.objects.filter(pk=pk).first()
-        #object = Legajos.objects.filter(pk=pk).first()
-        criterio = Criterios_Ingreso.objects.all()
-        context["object"] = object
-        context["criterio"] = criterio
-        context['form2'] = MA_IndiceIngresoHistorialForm()
-        return context
-    
-    def post(self, request, *args, **kwargs):
-        pk=self.kwargs["pk"]
-        # Genera una clave única utilizando uuid4 (versión aleatoria)
-        preadmi = MA_PreAdmision.objects.filter(pk=pk).first()
-        clave = str(uuid.uuid4())
-        nombres_campos = request.POST.keys()
-        puntaje_maximo = Criterios_Ingreso.objects.aggregate(total=Sum('puntaje'))['total']
-        total_puntaje = 0
-        historico = HistorialLegajoIndices()
-        for f in nombres_campos:
-            if f.isdigit():
-                criterio_ingreso = Criterios_Ingreso.objects.filter(id=f).first()
-                # Sumar el valor de f al total_puntaje
-                total_puntaje += int(criterio_ingreso.puntaje)
-                base = MA_IndiceIngreso()
-                base.fk_criterios_ingreso_id = f
-                base.fk_legajo_id = preadmi.fk_legajo_id
-                base.fk_preadmi_id = pk
-                base.tipo = "Ingreso"
-                base.presencia = True
-                base.programa = "MA"
-                historico.programa = base.programa
-                base.clave = clave
-                base.save()
-        
-        # total_puntaje contiene la suma de los valores de F
-        foto = MA_Foto_Ingreso()
-        foto.observaciones = request.POST.get('observaciones', '')
-        foto.fk_preadmi_id = pk
-        foto.fk_legajo_id = preadmi.fk_legajo_id
-        foto.puntaje = total_puntaje
-        foto.puntaje_max = puntaje_maximo
-        #foto.crit_modificables = crit_modificables
-        #foto.crit_presentes = crit_presentes
-        foto.tipo = "Ingreso"
-        foto.clave = clave
-        foto.creado_por_id = self.request.user.id
-
-        historico.observaciones = foto.observaciones
-        historico.fk_legajo_id = preadmi.fk_legajo_id
-        historico.puntaje = total_puntaje
-        historico.puntaje_total = total_puntaje
-        historico.puntaje_max = puntaje_maximo
-        historico.tipo = "Ingreso"
-        historico.clave = clave
-
-        historico.save()
-        foto.save()
-
-        preadmi.indice_ingreso = "SI"
-        preadmi.save()
-
-        #---------HISTORIAL---------------------------------
-        pk=self.kwargs["pk"]
-        base = MA_Historial()
-        base.fk_legajo_id = preadmi.fk_legajo.id
-        base.fk_legajo_derivacion_id = preadmi.fk_derivacion_id
-        base.fk_preadmi_id = preadmi.id
-        base.movimiento = "CREACION INDICE INGRESO"
-        base.creado_por_id = self.request.user.id
-        base.save()
-
-        return redirect('MA_indiceingreso_ver', preadmi.id)
-
-class MAIndiceIngresoUpdateView (PermisosMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
-    template_name = "SIF_MA/indiceingreso_edit.html"
-    model = MA_PreAdmision
-    form_class = MA_IndiceIngresoForm
-
-    def get_context_data(self, **kwargs):
-        pk = self.kwargs["pk"]
-        activos = MA_IndiceIngreso.objects.filter(fk_preadmi_id=pk)
-        observaciones = MA_Foto_Ingreso.objects.filter(fk_preadmi_id=pk).first()
-
-        context = super().get_context_data(**kwargs)
-        context["object"] = MA_PreAdmision.objects.filter(pk=pk).first()
-        context["activos"] = activos
-        context["clave"] = observaciones.clave
-        context["observaciones"] = observaciones.observaciones
-        context["criterio"] = Criterios_Ingreso.objects.all()
-        context['form2'] = MA_IndiceIngresoHistorialForm()
-        return context
-    
-    def post(self, request, *args, **kwargs):
-        pk=self.kwargs["pk"]
-        preadmi = MA_PreAdmision.objects.filter(pk=pk).first()
-        MA_foto = MA_Foto_IVI.objects.filter(fk_preadmi_id=pk).first()
-        clave = MA_foto.clave
-        indices_ingreso = MA_IndiceIngreso.objects.filter(clave=clave)
-        #MA_foto.delete()
-        indices_ingreso.delete()
-        nombres_campos = request.POST.keys()
-        puntaje_maximo = Criterios_Ingreso.objects.aggregate(total=Sum('puntaje'))['total']
-        total_puntaje = 0
-        historico = HistorialLegajoIndices()
-        for f in nombres_campos:
-            if f.isdigit():
-                criterio_ingreso = Criterios_Ingreso.objects.filter(id=f).first()
-                # Sumar el valor de f al total_puntaje
-                total_puntaje += int(criterio_ingreso.puntaje)
-                base = MA_IndiceIVI()
-                base.fk_criterios_ingreso_id = f
-                base.fk_legajo_id = preadmi.fk_legajo_id
-                base.fk_preadmi_id = pk
-                base.presencia = True
-                base.programa = "MA"
-                historico.programa = base.programa
-                base.clave = clave
-                base.save()
-        
-        # total_puntaje contiene la suma de los valores de F
-        foto = MA_Foto_Ingreso.objects.filter(clave=clave).first()
-        foto.observaciones = request.POST.get('observaciones', '')
-        foto.fk_preadmi_id = pk
-        foto.fk_legajo_id = preadmi.fk_legajo_id
-        foto.puntaje = total_puntaje
-        foto.puntaje_max = puntaje_maximo
-        #foto.crit_modificables = crit_modificables
-        #foto.crit_presentes = crit_presentes
-        #foto.tipo = "Ingreso"
-        #foto.clave = clave
-        foto.modificado_por_id = self.request.user.id
-
-        historico.observaciones = foto.observaciones
-        historico.fk_legajo_id = preadmi.fk_legajo_id
-        historico.puntaje = total_puntaje
-        historico.puntaje_total = total_puntaje
-        historico.puntaje_max = puntaje_maximo
-        historico.tipo = "Ingreso"
-        historico.clave = clave
-
-        historico.save()
-        foto.save()
-
-        #---------HISTORIAL---------------------------------
-        pk=self.kwargs["pk"]
-        preadmi = MA_PreAdmision.objects.filter(pk=pk).first()
-        base = MA_Historial()
-        base.fk_legajo_id = preadmi.fk_legajo.id
-        base.fk_legajo_derivacion_id = preadmi.fk_derivacion_id
-        base.fk_preadmi_id = preadmi.id
-        base.movimiento = "MODIFICACION INDICE INGRESO"
-        base.creado_por_id = self.request.user.id
-        base.save()
-
-        return redirect('MA_indiceingreso_ver', preadmi.id)
-    
-class MAIndiceIngresoDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
-    template_name = "SIF_MA/indiceingreso_detail.html"
-    model = MA_PreAdmision
-
-    def get_context_data(self, **kwargs):
-        pk=self.kwargs["pk"]
-        context = super().get_context_data(**kwargs)
-        criterio = MA_IndiceIngreso.objects.filter(fk_preadmi_id=pk, tipo="Ingreso")
-        object = MA_PreAdmision.objects.filter(pk=pk).first()
-        foto_ingreso = MA_Foto_Ingreso.objects.filter(fk_preadmi_id=pk, tipo="Ingreso").first()
-
-        context["object"] = object
-        context["foto_ingreso"] = foto_ingreso
-        context["criterio"] = criterio
-        context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
-        context["cantidad"] = criterio.count()
-        context["cant_combinables"] = criterio.filter(fk_criterios_ingreso__tipo='Criterios combinables para el ingreso').count()
-        context["cant_sociales"] = criterio.filter(fk_criterios_ingreso__tipo='Criterios sociales para el ingreso').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ingreso__modificable='SI').aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
-        context["ajustes"] = criterio.filter(fk_criterios_ingreso__tipo='Ajustes').count()
-        #context['maximo'] = foto_ingreso.puntaje_max
-        return context
-    
-#--------- CREAR IVI -------------------------------------
-
-class MACriteriosIVICreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
-    template_name = "SIF_MA/criterios_ivi_form.html"
-    model = Criterios_IVI
-    form_class = criterios_IVI
-
-    def form_valid(self, form):
-        self.object = form.save()
-        return HttpResponseRedirect(reverse('MA_criterios_ivi_crear'))
-
- 
-class MAIndiceIviCreateView (PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
-    model = Criterios_IVI
-    template_name = "SIF_MA/indiceivi_form.html"
-    form_class = MA_IndiceIviForm    
-    
-    def get_context_data(self, **kwargs):
-        pk=self.kwargs["pk"]
-        context = super().get_context_data(**kwargs)
-        object = MA_PreAdmision.objects.filter(pk=pk).first()
-        #object = Legajos.objects.filter(pk=pk).first()
-        criterio = Criterios_IVI.objects.all()
-        context["object"] = object
-        context["criterio"] = criterio
-        context['form2'] = MA_IndiceIviHistorialForm()
-        return context
-    
-    def post(self, request, *args, **kwargs):
-        pk=self.kwargs["pk"]
-        # Genera una clave única utilizando uuid4 (versión aleatoria)
-        preadmi = MA_PreAdmision.objects.filter(pk=pk).first()
-        clave = str(uuid.uuid4())
-        nombres_campos = request.POST.keys()
-        puntaje_maximo = Criterios_IVI.objects.aggregate(total=Sum('puntaje'))['total']
-        total_puntaje = 0
-        historico = HistorialLegajoIndices()
-        for f in nombres_campos:
-            if f.isdigit():
-                criterio_ivi = Criterios_IVI.objects.filter(id=f).first()
-                # Sumar el valor de f al total_puntaje
-                total_puntaje += int(criterio_ivi.puntaje)
-                base = MA_IndiceIVI()
-                base.fk_criterios_ivi_id = f
-                base.fk_legajo_id = preadmi.fk_legajo_id
-                base.fk_preadmi_id = pk
-                base.tipo = "Ingreso"
-                base.presencia = True
-                base.programa = "MA"
-                historico.programa = base.programa
-                base.clave = clave
-                base.save()
-        
-        # total_puntaje contiene la suma de los valores de F
-        foto = MA_Foto_IVI()
-        foto.observaciones = request.POST.get('observaciones', '')
-        foto.fk_preadmi_id = pk
-        foto.fk_legajo_id = preadmi.fk_legajo_id
-        foto.puntaje = total_puntaje
-        foto.puntaje_max = puntaje_maximo
-        #foto.crit_modificables = crit_modificables
-        #foto.crit_presentes = crit_presentes
-        foto.tipo = "Ingreso"
-        foto.clave = clave
-        foto.creado_por_id = self.request.user.id
-
-        historico.observaciones = foto.observaciones
-        historico.fk_legajo_id = preadmi.fk_legajo_id
-        historico.puntaje = total_puntaje
-        historico.puntaje_total = total_puntaje
-        historico.puntaje_max = puntaje_maximo
-        historico.tipo = "Ingreso"
-        historico.clave = clave
-
-        historico.save()
-        foto.save()
-
-        preadmi.ivi = "SI"
-        preadmi.save()
-
-        #---------HISTORIAL---------------------------------
-        pk=self.kwargs["pk"]
-        base = MA_Historial()
-        base.fk_legajo_id = preadmi.fk_legajo.id
-        base.fk_legajo_derivacion_id = preadmi.fk_derivacion_id
-        base.fk_preadmi_id = preadmi.id
-        base.movimiento = "CREACION IVI"
-        base.creado_por_id = self.request.user.id
-        base.save()
-
-        return redirect('MA_indiceivi_ver', preadmi.id)
-
-
-class MAIndiceIviUpdateView (PermisosMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
-    template_name = "SIF_MA/indiceivi_edit.html"
-    model = MA_PreAdmision
-    form_class = MA_IndiceIviForm
-
-    def get_context_data(self, **kwargs):
-        pk = self.kwargs["pk"]
-        activos = MA_IndiceIVI.objects.filter(fk_preadmi_id=pk)
-        observaciones = MA_Foto_IVI.objects.filter(fk_preadmi_id=pk).first()
-
-        context = super().get_context_data(**kwargs)
-        context["object"] = MA_PreAdmision.objects.filter(pk=pk).first()
-        context["activos"] = activos
-        context["clave"] = observaciones.clave
-        context["observaciones"] = observaciones.observaciones
-        context["criterio"] = Criterios_IVI.objects.all()
-        context['form2'] = MA_IndiceIviHistorialForm()
-        return context
-    
-    def post(self, request, *args, **kwargs):
-        pk=self.kwargs["pk"]
-        preadmi = MA_PreAdmision.objects.filter(pk=pk).first()
-        MA_foto = MA_Foto_IVI.objects.filter(fk_preadmi_id=pk).first()
-        clave = MA_foto.clave
-        indices_ivi = MA_IndiceIVI.objects.filter(clave=clave)
-        #MA_foto.delete()
-        indices_ivi.delete()
-        nombres_campos = request.POST.keys()
-        puntaje_maximo = Criterios_IVI.objects.aggregate(total=Sum('puntaje'))['total']
-        total_puntaje = 0
-        historico = HistorialLegajoIndices()
-        for f in nombres_campos:
-            if f.isdigit():
-                criterio_ivi = Criterios_IVI.objects.filter(id=f).first()
-                # Sumar el valor de f al total_puntaje
-                total_puntaje += int(criterio_ivi.puntaje)
-                base = MA_IndiceIVI()
-                base.fk_criterios_ivi_id = f
-                base.fk_legajo_id = preadmi.fk_legajo_id
-                base.fk_preadmi_id = pk
-                base.presencia = True
-                base.programa = "MA"
-                historico.programa = base.programa
-                base.clave = clave
-                base.save()
-        
-        # total_puntaje contiene la suma de los valores de F
-        foto = MA_Foto_IVI.objects.filter(clave=clave).first()
-        foto.observaciones = request.POST.get('observaciones', '')
-        foto.fk_preadmi_id = pk
-        foto.fk_legajo_id = preadmi.fk_legajo_id
-        foto.puntaje = total_puntaje
-        foto.puntaje_max = puntaje_maximo
-        #foto.crit_modificables = crit_modificables
-        #foto.crit_presentes = crit_presentes
-        #foto.tipo = "Ingreso"
-        #foto.clave = clave
-        foto.modificado_por_id = self.request.user.id
-
-        historico.observaciones = foto.observaciones
-        historico.fk_legajo_id = preadmi.fk_legajo_id
-        historico.puntaje = total_puntaje
-        historico.puntaje_total = total_puntaje
-        historico.puntaje_max = puntaje_maximo
-        historico.tipo = "Ingreso"
-        historico.clave = clave
-
-        historico.save()
-        foto.save()
-
-        #---------HISTORIAL---------------------------------
-        pk=self.kwargs["pk"]
-        preadmi = MA_PreAdmision.objects.filter(pk=pk).first()
-        base = MA_Historial()
-        base.fk_legajo_id = preadmi.fk_legajo.id
-        base.fk_legajo_derivacion_id = preadmi.fk_derivacion_id
-        base.fk_preadmi_id = preadmi.id
-        base.movimiento = "MODIFICACION IVI"
-        base.creado_por_id = self.request.user.id
-        base.save()
-
-        return redirect('MA_indiceivi_ver', preadmi.id)
-    
-    
-class MAIndiceIviDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
-    template_name = "SIF_MA/indiceivi_detail.html"
-    model = MA_PreAdmision
-
-    def get_context_data(self, **kwargs):
-        pk=self.kwargs["pk"]
-        context = super().get_context_data(**kwargs)
-        criterio = MA_IndiceIVI.objects.filter(fk_preadmi_id=pk, tipo="Ingreso")
-        object = MA_PreAdmision.objects.filter(pk=pk).first()
-        foto_ivi = MA_Foto_IVI.objects.filter(fk_preadmi_id=pk, tipo="Ingreso").first()
-
-        context["object"] = object
-        context["foto_ivi"] = foto_ivi
-        context["criterio"] = criterio
-        context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
-        context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable='Si').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable='Si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
-        context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
-        #context['maximo'] = foto_ivi.puntaje_max
-        return context
-    
-class MAPreAdmisiones3DetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
-    template_name = "SIF_MA/preadmisiones_detail3.html"
-    model = MA_PreAdmision
-
-    def get_context_data(self, **kwargs):
-        pk = MA_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
-        context = super().get_context_data(**kwargs)
-        legajo = LegajosDerivaciones.objects.filter(pk=pk.fk_derivacion_id).first()
-        familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
-        criterio = MA_IndiceIVI.objects.filter(fk_preadmi_id=pk, tipo="Ingreso")
-        criterio_ingreso = MA_IndiceIngreso.objects.filter(fk_preadmi_id=pk, tipo="Ingreso")
-        foto_ivi = MA_Foto_IVI.objects.filter(fk_preadmi_id= pk, tipo="Ingreso").first()
-        foto_ingreso = MA_Foto_Ingreso.objects.filter(fk_preadmi_id= pk, tipo="Ingreso").first()
-
-        context["legajo"] = legajo
-        context["familia"] = familia
-        context["foto_ivi"] = foto_ivi
-        context["foto_ingreso"] = foto_ingreso
-        context["puntaje"] = foto_ivi.puntaje
-        context["puntaje_ingreso"] = foto_ingreso.puntaje
-        context["cantidad"] = criterio.count()
-        context["cantidad_ingreso"] = criterio_ingreso.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable='SI').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
-        context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
-        context['maximo'] = foto_ivi.puntaje_max
-        context['maximo_ingreso'] = foto_ingreso.puntaje_max
-        context['criterios_total'] = criterio_ingreso.count()
-        context["cant_combinables"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='Criterios combinables para el ingreso').count()
-        context["cant_sociales"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='Criterios sociales para el ingreso').count() 
-        context["autonomos"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='Criteros autónomos de ingreso').all()
-        return context
-    
-    def post(self, request, *args, **kwargs):
-        if 'admitir' in request.POST:
-            preadmi = MA_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
-            preadmi.admitido = "SI"
-            preadmi.save()
-
-            base1 = MA_Admision()
-            base1.fk_preadmi_id = preadmi.pk
-            base1.creado_por_id = self.request.user.id
-            base1.save()
-            redirigir = base1.pk
-
-            #---------HISTORIAL---------------------------------
-            pk=self.kwargs["pk"]
-            legajo = MA_PreAdmision.objects.filter(pk=pk).first()
-            base = MA_Historial()
-            base.fk_legajo_id = legajo.fk_legajo.id
-            base.fk_legajo_derivacion_id = legajo.fk_derivacion_id
-            base.fk_preadmi_id = pk
-            base.fk_admision_id = redirigir
-            base.movimiento = "ADMITIDO"
-            base.creado_por_id = self.request.user.id
-            base.save()
-
-            # Redirige de nuevo a la vista de detalle actualizada
-            return redirect('MA_asignado_admisiones_ver', redirigir)
 
 class MAAdmisionesListView(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"
@@ -802,20 +325,54 @@ class MAAdmisionesListView(PermisosMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        criterio = MA_IndiceIVI.objects.all()
-        criterio_ingreso = MA_IndiceIngreso.objects.all()
         admi = MA_Admision.objects.all()
-        foto = MA_Foto_IVI.objects.all()
-        foto_ingreso = MA_Foto_Ingreso.objects.all()
-        conteo = MA_IndiceIngreso.objects.values('fk_preadmi_id').annotate(total=Count('fk_preadmi_id'))
 
-        context ["conteo"] = conteo
         context["admi"] = admi
-        context["foto"] = foto
-        context["foto_ingreso"] = criterio_ingreso.aggregate(total=Count('fk_criterios_ingreso'))
-        context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
-        context["puntaje_ingreso"] = criterio_ingreso.aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
         return context
+    
+class MAAdmisionesCreateView(PermisosMixin, CreateView):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_MA/admisiones_form.html"
+    form_class = MA_AdmisionForm
+    model = MA_Admision
+    
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs.get("pk")
+        admi = MA_Admision.objects.filter(pk=pk).first()
+        preadmi_ma = MA_PreAdmision.objects.filter(pk=pk).first()
+        context = super().get_context_data(**kwargs)
+
+        context["preadmi_ma"] = preadmi_ma
+        return context
+    
+    def post(self, request, *args, **kwargs):        
+        if 'confirmar_admi' in request.POST:
+            pk = self.kwargs.get("pk")
+            objeto = MA_Admision()
+            fecha_ingreso = request.POST.get('fecha_ingreso')
+            tipo_abrigo = request.POST.get('tipo_abrigo')
+            equipo_trabajo = request.POST.get('equipo_trabajo')
+            organismo = request.POST.get('organismo')
+            objeto.fecha_ingreso = fecha_ingreso
+            objeto.tipo_abrigo = tipo_abrigo
+            objeto.equipo_trabajo = equipo_trabajo
+            objeto.organismo = organismo
+            objeto.fk_preadmi_id = pk
+            objeto.save()
+            preadmi = MA_PreAdmision.objects.get(pk=pk)
+            preadmi.estado = 'Finalizada'
+            preadmi.save()
+            return redirect('MA_expediente_ver', pk=preadmi.fk_derivacion.id)
+    
+    
+    def form_invalid(self, form):
+        context = self.get_context_data(form=form)
+        return self.render_to_response(context)
+
+class MAAdmisionesUpdateView(PermisosMixin, UpdateView):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_MA/admisiones_form.html"
+    form_class = MA_AdmisionForm
 
 class MAAdmisionesDetailView(PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
@@ -825,18 +382,10 @@ class MAAdmisionesDetailView(PermisosMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         pk = MA_Admision.objects.filter(pk=self.kwargs["pk"]).first()
+        admi = MA_Admision.objects.filter(pk=self.kwargs["pk"]).first()
         preadmi = MA_PreAdmision.objects.filter(pk=pk.fk_preadmi_id).first()
-        criterio = MA_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
-        foto_ivi = MA_Foto_IVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso").first()
-
-        context["foto_ivi"] = foto_ivi
-        context["puntaje"] = foto_ivi.puntaje
-        context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable='SI').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
-        context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
-        context['maximo'] = foto_ivi.puntaje_max
-        
+        intervenciones = MA_Intervenciones.objects.filter(fk_admision_id=admi.id).all()
+        context["intervenciones"] = intervenciones
         return context
 
 
@@ -850,26 +399,9 @@ class MAAsignadoAdmisionDetail(PermisosMixin, DetailView):
         admi = MA_Admision.objects.filter(pk=self.kwargs["pk"]).first()
 
         preadmi = MA_PreAdmision.objects.filter(pk=admi.fk_preadmi_id).first()
-        criterio = MA_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
-        criterio_ingreso = MA_IndiceIngreso.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
-        criterio2 = MA_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
-        observaciones = MA_Foto_IVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso").first()
-        observaciones_ingreso = MA_Foto_Ingreso.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso").first()
-        observaciones2 = MA_Foto_IVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso").first()
         intervenciones = MA_Intervenciones.objects.filter(fk_admision_id=admi.id).all()
         intervenciones_last = MA_Intervenciones.objects.filter(fk_admision_id=admi.id).last()
-        foto_ivi_fin = MA_Foto_IVI.objects.filter(fk_preadmi_id=admi.fk_preadmi_id, tipo="Ingreso").last()
-        foto_ivi_inicio = MA_Foto_IVI.objects.filter(fk_preadmi_id=admi.fk_preadmi_id, tipo="Ingreso").first()
 
-        context["foto_ivi_fin"] = foto_ivi_fin
-        context["foto_ivi_inicio"] = foto_ivi_inicio
-        context["observaciones"] = observaciones
-        context["observaciones_ingreso"] = observaciones_ingreso
-        context["observaciones2"] = observaciones2
-        context["criterio"] = criterio
-        context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
-        context["cant_ingreso"] = criterio_ingreso.count()
-        context["puntaje2"] = criterio2.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["object"] = admi
         context["vo"] = self.object
         context["intervenciones_count"] = intervenciones.count()
@@ -887,16 +419,9 @@ class MAInactivaAdmisionDetail(PermisosMixin, DetailView):
         admi = MA_Admision.objects.filter(pk=self.kwargs["pk"]).first()
 
         preadmi = MA_PreAdmision.objects.filter(pk=admi.fk_preadmi_id).first()
-        criterio = MA_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Egreso")
         intervenciones = MA_Intervenciones.objects.filter(fk_admision_id=admi.id).all()
         intervenciones_last = MA_Intervenciones.objects.filter(fk_admision_id=admi.id).last()
-        foto_ivi_fin = MA_Foto_IVI.objects.filter(fk_preadmi_id=admi.fk_preadmi_id, tipo="Egreso").first()
-        foto_ivi_inicio = MA_Foto_IVI.objects.filter(fk_preadmi_id=admi.fk_preadmi_id, tipo="Ingreso").first()
 
-        
-        context["foto_ivi_fin"] = foto_ivi_fin
-        context["foto_ivi_inicio"] = foto_ivi_inicio
-        context["criterio"] = criterio
         context["object"] = admi
         context["vo"] = self.object
         context["intervenciones_count"] = intervenciones.count()
@@ -916,20 +441,8 @@ class MAIntervencionesCreateView(PermisosMixin, CreateView):
         form.instance.fk_admision_id = self.kwargs["pk"]
         form.instance.creado_por_id = self.request.user.id
         self.object = form.save()
-        
-        # --------- HISTORIAL ---------------------------------
-        pk = self.kwargs["pk"]
-        legajo = MA_Admision.objects.filter(pk=pk).first()
-        base = MA_Historial()
-        base.fk_legajo_id = legajo.fk_preadmi.fk_legajo.id
-        base.fk_legajo_derivacion_id = legajo.fk_preadmi.fk_derivacion_id
-        base.fk_preadmi_id = legajo.fk_preadmi.pk
-        base.fk_admision_id = legajo.id  # Cambia a self.object.id
-        base.movimiento = "INTERVENCION CREADA"
-        base.creado_por_id = self.request.user.id
-        base.save()
 
-        return redirect('MA_intervencion_ver', pk=self.object.id)
+        return redirect('MA_admisiones_ver', pk=self.kwargs["pk"])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -951,19 +464,6 @@ class MAIntervencionesUpdateView(PermisosMixin, UpdateView):
             form.instance.modificado_por_id = self.request.user.id
             self.object = form.save()
         
-            # --------- HISTORIAL ---------------------------------
-            pk = self.kwargs["pk"]
-            pk = MA_Intervenciones.objects.filter(pk=pk).first()
-            legajo = MA_Admision.objects.filter(pk=pk.fk_admision_id).first()
-            base = MA_Historial()
-            base.fk_legajo_id = legajo.fk_preadmi.fk_legajo.id
-            base.fk_legajo_derivacion_id = legajo.fk_preadmi.fk_derivacion_id
-            base.fk_preadmi_id = legajo.fk_preadmi.pk
-            base.fk_admision_id = legajo.pk
-            base.movimiento = "INTERVENCION MODIFICADA"
-            base.creado_por_id = self.request.user.id
-            base.save()
-
             return redirect('MA_intervencion_ver', self.object.id)
 
     def get_context_data(self, **kwargs):
@@ -986,20 +486,11 @@ class MAIntervencionesLegajosListView(PermisosMixin, DetailView):
         intervenciones = MA_Intervenciones.objects.filter(fk_admision_id=admi.id).all()
         intervenciones_last = MA_Intervenciones.objects.filter(fk_admision_id=admi.id).last()
         preadmi = MA_PreAdmision.objects.filter(pk=admi.fk_preadmi_id).first()
-        criterio = MA_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
-        observaciones = MA_Foto_IVI.objects.filter(clave=criterio.first().clave, tipo="Ingreso").first()
-        criterio2 = MA_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
-        observaciones2 = MA_Foto_IVI.objects.filter(clave=criterio2.last().clave, tipo="Ingreso").first()
 
         context["object"] = admi
         context["intervenciones"] = intervenciones
         context["intervenciones_count"] = intervenciones.count()
         context["intervenciones_last"] = intervenciones_last
-
-        context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
-        context["observaciones"] = observaciones
-        context["observaciones2"] = observaciones2
-        context["puntaje2"] = criterio2.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
 
         return context
     
@@ -1018,16 +509,6 @@ class MAIntervencionesDetail (PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_MA/intervencion_detail.html"
     model = MA_Intervenciones
-
-class MAOpcionesResponsablesCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
-    template_name = "SIF_MA/intervenciones_resposables.html"
-    model = OpcionesResponsables
-    form_class = MA_OpcionesResponsablesForm
-
-    def form_valid(self, form):
-        self.object = form.save()
-        return HttpResponseRedirect(reverse('MA_OpcionesResponsables'))
 
 class MAIntervencionesDeleteView(PermisosMixin, DeleteView):
     permission_required = "Usuarios.rol_admin"
@@ -1076,90 +557,78 @@ class MAAdmisionesBuscarListView(PermisosMixin, TemplateView):
 
         return self.render_to_response(context)
     
-class MAIndiceIviEgresoCreateView (PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
-    model = Legajos
-    template_name = "SIF_MA/indiceivi_form_egreso.html"
-    form_class = MA_IndiceIviForm
-    success_url = reverse_lazy("legajos_listar")
-    
+
+class MA_ExpedienteDetailView(PermisosMixin, DetailView):
+    permission_required = ['Usuarios.rol_admin','Usuarios.rol_observador','Usuarios.rol_consultante']
+    template_name = "SIF_MA/expediente_detail.html"
+    model = MA_Derivacion
     
     def get_context_data(self, **kwargs):
-        pk=self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
-        admi = MA_Admision.objects.filter(pk=pk).first()
-        object = Legajos.objects.filter(pk=admi.fk_preadmi.fk_legajo.id).first()
-        criterio = Criterios_IVI.objects.all()
-        context["object"] = object
-        context["criterio"] = criterio
-        context['form2'] = MA_IndiceIviHistorialForm()
+        id = self.kwargs["pk"]
+        derivacion = MA_Derivacion.objects.filter(pk=id).first()
+        preadmi_ma = MA_PreAdmision.objects.filter(fk_derivacion_id=derivacion.pk).first()
+        if preadmi_ma:
+            documentacion = MA_Preadmision_Archivos.objects.filter(fk_preadmi_id=preadmi_ma.pk).all()
+            admi = MA_Admision.objects.filter(fk_preadmi_id=preadmi_ma.id).first()
+        else:
+            documentacion = []
+            admi = []
+        pk = SL_Expedientes.objects.filter(pk=derivacion.fk_expediente_id).first()
+        preadmi = SL_PreAdmision.objects.filter(fk_expediente_id=pk).last()
+        familia = SL_GrupoFamiliar.objects.filter(fk_expediente_id=pk).all()
+        legajos_alertas = LegajoAlertas.objects.filter(fk_legajo=preadmi.fk_derivacion.fk_legajo)
+        archivos = SL_ExpedientesArchivos.objects.filter(fk_expediente_id=pk).all()
+        resultado = SL_IndiceVulnerabilidad.objects.filter(fk_expediente_id=preadmi.fk_expediente_id)
+        equipo = SL_EquipoDesignado.objects.filter(fk_expediente_id=preadmi.fk_expediente_id).first()
+        referentes = SL_Referentes.objects.filter(fk_expediente_id=preadmi.fk_expediente_id).all()
+        intervenciones = SL_Intervenciones.objects.filter(fk_expediente_id=preadmi.fk_expediente_id).all()
+
         context['admi'] = admi
+        context['preadmi'] = preadmi
+        context['documentacion'] = documentacion
+        context['preadmi_ma'] = preadmi_ma
+        context['legajos_alertas'] = legajos_alertas
+        context['familia'] = familia
+        context['archivos'] = archivos
+        context['equipo'] = equipo
+        context['referentes'] = referentes
+        context['intervenciones'] = intervenciones
+        context['resultado'] = resultado.aggregate(total=Sum('fk_indice__puntaje'))
+        context['hoy'] = datetime.now().date()
         return context
     
     def post(self, request, *args, **kwargs):
         pk=self.kwargs["pk"]
-        admi = MA_Admision.objects.filter(pk=pk).first()
-        # Genera una clave única utilizando uuid4 (versión aleatoria)
-        preadmi = MA_PreAdmision.objects.filter(fk_legajo_id=admi.fk_preadmi.fk_legajo.id).first()
-        foto_ivi = MA_Foto_IVI.objects.filter(fk_preadmi_id=preadmi.id).first()
-        clave = foto_ivi.clave
-        nombres_campos = request.POST.keys()
-        puntaje_maximo = Criterios_IVI.objects.aggregate(total=Sum('puntaje'))['total']
-        total_puntaje = 0
-        historico = HistorialLegajoIndices()
-        for f in nombres_campos:
-            if f.isdigit():
-                criterio_ivi = Criterios_IVI.objects.filter(id=f).first()
-                # Sumar el valor de f al total_puntaje
-                total_puntaje += int(criterio_ivi.puntaje)
-                base = MA_IndiceIVI()
-                base.fk_criterios_ivi_id = f
-                base.fk_legajo_id = admi.fk_preadmi.fk_legajo.id
-                base.fk_preadmi_id = preadmi.id
-                base.tipo = "Egreso"
-                base.presencia = True
-                base.programa = "MA"
-                historico.programa = base.programa
-                base.clave = clave
-                base.save()
+        if '45' in self.request.FILES:
+            archivo45 = request.FILES.get('45')
+            instancia = MA_PreAdmision.objects.filter(fk_derivacion_id=pk).first()
+            if instancia:
+                instancia.archivo45 = archivo45
+                instancia.save()
+            
+        if '90' in self.request.FILES:
+            archivo90 = request.FILES.get('90')
+            instancia = MA_PreAdmision.objects.filter(fk_derivacion_id=pk).first()
+            if instancia:
+                instancia.archivo90 = archivo90
+                instancia.save()
 
-        # total_puntaje contiene la suma de los valores de F
-        foto = MA_Foto_IVI()
-        foto.observaciones = request.POST.get('observaciones', '')
-        foto.fk_preadmi_id = preadmi.id
-        foto.fk_legajo_id = preadmi.fk_legajo_id
-        foto.puntaje = total_puntaje
-        foto.puntaje_max = puntaje_maximo
-        #foto.crit_modificables = crit_modificables
-        #foto.crit_presentes = crit_presentes
-        foto.tipo = "Egreso"
-        foto.clave = clave
-        foto.creado_por_id = self.request.user.id
+        if '135' in self.request.FILES:
+            archivo135 = request.FILES.get('135')
+            instancia = MA_PreAdmision.objects.filter(fk_derivacion_id=pk).first()
+            if instancia:
+                instancia.archivo135 = archivo135
+                instancia.save()
 
-        historico.observaciones = foto.observaciones
-        historico.fk_legajo_id = preadmi.fk_legajo_id
-        historico.puntaje = total_puntaje
-        historico.puntaje_total = total_puntaje
-        historico.puntaje_max = puntaje_maximo
-        historico.tipo = "Egreso"
-        historico.clave = clave
+        return redirect('MA_expediente_ver', pk)
 
-        historico.save()
-        foto.save()
+class MA_ExpedienteListView(PermisosMixin, ListView):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_MA/expediente_list.html"
+    model = MA_Admision
 
-        admi.estado = "Inactiva"
-        admi.modificado_por_id = self.request.user.id
-        admi.save()
-
-        #---------HISTORIAL---------------------------------
-        pk=self.kwargs["pk"]
-        legajo = admi.fk_preadmi
-        base = MA_Historial()
-        base.fk_legajo_id = legajo.fk_legajo.id
-        base.fk_legajo_derivacion_id = legajo.fk_derivacion_id
-        base.fk_preadmi_id = legajo.id
-        base.movimiento = "IVI EGRESO"
-        base.creado_por_id = self.request.user.id
-        base.save()
-
-        return redirect('MA_admisiones_listar')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['hoy'] = datetime.now().date()
+        return context

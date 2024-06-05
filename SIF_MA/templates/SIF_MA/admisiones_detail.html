@@ -12,7 +12,6 @@ Admisiones
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right">
   <li class="breadcrumb-item"><a href="" title="Ver listado de admisiones">Admisiones</a></li>
-  <li class="breadcrumb-item "><a href="{% url 'legajos_ver' object.fk_preadmi.fk_legajo.id %}" title="Ver legajo">{{object.fk_preadmi.fk_legajo}}</a></li>
   <li class="breadcrumb-item active">Detalle</li>
 </ol>
 {% endblock %};
@@ -26,8 +25,12 @@ Admisiones
   <!-- botones -->
   <div class="col-12 my-3 mx-2 d-print-none">
     {% if object.estado != "Inactiva" %}
+    <a href="{% url 'MA_intervenciones_crear' object.id %}" class="btn btn-primary mr-1">Agregar intervención</a>
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
+    {% if object.estado != "Inactiva" %}
+    <a href="#" class="btn btn-danger mr-1">Inactivar</a>
+    {% endif %}
   </div>
   <!-- ./botones -->
 
@@ -35,10 +38,10 @@ Admisiones
 <div class="row p-0 m-0 " id="seleccion">
 
   <!-- Datos de legajo -->
-  <div class="col-sm-4 pb-3">
+  <div class="col-sm-6 pb-3">
     <div class="card card-outline card-primary h-100 mb-0">
       <div class="card-header">
-        <h3 class="card-title">Detalle Legajo</h3>
+        <h3 class="card-title">Detalle </h3>
         <div class="card-tools d-inline">
           <a href="{% url 'legajos_ver' object.fk_preadmi.fk_legajo.id %}" class="ml-3 mr-2">Ver detalles</a>
           <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
@@ -47,15 +50,20 @@ Admisiones
         </div>
       </div>
       <div class="card-body">
-        <dl class="row">
-          <dd class="col-sm-5 mb-2">Nombre</dd>
-          <dt class="col-sm-7 mb-2"><a href="{% url 'legajos_ver' object.fk_preadmi.fk_legajo.id %}" title="Ver legajo">{{object.fk_preadmi.fk_legajo}}</a> </dt>
-          <dd class="col-sm-5 mb-2">DNI</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.fk_legajo.documento}}</dt>
-          <dd class="col-sm-5 mb-2">Fecha de nacimiento</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.fk_legajo.fecha_nacimiento|date:'d/m/Y'}}</dt>
-          <dd class="col-sm-5 mb-2">Sexo</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.fk_legajo.sexo}}</dt>
+        <dl class="row mb-3">
+          <dd class="col-sm-5 mb-2">Estado</dd>
+          <dt class="col-sm-7 mb-2"><span class="badge {% if preadmi_ma.estado == 'Finalizada' %}badge-success{% else %}badge-warning{% endif %}">{{ preadmi_ma.estado }}</span></dt>
+          <dd class="col-sm-5 mb-2">Fecha de solicitud</dd>
+          <dt class="col-sm-7 mb-2">{{preadmi_ma.creado|date:'d/m/Y'}}</dt>
+          <dd class="col-sm-5 mb-2">Solicitud creada por</dd>
+          <dt class="col-sm-7 mb-2">{{preadmi_ma.creado_por}}</dt>
+          <dd class="col-sm-5 mb-2">Postulación</dd>
+          <dt class="col-sm-7 mb-2">{% if preadmi_ma.familia_abrigadora %}{{preadmi_ma.familia_abrigadora}}{% endif %}{% if preadmi_ma.organismo_municipal %}{{preadmi_ma.organismo_municipal}}{% endif %}{% if preadmi_ma.organismo_zonal %}{{preadmi_ma.organismo_zonal}}{% endif %}</dt>
+          <dd class="col-sm-5 mb-2">Vencimiento</dd>
+          <dt class="col-sm-7 mb-2">{{preadmi_ma.i180|date:'d/m/Y'}}</dt>
+          {% if object.modificado_por %}
+          <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Modificado por {{object.modificado_por}} - {{object.modificado|date:'d/m/Y'}}</dd>
+          {% endif %}
         </dl>
       </div>
     </div>
@@ -63,12 +71,11 @@ Admisiones
   <!-- /  -->
 
   <!-- Datos de pre-admisión -->
-  <div class="col-sm-4 pb-3">
+  <div class="col-sm-6 pb-3">
     <div class="card card-outline card-primary h-100 mb-0">
       <div class="card-header">
         <h3 class="card-title">Detalle Admisión</h3>
         <div class="card-tools d-inline">
-          <a href="{% url 'MA_preadmisiones_ver3' object.fk_preadmi.id %}" class="ml-3 mr-2">Ver pre-admisión</a>
           <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
             <i class="fas fa-minus"></i>
           </button>
@@ -80,52 +87,68 @@ Admisiones
           <dt class="col-sm-7 mb-2"><span class="text-{% if object.estado == "Inactiva" %}danger{% else %}success{% endif %} font-weight-bold">{{object.estado}}</span></dt>
           <dd class="col-sm-5 mb-2">Fecha de admisión</dd>
           <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
-          <dd class="col-sm-5 mb-2">Acompaniante </dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.acompaniante}}</dt>
-          <dd class="col-sm-5 mb-2">Madrina</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.madrina}}</dt>
+          <dd class="col-sm-5 mb-2">Fecha de ingreso </dd>
+          <dt class="col-sm-7 mb-2">{{object.fecha_ingreso|date:'d/m/Y'}}</dt>
+          <dd class="col-sm-5 mb-2">Tipo de abrigo</dd>
+          <dt class="col-sm-7 mb-2">{{object.tipo_abrigo}}</dt>
+          <dd class="col-sm-5 mb-2">Organismo</dd>
+          <dt class="col-sm-7 mb-2">{{object.organismo}}</dt>
+          <dd class="col-sm-5 mb-2">Equipo de trabajo</dd>
+          <dt class="col-sm-7 mb-2">{{object.equipo_trabajo}}</dt>
         </dl>
       </div>
     </div>
   </div>
   <!-- /  -->
 
-  <!-- Datos de Indice -->
-  <div class="col-sm-4 pb-3">
-    <div class="card card-outline card-primary h-100 mb-0">
-      <div class="card-header">
-        <h3 class="card-title">Detalle IVI de ingreso</h3>
-        <div class="card-tools d-inline">
-          <a href="{% url 'MA_indiceivi_ver' object.fk_preadmi.id %}" class="ml-3 mr-2">Ver detalles</a>
-          <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
-            <i class="fas fa-minus"></i>
-          </button>
-        </div>
-      </div>
-      <div class="card-body pb-1">
-        <dl class="row mb-0">
-          <dd class="col-sm-7 mb-2">Puntaje</dd>
-          <dt class="col-sm-5 mb-2"><span class=" badge badge-warning">{{puntaje}}</span></dt>
-          <dd class="col-sm-7 mb-2">Fecha del índice</dd>
-          <dt class="col-sm-5 mb-2">{{foto_ivi.creado|date:'d/m/Y'}}</dt>
-          <dd class="col-sm-7 mb-2">Puntaje máximo posible</dd>
-          <dt class="col-sm-5 mb-2">{{maximo}}</dt>
-          <dd class="col-sm-7 mb-2">Criterios presentes</dd>
-          <dt class="col-sm-5 mb-2">{{cantidad}}</dt>
-          <dd class="col-sm-7 mb-2">Criterios modificables</dd>
-          <dt class="col-sm-5 mb-2">{{modificables}}</dt>
-          <dd class="col-sm-7 mb-2">Puntaje modificable</dd>
-          <dt class="col-sm-5 mb-2">{{mod_puntaje.total}}</dt>
-          <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Generado por {{foto_ivi.creado_por}}</dd>
-        </dl>
-      </div>
-
-    </div>
-  </div>
-  <!-- /  -->
 </div>
 <!-- /  -->
-
+{% if intervenciones %}
+<!-- Intervenciones -->
+<div class="col-12">
+  <div class="card card-outline card-primary">
+    <div class="card-header">
+      <h3 class="card-title">Intervenciones</h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+          <i class="fas fa-minus"></i>
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
+      <table class="table table-bordered table-striped projects tabladt table-sm">
+        <!-- <table class="table table-striped projects"> -->
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Usuario</th>
+            <th>Criterio</th>
+            <th>Gestión</th>
+            <th>Acción realizada</th>
+            <th width="5%" class="notexport"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in intervenciones %}
+          <tr>
+            <td> {{ i.creado|date:'d/m/Y' }} </td>
+            <td> {{i.creado_por}} </td>
+            <td> {{i.criterio_modificable}}</td>
+            <td> {{i.impacto}}</td>
+            <td> {{i.accion}}</td>
+            <td class="text-right">
+              <a href="{% url 'SL_intervencion_ver' i.id %}" class="btn btn-secondary btn-sm ver"
+                title="Ver detalle">Ver</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- ./ -->
+{% endif %}
 
 <div class="row mt-4 d-print-none">
   <div class="col-12 mx-2">

@@ -81,6 +81,7 @@ class SL_IndiceVulnerabilidad(models.Model):
     modificado = models.DateField(auto_now=True, null=True, blank=True)
 
 class SL_Intervenciones(models.Model):
+    fk_expediente = models.ForeignKey(SL_Expedientes, on_delete=models.CASCADE, null=True, blank=True)
     fk_admision = models.ForeignKey(SL_Admision, on_delete=models.CASCADE, null=True, blank=True)
     criterio_modificable = models.ForeignKey(Criterios_IVI, on_delete=models.CASCADE)
     accion = models.CharField(max_length=250, choices=CHOICE_ACCION_DESARROLLADA, null=False, blank=False)
@@ -91,6 +92,7 @@ class SL_Intervenciones(models.Model):
     modificado = models.DateField(auto_now=True, null=True, blank=True)
     creado_por = models.ForeignKey(Usuarios, related_name='SL_Intervenciones_creado_por', on_delete=models.CASCADE, blank=True, null=True)
     modificado_por = models.ForeignKey(Usuarios, related_name='SL_Intervenciones_modificada_por', on_delete=models.CASCADE, blank=True, null=True)
+
 
 
 class PreadmArchivos(models.Model):
