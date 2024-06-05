@@ -29,7 +29,7 @@ Servicio Local Pre-admisiones
     <div class="btn-toolbar" role="toolbar">
     {% if object.estado == 'En proceso' %}
     <a href="{% url 'SL_indicevulneracion_crear' object.pk %}" class="btn btn-primary mr-1">Agregar indice vulneración</a>
-    <a href="{% url 'SL_preadmisiones_editar' object.fk_derivacion.pk %}" class="btn btn-secondary mr-1">Editar</a>
+    <a href="{% url 'SL_preadmisiones_editar' object.pk %}" class="btn btn-secondary mr-1">Editar</a>
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     {% comment %}<a href="{% url 'SL_preadmisiones_eliminar' object.pk %}" class="btn btn-danger mr-1 mt-2 mt-sm-0">Eliminar</a>{% endcomment %}
     {% endif %}
@@ -148,6 +148,34 @@ Servicio Local Pre-admisiones
     </div>
   </div>
   <!-- /  -->
+      <!-- Datos Alarmas -->
+      <div class="col-12">
+        <div class="card card-outline card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Alertas del legajo</h3>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row" id="container-alertas">
+              {% if legajos_alertas %}
+              {% for a in legajos_alertas %}
+              <div class="col-md-3 col-sm-6 col-12 mb-2">
+                  <div class="callout h-100 pb-0">
+                      <h6 class="font-weight-bold"><i class="fas fa-exclamation-triangle px-1"></i> {{a.fk_alerta}}
+                      </h6>
+                  </div>
+              </div>
+              {% endfor %}
+              {% endif %}
+          </div>
+          </div>
+        </div>
+      </div>
+      <!-- ./ -->
 
     <!-- Datos Observaciones de vulneración -->
     <div class="col-12">
@@ -183,6 +211,46 @@ Servicio Local Pre-admisiones
       </div>
     </div>
     <!-- ./ -->
+        <!-- Datos Familiares -->
+        {% if grupo_familiar %}
+        <div class="col-12">
+          <div class="card card-outline card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Familiares que integran el expediente.</h3>
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+                {% if grupo_familiar %}
+                <div class="col-12">
+                    <ul class="users-list">
+                        {% for f in grupo_familiar %}
+                        <li>
+                          <a href="{% url 'legajos_ver' f.fk_legajo_familiar_id %}" target="_blank">
+                            {% if f.fk_legajo_familiar.foto %}
+                            <img src="{{f.fk_legajo_familiar.foto.url}}" alt="User Image" width="60px">
+                            {%else%}
+                            <img src="{% static 'custom/img/default.png'  %}" alt="User Image" width="60px">
+                            {%endif%}                        
+                            <span class="users-list-date">{{f.fk_legajo_familiar}}</span>
+                        </li>
+                      </a>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% else %}
+                <div class="card-body bg-light p-0">
+                    <h6 class="text-center text-muted py-3">Sin familiares</h6>
+                </div>
+                {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        <!-- ./ -->
 
 
 <div class="row mt-4 d-print-none">

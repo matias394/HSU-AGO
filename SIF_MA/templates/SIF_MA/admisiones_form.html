@@ -1,0 +1,98 @@
+{% extends "includes/base.html" %};
+{% load crispy_forms_tags %}
+{% load static %};
+
+{% block head %}{% endblock %}
+
+{% block title %}Admisiones formulario{% endblock %};
+
+{% block titulo-pagina %} Admisiones {% endblock %};
+
+{% block breadcrumb %}
+<ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="{% url 'MA_derivaciones_listar'%}"
+            title="Ver listado de Pre-admisiones">Pre-admisiones</a></li>
+            {%if request.resolver_match.url_name == "MA_admisiones_editar" %}
+            <li class="breadcrumb-item active">Editar</li>
+            {% else %}
+            <li class="breadcrumb-item active">Agregar</li>
+            {% endif %}
+</ol>
+{% endblock %};
+
+{% block menu-adicional %}
+{% endblock %};
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="bs-stepper">
+                <div class="bs-stepper-header" role="tablist">
+                    <div class="step" data-target="#bs1">
+                        <button type="button" class="step-trigger" role="tab" aria-controls="bs1"
+                            id="bs1-trigger">
+                            <span class="bs-stepper-circle">1</span>
+                            <span class="bs-stepper-label">Vacante</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body py-0 px-2 mt-5">
+                    <form novalidate method="POST" enctype="multipart/form-data">
+                        <!-- Security token -->
+                        {% csrf_token %}
+                        <input type="hidden" id="id_fk_derivacion" name="fk_derivacion" value={{pk}}>
+                        <input type="hidden" id="id_fk_legajo" name="fk_legajo" value={{legajo.fk_legajo.id}}>
+                        {%if request.resolver_match.url_name == "MA_admisiones_editar" %}
+                        <input type="hidden" id="id_modificado_por" name="modificado_por" value={{ user.id }}>
+                        {% else %}
+                        <input type="hidden" id="id_creado_por" name="creado_por" value={{ user.id }}>
+                        {% endif %}
+                    <div class="bs-stepper-content">
+                        <div id="bs1" class="content" role="tabpanel" aria-labelledby="bs1-trigger">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        {{form.fecha_ingreso| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        {{form.tipo_abrigo| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        {{form.organismo| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        {{form.equipo_trabajo| as_crispy_field}}
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="{% url 'MA_expediente_ver' preadmi_ma.fk_derivacion.id %}" class="btn btn-secondary float-left mb-3 mt-5">Cancelar</a>
+                            <button type="submit" name="confirmar_admi" class="btn btn-primary float-right mb-3 mt-5">Confirmar</button>
+                        </div>
+                </div>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+
+{% block customJS %}
+<script>
+    // BS-Stepper Init
+    document.addEventListener('DOMContentLoaded', function () {
+        window.stepper = new Stepper(document.querySelector('.bs-stepper'))
+    });
+</script>
+
+{% endblock %}

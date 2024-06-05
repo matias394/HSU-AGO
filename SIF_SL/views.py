@@ -13,6 +13,7 @@ import uuid
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
 from django.conf import settings
+from SIF_MA.models import MA_Derivacion
 
 
 # # Create your views here.
@@ -83,7 +84,9 @@ class SLDerivacionesDetailView(PermisosMixin, DetailView):
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=settings.PROG_SL).first()
+        archivos = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=pk).all()
         context["pk"] = pk
+        context["archivos"] = archivos
         return context
 
 class SLDerivacionesRechazo(PermisosMixin, CreateView):
@@ -157,7 +160,8 @@ class SLPreAdmisionesCreateView(PermisosMixin,FormView, SuccessMessageMixin):
         alertas = Alertas.objects.all()
         responsables = LegajoGrupoFamiliar.objects.filter(fk_legajo_1=legajo.fk_legajo.id).exclude(vinculo="Hermano/a")
         responsables2 = LegajoGrupoFamiliar.objects.filter(fk_legajo_2=legajo.fk_legajo.id).exclude(vinculo_inverso="Hermano/a")
-        
+        legajos_alertas = LegajoAlertas.objects.filter(fk_legajo=legajo.fk_legajo.pk).all()
+
         context["pk"] = pk
         context["legajo"] = legajo
         context["categorias_alertas"] = categorias_alertas
@@ -168,6 +172,7 @@ class SLPreAdmisionesCreateView(PermisosMixin,FormView, SuccessMessageMixin):
         context["count_referentes"] = responsables.count() + responsables2.count()
         context["responsables"] = responsables
         context["responsables2"] = responsables2
+        context["legajos_alertas"] = legajos_alertas
         return context
 
     def get_form_kwargs(self):
@@ -177,6 +182,7 @@ class SLPreAdmisionesCreateView(PermisosMixin,FormView, SuccessMessageMixin):
     
     def form_valid(self, form):
         pk = self.kwargs["pk"]
+        legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
         expediente_data = {
             'expediente': form.cleaned_data['expediente'],
             'fk_derivacion': form.cleaned_data['fk_derivacion'],
@@ -198,7 +204,7 @@ class SLPreAdmisionesCreateView(PermisosMixin,FormView, SuccessMessageMixin):
             'conocimiento_situacion': form.cleaned_data['conocimiento_situacion'],
             'estado': "En proceso",
         }
-        preadmi_instance = SL_PreAdmision.objects.create(**preadmision_data)
+        SL_PreAdmision.objects.create(**preadmision_data)
 
         fk_externo = form.cleaned_data.get('fk_externo')
         fk_legajo_referente = form.cleaned_data.get('fk_legajo_referente')
@@ -210,63 +216,281 @@ class SLPreAdmisionesCreateView(PermisosMixin,FormView, SuccessMessageMixin):
         if fk_legajo_referente:
             for referente in fk_legajo_referente:
                 SL_Referentes.objects.create(fk_expediente=expediente_instance, fk_legajo_referente=referente)
-                
-        # Procesar la carga de alarmas
-        alarmas = form.cleaned_data.get('fk_alarmas')
-        if alarmas:
-            for alarma in alarmas:
-                SL_Alarmas.objects.create(fk_expediente=expediente_instance, fk_alarmas_id=alarma.id)
-        
-        # Procesar la carga de grupo familiar
+                      
+        # Procesar la carga de grupo familiar y alarmas
         familiares = form.cleaned_data.get('fk_legajo_familiar')
+        alarmas = form.cleaned_data.get('fk_alarmas')
         if familiares:
             for familiar in familiares:
                 SL_GrupoFamiliar.objects.create(fk_expediente=expediente_instance, fk_legajo_familiar=familiar)
+
+        if alarmas:
+            for alarma in alarmas:
+                print("alarma")
+                LegajoAlertas.objects.get_or_create(fk_legajo_id=legajo.fk_legajo.pk, creada_por_id=self.request.user.id, fk_alerta_id=alarma.id  )
+                if familiares:
+                    print("Familiares")
+                    for familiar in familiares:
+                        print("Tiene familiar - carga alarma")
+                        LegajoAlertas.objects.get_or_create(fk_legajo_id=familiar.id, creada_por_id=self.request.user.id, fk_alerta_id=alarma.id  )
         
         # Procesar la carga de archivos
-        archivos = self.request.FILES.getlist('archivos')
-        if archivos:
+        if 'archivos' in self.request.FILES:
+            archivos = self.request.FILES.getlist('archivos')
             for archivo in archivos:
-                print ("==========================================")
-                print(archivo)
                 SL_ExpedientesArchivos.objects.create(fk_expediente=expediente_instance, archivo=archivo)
 
         base = LegajosDerivaciones.objects.get(pk=pk)
         base.estado = "Aceptada"
         base.save() 
         
-        return redirect('SL_preadmisiones_ver', pk=preadmi_instance.pk)
+        return redirect('SL_expediente_ver', pk=expediente_instance.pk)
     
     def form_invalid(self, form):
-        print(form.errors)
         return super().form_invalid(form)   
 
-
-class SLPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin):
-    permission_required = "Usuarios.rol_admin"
-    template_name = "SIF_SL/preadmisiones_form.html"
-    model = SL_PreAdmision
+class SLPreAdmisionesUpdateView(PermisosMixin, SuccessMessageMixin, FormView):
+    template_name = "SIF_SL/preadmisiones_form_edit.html"
     form_class = SL_MultiModelForm
-    success_message = "Preadmisión creada correctamente"
+    success_url = reverse_lazy('SL_preadmisiones_list')  # Define correctamente esta URL
+    success_message = "Preadmisión actualizada correctamente."
+    permission_required = "Usuarios.rol_admin"
 
+    def get_initial(self):
+        initial = super().get_initial()
+        pk = self.kwargs.get('pk')
+        preadmi = SL_PreAdmision.objects.filter(pk=pk).first()
+        archivos = SL_ExpedientesArchivos.objects.filter(fk_expediente_id=preadmi.fk_expediente_id)
+        initial['expediente'] = preadmi.fk_expediente.expediente
+        initial['organismo'] = preadmi.organismo
+        initial['motivo_ingreso'] = preadmi.motivo_ingreso
+        initial['obs_vulneracion'] = preadmi.obs_vulneracion
+        initial['dinamica_familiar'] = preadmi.dinamica_familiar
+        initial['conocimiento_situacion'] = preadmi.conocimiento_situacion
+        initial['archivos'] = archivos
+        return initial
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['pk_url'] = self.kwargs.get('pk')
+        return kwargs
+    
     def get_context_data(self, **kwargs):
-        pk = SL_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
+        pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
-        legajo = LegajosDerivaciones.objects.filter(pk=pk.fk_derivacion_id).first()
-        familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
-        familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
+        preadmi = SL_PreAdmision.objects.filter(pk=pk).first()
+        legajo = LegajosDerivaciones.objects.filter(pk=preadmi.fk_derivacion_id).first()
+        familiares_fk1 = LegajoGrupoFamiliar.objects.filter(fk_legajo_1=legajo.fk_legajo.id, vinculo="Hermano/a").all()
+        familiares_fk2 = LegajoGrupoFamiliar.objects.filter(fk_legajo_2=legajo.fk_legajo.id, vinculo_inverso="Hermano/a").all()
+        categorias_alertas = CategoriaAlertas.objects.all()
+        alertas = Alertas.objects.all()
+        responsables = LegajoGrupoFamiliar.objects.filter(fk_legajo_1=legajo.fk_legajo.id).exclude(vinculo="Hermano/a")
+        responsables2 = LegajoGrupoFamiliar.objects.filter(fk_legajo_2=legajo.fk_legajo.id).exclude(vinculo_inverso="Hermano/a")
+        legajos_alertas = LegajoAlertas.objects.filter(fk_legajo=legajo.fk_legajo.pk).all()
 
-        context["pk"] = pk.fk_derivacion_id
+        context["pk"] = pk
         context["legajo"] = legajo
-        context["familia"] = familia
-        context["familia_inversa"] = familia_inversa
+        context["preadmi"] = preadmi
+        context["categorias_alertas"] = categorias_alertas
+        context["alertas"] = alertas
+        context["count_familia"] = familiares_fk1.count() + familiares_fk2.count()
+        context["familiares_fk1"] = familiares_fk1
+        context["familiares_fk2"] = familiares_fk2
+        context["count_referentes"] = responsables.count() + responsables2.count()
+        context["responsables"] = responsables
+        context["responsables2"] = responsables2
+        context["legajos_alertas"] = legajos_alertas
         return context
 
+
     def form_valid(self, form):
-        form.save()
-        return super().form_valid(form)
-    def get_success_url(self):
-        return reverse_lazy('detalle_expediente', kwargs={'pk': self.object.pk})
+        pk = self.kwargs["pk"]
+        legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
+        expediente_data = {
+            'expediente': form.cleaned_data['expediente'],
+            'fk_derivacion': form.cleaned_data['fk_derivacion'],
+            'fk_equipo': form.cleaned_data['fk_equipo'],
+            'creado_por_id': self.request.user.id,
+            'modificado_por': form.cleaned_data['modificado_por'],
+            'estado': "Iniciado",
+        }
+        expediente_instance = SL_Expedientes.objects.create(**expediente_data)
+
+        preadmision_data = {
+            'fk_derivacion': form.cleaned_data['fk_derivacion'],
+            'fk_expediente': expediente_instance,
+            'fk_legajo': form.cleaned_data['fk_legajo'],
+            'organismo': form.cleaned_data['organismo'],
+            'motivo_ingreso': form.cleaned_data['motivo_ingreso'],
+            'obs_vulneracion': form.cleaned_data['obs_vulneracion'],
+            'dinamica_familiar': form.cleaned_data['dinamica_familiar'],
+            'conocimiento_situacion': form.cleaned_data['conocimiento_situacion'],
+            'estado': "En proceso",
+        }
+        SL_PreAdmision.objects.create(**preadmision_data)
+
+        fk_externo = form.cleaned_data.get('fk_externo')
+        fk_legajo_referente = form.cleaned_data.get('fk_legajo_referente')
+    
+        if fk_externo:
+            for externo in fk_externo.all():
+                SL_Referentes.objects.create(fk_expediente=expediente_instance, fk_externo=externo)
+
+        if fk_legajo_referente:
+            for referente in fk_legajo_referente:
+                SL_Referentes.objects.create(fk_expediente=expediente_instance, fk_legajo_referente=referente)
+                      
+        # Procesar la carga de grupo familiar y alarmas
+        familiares = form.cleaned_data.get('fk_legajo_familiar')
+        alarmas = form.cleaned_data.get('fk_alarmas')
+        if familiares:
+            for familiar in familiares:
+                SL_GrupoFamiliar.objects.create(fk_expediente=expediente_instance, fk_legajo_familiar=familiar)
+
+        if alarmas:
+            for alarma in alarmas:
+                print("alarma")
+                LegajoAlertas.objects.get_or_create(fk_legajo_id=legajo.fk_legajo.pk, creada_por_id=self.request.user.id, fk_alerta_id=alarma.id  )
+                if familiares:
+                    print("Familiares")
+                    for familiar in familiares:
+                        print("Tiene familiar - carga alarma")
+                        LegajoAlertas.objects.get_or_create(fk_legajo_id=familiar.id, creada_por_id=self.request.user.id, fk_alerta_id=alarma.id  )
+        
+        # Procesar la carga de archivos
+        if 'archivos' in self.request.FILES:
+            archivos = self.request.FILES.getlist('archivos')
+            for archivo in archivos:
+                SL_ExpedientesArchivos.objects.create(fk_expediente=expediente_instance, archivo=archivo)
+
+        base = LegajosDerivaciones.objects.get(pk=pk)
+        base.estado = "Aceptada"
+        base.save() 
+        
+        return redirect('SL_expediente_ver', pk=expediente_instance.pk)
+    
+    def form_invalid(self, form):
+        print(form.error)
+        return super().form_invalid(form)  
+    
+
+#class SLPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin):
+#    permission_required = "Usuarios.rol_admin"
+#    template_name = "SIF_SL/preadmisiones_form_edit.html"
+#    form_class = SL_MultiModelForm
+#    success_message = "Preadmisión editada correctamente"
+#
+#    def get_form_kwargs(self):
+#        kwargs = super().get_form_kwargs()
+#        instance = self.get_object()
+#        kwargs['initial'] = {
+#            'fk_expediente': instance.fk_expediente,
+#            'fk_derivacion': instance.fk_derivacion,
+#            'fk_legajo': instance.fk_legajo,
+#            'organismo': instance.organismo,
+#            'motivo_ingreso': instance.motivo_ingreso,
+#            'obs_vulneracion': instance.obs_vulneracion,
+#            'dinamica_familiar': instance.dinamica_familiar,
+#            'conocimiento_situacion': instance.conocimiento_situacion,
+#            'estado': instance.estado,
+#            # Asegúrate de agregar todos los campos necesarios aquí
+#        }
+#        kwargs['pk_url'] = self.kwargs["pk"]
+#        return kwargs
+#
+#    def get_context_data(self, **kwargs):
+#        pk = self.kwargs["pk"]
+#        context = super().get_context_data(**kwargs)
+#        legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
+#        familiares_fk1 = LegajoGrupoFamiliar.objects.filter(fk_legajo_1=legajo.fk_legajo.id, vinculo="Hermano/a").all()
+#        familiares_fk2 = LegajoGrupoFamiliar.objects.filter(fk_legajo_2=legajo.fk_legajo.id, vinculo_inverso="Hermano/a").all()
+#        categorias_alertas = CategoriaAlertas.objects.all()
+#        alertas = Alertas.objects.all()
+#        responsables = LegajoGrupoFamiliar.objects.filter(fk_legajo_1=legajo.fk_legajo.id).exclude(vinculo="Hermano/a")
+#        responsables2 = LegajoGrupoFamiliar.objects.filter(fk_legajo_2=legajo.fk_legajo.id).exclude(vinculo_inverso="Hermano/a")
+#        legajos_alertas = LegajoAlertas.objects.filter(fk_legajo=legajo.fk_legajo.pk).all()
+#
+#        context["pk"] = pk
+#        context["legajo"] = legajo
+#        context["categorias_alertas"] = categorias_alertas
+#        context["alertas"] = alertas
+#        context["count_familia"] = familiares_fk1.count() + familiares_fk2.count()
+#        context["familiares_fk1"] = familiares_fk1
+#        context["familiares_fk2"] = familiares_fk2
+#        context["count_referentes"] = responsables.count() + responsables2.count()
+#        context["responsables"] = responsables
+#        context["responsables2"] = responsables2
+#        context["legajos_alertas"] = legajos_alertas
+#        return context
+#
+#    def form_valid(self, form):
+#        pk = self.kwargs["pk"]
+#        legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
+#        expediente_data = {
+#            'expediente': form.cleaned_data['expediente'],
+#            'fk_derivacion': form.cleaned_data['fk_derivacion'],
+#            'fk_equipo': form.cleaned_data['fk_equipo'],
+#            'creado_por_id': self.request.user.id,
+#            'modificado_por': form.cleaned_data['modificado_por'],
+#            'estado': "Iniciado",
+#        }
+#        expediente_instance = SL_Expedientes.objects.create(**expediente_data)
+#
+#        preadmision_data = {
+#            'fk_derivacion': form.cleaned_data['fk_derivacion'],
+#            'fk_expediente': expediente_instance,
+#            'fk_legajo': form.cleaned_data['fk_legajo'],
+#            'organismo': form.cleaned_data['organismo'],
+#            'motivo_ingreso': form.cleaned_data['motivo_ingreso'],
+#            'obs_vulneracion': form.cleaned_data['obs_vulneracion'],
+#            'dinamica_familiar': form.cleaned_data['dinamica_familiar'],
+#            'conocimiento_situacion': form.cleaned_data['conocimiento_situacion'],
+#            'estado': "En proceso",
+#        }
+#        SL_PreAdmision.objects.create(**preadmision_data)
+#
+#        fk_externo = form.cleaned_data.get('fk_externo')
+#        fk_legajo_referente = form.cleaned_data.get('fk_legajo_referente')
+#    
+#        if fk_externo:
+#            for externo in fk_externo.all():
+#                SL_Referentes.objects.create(fk_expediente=expediente_instance, fk_externo=externo)
+#
+#        if fk_legajo_referente:
+#            for referente in fk_legajo_referente:
+#                SL_Referentes.objects.create(fk_expediente=expediente_instance, fk_legajo_referente=referente)
+#                      
+#        # Procesar la carga de grupo familiar y alarmas
+#        familiares = form.cleaned_data.get('fk_legajo_familiar')
+#        alarmas = form.cleaned_data.get('fk_alarmas')
+#        if familiares:
+#            for familiar in familiares:
+#                SL_GrupoFamiliar.objects.create(fk_expediente=expediente_instance, fk_legajo_familiar=familiar)
+#
+#        if alarmas:
+#            for alarma in alarmas:
+#                print("alarma")
+#                LegajoAlertas.objects.get_or_create(fk_legajo_id=legajo.fk_legajo.pk, creada_por_id=self.request.user.id, fk_alerta_id=alarma.id  )
+#                if familiares:
+#                    print("Familiares")
+#                    for familiar in familiares:
+#                        print("Tiene familiar - carga alarma")
+#                        LegajoAlertas.objects.get_or_create(fk_legajo_id=familiar.id, creada_por_id=self.request.user.id, fk_alerta_id=alarma.id  )
+#        
+#        # Procesar la carga de archivos
+#        if 'archivos' in self.request.FILES:
+#            archivos = self.request.FILES.getlist('archivos')
+#            for archivo in archivos:
+#                SL_ExpedientesArchivos.objects.create(fk_expediente=expediente_instance, archivo=archivo)
+#
+#        base = LegajosDerivaciones.objects.get(pk=pk)
+#        base.estado = "Aceptada"
+#        base.save() 
+#        
+#        return redirect('SL_expediente_ver', pk=expediente_instance.pk)
+    
+    def form_invalid(self, form):
+        return super().form_invalid(form)  
     
 
 class SLPreAdmisionesListView(PermisosMixin, ListView):
@@ -276,8 +500,8 @@ class SLPreAdmisionesListView(PermisosMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        pre_admi = SL_PreAdmision.objects.all()
-        context["object"] = pre_admi
+        preadmi = SL_PreAdmision.objects.all()
+        context["object"] = preadmi
         return context
 
 class SLPreAdmisionesBuscarListView(PermisosMixin, TemplateView):
@@ -321,8 +545,8 @@ class SLPreAdmisionesDeleteView(PermisosMixin, DeleteView):
             return redirect("SL_preadmisiones_ver", pk=int(self.object.id))
 
         if self.request.user.id != self.object.creado_por.id:
-            print(self.request.user)
-            print(self.object.creado_por)
+            #print(self.request.user)
+            #print(self.object.creado_por)
             messages.error(
                 self.request,
                 "Solo el usuario que generó esta derivación puede eliminarla.",
@@ -368,7 +592,7 @@ class SLIndiceVulneracionCreateView(PermisosMixin, CreateView):
             preadmi.estado = "A efectivizar"
             preadmi.save()
 
-        return redirect('SL_preadmisiones_ver', preadmi.id)
+        return redirect('SL_expediente_ver', preadmi.fk_expediente.id)
     
 class SLIndiceVulneracionUpdateView (PermisosMixin, UpdateView):
     permission_required = "Usuarios.rol_admin"
@@ -404,7 +628,7 @@ class SLIndiceVulneracionUpdateView (PermisosMixin, UpdateView):
                 base.creado_por_id = self.request.user.id
                 base.save()
 
-        return redirect('SL_preadmisiones_ver', preadmi.id)
+        return redirect('SL_expediente_ver', preadmi.fk_expediente.id)
     
 
 
@@ -491,15 +715,17 @@ class SLIntervencionesCreateView(PermisosMixin, CreateView):
     form_class = SL_IntervencionesForm
 
     def form_valid(self, form):
-        form.instance.fk_admision_id = self.kwargs["pk"]
+        expediente = SL_Expedientes.objects.get(pk=self.kwargs["pk"])
+        form.instance.fk_expediente_id = self.kwargs["pk"]
         form.instance.creado_por_id = self.request.user.id
         self.object = form.save()
 
-        return redirect('SL_intervencion_ver', pk=self.object.id)
+        return redirect('SL_expediente_ver', pk=expediente.pk)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["object"] = SL_Admision.objects.get(pk=self.kwargs["pk"])  # Obtén el objeto directamente
+        context["object"] = SL_Expedientes.objects.get(pk=self.kwargs["pk"])  # Obtén el objeto directamente
+        context["equipo"] = SL_EquipoDesignado.objects.get(fk_expediente_id=self.kwargs["pk"])
         context["form"] = self.get_form()  # Obtiene una instancia del formulario
 
         return context
@@ -512,19 +738,20 @@ class SLIntervencionesUpdateView(PermisosMixin, UpdateView):
 
     def form_valid(self, form):
             pk = SL_Intervenciones.objects.filter(pk=self.kwargs["pk"]).first()
-            admi = SL_Admision.objects.filter(id=pk.fk_admision.id).last()
-            form.instance.fk_admision_id = admi.id
+            expediente = SL_Expedientes.objects.filter(id=pk.fk_expediente.id).last()
+            form.instance.fk_expediente_id = expediente.id
             form.instance.modificado_por_id = self.request.user.id
             self.object = form.save()
 
-            return redirect('SL_admisiones_ver', self.object.id)
+            return redirect('SL_expediente_ver', expediente.id)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         pk = SL_Intervenciones.objects.filter(pk=self.kwargs["pk"]).first()
-        admi = SL_Admision.objects.filter(id=pk.fk_admision.id).first()
+        expediente = SL_Expedientes.objects.filter(id=pk.fk_expediente.id).first()
 
-        context["object"] = admi
+        context["object"] = expediente
+        context["equipo"] = SL_EquipoDesignado.objects.get(fk_expediente_id=expediente.id)
 
         return context
 
@@ -571,6 +798,14 @@ class SLIntervencionesDetail (PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_SL/intervencion_detail.html"
     model = SL_Intervenciones
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = SL_Intervenciones.objects.filter(pk=self.kwargs["pk"]).first()
+        expediente = SL_Expedientes.objects.filter(id=pk.fk_expediente.id).first()
+
+        context["equipo"] = SL_EquipoDesignado.objects.get(fk_expediente_id=expediente.id)
+
+        return context
 
 class SLOpcionesResponsablesCreateView(PermisosMixin, CreateView):
     permission_required = "Usuarios.rol_admin"
@@ -591,8 +826,8 @@ class SLIntervencionesDeleteView(PermisosMixin, DeleteView):
     def form_valid(self, form):
 
         if self.request.user.id != self.object.creado_por.id:
-            print(self.request.user)
-            print(self.object.creado_por)
+            #print(self.request.user)
+            #print(self.object.creado_por)
             messages.error(
                 self.request,
                 "Solo el usuario que generó esta derivación puede eliminarla.",
@@ -715,8 +950,13 @@ class SLPreAdmisionesDetailView(PermisosMixin, DetailView):
         context = super().get_context_data(**kwargs)
         preadmi = SL_PreAdmision.objects.filter(pk=pk).first()
         resultado = SL_IndiceVulnerabilidad.objects.filter(Q(fk_preadmi_id=pk) | Q(fk_expediente_id=preadmi.fk_expediente_id))
+        legajos_alertas = LegajoAlertas.objects.filter(fk_legajo=preadmi.fk_derivacion.fk_legajo)
+        grupo_familiar =  SL_GrupoFamiliar.objects.filter(fk_expediente_id=preadmi.fk_expediente_id).all()
+        #print(grupo_familiar)
 
         context['resultado'] = resultado.aggregate(total=Sum('fk_indice__puntaje'))
+        context['legajos_alertas'] = legajos_alertas
+        context['grupo_familiar'] = grupo_familiar
         return context
 
 class SLExpedientesListView(PermisosMixin, ListView):
@@ -744,6 +984,7 @@ class SLDesignarEquipoCreateView(PermisosMixin, CreateView):
     def form_valid(self, form):
         pk = self.kwargs["pk"]
         preadmi = SL_PreAdmision.objects.filter(pk=pk).first()
+        expediente = SL_Expedientes.objects.filter(fk_derivacion_id=preadmi.fk_derivacion_id).first()
         admision = SL_Admision()
         admision.fk_expediente_id = preadmi.fk_expediente_id
         admision.fk_preadmi_id = pk
@@ -751,16 +992,19 @@ class SLDesignarEquipoCreateView(PermisosMixin, CreateView):
         admision.save()
 
         form.instance.creado_por_id = self.request.user.id
-        form.instance.admi
+        form.instance.fk_admi_id = admision.id
         self.object = form.save()
 
-        preadmi.estado = "Finalizado"
+        expediente.estado = "En proceso"
+        expediente.save()
+
+        preadmi.estado = "Finalizada"
         preadmi.save()
 
-        return redirect('SL_admisiones_ver', pk=admision.pk)
+        return redirect('SL_expediente_ver', pk=preadmi.fk_expediente_id)
     
     def form_invalid(self, form):
-        print(form.errors)
+        #print(form.errors)
         return super().form_invalid(form)   
 
     def get_context_data(self, **kwargs):
@@ -781,11 +1025,15 @@ class SLDesignarEquipoUpdateView(PermisosMixin, UpdateView):
         admision = SL_Admision.objects.filter(fk_preadmi_id = preadmi, fk_expediente_id = expediente).last()
         form.instance.modificado_por_id = self.request.user.id
         self.object = form.save()
+
+        expediente = SL_Expedientes.objects.filter(fk_derivacion_id=preadmi.fk_derivacion_id).first()
+        expediente.estado = "En proceso"
+        expediente.save()
         
-        return redirect('SL_admisiones_ver', pk=admision.pk)
+        return redirect('SL_expediente_ver', pk=expediente.pk)
     
     def form_invalid(self, form):
-        print(form.errors)
+        #print(form.errors)
         return super().form_invalid(form)   
 
     def get_context_data(self, **kwargs):
@@ -812,7 +1060,61 @@ class SL_EquiposDesignadosListView(PermisosMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Obtenemos el nombre del equipo, su id y la cantidad de registros por cada equipo
-        context['info_por_equipo'] = SL_EquipoDesignado.objects.values('fk_equipo__nombre', 'fk_equipo').annotate(cantidad=Count('id'))
-        return context
+        equipos = SL_Equipos.objects.all()
+        equipos_designados = SL_EquipoDesignado.objects.values_list('fk_equipo', flat=True)
+        equipos_no_designados = [equipo for equipo in equipos if equipo.pk not in equipos_designados]
 
+        context['no_esta'] = equipos_no_designados
+        info_equipos_designados = SL_EquipoDesignado.objects.values('fk_equipo__nombre', 'fk_equipo').annotate(cantidad=Count('id'))
+        context['info_por_equipo'] = info_equipos_designados
+
+        return context
+    
+class SL_ExpedienteDetailView(PermisosMixin, DetailView):
+    permission_required = ['Usuarios.rol_admin','Usuarios.rol_observador','Usuarios.rol_consultante']
+    template_name = "SIF_SL/expediente_detail.html"
+    model = SL_Expedientes
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs["pk"]
+        preadmi = SL_PreAdmision.objects.filter(fk_expediente_id=pk).last()
+        familia = SL_GrupoFamiliar.objects.filter(fk_expediente_id=pk).all()
+        legajos_alertas = LegajoAlertas.objects.filter(fk_legajo=preadmi.fk_derivacion.fk_legajo)
+        archivos = SL_ExpedientesArchivos.objects.filter(fk_expediente_id=pk).all()
+        resultado = SL_IndiceVulnerabilidad.objects.filter(fk_expediente_id=preadmi.fk_expediente_id)
+        equipo = SL_EquipoDesignado.objects.filter(fk_expediente_id=preadmi.fk_expediente_id).first()
+        referentes = SL_Referentes.objects.filter(fk_expediente_id=preadmi.fk_expediente_id).all()
+        intervenciones = SL_Intervenciones.objects.filter(fk_expediente_id=preadmi.fk_expediente_id).all()
+
+        context['preadmi'] = preadmi
+        context['legajos_alertas'] = legajos_alertas
+        context['familia'] = familia
+        context['archivos'] = archivos
+        context['equipo'] = equipo
+        context['referentes'] = referentes
+        context['intervenciones'] = intervenciones
+        context['resultado'] = resultado.aggregate(total=Sum('fk_indice__puntaje'))
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        pk=self.kwargs["pk"]
+        if 'archivos' in self.request.FILES:
+            archivos = self.request.FILES.getlist('archivos')
+            for archivo in archivos:
+                SL_ExpedientesArchivos.objects.create(fk_expediente_id=pk, archivo=archivo)
+        
+        if 'derivacion_ma' in self.request.POST:
+            expediente = SL_Expedientes.objects.filter(pk=pk).first()
+            expediente.estado = "Finalizada"
+            expediente.save()
+            
+            MA_Derivacion.objects.create(fk_expediente_id=pk, estado="Pendiente", creado_por_id=self.request.user.id)
+
+        return redirect('SL_expediente_ver', pk)
+
+class SL_ExpedienteListView(PermisosMixin, ListView):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_SL/expediente_list.html"
+    model = SL_Expedientes
+    
