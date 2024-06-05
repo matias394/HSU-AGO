@@ -747,15 +747,19 @@ class CDIFVacantesAdmisionCambio(PermisosMixin, CreateView):
         #     messages.error(self.request, 'El campo fecha de egreso es requerido.')
         #     return super().form_invalid(form) 
         # else:
+        form.evento = "CambioVacante"
         pk = self.kwargs["pk"]
         vacante_anterior = CDIF_VacantesOtorgadas.objects.filter(fk_admision_id=pk).last()
         vacante_anterior.estado_vacante = "Cambiado"
+        vacante_anterior.motivo = form.cleaned_data['motivo']
         vacante_anterior.fecha_egreso = date.today()
         vacante_anterior.save()
 
-        form.evento = "CambioVacante"
+        
         sala = form.cleaned_data['sala']
         turno = form.cleaned_data['turno']
+        #need to clear data from existing form before saving
+        form.instance.motivo = ""
         if sala == 'Bebes' and turno == 'Mañana':
             form.instance.salashort = 'manianabb'
         elif sala == 'Bebes' and turno == 'Tarde':
