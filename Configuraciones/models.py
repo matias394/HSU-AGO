@@ -454,6 +454,7 @@ class StockVacante(models.Model):
     cupo = models.IntegerField(null=True, blank=True)
     observaciones = models.CharField(max_length=300, null=True, blank=True)
     fk_vacante = models.ForeignKey(Vacantes,on_delete=models.CASCADE, related_name='stockvacantes')
+    fecha_creacion = models.DateField(auto_now=True)
 
     def __str__(self):
         return self.nombre
