@@ -246,14 +246,16 @@ class VacantesForm(forms.ModelForm):
         }
 
 class StockVacantesForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['nombre'].label = "Nombre"
-        self.fields['cupo'].label = "Cupo Maximo"
-        self.fields['observaciones'].label = "Descripcion"
+
     class Meta:
-        model = Vacantes
-        exclude = ()
+        model = StockVacante
+        exclude = ('fk_vacante',)
+        labels = {
+            'nombre': 'Nombre del cupo',
+            'cupo': 'Cupo Maximo',
+            'observaciones': 'Descripcion',
+        }
+
         widgets = {
             'observaciones': forms.Textarea(
                 attrs={
@@ -262,6 +264,7 @@ class StockVacantesForm(forms.ModelForm):
                 }
             ),
         }
+
         
 class IndicesForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
