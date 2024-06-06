@@ -1,6 +1,10 @@
 from django.contrib import messages
+from django.forms import BaseForm
+from django.http import HttpResponseRedirect
+from django.http.response import HttpResponse
 from django.shortcuts import redirect
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
+from django.views.generic.edit import FormMixin
 from Usuarios.mixins import PermisosMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from .models import *
@@ -853,6 +857,17 @@ class VacantesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
     form_class = VacantesForm
     success_message = "%(nombre)s fue registrado correctamente"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['stockform'] = StockVacantesForm()
+        return context
+    
+    def post(self,request,*args,**kwargs):
+        if 'crear_cupo' in request.POST:
+            pk = self.kwargs.get('pk')
+            print(request.POST)
+        # redirect('vacantes_listar')
+        return HttpResponseRedirect(self.request.path_info)
 
 class VacantesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'Usuarios.rol_admin'
@@ -860,6 +875,32 @@ class VacantesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
     form_class = VacantesForm
     success_message = "%(nombre)s fue editado correctamente"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['stockform'] = StockVacantesForm()
+        context['lista_cupos'] = StockVacante.objects.filter(fk_vacante_id=self.kwargs["pk"]).all()
+        return context
+
+    def post(self,request,*args,**kwargs):
+
+        if 'crear_cupo' in request.POST:
+            nuevo_cupo = StockVacante()
+            nuevo_cupo.nombre = request.POST.get('nombre') 
+            nuevo_cupo.cupo = request.POST.get('cupo')
+            nuevo_cupo.observaciones = request.POST.get('observaciones')
+            nuevo_cupo.fk_vacante = self.get_object()
+            nuevo_cupo.save()
+        
+        elif 'vacante_actualizar' in request.POST:
+            vacante = self.get_object()
+            for clave,valor in request.POST.items():
+                setattr(vacante,clave if not 'fk_' in clave else f'{clave}_id',valor)
+            vacante.save()
+                
+        # redirect('vacantes_listar')
+        return HttpResponseRedirect(self.request.path_info)
+    
+    
 
 # region ############################################################### Servicio Local Equipos
 
