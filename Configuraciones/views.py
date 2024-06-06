@@ -883,6 +883,7 @@ class VacantesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
     def post(self,request,*args,**kwargs):
 
+        # Post del formulario de stock
         if 'crear_cupo' in request.POST:
             nuevo_cupo = StockVacante()
             nuevo_cupo.nombre = request.POST.get('nombre') 
@@ -891,6 +892,7 @@ class VacantesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
             nuevo_cupo.fk_vacante = self.get_object()
             nuevo_cupo.save()
         
+        # Post de la vacante
         elif 'vacante_actualizar' in request.POST:
             vacante = self.get_object()
             for clave,valor in request.POST.items():
