@@ -857,18 +857,6 @@ class VacantesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
     form_class = VacantesForm
     success_message = "%(nombre)s fue registrado correctamente"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['stockform'] = StockVacantesForm()
-        return context
-    
-    def post(self,request,*args,**kwargs):
-        if 'crear_cupo' in request.POST:
-            pk = self.kwargs.get('pk')
-            print(request.POST)
-        # redirect('vacantes_listar')
-        return HttpResponseRedirect(self.request.path_info)
-
 class VacantesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'Usuarios.rol_admin'
     model = Vacantes
