@@ -179,9 +179,9 @@
                             <form method="post">
                                 {% csrf_token %}
                                 <div class="modal-body">
-                                    {{ stockform.nombre| as_crispy_field }}
-                                    {{ stockform.cupo| as_crispy_field }}
-                                    {{ stockform.observaciones| as_crispy_field }}
+                                    {{ cupoform.nombre| as_crispy_field }}
+                                    {{ cupoform.cupo| as_crispy_field }}
+                                    {% comment %} {{ cupoform.observaciones| as_crispy_field }} {% endcomment %}
 
 
                                 </div>
@@ -203,7 +203,7 @@
                             <th>Creado</th>
                             <th>Nombre</th>
                             <th>Cupo</th>
-                            <th>Descripción</th>
+                            {% comment %} <th>Descripción</th> {% endcomment %}
                          
                         </tr>
                     </thead>
@@ -213,7 +213,7 @@
                             <th>{{o.fecha_creacion|date:'d/m/Y'}}</th>
                             <td>{{o.nombre}}</td>
                             <td> {{o.cupo |default_if_none:"-" }}</td>
-                            <td> {{o.observaciones |default_if_none:"-"|truncatechars:100 }}</td>
+                            {% comment %} <td> {{o.observaciones |default_if_none:"-"|truncatechars:100 }}</td> {% endcomment %}
                         </tr>
                         {% endfor %}
                     </tbody>

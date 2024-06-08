@@ -865,15 +865,15 @@ class VacantesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['stockform'] = StockVacantesForm()
-        context['lista_cupos'] = StockVacante.objects.filter(fk_vacante_id=self.kwargs["pk"]).all()
+        context['cupoform'] = CupoVacantesForm()
+        context['lista_cupos'] = CupoVacante.objects.filter(fk_vacante_id=self.kwargs["pk"]).all()
         return context
 
     def post(self,request,*args,**kwargs):
 
-        # Post del formulario de stock
+        # Post del formulario de Cupo
         if 'crear_cupo' in request.POST:
-            nuevo_cupo = StockVacante()
+            nuevo_cupo = CupoVacante()
             nuevo_cupo.nombre = request.POST.get('nombre') 
             nuevo_cupo.cupo = request.POST.get('cupo')
             nuevo_cupo.observaciones = request.POST.get('observaciones')

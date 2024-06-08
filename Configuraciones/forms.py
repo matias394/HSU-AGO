@@ -245,10 +245,10 @@ class VacantesForm(forms.ModelForm):
             'tipo_vacante': forms.Select(choices=CHOICE_TIPO_VACANTE),
         }
 
-class StockVacantesForm(forms.ModelForm):
+class CupoVacantesForm(forms.ModelForm):
 
     class Meta:
-        model = StockVacante
+        model = CupoVacante
         exclude = ('fk_vacante',)
         labels = {
             'nombre': 'Nombre del cupo',
