@@ -943,7 +943,59 @@ class DESCENVacantesListView(PermisosMixin, ListView):
     #    context['organizaciones'] = self.get_queryset()
     #    print(context)
     #    return context
+
+class DESCENVacantesStockListView(PermisosMixin, UpdateView):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_DESCEN/vacantes_stock_detail.html"
+    model = Vacantes
+    form_class = DESCEN_StockForm
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        organizacion = Vacantes.objects.filter(pk=self.kwargs["pk"]).first()
+        admi = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], fk_admision__estado ="Activa", estado_vacante = "Asignada")
+        admi2 = DESCEN_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"], estado ="Activa", estado_vacante = "Lista de espera")
+        detalle_cupo = CupoVacante.objects.filter(fk_vacante_id=organizacion.id).all()
+        context["object"] = Vacantes.objects.get(pk=self.kwargs["pk"])
+        context["stock"] = DESCEN_Vacantes_Stock.objects.filter(fk_vacante_id=self.kwargs["pk"]).all()
+        context["admi"] = admi
+        context["admi2"] = admi2
+        context["detalle_cupo"] = detalle_cupo
+        context["stockform"] = DESCEN_StockForm()
+        return context
     
+    def post(self,request,*args,**kwargs):
+        if 'crear_stock' in request.POST:
+            data = request.POST.copy()
+            data.appendlist('fk_vacante', self.kwargs["pk"])
+            crear_stock = DESCEN_StockForm(data)
+            if crear_stock.is_valid():
+                crear_stock.save()
+            else:
+                print(crear_stock.errors)
+        return HttpResponseRedirect(self.request.path_info)
+
+class DESCENVacantesStockEditView(PermisosMixin,SuccessMessageMixin, UpdateView):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_DESCEN/vacantes_stock_edit.html"
+    model = Vacantes
+    form_class = DESCEN_Vacantes_Stock
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        organizacion = Vacantes.objects.filter(pk=self.kwargs["pk"]).first()
+        DESCEN_Vacantes_Stock
+        admi = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], fk_admision__estado ="Activa", estado_vacante = "Asignada")
+        admi2 = DESCEN_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"], estado ="Activa", estado_vacante = "Lista de espera")
+        detalle_cupo = CupoVacante.objects.filter(fk_vacante_id=organizacion.id).all()
+
+        context["object"] = Vacantes.objects.get(pk=self.kwargs["pk"])
+        context["stock"] = DESCEN_Vacantes_Stock.objects.filter(fk_legajo=self.kwargs["pk"]).all()
+        context["admi"] = admi
+        context["admi2"] = admi2
+        context["detalle_cupo"] = detalle_cupo
+        context["stockform"] = DESCEN_StockForm()
+        return context
+        
+
 class DESCENVacantesDetailView (PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_DESCEN/vacantes_detail.html"
@@ -951,7 +1003,7 @@ class DESCENVacantesDetailView (PermisosMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        organizacion = Vacantes.objects.filter(pk=self.kwargs["pk"])
+        organizacion = Vacantes.objects.filter(pk=self.kwargs["pk"]).first()
         asig_manianabb = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="Bebes", turno= "Mañana", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
         asig_tardebb = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="Bebes", turno= "Tarde", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
         asig_maniana2 = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="2", turno= "Mañana", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
@@ -967,7 +1019,8 @@ class DESCENVacantesDetailView (PermisosMixin, DetailView):
 
         admi = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], fk_admision__estado ="Activa", estado_vacante = "Asignada")
         admi2 = DESCEN_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"], estado ="Activa", estado_vacante = "Lista de espera")
-        
+        detalle_cupo = CupoVacante.objects.filter(fk_vacante_id=organizacion.id).all()
+        stock = DESCEN_Vacantes_Stock.objects.filter(fk_vacante_id=organizacion.id).all()
         context["object"] = Vacantes.objects.get(pk=self.kwargs["pk"])
         context["asig_manianabb"] = asig_manianabb
         context["asig_tardebb"] = asig_tardebb
@@ -983,6 +1036,8 @@ class DESCENVacantesDetailView (PermisosMixin, DetailView):
         context["esp_tarde3"] = esp_tarde3
         context["admi"] = admi
         context["admi2"] = admi2
+        context["detalle_cupo"] = detalle_cupo
+        context["stock"] = stock
         return context
 
 class DESCENIntervencionesCreateView(PermisosMixin, CreateView):

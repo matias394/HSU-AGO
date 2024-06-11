@@ -26,7 +26,7 @@ Admisiones
   <!-- botones -->
   <div class="col-12 my-3 mx-2 d-print-none">
     {% if object.estado != "Inactiva" %}
-    <a href="{% url 'DESCEN_intervenciones_legajos_listar' object.id %}" class="btn btn-primary mr-1">Ver intervenciones</a>
+    <!--a href="{% url 'DESCEN_intervenciones_legajos_listar' object.id %}" class="btn btn-primary mr-1">Ver intervenciones</a-->
     <a href="{% url 'DESCEN_vacantes_form_cambio' object.id %}" class="btn btn-secondary mr-1">Cambiar vacante</a>
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>

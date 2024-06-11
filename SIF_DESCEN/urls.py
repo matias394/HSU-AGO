@@ -31,6 +31,8 @@ urlpatterns = [
     path('DESCEN/vacantes/ver/<pk>', login_required(DESCENVacantesDetailView.as_view()), name='DESCEN_vacantes_ver'),
     path('DESCEN/vacantes/crear/<pk>', login_required(DESCENVacantesAdmision.as_view()), name='DESCEN_vacantes_form'),
     path('DESCEN/vacantes/cambio/<pk>', login_required(DESCENVacantesAdmisionCambio.as_view()), name='DESCEN_vacantes_form_cambio'),
+    path('DESCEN/vacantes/stock/list/<pk>', login_required(DESCENVacantesStockListView.as_view()), name='DESCEN_vacantes_stock_listar'),
+    path('DESCEN/vacantes/stock/edit/<pk>', login_required(DESCENVacantesStockEditView.as_view()), name='DESCEN_vacantes_stock_edit'),
     # Admisiones
     path('DESCEN/admisiones/ver/<pk>', login_required(DESCENAdmisionesDetailView.as_view()), name='DESCEN_admisiones_ver'),
     path('DESCEN/admisiones/listar/', login_required(DESCENAdmisionesListView.as_view()), name='DESCEN_admisiones_listar'),
@@ -44,6 +46,7 @@ urlpatterns = [
     path('DESCEN/intervencion/ver/<pk>', login_required(DESCENIntervencionesDetail.as_view()), name='DESCEN_intervencion_ver'),
     path('DESCEN/intervenciones/editar/<pk>', login_required(DESCENIntervencionesUpdateView.as_view()), name='DESCEN_intervencion_editar'),
     path('DESCEN/intervenciones/borrar/<pk>', login_required(DESCENIntervencionesDeleteView.as_view()), name='DESCEN_intervencion_borrar'),
-
+    # Stock
+    
     ]
 

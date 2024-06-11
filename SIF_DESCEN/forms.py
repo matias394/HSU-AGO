@@ -100,14 +100,34 @@ class DESCEN_IndiceIviHistorialForm (forms.ModelForm):
         widgets = {}
         labels = {}
 
+class DESCEN_StockForm(forms.ModelForm):
+    class Meta:
+        model = DESCEN_Vacantes_Stock
+        labels = {
+            'tipo': 'Tipo',
+            'cantidad': 'Cantidad',
+            'observaciones': 'Descripcion',
+        }
+        exclude = ['id']
+        fields = ['fk_vacante','tipo','cantidad','observaciones']
+        widgets = {
+            'observaciones': forms.Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'rows': 3,
+                }
+            ),
+        }
+
 class DESCEN_VacantesOtorgadasForm (forms.ModelForm):
     class Meta:
         model = DESCEN_VacantesOtorgadas
         fields = '__all__'
         widgets = {
             'fecha_ingreso': forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
-            'sala': forms.Select(choices=[('', ''),('Bebes', 'Bebés'), ('2', '2'), ('3', '3')]),
-            'turno': forms.Select(choices=[('', ''), ('Mañana', 'Mañana'), ('Tarde', 'Tarde')]),
+            'stockturno': forms.Select(choices=[('', '2'),('Bebes', 'Bebés'), ('2', '2'), ('3', '3')]), #ver que cosas van aca
+            'sala': forms.Select(choices=[('', '2'),('Bebes', 'Bebés'), ('2', '2'), ('3', '3')]),
+            'turno': forms.Select(choices=[('', '2'), ('Mañana', 'Mañana'), ('Tarde', 'Tarde')]),
             'fecha_egreso': forms.DateInput(attrs={'type': 'date','required':'required'}, format="%Y-%m-%d"),
             'motivo': forms.Select(choices=[('', ''),('Cambio de ciclo', 'Cambio de ciclo'), ('Cambio de turno', 'Cambio de turno'), ('Cambio de centro', 'Cambio de centro')]),
             'detalles': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
@@ -116,6 +136,7 @@ class DESCEN_VacantesOtorgadasForm (forms.ModelForm):
             'fk_organismo':'Centro al que ingresa',
             'sala':'Sala a la que ingresa',
             'turno':'Turno al que ingresa',
+            'stockturno':'Turno al que ingresa',
             'educador':'Educador/a',
             'fecha_egreso':'Fecha de egreso*',
             'motivo':'Motivo principal',
