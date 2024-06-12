@@ -100,6 +100,21 @@ class DESCEN_IndiceIviHistorialForm (forms.ModelForm):
         widgets = {}
         labels = {}
 
+
+class DESCEN_VacanteStockAsignado (forms.ModelForm):
+    class Meta:
+        model = DESCEN_Vacantes_Stock_Asignado
+        fields = '__all__'
+        widgets = {}
+        labels = {}
+
+class DESCEN_Stock (forms.ModelForm):
+    class Meta:
+        model = DESCEN_Vacantes_Stock_Asignado
+        fields = '__all__'
+        widgets = {}
+        labels = {}
+
 class DESCEN_StockForm(forms.ModelForm):
     class Meta:
         model = DESCEN_Vacantes_Stock

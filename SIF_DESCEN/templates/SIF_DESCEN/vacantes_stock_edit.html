@@ -24,119 +24,45 @@
 
   <!-- Datos de vacantes centros -->
 
-  <div class="col-12">
-    <div class="row">
-      <div class="col-sm-6">
-        <div class="card card-outline card-primary h-100">
-          <div class="card-header">
-            <h3 class="card-title">Detalle Organismo</h3>
-            <div class="card-tools">
-              <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
-              </button>
-            </div>
-          </div>
-          <div class="card-body pb-0 pt-2">
-            <dl class="row mb-0">
-              <dt class="col-sm-2 font-weight-normal">Nombre: </dt>
-              <dd class="col-sm-10 font-weight-bold">{{object.nombre}}</dd>
-              <dt class="col-sm-2 font-weight-normal">Programa: </dt>
-              <dd class="col-sm-10 font-weight-bold">{{object.fk_programa}}</dd>
-              <dt class="col-sm-2 font-weight-normal">Calle:</dt>
-              <dd class="col-sm-10 font-weight-bold"> {{object.fk_organismo.calle|default_if_none:"-" }} </dd>
-              <dt class="col-sm-2 font-weight-normal">Número: </dt>
-              <dd class="col-sm-10 font-weight-bold">{{object.fk_organismo.altura|default_if_none:"-" }}</dd>
-              <dt class="col-sm-2 font-weight-normal">Barrio: </dt>
-              <dd class="col-sm-10 font-weight-bold">{{object.fk_organismo.barrio|default_if_none:"-" }}</dd>
-            </dl>
-          </div>
-        </div>
-      </div>
-      
-    </div>
-  </div>
 
   <div class="col-12 mt-3">
     <div class="card card-primary card-outline">
       <div class="card-body ">
         <div class="table-responsive mailbox-messages">
-          <table class="table table-bordered table-striped projects tabladt">
-            <thead>
-              <tr>
-                <th>Fecha</th>
-                <th>Tipo</th>
-                <th>Cantidad</th>
-                <th>Observacion</th>
-                <th>
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalcupo">
-                    Agregar Stock
-                  </button>
-                  <div class="modal fade" id="modalcupo" tabindex="-1" aria-labelledby="modalCupo" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="modalCupo">Agregar Stock</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <form method="post">
-                                {% csrf_token %}
-                                <div class="modal-body">
-                                    {{ stockform.tipo| as_crispy_field }}
-                                    {{ stockform.cantidad| as_crispy_field }}
-                                    {{ stockform.observaciones| as_crispy_field }}
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-dismiss="modal">Cancelar</button>
-                                    <button type="submit" name="crear_stock" class="btn btn-primary">Crear cupo</button>
-                                </div>
-                            </form>
-                        </div>
+            <!-- Form -->
+            <div class="col">
+              <form class="needs-validation" novalidate method="POST" enctype="multipart/form-data">
+                  <input type="hidden" name="id" value="{{object.id}}" maxlength="150" class="form-control" id="id">
+                  <input type="hidden" name="fk_vacante_di" value="{{object.fk_vacante_di}}" maxlength="150" class="form-control" id="fk_vacante_di">
+                <!-- Security token -->
+                {% csrf_token %}
+                <div class="card card-primary card-outline">
+                  <div class="card-header">
+                    <h3 class="card-title">Confirmar Edicion</h3>
+                  </div>
+                  <div class="card-body">
+                    <div class="form-row">
+                      <div class="col-sm-2 form-group">
+                          {{ form.fk_vacante| as_crispy_field }}
+                      </div>
+                      <div class="col-sm-3 form-group">
+                          {{ form.tipo| as_crispy_field }}
+                      </div>
+                      <div class="col-sm-3 form-group">
+                        {{ form.cantidad| as_crispy_field }}
                     </div>
+                    <div class="col-sm-3 form-group">
+                      {{ form.observaciones| as_crispy_field }}
+                  </div>
+                    </div>
+                  </div>
                 </div>
-                </th>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for a in detalle_cupo %}
-              <tr>
-                <td class="mailbox-date">{{a.fecha|date:'d/m/Y'}}</td>
-                <td class="">{{a.tipo}}</td>
-                <td class="">{{a.cantidad}}</td>
-                <td>{{a.observaciones }}</td>
-                <td class="project-actions text-right">
-                  <div class="btn-group" role="group">
-                    <a href="{% url 'DESCEN_vacantes_stock_listar' a.id %}" class="btn btn-primary btn-sm ver">Editar</a>
-                  </div>
-                </td>
-              </tr>
-              {% endfor %}
-              {% for a in admi2 %}
-              <tr>
-                <td class="mailbox-date">{{a.creado|date:'d/m/Y'}}</td>
-                <td class=""><a href="" title="Ver detalle de admisión">{{a.fk_preadmi.fk_legajo}}</a></td>
-                <td class="">{{a.fk_preadmi.fk_legajo.tipo_doc}} {{a.fk_preadmi.fk_legajo.documento}}</td>
-                <td>{{ a.sala }}{% if a.sala == "Bebes"%}{% else %} años{% endif %}</td>
-                <td>{{ a.turno }}</td>
-                <td><span class="badge badge-{% if a.estado_vacante == "Asignada" %}success{% endif %}{% if a.estado_vacante == "Lista de espera" %}warning{% endif %}">{{a.estado_vacante}}</span></td>
-                <td class="project-actions text-right">
-                  <div class="btn-group" role="group">
-                    {% if a.estado_vacante == "Asignada" %}
-                    <a href="{% url 'DESCEN_vacantes_form_cambio' a.id %}" class="btn btn-primary btn-sm ver">Cambiar vacante</a>
-                    {% endif %}
-                    {% if a.estado_vacante == "Lista de espera"%}
-                    <a href="{% url 'DESCEN_vacantes_form' a.id %}" class="btn btn-primary btn-sm ver">Otorgar vacante</a>
-                    {% endif %}
-                    <a href="{% url 'DESCEN_asignado_admisiones_ver' a.id %}" class="btn btn-secondary btn-sm editar">Ver</a>
-                  </div>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+                <div class="mt-4 mx-2 btn-toolbar" role="toolbar">
+                  <button type="submit" class="btn btn-primary mr-2">Confirmar</button>
+                  <a href="{% url 'DESCEN_vacantes_listar' %}" class="btn btn-secondary">Cancelar</a>
+                </div>
+              </form>
+            </div>
         </div>
       </div>
     </div>

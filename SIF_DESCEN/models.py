@@ -271,6 +271,7 @@ class DESCEN_Vacantes_Stock(models.Model):
         return reverse('cupos_vacantes_ver', kwargs={'pk': self.pk})
 
 class DESCEN_Vacantes_Stock_Asignado(models.Model):
+    fk_stock = models.ForeignKey(DESCEN_Vacantes_Stock, on_delete=models.CASCADE, null=True, blank=True)
     fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, null=True, blank=True)
     fk_vacante = models.ForeignKey(Vacantes, on_delete=models.CASCADE, null=True, blank=True)  # Nueva línea
     cantidad =  models.SmallIntegerField(null=True, blank=True)
