@@ -999,7 +999,16 @@ class DESCENVacantesStocAsignarView(PermisosMixin, UpdateView):
         context["admi"] = admi
         context["detalle_cupo"] = detalle_cupo
         return context
-
+    
+    def form_valid(self, form):
+        asignado = DESCEN_Vacantes_Stock_Asignado()
+        asignado.fk_legajo = form.cleaned_data['fk_legajo']
+        asignado.fk_vacante = form.cleaned_data['fk_vacante']
+        asignado.fk_stock = form.cleaned_data['fk_stock']
+        asignado.cantidad = form.cleaned_data['cantidad']
+        asignado.save()
+        return redirect('DESCEN_vacantes_stock_asignar', self.object.id)
+    
 class DESCENVacantesDetailView (PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_DESCEN/vacantes_detail.html"

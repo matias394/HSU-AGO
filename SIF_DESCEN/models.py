@@ -268,7 +268,7 @@ class DESCEN_Vacantes_Stock(models.Model):
         verbose_name = 'StockVacante'
         verbose_name_plural = "StockVacantes"
     def get_absolute_url(self):
-        return reverse('cupos_vacantes_ver', kwargs={'pk': self.pk})
+        return reverse('DESCEN_vacantes_stock_edit', kwargs={'pk': self.pk})
 
 class DESCEN_Vacantes_Stock_Asignado(models.Model):
     fk_stock = models.ForeignKey(DESCEN_Vacantes_Stock, on_delete=models.CASCADE, null=True, blank=True)
