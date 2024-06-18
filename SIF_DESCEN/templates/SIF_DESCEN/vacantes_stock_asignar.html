@@ -54,7 +54,6 @@
     <form class="needs-validation" novalidate method="POST" enctype="multipart/form-data">
       {% csrf_token %}
       <!-- Security token -->
-
       <input type="hidden" name="fk_vacante" value="{{object.id}}" maxlength="150" class="form-control" id="id_fk_vacante">
       <input type="hidden" name="fk_legajo" value="{{admi.fk_admision.fk_preadmi.fk_legajo.id}}" maxlength="150" class="form-control" id="id_fk_legajo">
       
@@ -80,6 +79,35 @@
       </div>
     </form>
   </div>
+
+  <div class="col-12 mt-3">
+    <div class="card card-primary card-outline">
+      <div class="card-body ">
+        <div class="table-responsive mailbox-messages">
+          <table class="table table-bordered table-striped projects tabladt">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Tipo</th>
+                <th>Cantidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for a in stock_asignado %}
+              <tr>
+                <td class="mailbox-date">{{a.fecha|date:'d/m/Y'}}</td>
+                <td class="">{{a.fk_stock}}</td>
+                <td class="">{{a.cantidad}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 </div>
 
 {% endblock content %}

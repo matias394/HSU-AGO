@@ -32,8 +32,8 @@
             <!-- Form -->
             <div class="col">
               <form class="needs-validation" novalidate method="POST" enctype="multipart/form-data">
+                  <input type="hidden" name="fk_vacante" value="{{object.fk_vacante.id}}" maxlength="150" class="form-control" id="id_fk_vacante">
                   <input type="hidden" name="id" value="{{object.id}}" maxlength="150" class="form-control" id="id">
-                  <input type="hidden" name="fk_vacante_di" value="{{object.fk_vacante_di}}" maxlength="150" class="form-control" id="fk_vacante_di">
                 <!-- Security token -->
                 {% csrf_token %}
                 <div class="card card-primary card-outline">
@@ -42,9 +42,6 @@
                   </div>
                   <div class="card-body">
                     <div class="form-row">
-                      <div class="col-sm-2 form-group">
-                          {{ form.fk_vacante| as_crispy_field }}
-                      </div>
                       <div class="col-sm-3 form-group">
                           {{ form.tipo| as_crispy_field }}
                       </div>
