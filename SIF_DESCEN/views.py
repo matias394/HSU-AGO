@@ -995,6 +995,17 @@ class DESCENVacantesStockEditView(PermisosMixin,SuccessMessageMixin, UpdateView)
         context = super().get_context_data(**kwargs)
         context["stock"] = DESCEN_Vacantes_Stock.objects.get(id=self.kwargs["pk"])
         return context
+    def form_valid(self, form):
+        stock = DESCEN_Vacantes_Stock_Consolidado.objects.filter(fk_stock=self.kwargs["pk"]).first()
+        diferencia = form.cleaned_data['cantidad'] - stock.cantidad_total
+        stock.cantidad_total = stock.cantidad_total + diferencia
+        if(stock.cantidad_total > 0):
+            stock.save()
+            form.save()
+            return redirect('DESCEN_vacantes_stock_edit', self.kwargs["pk"])
+        else:
+            messages.error(self.request,'No hay stock disponible para asignar.')
+            return redirect('DESCEN_vacantes_stock_edit', self.kwargs["pk"])
 
 class DESCENVacantesStocAsignarView(PermisosMixin, UpdateView):
     permission_required = "Usuarios.rol_admin"
