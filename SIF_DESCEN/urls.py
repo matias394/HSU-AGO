@@ -33,7 +33,7 @@ urlpatterns = [
     path('DESCEN/vacantes/cambio/<pk>', login_required(DESCENVacantesAdmisionCambio.as_view()), name='DESCEN_vacantes_form_cambio'),
     path('DESCEN/vacantes/stock/list/<pk>', login_required(DESCENVacantesStockListView.as_view()), name='DESCEN_vacantes_stock_listar'),
     path('DESCEN/vacantes/stock/edit/<pk>', login_required(DESCENVacantesStockEditView.as_view()), name='DESCEN_vacantes_stock_edit'),
-    path('DESCEN/vacantes/stock/asignar/<pk>', login_required(DESCENVacantesStocAsignarView.as_view()), name='DESCEN_vacantes_stock_asignar'),
+    path('DESCEN/vacantes/stock/asignar/<pk>/<pk1>', login_required(DESCENVacantesStocAsignarView.as_view()), name='DESCEN_vacantes_stock_asignar'),
     # Admisiones
     path('DESCEN/admisiones/ver/<pk>', login_required(DESCENAdmisionesDetailView.as_view()), name='DESCEN_admisiones_ver'),
     path('DESCEN/admisiones/listar/', login_required(DESCENAdmisionesListView.as_view()), name='DESCEN_admisiones_listar'),

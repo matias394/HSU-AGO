@@ -277,3 +277,9 @@ class DESCEN_Vacantes_Stock_Asignado(models.Model):
     cantidad =  models.SmallIntegerField(null=True, blank=True)
     fecha = models.DateField(auto_now=True)
 
+class DESCEN_Vacantes_Stock_Consolidado(models.Model):
+    fk_stock = models.ForeignKey(DESCEN_Vacantes_Stock, on_delete=models.CASCADE, null=True, blank=True)
+    fk_vacante = models.ForeignKey(Vacantes, on_delete=models.CASCADE, null=True, blank=True)  # Nueva línea
+    cantidad_total =  models.SmallIntegerField(null=True, blank=True)
+    tipo = models.CharField(max_length=100)
+
