@@ -46,6 +46,7 @@ class Usuarios(models.Model):
             ("rol_admin", "Administrador"),
             ("programa_externo", "Externo"),
             ("programa_CDIF", "CDIF"),
+            ("programa_DESCEN", "DESCEN"),
             ("programa_CDLE", "CDLE"),
             ("programa_PDV", "PDV"),
             ("programa_1000D", "1000D"),

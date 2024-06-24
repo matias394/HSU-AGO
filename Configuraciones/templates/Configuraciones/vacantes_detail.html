@@ -60,6 +60,8 @@
                         {% else %}
                         <span class="text-danger font-weight-bold">Inactivo</span>
                         {% endif %} </dd>
+                        <dt class="col-sm-3 font-weight-normal">Tipo de vacante</dt>
+                        <dd class="col-sm-9 font-weight-bold">{{ object.tipo_vacante|default_if_none:"-" }}</dd>
                         <dt class="col-sm-3 font-weight-normal">Observaciones</dt>
                         <dd class="col-sm-9 font-weight-bold">{{ object.observaciones|default_if_none:"-" }} cupos</dd>
                 </dl>

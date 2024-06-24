@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     'SIF_SL',
     'SIF_MA',
     'SIF_UMI',
+    'SIF_DESCEN',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -285,3 +286,4 @@ PROG_PDV = 26
 PROG_MA = 30
 PROG_SL = 21
 PROG_UMI = 36
+PROG_DESCEN = 37
