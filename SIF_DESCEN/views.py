@@ -971,7 +971,7 @@ class DESCENVacantesStockListView(PermisosMixin, UpdateView):
             if crear_stock.is_valid():
                 #Actualizar stock consolidado
                 crear_stock.save()
-                stock = DESCEN_Vacantes_Stock_Consolidado.objects.filter(fk_vacante=self.kwargs["pk"],tipo=crear_stock.cleaned_data['tipo']).first()
+                stock = DESCEN_Vacantes_Stock_Consolidado.objects.filter(fk_vacante=self.kwargs["pk"],fk_producto=crear_stock.cleaned_data['fk_producto']).first()
                 if(stock != None):
                     stock.cantidad_total = stock.cantidad_total + crear_stock.cleaned_data['cantidad']
                 if(stock == None):
@@ -979,7 +979,7 @@ class DESCENVacantesStockListView(PermisosMixin, UpdateView):
                     stock.fk_vacante = Vacantes.objects.filter(id=self.kwargs["pk"]).first()
                     stock.fk_stock = DESCEN_Vacantes_Stock.objects.filter(id=crear_stock.instance.id).first()
                     stock.cantidad_total = crear_stock.cleaned_data['cantidad']
-                    stock.tipo = crear_stock.cleaned_data['tipo']
+                    stock.fk_producto = crear_stock.cleaned_data['fk_producto']
                 stock.save()
                 
             else:
@@ -1068,7 +1068,8 @@ class DESCENVacantesDetailView (PermisosMixin, DetailView):
         admi = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], fk_admision__estado ="Activa", estado_vacante = "Asignada")
         admi2 = DESCEN_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"], estado ="Activa", estado_vacante = "Lista de espera")
         detalle_cupo = CupoVacante.objects.filter(fk_vacante_id=organizacion.id).all()
-        stock = DESCEN_Vacantes_Stock.objects.filter(fk_vacante_id=organizacion.id).all()
+        
+        stock = DESCEN_Vacantes_Stock_Consolidado.objects.filter(fk_vacante_id=organizacion.id).all()
         context["object"] = Vacantes.objects.get(pk=self.kwargs["pk"])
         context["asig_manianabb"] = asig_manianabb
         context["asig_tardebb"] = asig_tardebb

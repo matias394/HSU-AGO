@@ -96,7 +96,7 @@
               {% for a in stock_asignado %}
               <tr>
                 <td class="mailbox-date">{{a.fecha|date:'d/m/Y'}}</td>
-                <td class="">{{a.fk_stock}}</td>
+                <td class="">{{a.fk_stock.fk_producto.nombre}}</td>
                 <td class="">{{a.cantidad}}</td>
               </tr>
               {% endfor %}

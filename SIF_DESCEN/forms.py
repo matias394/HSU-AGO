@@ -106,25 +106,27 @@ class DESCEN_VacanteStockAsignado (forms.ModelForm):
         model = DESCEN_Vacantes_Stock_Asignado
         fields = '__all__'
         widgets = {}
-        labels = {}
+        labels = {'fk_stock': 'Nombre', 'cantidad': 'Cantidad'}
 
 class DESCEN_Stock (forms.ModelForm):
     class Meta:
         model = DESCEN_Vacantes_Stock_Asignado
         fields = '__all__'
-        widgets = {}
-        labels = {}
+        widgets = {
+            'fk_stock': forms.Select(choices=[(fk_stock.id, fk_stock.fk_producto.nombre) for fk_stock in DESCEN_Vacantes_Stock.objects.all()]),
+        }
+        labels = {'fk_stock': 'Nombre', 'cantidad': 'Cantidad'}
 
 class DESCEN_StockForm(forms.ModelForm):
     class Meta:
         model = DESCEN_Vacantes_Stock
         labels = {
-            'tipo': 'Tipo',
+            'fk_producto': 'Nombre',
             'cantidad': 'Cantidad',
             'observaciones': 'Descripcion',
         }
         exclude = ['id']
-        fields = ['fk_vacante','tipo','cantidad','observaciones']
+        fields = '__all__'
         widgets = {
             'observaciones': forms.Textarea(
                 attrs={
@@ -132,6 +134,7 @@ class DESCEN_StockForm(forms.ModelForm):
                     'rows': 3,
                 }
             ),
+            'fk_producto': forms.Select(choices=[(fk_producto.id, fk_producto.nombre) for fk_producto in DESCEN_Vacantes_Stock_Productos.objects.all()]),
         }
 
 class DESCEN_VacantesOtorgadasForm (forms.ModelForm):

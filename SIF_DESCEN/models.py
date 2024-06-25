@@ -250,21 +250,18 @@ class DESCEN_Historial(models.Model):
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     creado_por = models.ForeignKey(Usuarios, on_delete=models.CASCADE, null=True, blank=True)
 
+class DESCEN_Vacantes_Stock_Productos(models.Model):
+    nombre = models.CharField(max_length=100)
+
 class DESCEN_Vacantes_Stock(models.Model):
 
-    def __str__(self):
-        return self.tipo
-
-    def clean(self):
-        self.tipo = self.tipo.capitalize()
-
     fk_vacante = models.ForeignKey(Vacantes, on_delete=models.CASCADE, null=True, blank=True)  # Nueva línea
-    tipo = models.CharField(max_length=100)
+    fk_producto = models.ForeignKey(DESCEN_Vacantes_Stock_Productos, on_delete=models.CASCADE, null=True, blank=True)
     cantidad =  models.SmallIntegerField(null=True, blank=True) 
     observaciones = models.CharField(max_length=300, null=True, blank=True)
     fecha = models.DateField(auto_now=True)
     class Meta:
-        ordering = ['tipo']
+        ordering = ['fk_producto']
         verbose_name = 'StockVacante'
         verbose_name_plural = "StockVacantes"
     def get_absolute_url(self):
@@ -281,5 +278,5 @@ class DESCEN_Vacantes_Stock_Consolidado(models.Model):
     fk_stock = models.ForeignKey(DESCEN_Vacantes_Stock, on_delete=models.CASCADE, null=True, blank=True)
     fk_vacante = models.ForeignKey(Vacantes, on_delete=models.CASCADE, null=True, blank=True)  # Nueva línea
     cantidad_total =  models.SmallIntegerField(null=True, blank=True)
-    tipo = models.CharField(max_length=100)
+    fk_producto = models.ForeignKey(DESCEN_Vacantes_Stock_Productos, on_delete=models.CASCADE, null=True, blank=True)
 
