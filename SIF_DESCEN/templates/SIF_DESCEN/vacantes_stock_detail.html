@@ -83,14 +83,14 @@
                             <form method="post">
                                 {% csrf_token %}
                                 <div class="modal-body">
-                                    {{ stockform.tipo| as_crispy_field }}
+                                    {{ stockform.fk_producto| as_crispy_field }}
                                     {{ stockform.cantidad| as_crispy_field }}
                                     {{ stockform.observaciones| as_crispy_field }}
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-dismiss="modal">Cancelar</button>
-                                    <button type="submit" name="crear_stock" class="btn btn-primary">Crear cupo</button>
+                                    <button type="submit" name="crear_stock" class="btn btn-primary">Agregar</button>
                                 </div>
                             </form>
                         </div>
@@ -104,12 +104,12 @@
               {% for a in stock %}
               <tr>
                 <td class="mailbox-date">{{a.fecha|date:'d/m/Y'}}</td>
-                <td class="">{{a.tipo}}</td>
+                <td class="">{{a.fk_producto.nombre}}</td>
                 <td class="">{{a.cantidad}}</td>
                 <td>{{a.observaciones }}</td>
                 <td class="project-actions text-right">
                   <div class="btn-group" role="group">
-                    <a href="{% url 'DESCEN_vacantes_stock_edit' a.id %}" class="btn btn-primary btn-sm ver">Editar</a>
+                    <a href="{% url 'DESCEN_vacantes_stock_edit' a.id object.id %}" class="btn btn-primary btn-sm ver">Editar</a>
                   </div>
                 </td>
               </tr>
@@ -123,7 +123,7 @@
 </div>
 <div class="row mt-4 d-print-none">
   <div class="col-12 mx-2">
-    <a href="{% url 'DESCEN_vacantes_listar' %}" class="btn btn-secondary"
+    <a href="{% url 'DESCEN_vacantes_ver' object.id%}" class="btn btn-secondary"
       title="Ver listado de vacantes por centro">Volver</a>
   </div>
 </div>
