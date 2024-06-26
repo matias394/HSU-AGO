@@ -65,7 +65,14 @@
         <div class="card-body">
           <div class="form-row">
             <div class="col-sm-2 form-group">
-                {{ form.fk_stock| as_crispy_field }}
+             
+                <label for="producto">Producto</label>
+                 <select name="fk_producto" id="id_fk_producto" class="form-control">
+                   {%for i in select%}
+                     <option value="{{i.fk_producto.id}}">{{i.fk_producto.nombre}}</option>
+                   {%endfor%}
+                 </select>
+          
             </div>
             <div class="col-sm-3 form-group">
                 {{ form.cantidad| as_crispy_field }}
@@ -75,7 +82,7 @@
       </div>
       <div class="mt-4 mx-2 btn-toolbar" role="toolbar">
         <button type="submit" class="btn btn-primary mr-2">Confirmar</button>
-        <a href="{% url 'DESCEN_vacantes_listar' %}" class="btn btn-secondary">Cancelar</a>
+        <a href="{% url 'DESCEN_vacantes_ver' object.id %}" class="btn btn-secondary">Cancelar</a>
       </div>
     </form>
   </div>
@@ -96,7 +103,7 @@
               {% for a in stock_asignado %}
               <tr>
                 <td class="mailbox-date">{{a.fecha|date:'d/m/Y'}}</td>
-                <td class="">{{a.fk_stock.fk_producto.nombre}}</td>
+                <td class="">{{a.fk_producto}}</td>
                 <td class="">{{a.cantidad}}</td>
               </tr>
               {% endfor %}
@@ -107,7 +114,12 @@
     </div>
   </div>
 
-
+  <div class="row mt-4 d-print-none">
+    <div class="col-12 mx-2">
+      <a href="{% url 'DESCEN_vacantes_ver' object.id%}" class="btn btn-secondary"
+        title="Ver listado de vacantes por centro">Volver</a>
+    </div>
+  </div>
 </div>
 
 {% endblock content %}

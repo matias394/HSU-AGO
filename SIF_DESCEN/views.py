@@ -993,19 +993,20 @@ class DESCENVacantesStockEditView(PermisosMixin,SuccessMessageMixin, UpdateView)
     form_class = DESCEN_StockForm
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["select"] = DESCEN_Vacantes_Stock_Consolidado.objects.filter(fk_vacante_id=self.kwargs["pk1"]).all()
         context["stock"] = DESCEN_Vacantes_Stock.objects.get(id=self.kwargs["pk"])
         return context
     def form_valid(self, form):
-        stock = DESCEN_Vacantes_Stock_Consolidado.objects.filter(fk_stock=self.kwargs["pk"]).first()
+        stock = DESCEN_Vacantes_Stock_Consolidado.objects.filter(fk_vacante=self.kwargs["pk1"],fk_producto=form.cleaned_data['fk_producto'].id).first()
         diferencia = form.cleaned_data['cantidad'] - stock.cantidad_total
         stock.cantidad_total = stock.cantidad_total + diferencia
         if(stock.cantidad_total > 0):
             stock.save()
             form.save()
-            return redirect('DESCEN_vacantes_stock_edit', self.kwargs["pk"])
+            return redirect('DESCEN_vacantes_stock_edit', self.kwargs["pk"], self.kwargs["pk1"])
         else:
             messages.error(self.request,'No hay stock disponible para asignar.')
-            return redirect('DESCEN_vacantes_stock_edit', self.kwargs["pk"])
+            return redirect('DESCEN_vacantes_stock_edit', self.kwargs["pk"],  self.kwargs["pk1"])
 
 class DESCENVacantesStocAsignarView(PermisosMixin, UpdateView):
     permission_required = "Usuarios.rol_admin"
@@ -1018,6 +1019,7 @@ class DESCENVacantesStocAsignarView(PermisosMixin, UpdateView):
         admi = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk1"], fk_admision__estado ="Activa", estado_vacante = "Asignada").first()
         detalle_cupo = CupoVacante.objects.filter(fk_vacante_id=organizacion.id).all()
         context["object"] = Vacantes.objects.get(pk=self.kwargs["pk1"])
+        context["select"] = DESCEN_Vacantes_Stock_Consolidado.objects.filter(fk_vacante_id=self.kwargs["pk1"]).all()
         context["stock"] = DESCEN_Vacantes_Stock.objects.filter(fk_vacante=self.kwargs["pk"]).all()
         context["stock_asignado"] = DESCEN_Vacantes_Stock_Asignado.objects.filter(fk_vacante=self.kwargs["pk1"],fk_legajo=admi.fk_admision.fk_preadmi.fk_legajo.id).all()
         context["admi"] = admi
@@ -1028,12 +1030,11 @@ class DESCENVacantesStocAsignarView(PermisosMixin, UpdateView):
         asignado = DESCEN_Vacantes_Stock_Asignado()
         asignado.fk_legajo = form.cleaned_data['fk_legajo']
         asignado.fk_vacante = form.cleaned_data['fk_vacante']
-        asignado.fk_stock = form.cleaned_data['fk_stock']
+        asignado.fk_producto = form.cleaned_data['fk_producto']
         asignado.cantidad = form.cleaned_data['cantidad']
         asignado.save()
-        print(form.cleaned_data['fk_legajo'].id);
         #ACtualizar stock consolidado
-        stock = DESCEN_Vacantes_Stock_Consolidado.objects.filter(fk_stock=form.cleaned_data['fk_stock'].id,fk_vacante=form.cleaned_data['fk_vacante'].id).first()
+        stock = DESCEN_Vacantes_Stock_Consolidado.objects.filter(fk_producto=form.cleaned_data['fk_producto'],fk_vacante=form.cleaned_data['fk_vacante'].id).first()
         stock.cantidad_total = stock.cantidad_total - form.cleaned_data['cantidad']
         if(stock.cantidad_total > 0):
             stock.save()

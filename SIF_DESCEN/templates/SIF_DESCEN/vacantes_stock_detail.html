@@ -109,7 +109,7 @@
                 <td>{{a.observaciones }}</td>
                 <td class="project-actions text-right">
                   <div class="btn-group" role="group">
-                    <a href="{% url 'DESCEN_vacantes_stock_edit' a.id %}" class="btn btn-primary btn-sm ver">Editar</a>
+                    <a href="{% url 'DESCEN_vacantes_stock_edit' a.id object.id %}" class="btn btn-primary btn-sm ver">Editar</a>
                   </div>
                 </td>
               </tr>
@@ -123,7 +123,7 @@
 </div>
 <div class="row mt-4 d-print-none">
   <div class="col-12 mx-2">
-    <a href="{% url 'DESCEN_vacantes_listar' %}" class="btn btn-secondary"
+    <a href="{% url 'DESCEN_vacantes_ver' object.id%}" class="btn btn-secondary"
       title="Ver listado de vacantes por centro">Volver</a>
   </div>
 </div>

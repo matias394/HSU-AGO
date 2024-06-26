@@ -251,10 +251,11 @@ class DESCEN_Historial(models.Model):
     creado_por = models.ForeignKey(Usuarios, on_delete=models.CASCADE, null=True, blank=True)
 
 class DESCEN_Vacantes_Stock_Productos(models.Model):
+    def __str__(self):
+        return self.nombre
     nombre = models.CharField(max_length=100)
 
 class DESCEN_Vacantes_Stock(models.Model):
-
     fk_vacante = models.ForeignKey(Vacantes, on_delete=models.CASCADE, null=True, blank=True)  # Nueva línea
     fk_producto = models.ForeignKey(DESCEN_Vacantes_Stock_Productos, on_delete=models.CASCADE, null=True, blank=True)
     cantidad =  models.SmallIntegerField(null=True, blank=True) 
@@ -266,17 +267,18 @@ class DESCEN_Vacantes_Stock(models.Model):
         verbose_name_plural = "StockVacantes"
     def get_absolute_url(self):
         return reverse('DESCEN_vacantes_stock_edit', kwargs={'pk': self.pk})
+    
+
+class DESCEN_Vacantes_Stock_Consolidado(models.Model):
+    fk_vacante = models.ForeignKey(Vacantes, on_delete=models.CASCADE, null=True, blank=True)  # Nueva línea
+    cantidad_total =  models.SmallIntegerField(null=True, blank=True)
+    fk_producto = models.ForeignKey(DESCEN_Vacantes_Stock_Productos, on_delete=models.CASCADE, null=True, blank=True)
 
 class DESCEN_Vacantes_Stock_Asignado(models.Model):
-    fk_stock = models.ForeignKey(DESCEN_Vacantes_Stock, on_delete=models.CASCADE, null=True, blank=True)
     fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, null=True, blank=True)
     fk_vacante = models.ForeignKey(Vacantes, on_delete=models.CASCADE, null=True, blank=True)  # Nueva línea
     cantidad =  models.SmallIntegerField(null=True, blank=True)
     fecha = models.DateField(auto_now=True)
-
-class DESCEN_Vacantes_Stock_Consolidado(models.Model):
-    fk_stock = models.ForeignKey(DESCEN_Vacantes_Stock, on_delete=models.CASCADE, null=True, blank=True)
-    fk_vacante = models.ForeignKey(Vacantes, on_delete=models.CASCADE, null=True, blank=True)  # Nueva línea
-    cantidad_total =  models.SmallIntegerField(null=True, blank=True)
     fk_producto = models.ForeignKey(DESCEN_Vacantes_Stock_Productos, on_delete=models.CASCADE, null=True, blank=True)
+
 

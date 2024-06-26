@@ -102,6 +102,12 @@ class DESCEN_IndiceIviHistorialForm (forms.ModelForm):
 
 
 class DESCEN_VacanteStockAsignado (forms.ModelForm):
+    fk_producto = forms.ModelChoiceField(
+        queryset=DESCEN_Vacantes_Stock_Productos.objects.all(),
+        label="Nombre",
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
     class Meta:
         model = DESCEN_Vacantes_Stock_Asignado
         fields = '__all__'
@@ -112,12 +118,15 @@ class DESCEN_Stock (forms.ModelForm):
     class Meta:
         model = DESCEN_Vacantes_Stock_Asignado
         fields = '__all__'
-        widgets = {
-            'fk_stock': forms.Select(choices=[(fk_stock.id, fk_stock.fk_producto.nombre) for fk_stock in DESCEN_Vacantes_Stock.objects.all()]),
-        }
         labels = {'fk_stock': 'Nombre', 'cantidad': 'Cantidad'}
 
 class DESCEN_StockForm(forms.ModelForm):
+    fk_producto = forms.ModelChoiceField(
+        queryset=DESCEN_Vacantes_Stock_Productos.objects.all(),
+        label="Nombre",
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
     class Meta:
         model = DESCEN_Vacantes_Stock
         labels = {
@@ -133,8 +142,7 @@ class DESCEN_StockForm(forms.ModelForm):
                     'class': 'form-control',
                     'rows': 3,
                 }
-            ),
-            'fk_producto': forms.Select(choices=[(fk_producto.id, fk_producto.nombre) for fk_producto in DESCEN_Vacantes_Stock_Productos.objects.all()]),
+            )
         }
 
 class DESCEN_VacantesOtorgadasForm (forms.ModelForm):
