@@ -70,7 +70,7 @@
               <div class="btn-group" role="group">
                 <a href="{% url 'equipos_ver' o.id %}" class="btn btn-primary btn-sm ver">Ver</a> 
                 <a href="{% url 'equipos_editar' o.id %}" class="btn btn-primary btn-sm editar">Editar</a>
-                <a href="{% url 'equipos_eliminar' o.id %}" class="btn btn-danger btn-sm eliminar">Eliminar</a>
+                {% comment %}<a href="{% url 'equipos_eliminar' o.id %}" class="btn btn-danger btn-sm eliminar">Eliminar</a>{% endcomment %}
                 </div>
               {%endif%}
             </td>

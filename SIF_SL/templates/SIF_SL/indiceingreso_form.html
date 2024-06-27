@@ -22,20 +22,27 @@
     <div class="col-12">
         <div class="card card-outline card-primary ">
             <div class="card-header">
-                <h3 class="card-title">Detalle Legajo</h3>
+                <h3 class="card-title">Detalle Pre-Admisión</h3>
             </div>
-            <div class="card-body">
-                <dl class="row mb-0">
-                    <dd class="col-sm-2 mb-2">Nombre</dd>
-                    <dt class="col-sm-10 mb-2"><a href="{% url 'legajos_ver' object.fk_derivacion.fk_legajo.id %}" title="Ver legajo">{{ object.fk_derivacion.fk_legajo}}</a></dt>
-                    <dd class="col-sm-2 mb-2">DNI</dd>
-                    <dt class="col-sm-10 mb-2">{{object.fk_derivacion.fk_legajo.documento}}</dt>
-                    <dd class="col-sm-2 mb-2">Fecha de nacimiento</dd>
-                    <dt class="col-sm-10 mb-2">{{object.fk_derivacion.fk_legajo.fecha_nacimiento|date:'d/m/Y'}}</dt>
-                    <dd class="col-sm-2 mb-2">Sexo</dd>
-                    <dt class="col-sm-10 mb-2">{{object.fk_derivacion.fk_legajo.sexo}}</dt>
-                </dl>
-            </div>
+        <div class="card-body pb-1">
+          <dl class="row mb-0">
+            <dd class="col-sm-5 mb-2">Estado</dd>
+            <dt class="col-sm-7 mb-2"><span class="badge {% if object.estado == 'Finalizada' %}badge-success{% else %}badge-warning{% endif %}">{{ object.estado }}</span></dt>
+            <dd class="col-sm-5 mb-2">Fecha de solicitud</dd>
+            <dt class="col-sm-7 mb-2">{{object.fk_expediente.creado|date:'d/m/Y'}}</dt>
+            <dd class="col-sm-5 mb-2">Solicitud creada por</dd>
+            <dt class="col-sm-7 mb-2">{{object.fk_expediente.creado_por}}</dt>
+            <dd class="col-sm-5 mb-2">Organismo</dd>
+            <dt class="col-sm-7 mb-2">{{object.organismo}}</dt>
+            <dd class="col-sm-5 mb-2">Motivo de ingreso</dd>
+            <dt class="col-sm-7 mb-2">{{object.motivo_ingreso}}</dt>
+            <dd class="col-sm-5 mb-2">Conocimiento de la situación</dd>
+            <dt class="col-sm-7 mb-2">{{object.conocimiento_situacion}}</dt>
+            {% if object.modificado_por %}
+            <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Modificado por {{object.modificado_por}} - {{object.modificado|date:'d/m/Y'}}</dd>
+            {% endif %}
+          </dl>
+        </div>
         </div>
     </div>
 </div>
@@ -80,7 +87,7 @@
 
             <div class="mt-4 mx-2">
                 <button class="btn btn-primary mr-1" type="submit">Confirmar</button>
-                <a href="{% url 'SL_preadmisiones_ver' object.id%}" class="btn btn-secondary">Cancelar</a>
+                <a href="{% url 'SL_expediente_ver' object.fk_expediente_id%}" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>
     </div>

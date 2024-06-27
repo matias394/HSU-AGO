@@ -14,32 +14,48 @@
 {% block content %}
 
 <div class="row ">
+  <div class="col-12 my-3 mx-2 d-print-none">
+    <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
+  </div>
+  <!-- ./botones -->
   <div class="col-12">
 <div class="card">
+<div class="card-header">
+<h3 class="card-title">Distribución de expedientes por equipo</h3>
+</div>
   <div class="card-body">
-      <table class="table table-bordered table-striped">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Cantidad</th>
-            <th style="width: 15%" class="notexport">
-            </th>
-          </tr>
-        </thead>
-        <tbody>
+    <div class="row">
           {% for equipo in info_por_equipo %}
-          <tr>
-            <td>{{ equipo.fk_equipo__nombre  }}</a></td>
-            <td >{{ equipo.cantidad }}</td>
-            <td class="project-actions text-right">
-              <div class="btn-group" role="group">
-                <a href="{% url 'sl_equipodesignado_ver' equipo.fk_equipo %}" class="btn btn-primary btn-sm ver">Ver</a> 
-                </div>
-            </td>
-          </tr>   
+          <div class="col-lg-3 col-6">
+
+            <div class="small-box bg-info">
+            <div class="inner">
+            <h3>{{ equipo.cantidad }}</h3>
+            <p>{{ equipo.fk_equipo__nombre  }}</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <a href="{% url 'sl_equipodesignado_ver' equipo.fk_equipo %}" class="small-box-footer">Ver mas detalles <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+            </div>
             {% endfor %}
-        </tbody>
-      </table>
+            {% for equipo in no_esta %}
+            <div class="col-lg-3 col-6">
+  
+              <div class="small-box bg-info">
+              <div class="inner">
+              <h3>0</h3>
+              <p>{{ equipo.nombre  }}</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-users"></i>
+              </div>
+              <a href="{% url 'sl_equipodesignado_ver' equipo.id %}" class="small-box-footer">Ver mas detalles <i class="fas fa-arrow-circle-right"></i></a>
+              </div>
+              </div>
+              {% endfor %}
+          </div>
     </div>
   </div>
 </div>
