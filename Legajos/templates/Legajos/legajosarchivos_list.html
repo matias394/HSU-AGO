@@ -56,8 +56,8 @@ Archivo
                                 <div class="btn-group" role="group">
                                   <a href="{{ MEDIA_URL }}{{a.archivo.url}}"  target="_blank"class="btn btn-primary btn-sm">Ver</a>
                                   <a href="{{ MEDIA_URL }}{{a.archivo.url}}" download class="btn btn-primary btn-sm editar">Descargar</a>
-                                  <button onclick='deleteArchivo("{{ a.id }}")' type="button"
-                                    class="btn btn-danger btn-sm">Eliminar</button>
+                                  {% comment %}<button onclick='deleteArchivo("{{ a.id }}")' type="button"
+                                    class="btn btn-danger btn-sm">Eliminar</button>{% endcomment %}
                                 </div>
                               </td>
                         </tr>

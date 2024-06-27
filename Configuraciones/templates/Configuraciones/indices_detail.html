@@ -69,8 +69,8 @@
                             <div class="row text-center mt-5">
                                 <div class="col-sm-12">
                                     {%if perms.Usuarios.rol_admin%}
-                                    <a href="{% url 'indices_eliminar' object.id %}">
-                                        <button type="" class="btn btn-secondary">Eliminar</button></a>
+                                    {% comment %}<a href="{% url 'indices_eliminar' object.id %}">
+                                        <button type="" class="btn btn-secondary">Eliminar</button></a>{% endcomment %}
                                     
                                     <a href="{% url 'indices_editar' object.id %}">
                                         <button type="submit" class="btn btn-primary">Editar</button>

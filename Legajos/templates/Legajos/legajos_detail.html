@@ -34,7 +34,7 @@
     {%endif%}
     <a href="#" class="btn btn-secondary print mr-1 d-none d-sm-inline">Imprimir</a>
     {%if perms.Usuarios.rol_admin%}
-    <a href="{% url 'legajos_eliminar' object.id %}" class="btn btn-danger">Eliminar</a>
+    {% comment %}<a href="{% url 'legajos_eliminar' object.id %}" class="btn btn-danger">Eliminar</a>{% endcomment %}
     {%endif%}
 </div>
 <div class="row">

@@ -146,8 +146,12 @@ class MAPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin):
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
         legajo = MA_Derivacion.objects.filter(pk=pk).first()
+        responsables = LegajoGrupoFamiliar.objects.filter(fk_legajo_1=legajo.fk_expediente.fk_derivacion.fk_legajo.id, vinculo="Referente")
+        responsables2 = LegajoGrupoFamiliar.objects.filter(fk_legajo_2=legajo.fk_expediente.fk_derivacion.fk_legajo.id, vinculo_inverso="Referente")
         context["pk"] = pk
         context["legajo"] = legajo
+        context["responsables"] = responsables
+        context["responsables2"] = responsables2
         return context
 
     def get_form_kwargs(self):
@@ -169,7 +173,6 @@ class MAPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin):
             'PER': form.cleaned_data['PER'],
             'juzgado': form.cleaned_data['juzgado'],
             'REUNA': form.cleaned_data['REUNA'],
-            'familia_abrigadora': form.cleaned_data['familia_abrigadora'],
             'organismo_municipal': form.cleaned_data['organismo_municipal'],
             'organismo_zonal': form.cleaned_data['organismo_zonal'],
             'estado': "En proceso",
@@ -180,6 +183,13 @@ class MAPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin):
             'i180' : i180,
         }
         preadmi_instance = MA_PreAdmision.objects.create(**preadmision_data)
+
+        familia_abrigadora = self.request.POST.getlist('familia_abrigadora'),
+        if familia_abrigadora:
+            for familiar in familia_abrigadora:
+                for f in familiar:
+                    familia = MA_Familia_Abrigadora(fk_preadmi=preadmi_instance, fk_legajo_id=f)
+                    familia.save()
 
         archivos = self.request.FILES.getlist('archivos')
         for archivo in archivos:
@@ -220,6 +230,13 @@ class MAPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin):
         preadmi_instance.estado = "En proceso"
         preadmi_instance.creado_por_id = self.request.user.id
         preadmi_instance.save()
+
+        familia_abrigadora = self.request.POST.getlist('familia_abrigadora'),
+        if familia_abrigadora:
+            for familiar in familia_abrigadora:
+                for f in familiar:
+                    familia = MA_Familia_Abrigadora(fk_preadmi=preadmi_instance, fk_legajo_id=f)
+                    familia.save()
 
         archivos = self.request.FILES.getlist('archivos')
         for archivo in archivos:
@@ -358,9 +375,10 @@ class MAAdmisionesCreateView(PermisosMixin, CreateView):
             objeto.equipo_trabajo = equipo_trabajo
             objeto.organismo = organismo
             objeto.fk_preadmi_id = pk
+            objeto.creado_por_id = self.request.user.id
             objeto.save()
             preadmi = MA_PreAdmision.objects.get(pk=pk)
-            preadmi.estado = 'Finalizada'
+            preadmi.estado = 'Activa'
             preadmi.save()
             return redirect('MA_expediente_ver', pk=preadmi.fk_derivacion.id)
     
@@ -570,30 +588,39 @@ class MA_ExpedienteDetailView(PermisosMixin, DetailView):
         preadmi_ma = MA_PreAdmision.objects.filter(fk_derivacion_id=derivacion.pk).first()
         if preadmi_ma:
             documentacion = MA_Preadmision_Archivos.objects.filter(fk_preadmi_id=preadmi_ma.pk).all()
+            documentacion_adicional = MA_Expedientes_Archivos.objects.filter(fk_derivacion_id=id).all()
             admi = MA_Admision.objects.filter(fk_preadmi_id=preadmi_ma.id).first()
+            familia_abrigadora = MA_Familia_Abrigadora.objects.filter(fk_preadmi_id=preadmi_ma.pk).all()
         else:
             documentacion = []
+            documentacion_adicional = []
             admi = []
+            familia_abrigadora = []
         pk = SL_Expedientes.objects.filter(pk=derivacion.fk_expediente_id).first()
         preadmi = SL_PreAdmision.objects.filter(fk_expediente_id=pk).last()
         familia = SL_GrupoFamiliar.objects.filter(fk_expediente_id=pk).all()
         legajos_alertas = LegajoAlertas.objects.filter(fk_legajo=preadmi.fk_derivacion.fk_legajo)
         archivos = SL_ExpedientesArchivos.objects.filter(fk_expediente_id=pk).all()
+        archivos_derivacion = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion_id=preadmi.fk_derivacion_id).all()
         resultado = SL_IndiceVulnerabilidad.objects.filter(fk_expediente_id=preadmi.fk_expediente_id)
         equipo = SL_EquipoDesignado.objects.filter(fk_expediente_id=preadmi.fk_expediente_id).first()
         referentes = SL_Referentes.objects.filter(fk_expediente_id=preadmi.fk_expediente_id).all()
         intervenciones = SL_Intervenciones.objects.filter(fk_expediente_id=preadmi.fk_expediente_id).all()
+        
 
         context['admi'] = admi
         context['preadmi'] = preadmi
         context['documentacion'] = documentacion
+        context['documentacion_adicional'] = documentacion_adicional
         context['preadmi_ma'] = preadmi_ma
         context['legajos_alertas'] = legajos_alertas
         context['familia'] = familia
         context['archivos'] = archivos
+        context['archivos_derivacion'] = archivos_derivacion
         context['equipo'] = equipo
         context['referentes'] = referentes
         context['intervenciones'] = intervenciones
+        context['familia_abrigadora'] = familia_abrigadora
         context['resultado'] = resultado.aggregate(total=Sum('fk_indice__puntaje'))
         context['hoy'] = datetime.now().date()
         return context
@@ -620,6 +647,11 @@ class MA_ExpedienteDetailView(PermisosMixin, DetailView):
             if instancia:
                 instancia.archivo135 = archivo135
                 instancia.save()
+        
+        if 'archivos' in self.request.FILES:
+            archivos = self.request.FILES.getlist('archivos')
+            for archivo in archivos:
+                MA_Expedientes_Archivos.objects.create(fk_derivacion_id=pk, archivo=archivo)
 
         return redirect('MA_expediente_ver', pk)
 

@@ -35,7 +35,7 @@ Derivaciones
     <a href="{% url 'legajosderivaciones_editar' object.id %}" class="btn btn-primary mr-1">Editar</a>
     {%endif%}
     {% if request.user.id == object.fk_usuario.id and object.estado == 'Pendiente' %}
-    <a href="{% url 'legajosderivaciones_eliminar' object.id %}" class="btn btn-danger mr-1">Eliminar</a>
+    {% comment %}<a href="{% url 'legajosderivaciones_eliminar' object.id %}" class="btn btn-danger mr-1">Eliminar</a>{% endcomment %}
     {%endif%}
   </div>
   <!-- ./botones -->

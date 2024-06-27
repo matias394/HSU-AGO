@@ -33,9 +33,10 @@
               <tr>
                 <th>Fecha</th>
                 <th>Expediente</th>
-                <th>Estado</th>
+                <th>Grupo familiar</th>
                 <th>Equipo</th>
                 <th>Indice vulnerabilidad</th>
+                <th>Estado</th>
                 <th style="width: 5%" class="notexport">
                 </th>
               </tr>
@@ -45,9 +46,10 @@
               <tr>
                 <td class="mailbox-date">{{a.creado|date:'d/m/Y'}}</td>
                 <td class="">{{a.expediente}}</td>
-                <td> <span class="badge {% if a.estado == 'Finalizada' %}badge-success{% else %}badge-warning{% endif %}">{{ a.estado }}</span></td>
-                <td>{{a.expediente}}</td>
-                <td class="text-center"></td>
+                <td>{{a.fk_derivacion.fk_legajo.apellido}}</td>
+                <td>{% for e in equipo %}{% if e.fk_expediente.id == a.pk %}{{e.fk_equipo}}{% endif %}{% endfor %}</td>
+                <td></td>
+                <td><span class="{% if a.estado == "Activa" %}text-success{% endif %}{% if a.estado == "Inactiva" %}text-danger{% endif %}{% if a.estado == "En proceso" %}text-warning{% endif %}">{{a.estado}}</span></td>
                 <td class="project-actions text-right">
                   <div class="btn-group" role="group">
                     <a href="{% url 'SL_expediente_ver' a.id%}" class="btn btn-secondary btn-sm editar">Ver</a>

@@ -7,6 +7,9 @@ Medidas de abrigo Expediente detalle
 
 {% block titulo-pagina %}
 Medidas de abrigo Expediente
+{% if admi.estado == 'Inactiva' %}
+<span class="badge badge-sm bg-danger font-weight-normal">Expediente inactivo</span>
+{% endif %}
 {% endblock %};
 
 {% block breadcrumb %}
@@ -36,6 +39,10 @@ Medidas de abrigo Expediente
     <a href="{% url 'MA_admisiones_crear' preadmi_ma.id %}" class="btn btn-primary mr-1">Admitir</a>
     {% endif %}
     {% endif %}
+    {% if admi.estado == "Activa" %}
+    <button type="button" class="btn btn-secondary mr-1" data-toggle="modal" data-target="#modal-documentacion">Agregar documentación</button>
+    <button type="button" class="btn btn-danger mr-1" data-toggle="modal" data-target="#modal-inactivar">Inactivar</button>
+    {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     
     </div>
@@ -49,7 +56,7 @@ Medidas de abrigo Expediente
     <div class="col-sm-4 pb-3">
       <div class="card card-outline card-primary h-100 mb-0">
         <div class="card-header">
-          <h3 class="card-title">Detalle Derivación</h3>
+          <h3 class="card-title">Derivación a Medida de abrigo</h3>
           <div class="card-tools">
             <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
               <i class="fas fa-minus"></i>
@@ -60,6 +67,8 @@ Medidas de abrigo Expediente
           <dl class="row mb-0">
             <dd class="col-sm-5 mb-2">Estado</dd>
             <dt class="col-sm-7 mb-2"><span class="badge {% if object.estado == 'Aceptada' %}badge-success{% else %}badge-warning{% endif %}">{{ object.estado }}</span></dt>
+            <dd class="col-sm-5 mb-2">Expediente</dd>
+            <dt class="col-sm-7 mb-2">{{object.fk_expediente.expediente}}</dt>
             <dd class="col-sm-5 mb-2">Fecha de solicitud</dd>
             <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
             <dd class="col-sm-5 mb-2">Solicitud creada por</dd>
@@ -119,7 +128,7 @@ Medidas de abrigo Expediente
     <div class="col-sm-4 pb-3">
       <div class="card card-outline card-primary h-50 mb-0">
         <div class="card-header">
-          <h3 class="card-title">Equipo designado</h3>
+          <h3 class="card-title">Equipo designado en Servicio Local</h3>
           <div class="card-tools d-inline">
             <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
               <i class="fas fa-minus"></i>
@@ -197,15 +206,25 @@ Medidas de abrigo Expediente
                         <div class="col-5">
                         <dl class="row mb-3">
                           <dd class="col-sm-5 mb-2">Estado</dd>
-                          <dt class="col-sm-7 mb-2"><span class="badge {% if preadmi_ma.estado == 'Finalizada' %}badge-success{% else %}badge-warning{% endif %}">{{ preadmi_ma.estado }}</span></dt>
+                          <dt class="col-sm-7 mb-2"><span class="badge {% if admi.estado == 'Activa' %}badge-success{% else %}badge-warning{% endif %}">{{ admi.estado }}</span></dt>
                           <dd class="col-sm-5 mb-2">Fecha de solicitud</dd>
-                          <dt class="col-sm-7 mb-2">{{preadmi_ma.creado|date:'d/m/Y'}}</dt>
+                          <dt class="col-sm-7 mb-2">{{admi.creado|date:'d/m/Y'}}</dt>
                           <dd class="col-sm-5 mb-2">Solicitud creada por</dd>
-                          <dt class="col-sm-7 mb-2">{{preadmi_ma.creado_por}}</dt>
+                          <dt class="col-sm-7 mb-2">{{admi.creado_por}}</dt>
                           <dd class="col-sm-5 mb-2">Postulación</dd>
-                          <dt class="col-sm-7 mb-2">{% if preadmi_ma.familia_abrigadora %}{{preadmi_ma.familia_abrigadora}}{% endif %}{% if preadmi_ma.organismo_municipal %}{{preadmi_ma.organismo_municipal}}{% endif %}{% if preadmi_ma.organismo_zonal %}{{preadmi_ma.organismo_zonal}}{% endif %}</dt>
+                          {% if familia_abrigadora %}
+                          <dt class="col-sm-7 mb-2">
+                            <ul>
+                              {% for f in familia_abrigadora %}
+                              <li>{{f.fk_legajo}}</li>
+                              {% endfor %}
+                            </ul>
+                          </dt>
+                          {% else %}
+                          <dt class="col-sm-7 mb-2">{{admi.tipo_abrigo}}</dt>
+                          {% endif %}
                           <dd class="col-sm-5 mb-2">Vencimiento</dd>
-                          <dt class="col-sm-7 mb-2">{% if hoy|date:'d/m/Y' < preadmi_ma.i45|date:'d/m/Y' %}<span class="badge badge-danger text-sm">{% else %}<span class="">{% endif %}{{preadmi_ma.i180|date:'d/m/Y'}}</span></dt>
+                          <dt class="col-sm-7 mb-2">{% if hoy|date:'d/m/Y' > preadmi_ma.i45|date:'d/m/Y' %}<span class="badge badge-danger text-sm">{% else %}<span class="">{% endif %}{{preadmi_ma.i180|date:'d/m/Y'}}</span></dt>
                           {% if object.modificado_por %}
                           <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Modificado por {{object.modificado_por}} - {{object.modificado|date:'d/m/Y'}}</dd>
                           {% endif %}
@@ -213,14 +232,16 @@ Medidas de abrigo Expediente
                       </div>
                       <div class="col-2"></div>
                       <div class="col-5">
+                        {% if preadmi_ma.estado != "En proceso" %}
                         <dl class="row mb-3">
-                          <dd class="col-sm-5 mb-2">Informe 45 dias {% if hoy|date:'d/m/Y' < preadmi_ma.i45|date:'d/m/Y' %}<span class="badge badge-danger text-sm">{% else %}<span class="text-muted text-sm">{% endif %}{{preadmi_ma.i45|date:'d/m/Y'}}</span></dd>
+                          <dd class="col-sm-5 mb-2">Informe 45 dias {% if hoy|date:'d/m/Y' > preadmi_ma.i45|date:'d/m/Y' %}<span class="badge badge-danger text-sm">{% else %}<span class="text-muted text-sm">{% endif %}{{preadmi_ma.i45|date:'d/m/Y'}}</span></dd>
                           <dt class="col-sm-7 mb-2">{% if preadmi_ma.archivo45 %}<a href="{{ preadmi_ma.archivo45.url}}" target="_blank">{{preadmi_ma.archivo45|cut:'MedidasAbrigo/archivos/'}}</a>{% else %}<button type="button" class="btn btn-sm btn-secondary mr-1" data-toggle="modal" data-target="#modal-45">Agregar informe</button>{% endif %}</dt>
                           <dd class="col-sm-5 mb-2">Informe 90 dias {% if hoy|date:'d/m/Y' < preadmi_ma.i90|date:'d/m/Y' %}<span class="badge badge-danger text-sm">{% else %}<span class="text-muted text-sm">{% endif %}{{preadmi_ma.i90|date:'d/m/Y'}}</span></dd>
                           <dt class="col-sm-7 mb-2">{% if preadmi_ma.archivo90 %}<a href="{{ preadmi_ma.archivo90.url}}" target="_blank">{{preadmi_ma.archivo90|cut:'MedidasAbrigo/archivos/'}}</a>{% else %}<button type="button" class="btn btn-sm btn-secondary mr-1" data-toggle="modal" data-target="#modal-90">Agregar informe</button>{% endif %}</dt>
-                          <dd class="col-sm-5 mb-2">Informe 135 dias {% if hoy|date:'d/m/Y' < preadmi_ma.i135|date:'d/m/Y' %}<span class="badge badge-danger text-sm">{% else %}<span class="text-muted text-sm">{% endif %}{{preadmi_ma.i135|date:'d/m/Y'}}</span></dd>
+                          <dd class="col-sm-5 mb-2">Informe 135 dias {% if hoy|date:'d/m/Y' > preadmi_ma.i135|date:'d/m/Y' %}<span class="badge badge-danger text-sm">{% else %}<span class="text-muted text-sm">{% endif %}{{preadmi_ma.i135|date:'d/m/Y'}}</span></dd>
                           <dt class="col-sm-7 mb-2">{% if preadmi_ma.archivo135 %}<a href="{{ preadmi_ma.archivo135.url}}" target="_blank">{{preadmi_ma.archivo135|cut:'MedidasAbrigo/archivos/'}}</a>{% else %}<button type="button" class="btn btn-sm btn-secondary mr-1" data-toggle="modal" data-target="#modal-135">Agregar informe</button>{% endif %}</dt>
                         </dl>
+                        {% endif %}
                       </div>
                     </div>
                       </li>
@@ -255,11 +276,12 @@ Medidas de abrigo Expediente
 
                           {% if documentacion %}
                           <ul>{% for a in documentacion %}<li><a href="{{ a.archivo.url}}" target="_blank">{{a.archivo|cut:'MedidasAbrigo/archivos/'}}</a></li>{% endfor %}</ul>
-            {% else %}
-                <div class="col-md-3 col-sm-6 col-12 mb-2">
-                    <h6>Sin documentacion</h6>
-                </div>
-            {% endif %}
+                          {% else %}
+                                  <h6 class="mt-3">Sin documentacion</h6>
+                          {% endif %}
+                          {% if documentacion_adicional %}
+                          <ul>{% for a in documentacion_adicional %}<li><a href="{{ a.archivo.url}}" target="_blank">{{a.archivo|cut:'MedidasAbrigo/archivos/'}}</a></li>{% endfor %}</ul>
+                          {% endif %}
                         </div>
                     </li>
                   </ul>
@@ -326,13 +348,14 @@ Medidas de abrigo Expediente
             </div>
             <div class="card-body">
               <div class="row" id="container-alertas">
-                {% if archivos %}
-                          <ul>{% for a in archivos %}<li><a href="{{ a.archivo.url}}" target="_blank">{{a.archivo|cut:'ServicioLocal/archivos/'}}</a></li>{% endfor %}</ul>
-            {% else %}
-                <div class="col-md-3 col-sm-6 col-12 mb-2">
-                    <h6>Sin archivos</h6>
-                </div>
-            {% endif %}   
+                <ul>
+                  {% if archivos %}
+                    {% for a in archivos %}<li><a href="{{ a.archivo.url}}" target="_blank">{{a.archivo|cut:'ServicioLocal/archivos/'}}</a></li>{% endfor %}
+                  {% endif %}
+                  {% if archivos_derivacion %}
+                    {% for a in archivos_derivacion %}<li><a href="{{ a.archivo.url}}" target="_blank">{{a.archivo|cut:'legajos/archivos/'}}</a></li>{% endfor %}
+                  {% endif %}
+                </ul>
             </div>
             </div>
           </div>
@@ -611,4 +634,68 @@ Medidas de abrigo Expediente
   </div>
 </div>
 
+
+<!-- Agregar documentacion -->
+<div class="modal fade" id="modal-documentacion" tabindex="-1" aria-labelledby="modal-documentacionLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-documentacionLabel">Agregar documentación a la derivación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="form-group">
+                  <label for="exampleInputFile">Adjuntar archivos</label>
+                  <div class="input-group">
+                      <div class="custom-file">
+                          <input type="file" class="custom-file-input" id="exampleInputFile" multiple
+                              name="archivos" />
+                          <label class="custom-file-label" for="exampleInputFile"></label>
+                      </div>
+                      <div class="input-group-append">
+                          <span class="input-group-text"><i class="fas fa-paperclip"></i></span>
+                      </div>
+                  </div>
+              </div>
+              <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-sm btn-primary" name="agregar_archivos">Agregar</button>
+            </form>
+          </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Inactivar -->
+<div class="modal fade" id="modal-inactivar" tabindex="-1" aria-labelledby="modal-inactivarLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-inactivarLabel">Inactivar expediente</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <form method="POST">
+              {% csrf_token %}
+              <h5 class="my-5">Esta seguro que quiere inactivar el expediente?</h5>
+              <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-sm btn-primary" name="inactivar">Confirmar</button>
+            </form>
+          </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %};

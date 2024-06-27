@@ -10,7 +10,6 @@ class MA_MultiModelForm(forms.Form):
     PER = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=True)
     juzgado = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=True)
     REUNA = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=True)
-    familia_abrigadora = forms.ChoiceField(choices=CHOICE_FAMILIA_ABRIGADORA,required=False, label='Familia abrigadora')
     organismo_municipal = forms.ChoiceField(choices=CHOICE_ORGANISMO_MUNICIPAL,required=False, label='Organismo municipal')
     organismo_zonal = forms.ChoiceField(choices=CHOICE_ORGANISMO_ZONAL,required=False, label='Organismo zonal')
 

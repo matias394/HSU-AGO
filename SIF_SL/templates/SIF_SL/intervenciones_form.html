@@ -25,7 +25,7 @@
                   <dd class="col-sm-2 mb-2">Creado</dd>
                   <dt class="col-sm-10 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
                   <dd class="col-sm-2 mb-2">Estado</dd>
-                  <dt class="col-sm-10 mb-2"><span class="badge {% if object.estado == 'Finalizada' %}badge-success{% else %}badge-warning{% endif %}">{{ object.estado }}</span></dt>
+                  <dt class="col-sm-10 mb-2"><span class="badge {% if object.estado == 'Activa' %}badge-success{% else %}badge-warning{% endif %}">{{ object.estado }}</span></dt>
                   <dd class="col-sm-2 mb-2">Equipo</dd>
                   <dt class="col-sm-10 mb-2">{{equipo.fk_equipo}}</dt>
                 </dl>

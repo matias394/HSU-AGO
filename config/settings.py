@@ -30,7 +30,7 @@ log_file = os.path.join(log_dir, f'app_{current_month}.log')
 
 
 #Levantar variables de entorno desde .env
-print('Ejecutando proyecto en entorno: '+ os.getenv('DJANGO_ENV'))
+#print('Ejecutando proyecto en entorno: '+ os.getenv('DJANGO_ENV'))
 
 
 # Configuración de logging

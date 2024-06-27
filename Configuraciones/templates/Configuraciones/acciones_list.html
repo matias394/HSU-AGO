@@ -58,7 +58,7 @@
                 <div class="btn-group" role="group"> 
                   <a href="{% url 'acciones_ver' o.id %}" class="btn btn-primary btn-sm ver">Ver</a> 
                   <a href="{% url 'acciones_editar' o.id %}" class="btn btn-primary btn-sm editar">Editar</a> 
-                  <a href="{% url 'acciones_eliminar' o.id %}" class="btn btn-danger btn-sm eliminar">Eliminar</a> 
+                  {% comment %}<a href="{% url 'acciones_eliminar' o.id %}" class="btn btn-danger btn-sm eliminar">Eliminar</a>{% endcomment %}
                   </div>
               </td>
             </tr>

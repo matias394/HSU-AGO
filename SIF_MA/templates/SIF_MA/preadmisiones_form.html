@@ -122,12 +122,33 @@
                             </button>
                         </div>
                         <div id="bs2" class="content" role="tabpanel" aria-labelledby="bs2-trigger">
+                            <div class="row mb-3 mt-0">
+                                <h5>Seleccionar solo una de las opciones</h5>
+                            </div>
                             <div class="row">
+                            {% if familia_abrigadora %}
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        {{form.familia_abrigadora| as_crispy_field}}
+                                        <div id="div_id_familia_abrigadora" class="form-group">
+                                            <label for="id_familia_abrigadora" class="">
+                                                    Familia abrigadora
+                                                </label>
+                                                <div>
+                                        <select name="familia_abrigadora" class="form-control custom-select" id="id_familia_abrigadora" multiple>
+                                      <option value="" selected=""></option>
+                                      {% for r in responsables %}
+                                      <option value="{{r.fk_legajo_2_id}}">{{r.fk_legajo_2}} ({{r.vinculo_inverso}})</option>
+                                      {% endfor %}
+                                      {% for r in responsables2 %}
+                                      <option value="{{r.fk_legajo_1_id}}">{{r.fk_legajo_1}} ({{r.vinculo_inverso}})</option>
+                                      {% endfor %}
+                                    </select>
+                                </div>
+                                
+                            </div>
                                     </div>
                                 </div>
+                                {% endif %}
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         {{form.organismo_municipal| as_crispy_field}}

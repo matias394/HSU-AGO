@@ -6,7 +6,15 @@ Servicio Local Expediente detalle
 {%endblock %};
 
 {% block titulo-pagina %}
-Servicio Local Expediente
+Servicio Local Expediente 
+{% if object.estado == 'Inactiva' %}
+<span class="badge badge-sm bg-danger font-weight-normal">Expediente inactivo</span>
+{% endif %}
+{% if object.derivado == 'Si' %}
+<span class="badge badge-success font-weight-normal">
+Derivado a Medidas de abrigo
+</span>
+{% endif %}
 {% endblock %};
 
 {% block breadcrumb %}
@@ -41,9 +49,9 @@ Servicio Local Expediente
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     {% comment %}<a href="{% url 'SL_preadmisiones_eliminar' object.pk %}" class="btn btn-danger mr-1 mt-2 mt-sm-0">Eliminar</a>{% endcomment %}
     {% endif %}
-    {% if preadmi.estado == 'Finalizada' %}
+    {% if object.estado == 'Activa' %}
     
-    {% if object.estado != 'Finalizada' %}
+    {% if object.derivado == 'No' %}
     <a href="{% url 'SL_intervenciones_crear' object.id %}" class="btn btn-primary mr-1">Agregar intervenciones</a>
     <form method="POST" action="#" class="d-inline">
       <button type="submit" name="derivacion_ma" class="btn btn-primary mr-1">Derivar a Medias de abrigo</button>
@@ -53,6 +61,12 @@ Servicio Local Expediente
     {% endif %}
     
     <button type="button" class="btn btn-secondary mr-1" data-toggle="modal" data-target="#modal-documentacion">Agregar documentación</button>
+    <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
+    {% if object.derivado == 'No' %}
+    <button type="button" class="btn btn-danger mr-1" data-toggle="modal" data-target="#modal-inactivar">Inactivar</button>
+    {% endif %}
+    {% endif %}
+    {% if object.estado == 'Inactiva' %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     {% endif %}
     </div>
@@ -76,7 +90,7 @@ Servicio Local Expediente
         <div class="card-body pb-1">
           <dl class="row mb-0">
             <dd class="col-sm-5 mb-2">Estado</dd>
-            <dt class="col-sm-7 mb-2"><span class="badge {% if preadmi.estado == 'Finalizada' %}badge-success{% else %}badge-warning{% endif %}">{{ preadmi.estado }}</span></dt>
+            <dt class="col-sm-7 mb-2"><span class="badge {% if preadmi.estado == 'Aceptado' %}badge-success{% else %}badge-warning{% endif %}">{{ preadmi.estado }}</span></dt>
             <dd class="col-sm-5 mb-2">Fecha de solicitud</dd>
             <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
             <dd class="col-sm-5 mb-2">Solicitud creada por</dd>
@@ -212,13 +226,14 @@ Servicio Local Expediente
             </div>
             <div class="card-body">
               <div class="row" id="container-alertas">
-                {% if archivos %}
-                          <ul>{% for a in archivos %}<li><a href="{{ a.archivo.url}}" target="_blank">{{a.archivo|cut:'ServicioLocal/archivos/'}}</a></li>{% endfor %}</ul>
-            {% else %}
-                <div class="col-md-3 col-sm-6 col-12 mb-2">
-                    <h6>Sin archivos</h6>
-                </div>
-            {% endif %}   
+                <ul>
+                  {% if archivos %}
+                    {% for a in archivos %}<li><a href="{{ a.archivo.url}}" target="_blank">{{a.archivo|cut:'ServicioLocal/archivos/'}}</a></li>{% endfor %}
+                  {% endif %}
+                  {% if archivos_derivacion %}
+                    {% for a in archivos_derivacion %}<li><a href="{{ a.archivo.url}}" target="_blank">{{a.archivo|cut:'legajos/archivos/'}}</a></li>{% endfor %}
+                  {% endif %}
+                </ul>
             </div>
             </div>
           </div>
@@ -289,7 +304,7 @@ Servicio Local Expediente
                   <td> {{i.impacto}}</td>
                   <td> {{i.accion}}</td>
                   <td class="text-right">
-                    <a href="{% url 'SL_intervencion_editar' i.id %}" class="btn btn-secondary btn-sm">Editar</a>
+                    <a href="{% url 'SL_intervencion_ver' i.id %}" class="btn btn-primary btn-sm">Ver</a>
                   </td>
                 </tr>
                 {% endfor %}
@@ -380,7 +395,7 @@ Servicio Local Expediente
 <div class="row mt-4 d-print-none">
   <div class="col-12 mx-2">
     <div class="form-group  d-flex justify-content-between">
-      <a href="{% url 'SL_preadmisiones_listar' %}" class="btn btn-secondary">Volver</a>
+      <a href="{% url 'SL_expediente_listar' %}" class="btn btn-secondary">Volver</a>
     </div>
   </div>
 </div>
@@ -391,7 +406,7 @@ Servicio Local Expediente
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modal-documentacionLabel">Agregar documentación</h5>
+        <h5 class="modal-title" id="modal-documentacionLabel">Agregar documentación a la derivación</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -416,6 +431,32 @@ Servicio Local Expediente
               </div>
               <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cerrar</button>
               <button type="submit" class="btn btn-sm btn-primary" name="agregar_archivos">Agregar</button>
+            </form>
+          </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Inactivar -->
+<div class="modal fade" id="modal-inactivar" tabindex="-1" aria-labelledby="modal-inactivarLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-inactivarLabel">Inactivar expediente</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <form method="POST">
+              {% csrf_token %}
+              <h5 class="my-5">Esta seguro que quiere inactivar el expediente?</h5>
+              <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-sm btn-primary" name="inactivar">Confirmar</button>
             </form>
           </div>
       </div>

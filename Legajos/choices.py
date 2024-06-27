@@ -487,6 +487,7 @@ CHOICE_VINCULO_FAMILIAR = [
     ('Tío/a', 'Tío/a'),
     ('Sobrino/a', 'Sobrino/a'),
     ('Pareja', 'Pareja'),
+    ('Referente', 'Referente'),
     ('Otro', 'Otro'),
 ]
 
@@ -556,6 +557,7 @@ VINCULO_MAP = {
     "Hermano/a": {"vinculo": "Hermano/a", "vinculo_inverso": "Hermano/a"},
     "Tío/a": {"vinculo": "Tío/a", "vinculo_inverso": "Sobrino/a"},
     "Sobrino/a": {"vinculo": "Sobrino/a", "vinculo_inverso": "Tío/a"},
+    "Referente": {"vinculo": "Referente", "vinculo_inverso": "Referente"},
     "Otro": {"vinculo": "Otro", "vinculo_inverso": "Otro"},
 }
 DIMENSIONES_RIESGO_MAP = {

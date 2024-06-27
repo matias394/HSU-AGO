@@ -995,10 +995,10 @@ class SLDesignarEquipoCreateView(PermisosMixin, CreateView):
         form.instance.fk_admi_id = admision.id
         self.object = form.save()
 
-        expediente.estado = "En proceso"
+        expediente.estado = "Activa"
         expediente.save()
 
-        preadmi.estado = "Finalizada"
+        preadmi.estado = "Aceptado"
         preadmi.save()
 
         return redirect('SL_expediente_ver', pk=preadmi.fk_expediente_id)
@@ -1027,7 +1027,7 @@ class SLDesignarEquipoUpdateView(PermisosMixin, UpdateView):
         self.object = form.save()
 
         expediente = SL_Expedientes.objects.filter(fk_derivacion_id=preadmi.fk_derivacion_id).first()
-        expediente.estado = "En proceso"
+        expediente.estado = "Activa"
         expediente.save()
         
         return redirect('SL_expediente_ver', pk=expediente.pk)
@@ -1082,6 +1082,7 @@ class SL_ExpedienteDetailView(PermisosMixin, DetailView):
         familia = SL_GrupoFamiliar.objects.filter(fk_expediente_id=pk).all()
         legajos_alertas = LegajoAlertas.objects.filter(fk_legajo=preadmi.fk_derivacion.fk_legajo)
         archivos = SL_ExpedientesArchivos.objects.filter(fk_expediente_id=pk).all()
+        archivos_derivacion = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion_id=preadmi.fk_derivacion_id).all()
         resultado = SL_IndiceVulnerabilidad.objects.filter(fk_expediente_id=preadmi.fk_expediente_id)
         equipo = SL_EquipoDesignado.objects.filter(fk_expediente_id=preadmi.fk_expediente_id).first()
         referentes = SL_Referentes.objects.filter(fk_expediente_id=preadmi.fk_expediente_id).all()
@@ -1091,6 +1092,7 @@ class SL_ExpedienteDetailView(PermisosMixin, DetailView):
         context['legajos_alertas'] = legajos_alertas
         context['familia'] = familia
         context['archivos'] = archivos
+        context['archivos_derivacion'] = archivos_derivacion
         context['equipo'] = equipo
         context['referentes'] = referentes
         context['intervenciones'] = intervenciones
@@ -1106,10 +1108,16 @@ class SL_ExpedienteDetailView(PermisosMixin, DetailView):
         
         if 'derivacion_ma' in self.request.POST:
             expediente = SL_Expedientes.objects.filter(pk=pk).first()
-            expediente.estado = "Finalizada"
+            expediente.derivado = "Si"
+            expediente.save()
+
+            MA_Derivacion.objects.create(fk_expediente_id=pk, estado="Pendiente", creado_por_id=self.request.user.id)
+
+        if 'inactivar' in self.request.POST:
+            expediente = SL_Expedientes.objects.filter(pk=pk).first()
+            expediente.estado = "Inactiva"
             expediente.save()
             
-            MA_Derivacion.objects.create(fk_expediente_id=pk, estado="Pendiente", creado_por_id=self.request.user.id)
 
         return redirect('SL_expediente_ver', pk)
 
@@ -1117,4 +1125,11 @@ class SL_ExpedienteListView(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_SL/expediente_list.html"
     model = SL_Expedientes
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        equipo = SL_EquipoDesignado.objects.all()
+
+        context['equipo'] = equipo
+        return context
     
