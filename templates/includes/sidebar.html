@@ -557,8 +557,8 @@
 {%endif%}
 
 {% if perms.Usuarios.programa_DESCEN %}
-<li class="nav-item {% if 'DESCEN' in pagina_actual %}menu-open{% endif %}">
-	<a href="#" class="nav-link {% if 'DESCEN' in pagina_actual %}active{% endif %}">
+<li class="nav-item {% if 'descentralizado' in pagina_actual %}menu-open{% endif %}">
+	<a href="#" class="nav-link {% if 'descentralizado' in pagina_actual %}active{% endif %}">
 		<i class=" nav-icon fas fa-circle"></i>
 		<p>Descentralizado<i class="right fas fa-angle-left"></i>
 		</p>
@@ -575,21 +575,21 @@
 	{% if request.user.is_superuser %}
 		<li class="nav-item">
 			<a href="{% url 'DESCEN_preadmisiones_listar' %}"
-				class="nav-link  {% if 'preadmisiones' in pagina_actual %}active{% endif %}">
+				class="nav-link  {% if 'descentralizado/preadmisiones' in pagina_actual %}active{% endif %}">
 				<i class="nav-icon fas fa-tasks"></i>
 				<p>Pre-admisiones</p>
 			</a>
 		</li>
 		<li class="nav-item">
 			<a href="{% url 'DESCEN_admisiones_listar' %}"
-				class="nav-link  {% if '/admisiones' in pagina_actual %}active{% endif %}{% if '/asignado_admisiones' in pagina_actual %}active{% endif %} ">
+				class="nav-link  {% if 'descentralizado/admisiones' in pagina_actual %}active{% endif %}{% if '/asignado_admisiones' in pagina_actual %}active{% endif %} ">
 				<i class="nav-icon fas fa-id-badge"></i>
 				<p>Admisiones</p>
 			</a>
 		</li>
 		<li class="nav-item">
 			<a href="{% url 'DESCEN_vacantes_listar' %}"
-				class="nav-link {% if 'vacantes' in pagina_actual %}active{% endif %}">
+				class="nav-link {% if 'descentralizado/vacantes' in pagina_actual %}active{% endif %}">
 				<i class="nav-icon fas fa-sign-in-alt"></i>
 				<p>Vacantes</p>
 			</a>
