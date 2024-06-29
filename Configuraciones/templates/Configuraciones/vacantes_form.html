@@ -57,75 +57,6 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-2">
-                            <div class="form-group mt-4 mr-5 text-left h6 font-weight-bold">
-                                Bebes:
-                            </div>
-                        </div>
-                        <div class="col-5">
-                            <div class="form-group">
-                                {{form.manianabb| as_crispy_field}}
-                            </div>
-                        </div>
-                        <div class="col-5">
-                            <div class="form-group">
-                                {{form.tardebb| as_crispy_field}}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2">
-                            <div class="form-group  mt-4 mr-5 text-left h6 font-weight-bold">
-                                2 años:
-                            </div>
-                        </div>
-                        <div class="col-5">
-                            <div class="form-group">
-                                {{form.maniana2| as_crispy_field}}
-                            </div>
-                        </div>
-
-                        <div class="col-5">
-                            <div class="form-group">
-                                {{form.tarde2| as_crispy_field}}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2">
-                            <div class="form-group  mt-4 mr-5 text-left h6 font-weight-bold">
-                                3 años:
-                            </div>
-                        </div>
-                        <div class="col-5">
-                            <div class="form-group">
-                                {{form.maniana3| as_crispy_field}}
-                            </div>
-                        </div>
-                        <div class="col-5">
-                            <div class="form-group">
-                                {{form.tarde3| as_crispy_field}}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2">
-                            <div class="form-group  mt-4 mr-5 text-left h6 font-weight-bold">
-                                General:
-                            </div>
-                        </div>
-                        <div class="col-5">
-                            <div class="form-group">
-                                {{form.maniana4| as_crispy_field}}
-                            </div>
-                        </div>
-
-                        <div class="col-5">
-                            <div class="form-group">
-                                {{form.tarde4| as_crispy_field}}
-                            </div>
-                        </div>
-
                         <div class="col-5">
                             <div class="form-group">
                                 {{form.tipo_vacante| as_crispy_field}}
@@ -151,8 +82,7 @@
                     </div>
                 </div>
         </form>
-        {% if form.tipo_vacante.value == 'Stock' %}
-
+        {% if request.resolver_match.url_name == "vacantes_editar" %}
         <div class="card-header">
             <h3 class="card-title">
                 Cupos de la vacante

@@ -399,39 +399,7 @@ class Vacantes(models.Model):
     nombre = models.CharField(max_length=100)
     observaciones = models.CharField(max_length=300, null=True, blank=True)
     fk_programa = models.ForeignKey(Programas, on_delete=models.PROTECT)
-    fk_organismo = models.ForeignKey(Organismos, on_delete=models.PROTECT, null=True, blank=True)
-    manianabb = models.PositiveIntegerField(
-        validators=[MinValueValidator(0)],
-        default=0, verbose_name = 'Turno Mañana', 
-    )
-    tardebb = models.PositiveIntegerField(
-        validators=[MinValueValidator(0)],
-        default=0,verbose_name = 'Turno Tarde',
-    )
-    maniana2 = models.PositiveIntegerField(
-        validators=[MinValueValidator(0)],
-        default=0,verbose_name = 'Turno Mañana',
-    )
-    tarde2 = models.PositiveIntegerField(
-        validators=[MinValueValidator(0)],
-        default=0,verbose_name = 'Turno Tarde',
-    )
-    maniana3 = models.PositiveIntegerField(
-        validators=[MinValueValidator(0)],
-        default=0, verbose_name = 'Turno Mañana',
-    )
-    tarde3 = models.PositiveIntegerField(
-        validators=[MinValueValidator(0)],
-        default=0,verbose_name = 'Turno Tarde',
-    )
-    maniana4 = models.PositiveIntegerField(
-        validators=[MinValueValidator(0)],
-        default=0, verbose_name = 'Turno Mañana',
-    )
-    tarde4 = models.PositiveIntegerField(
-        validators=[MinValueValidator(0)],
-        default=0,verbose_name = 'Turno Tarde',
-    )
+    fk_organismo = models.ForeignKey(Organismos, on_delete=models.PROTECT)
     estado = models.BooleanField(default=True)
     tipo_vacante = models.CharField(default='Generica', max_length=20, choices=CHOICE_TIPO_VACANTE)
 

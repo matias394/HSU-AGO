@@ -118,6 +118,7 @@ CHOICE_CRITERIO_ALERTA=[
 ]
 
 CHOICE_TIPO_VACANTE=[
+    (None, ''),
     ('Generica', 'Generica'),
     ('Stock', 'Stock'),
 ]

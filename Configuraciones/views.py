@@ -845,6 +845,11 @@ class VacantesDetailView(PermisosMixin, DetailView):
     permission_required = ['Usuarios.rol_admin', 'Usuarios.rol_observador', 'Usuarios.rol_consultante']
     model = Vacantes
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['lista_cupos'] = CupoVacante.objects.filter(fk_vacante_id=self.kwargs["pk"]).all()
+        return context
+
 class VacantesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
     permission_required = 'Usuarios.rol_admin'
     model = Vacantes
@@ -856,6 +861,11 @@ class VacantesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
     model = Vacantes
     form_class = VacantesForm
     success_message = "%(nombre)s fue registrado correctamente"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cupoform'] = CupoVacantesForm()
+        return context
 
 class VacantesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'Usuarios.rol_admin'
@@ -886,9 +896,9 @@ class VacantesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
             for clave,valor in request.POST.items():
                 setattr(vacante,clave if not 'fk_' in clave else f'{clave}_id',valor)
             vacante.save()
-                
-        # redirect('vacantes_listar')
-        return HttpResponseRedirect(self.request.path_info)
+
+        url = reverse('vacantes_ver', args=[self.kwargs["pk"]])
+        return HttpResponseRedirect(url)
     
     
 
