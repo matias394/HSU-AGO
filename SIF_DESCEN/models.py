@@ -196,7 +196,7 @@ class DESCEN_Admision(models.Model):
 class DESCEN_VacantesOtorgadas (models.Model):
     fk_admision = models.ForeignKey(DESCEN_Admision, on_delete=models.CASCADE)
     fk_organismo = models.ForeignKey(Vacantes, on_delete=models.CASCADE)
-    sala = models.CharField(max_length=150, null=False, blank=False)
+    sala = models.ForeignKey(CupoVacante, on_delete=models.PROTECT, null=False, blank=False)
     salashort = models.CharField(max_length=150, null=True, blank=True)
     turno = models.CharField(max_length=150, null=False, blank=False)
     educador = models.CharField(max_length=150, null=True, blank=True)

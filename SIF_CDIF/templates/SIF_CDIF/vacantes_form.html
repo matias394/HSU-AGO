@@ -48,8 +48,6 @@ Vacantes
           <dt class="col-sm-7 mb-2">{{object.fk_preadmi.centro_postula}}</dt>
           <dd class="col-sm-5 mb-2">Sala solicitada</dd>
           <dt class="col-sm-7 mb-2">{{object.fk_preadmi.sala_postula}}</dt>
-          <dd class="col-sm-5 mb-2">Turno solicitado</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.turno_postula}}</dt>
         </dl>
       </div>
     </div>
@@ -133,15 +131,31 @@ Vacantes
                 {{ form.fecha_ingreso| as_crispy_field }}
             </div>
             <div class="col-sm-3 form-group">
-                {{ form.fk_organismo| as_crispy_field }}
-            </div>
-
-            <div class="col-sm-2 form-group">
-                {{ form.sala| as_crispy_field }}
-            </div>
-            <div class="col-sm-2 form-group">
-              {{ form.turno| as_crispy_field }}
-            </div>
+              <label for="id_fk_organismo">Centro al que ingresa *</label>
+              <select name="fk_organismo" class="form-control custom-select {% if messages %}is-invalid{% endif %}" id="id_fk_organismo" required>
+                  <option value="" selected=""></option>
+                  {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                  <option value="{{object.fk_organismo.id}}" selected>{{object.fk_organismo}}</option>
+                  {% endif %}
+                  {% for c in centros %}
+                  <option value="{{c.id}}">{{c.nombre}}</option>
+                  {% endfor %}
+                </select>
+              {% comment %} <p id="error_1_id_centro_postula" class="invalid-feedback"><strong>Este campo es obligatorio.</strong></p> {% endcomment %}
+          </div>
+          <div class="col-sm-3 form-group">
+              <label for="id_sala">Sala que ingresa *</label>
+              <select name="sala" class="form-control custom-select {% if messages %}is-invalid{% endif %}" id="id_sala" required>
+                  <option value="" selected=""></option>
+                  {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                  <option value="{{object.sala.id}}" selected>{{object.sala}}</option>
+                  {% endif %}
+                  {% for c in cupos %}
+                  <option value="{{c.id}}" data-group="{{c.fk_vacante_id}}">{{c.nombre}}</option>
+                  {% endfor %}
+                </select>
+              {% comment %} <p id="error_1_id_centro_postula" class="invalid-feedback"><strong>Este campo es obligatorio.</strong></p> {% endcomment %}
+          </div>
             <div class="col-sm-3 form-group">
                 {{ form.educador| as_crispy_field }}
             </div>
@@ -163,4 +177,57 @@ Vacantes
 {% endblock %};
 
 {% block customJS %}
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      var select1 = document.getElementById("id_fk_organismo");
+      var select2 = document.getElementById("id_sala");
+      function updateSelect2Options() {
+          var selectedValue = select1.value;
+          Array.from(select2.options).forEach(function(option) {
+              option.style.display = option.getAttribute("data-group") === selectedValue ? "block" : "none";
+          });
+          // Selecciona la primera opción visible en select2
+          select2.value = Array.from(select2.options).find(option => option.style.display === "block").value;
+      }
+      select1.addEventListener("change", updateSelect2Options);
+      // Inicializar las opciones de select2
+      updateSelect2Options();
+  });
+</script>
+<script>
+  // Disable form submissions if there are invalid fields
+  (function () {
+      'use strict';
+      window.addEventListener('load', function () {
+          // Get the forms we want to add validation styles to
+          var forms = document.getElementsByClassName('needs-validation');
+          // Loop over them and prevent submission
+          var validation = Array.prototype.filter.call(forms, function (form) {
+              form.addEventListener('submit', function (event) {
+                  var invalidFields = form.querySelectorAll(':invalid');
+                  if (invalidFields.length > 0) {
+                      // Si hay campos inválidos, detener la propagación del evento
+                      event.preventDefault();
+                      event.stopPropagation();
+        
+                      // Iterar sobre los campos inválidos y agregar mensajes de obligatoriedad
+                      invalidFields.forEach(function (field) {
+                          if (field.hasAttribute('required')) {
+                              // Verificar si el mensaje de error ya existe
+                              if (!field.nextElementSibling || !field.nextElementSibling.classList.contains('invalid-feedback')) {
+                                  // Agregar un mensaje de obligatoriedad para los campos requeridos
+                                  var errorMessage = document.createElement('div');
+                                  errorMessage.className = 'invalid-feedback';
+                                  errorMessage.innerHTML = 'Este campo es obligatorio.';
+                                  field.parentNode.appendChild(errorMessage);
+                              }
+                          }
+                      });
+                  }
+                  form.classList.add('was-validated');
+              }, false);
+          });
+      }, false);
+  })();
+</script>
 {% endblock %}
