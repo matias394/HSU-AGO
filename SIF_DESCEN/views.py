@@ -888,11 +888,30 @@ class DESCENVacantesListView(PermisosMixin, ListView):
     template_name = 'SIF_DESCEN/vacantes_list.html'
     context_object_name = 'organizaciones'
 
-    def get_queryset(self):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        centros = Vacantes.objects.filter(fk_programa_id=settings.PROG_DESCEN)
+        cupos = CupoVacante.objects.filter(fk_vacante__fk_programa_id=settings.PROG_DESCEN)
+        asignada = DESCEN_VacantesOtorgadas.objects.filter(estado_vacante="Asignada")
 
-        organizaciones = Vacantes.objects.filter(fk_programa=settings.PROG_DESCEN)
+        # Crear una lista para almacenar los resultados con el conteo
+        resultados = []
+        for cupo in cupos:
+            contador_aciertos = asignada.filter(sala_id=cupo.id).count()
+            resultados.append({'cupo': cupo, 'aciertos': contador_aciertos})
 
-        data = []
+        context["centros"] = centros
+        context["cupos"] = cupos
+        context["asignada"] = asignada
+        context["resultados"] = resultados
+        
+        return context
+
+    #def get_queryset(self):
+
+    #   organizaciones = Vacantes.objects.filter(fk_programa=settings.PROG_DESCEN)
+
+    #   data = []
 
         #for organizacion in organizaciones:
         #    organizacion_data = {'nombre': organizacion.nombre,
@@ -935,7 +954,7 @@ class DESCENVacantesListView(PermisosMixin, ListView):
 #
             #data.append(organizacion_data)
 
-        return data
+        #return data
 
     
     #def get_context_data(self, **kwargs):
@@ -1053,37 +1072,12 @@ class DESCENVacantesDetailView (PermisosMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         organizacion = Vacantes.objects.filter(pk=self.kwargs["pk"]).first()
-        asig_manianabb = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="Bebes", turno= "Mañana", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
-        asig_tardebb = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="Bebes", turno= "Tarde", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
-        asig_maniana2 = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="2", turno= "Mañana", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
-        asig_tarde2 = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="2", turno= "Tarde", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
-        asig_maniana3 = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="3", turno= "Mañana", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
-        asig_tarde3 = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="3", turno= "Tarde", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
-        esp_manianabb = DESCEN_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="manianabb",estado_vacante='Lista de espera').count()
-        esp_tardebb = DESCEN_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="tardebb",estado_vacante='Lista de espera').count()
-        esp_maniana2 = DESCEN_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="maniana2",estado_vacante='Lista de espera').count()
-        esp_tarde2 = DESCEN_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="tarde2",estado_vacante='Lista de espera').count()
-        esp_maniana3 = DESCEN_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="maniana3",estado_vacante='Lista de espera').count()
-        esp_tarde3 =  DESCEN_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="tarde3",estado_vacante='Lista de espera').count()
-
         admi = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], fk_admision__estado ="Activa", estado_vacante = "Asignada")
         admi2 = DESCEN_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"], estado ="Activa", estado_vacante = "Lista de espera")
         detalle_cupo = CupoVacante.objects.filter(fk_vacante_id=organizacion.id).all()
         
         stock = DESCEN_Vacantes_Stock_Consolidado.objects.filter(fk_vacante_id=organizacion.id).all()
         context["object"] = Vacantes.objects.get(pk=self.kwargs["pk"])
-        context["asig_manianabb"] = asig_manianabb
-        context["asig_tardebb"] = asig_tardebb
-        context["asig_maniana2"] = asig_maniana2
-        context["asig_tarde2"] = asig_tarde2
-        context["asig_maniana3"] = asig_maniana3
-        context["asig_tarde3"] = asig_tarde3
-        context["esp_manianabb"] = esp_manianabb
-        context["esp_tardebb"] = esp_tardebb
-        context["esp_maniana2"] = esp_maniana2
-        context["esp_tarde2"] = esp_tarde2
-        context["esp_maniana3"] = esp_maniana3
-        context["esp_tarde3"] = esp_tarde3
         context["admi"] = admi
         context["admi2"] = admi2
         context["detalle_cupo"] = detalle_cupo
