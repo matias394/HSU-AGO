@@ -46,8 +46,8 @@ Vacantes
           <dt class="col-sm-7 mb-2">{{object.creado_por}}</dt>
           <dd class="col-sm-5 mb-2">Taller solicitado</dd>
           <dt class="col-sm-7 mb-2">{{object.fk_preadmi.centro_postula}}</dt>
-          <dd class="col-sm-5 mb-2">Centro solicitado</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.taller_postula}}</dt>
+          <dd class="col-sm-5 mb-2">Turno solicitado</dd>
+          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.sala_postula}}</dt>
         </dl>
       </div>
     </div>
@@ -131,7 +131,7 @@ Vacantes
                 {{ form.fecha_ingreso| as_crispy_field }}
             </div>
             <div class="col-sm-3 form-group">
-              <label for="id_fk_organismo">Centro al que ingresa *</label>
+              <label for="id_fk_organismo">Taller al que ingresa *</label>
               <select name="fk_organismo" class="form-control custom-select {% if messages %}is-invalid{% endif %}" id="id_fk_organismo" required>
                   <option value="" selected=""></option>
                   {%if request.resolver_match.url_name == "PDV_preadmisiones_editar" %}
@@ -144,7 +144,7 @@ Vacantes
               {% comment %} <p id="error_1_id_centro_postula" class="invalid-feedback"><strong>Este campo es obligatorio.</strong></p> {% endcomment %}
           </div>
           <div class="col-sm-3 form-group">
-              <label for="id_sala">Taller que ingresa *</label>
+              <label for="id_sala">Turno que ingresa *</label>
               <select name="sala" class="form-control custom-select {% if messages %}is-invalid{% endif %}" id="id_sala" required>
                   <option value="" selected=""></option>
                   {%if request.resolver_match.url_name == "PDV_preadmisiones_editar" %}

@@ -134,11 +134,13 @@ class PDVPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin):
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
         centros = Vacantes.objects.filter(fk_programa_id=settings.PROG_PDV)
+        cupos = CupoVacante.objects.filter(fk_vacante__fk_programa_id=settings.PROG_PDV)
         context["pk"] = pk
         context["legajo"] = legajo
         context["familia"] = familia
         context["familia_inversa"] = familia_inversa
         context["centros"] = centros
+        context["cupos"] = cupos
         return context
 
     def form_valid(self, form):
@@ -150,22 +152,6 @@ class PDVPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin):
         form.instance.vinculo4 = form.cleaned_data['vinculo4']
         form.instance.vinculo5 = form.cleaned_data['vinculo5']
         form.instance.creado_por_id = self.request.user.id
-
-        sala = form.cleaned_data['sala_postula']
-        taller = form.cleaned_data['taller_postula']
-
-        if sala == 'Bebés' and taller == 'Mañana':
-            form.instance.sala_short = 'manianabb'
-        elif sala == 'Bebés' and taller == 'Tarde':
-            form.instance.sala_short = 'tardebb'
-        elif sala == 'Sala de 2' and taller == 'Mañana':
-            form.instance.sala_short = 'maniana2'
-        elif sala == 'Sala de 2' and taller == 'Tarde':
-            form.instance.sala_short = 'tarde2'
-        elif sala == 'Sala de 3' and taller == 'Mañana':
-            form.instance.sala_short = 'maniana3'
-        elif sala == 'Sala de 3' and taller == 'Tarde':
-            form.instance.sala_short = 'tarde3'
         self.object = form.save()
 
         base = LegajosDerivaciones.objects.get(pk=pk)
@@ -198,12 +184,14 @@ class PDVPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin):
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
         centros = Vacantes.objects.filter(fk_programa_id=settings.PROG_PDV)
+        cupos = CupoVacante.objects.filter(fk_vacante__fk_programa_id=settings.PROG_PDV)
 
         context["pk"] = pk.fk_derivacion_id
         context["legajo"] = legajo
         context["familia"] = familia
         context["familia_inversa"] = familia_inversa
         context["centros"] = centros
+        context["cupos"] = cupos
         return context
 
     def form_valid(self, form):
@@ -216,20 +204,6 @@ class PDVPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin):
         form.instance.vinculo5 = form.cleaned_data['vinculo5']
         form.instance.estado = pk.estado
         form.instance.modificado_por_id = self.request.user.id
-        sala = form.cleaned_data['sala_postula']
-        taller = form.cleaned_data['taller_postula']
-        if sala == 'Bebés' and taller == 'Mañana':
-            form.instance.sala_short = 'manianabb'
-        elif sala == 'Bebés' and taller == 'Tarde':
-            form.instance.sala_short = 'tardebb'
-        elif sala == 'Sala de 2' and taller == 'Mañana':
-            form.instance.sala_short = 'maniana2'
-        elif sala == 'Sala de 2' and taller == 'Tarde':
-            form.instance.sala_short = 'tarde2'
-        elif sala == 'Sala de 3' and taller == 'Mañana':
-            form.instance.sala_short = 'maniana3'
-        elif sala == 'Sala de 3' and taller == 'Tarde':
-            form.instance.sala_short = 'tarde3'
         self.object = form.save()
 
         return HttpResponseRedirect(reverse('PDV_preadmisiones_ver', args=[self.object.pk]))
