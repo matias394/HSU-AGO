@@ -34,58 +34,39 @@
       </div>
       <div class="card-body p-0 m-0">
         <div class="row p-2">
-            {% for organizacion in organizaciones %}
-          <div class="col-sm-4">
-            <a href="{% url 'CDIF_vacantes_ver' organizacion.id %}">
-              <div class="card pb-0">
+            {% for c in centros %}
+          <div class="col-sm-4  mb-3">
+            <a href="{% url 'CDIF_vacantes_ver' c.id %}">
+              <div class="card pb-0 h-100">
                 <div class="card-header py-2">
-                  <span class="card-title">{{ organizacion.nombre }}</span>
+                  <span class="card-title">{{ c.nombre }}</span>
                   <div class="card-tools d-flex">
-                    <!--
-                    <span class="float-right badge badge-secondary" title="Total disponibles">{{organizacion.total_vacantes}}</span>
-                    <span class="float-right badge bg-success mx-2" title="Total asignadas">{{organizacion.total_asignadas}}</span>
-                    <span class="float-right badge badge-warning" title="Total en lista de espera">10</span>-->
                     <button type="button" class="float-right btn btn-tool d-sm-none ml-2" data-card-widget="collapse">
                       <i class="fas fa-minus"></i>
                     </button>
                   </div>
                 </div>
                 <div class="card-footer p-0">
-                  <ul class="list-unstyled flex-column my-2">
-                    <li class="mx-2">
-                      <span class="text-muted ">
-                        Sala
-                        <span class="text-muted float-right">En espera</span>
-                        <span class="text-muted float-right mx-3">Asignadas</span>
-                        <span class="text-muted float-right">Disponibles</span>
-                      </span>
-                    </li>
-                    <li class="mx-2">
-                      <span class="font-weight-bold">
-                        3 años
-                        <span class="float-right pr-2 pl-4">{{ organizacion.maniana3_tarde3_disponibles }}</span>
-                        <span class="float-right px-5">{{ organizacion.maniana3_tarde3_asignadas }}</span>
-                        <span class="float-right pr-4">{{ organizacion.maniana3_tarde3_total }}</span>
-                      </span>
-                    </li>
-                    <li class="mx-2">
-                      <span class="font-weight-bold">
-                        2 años
-                        <span class="float-right pr-2 pl-4">{{ organizacion.maniana2_tarde2_disponibles }}</span>
-                        <span class="float-right px-5">{{ organizacion.maniana2_tarde2_asignadas }}</span>
-                        <span class="float-right pr-4">{{ organizacion.maniana2_tarde2_total }}</span>
-                      </span>
-                    </li>
-                    <li class="mx-2">
-                      <span class="font-weight-bold">
-                        Bebés
-                        <span class="float-right pr-2 pl-4">{{ organizacion.manianabb_tardebb_disponibles }}</span>
-                        <span class="float-right px-5">{{ organizacion.manianabb_tardebb_asignadas }}</span>
-                        <span class="float-right pr-4">{{ organizacion.manianabb_tardebb_total }}</span>
-                      </span>
-                    </li>
-
-                  </ul>
+                  <table class="table table-borderless table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th>Sala</th>
+                            <th class="text-center">Cupos</th>
+                            <th class="text-center">Asignadas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      {% for r in resultados %}
+                      {% if r.cupo.fk_vacante_id == c.id %}
+                      <tr>
+                          <td>{{ r.cupo.nombre }}</td>
+                          <td class="text-center">{{ r.cupo.cupo }}</td>
+                          <td class="text-center">{{ r.aciertos }}</td>
+                      </tr>
+                      {% endif %}
+                      {% endfor %}
+                    </tbody>
+                </table>
                 </div>
               </div>
             </a>

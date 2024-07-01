@@ -31,7 +31,7 @@ class SL_MultiModelForm(forms.Form):
     fk_externo = forms.ModelMultipleChoiceField(queryset=AgentesExternos.objects.all(), required=False, label="Agentes externos")
 
     # Campo para SL_ExpedientesArchivos
-    archivos = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
+    archivos = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}),required=True)
 
     def __init__(self, *args, **kwargs):
         pk_url = kwargs.pop('pk_url', None)  # Obtener el pk de la URL
@@ -91,6 +91,7 @@ class PreadmArchivosForm(forms.ModelForm):
 class SL_EquipoDesignadoForm (forms.ModelForm):
     class Meta:
         model = SL_EquipoDesignado
+        exclude = ['fk_admi']
         fields = '__all__'
         widgets = {}
         labels = {

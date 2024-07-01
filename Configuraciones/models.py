@@ -28,7 +28,7 @@ class Secretarias(models.Model):
 
 
 class Subsecretarias(models.Model):
-    fk_secretaria = models.ForeignKey(Secretarias, on_delete=models.CASCADE)
+    fk_secretaria = models.ForeignKey(Secretarias, on_delete=models.PROTECT)
     nombre = models.CharField(max_length=40, unique=True)
     observaciones = models.CharField(
         max_length=300,
@@ -53,7 +53,7 @@ class Subsecretarias(models.Model):
 
 
 class Programas(models.Model):
-    fk_subsecretaria = models.ForeignKey(Subsecretarias, on_delete=models.CASCADE)
+    fk_subsecretaria = models.ForeignKey(Subsecretarias, on_delete=models.PROTECT)
     nombre = models.CharField(max_length=100, unique=True)
     estado = models.BooleanField(default=True)
     observaciones = models.CharField(max_length=300, null=True, blank=True)
@@ -134,7 +134,7 @@ class AgentesExternos(models.Model):
         null=True,
         blank=True,
     )
-    fk_organismo = models.ForeignKey(Organismos, on_delete=models.CASCADE, null=True, blank=True)
+    fk_organismo = models.ForeignKey(Organismos, on_delete=models.PROTECT, null=True, blank=True)
     rol = models.CharField(
         max_length=30,
         null=True,
@@ -195,11 +195,11 @@ class Equipos(models.Model):
     La finalidad es su uso en cada programa.
     '''
 
-    fk_programa = models.ForeignKey(Programas, on_delete=models.CASCADE)
+    fk_programa = models.ForeignKey(Programas, on_delete=models.PROTECT)
     nombre = models.CharField(max_length=250)
     fk_coordinador = models.ForeignKey(
         Usuarios,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         null=True,
         blank=True,
         related_name="fkcoordinador",
@@ -253,7 +253,7 @@ class Alertas(models.Model):
     '''
 
     nombre = models.CharField(max_length=100, unique=True)
-    fk_categoria = models.ForeignKey(CategoriaAlertas, on_delete=models.CASCADE)
+    fk_categoria = models.ForeignKey(CategoriaAlertas, on_delete=models.PROTECT)
     estado = models.BooleanField(default=True)
     gravedad = models.CharField(max_length=500, null=False, blank=False)
 
@@ -327,7 +327,7 @@ class Criterios(models.Model):
 
     nombre = models.CharField(max_length=250, unique=True)
     dimension = models.CharField(max_length=12, choices=CHOICE_DIMENSIONES, default='Desconocida')
-    fk_sujeto = models.ForeignKey(Sujetos, on_delete=models.CASCADE)
+    fk_sujeto = models.ForeignKey(Sujetos, on_delete=models.PROTECT)
     permite_potencial = models.BooleanField(default=False)
     m2m_acciones = models.ManyToManyField(Acciones, blank=True)
     m2m_alertas = models.ManyToManyField(CategoriaAlertas, blank=True)
@@ -378,8 +378,8 @@ class IndiceCriterios(models.Model):
     acorde a las necesidades que cada servicio/programa requiera.
     '''
 
-    fk_criterio = models.ForeignKey(Criterios, on_delete=models.CASCADE, related_name='fkcriterio')
-    fk_indice = models.ForeignKey(Indices, on_delete=models.CASCADE, related_name='fkindice')
+    fk_criterio = models.ForeignKey(Criterios, on_delete=models.PROTECT, related_name='fkcriterio')
+    fk_indice = models.ForeignKey(Indices, on_delete=models.PROTECT, related_name='fkindice')
     puntaje_base = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(10)],
         help_text='Permite valores entre 0 y 10.',
@@ -398,40 +398,8 @@ class IndiceCriterios(models.Model):
 class Vacantes(models.Model):
     nombre = models.CharField(max_length=100)
     observaciones = models.CharField(max_length=300, null=True, blank=True)
-    fk_programa = models.ForeignKey(Programas, on_delete=models.CASCADE)
-    fk_organismo = models.ForeignKey(Organismos, on_delete=models.CASCADE, null=True, blank=True)
-    manianabb = models.PositiveIntegerField(
-        validators=[MinValueValidator(0)],
-        default=0, verbose_name = 'Turno Mañana', 
-    )
-    tardebb = models.PositiveIntegerField(
-        validators=[MinValueValidator(0)],
-        default=0,verbose_name = 'Turno Tarde',
-    )
-    maniana2 = models.PositiveIntegerField(
-        validators=[MinValueValidator(0)],
-        default=0,verbose_name = 'Turno Mañana',
-    )
-    tarde2 = models.PositiveIntegerField(
-        validators=[MinValueValidator(0)],
-        default=0,verbose_name = 'Turno Tarde',
-    )
-    maniana3 = models.PositiveIntegerField(
-        validators=[MinValueValidator(0)],
-        default=0, verbose_name = 'Turno Mañana',
-    )
-    tarde3 = models.PositiveIntegerField(
-        validators=[MinValueValidator(0)],
-        default=0,verbose_name = 'Turno Tarde',
-    )
-    maniana4 = models.PositiveIntegerField(
-        validators=[MinValueValidator(0)],
-        default=0, verbose_name = 'Turno Mañana',
-    )
-    tarde4 = models.PositiveIntegerField(
-        validators=[MinValueValidator(0)],
-        default=0,verbose_name = 'Turno Tarde',
-    )
+    fk_programa = models.ForeignKey(Programas, on_delete=models.PROTECT)
+    fk_organismo = models.ForeignKey(Organismos, on_delete=models.PROTECT)
     estado = models.BooleanField(default=True)
     tipo_vacante = models.CharField(default='Generica', max_length=20, choices=CHOICE_TIPO_VACANTE)
 
@@ -525,8 +493,8 @@ class CupoVacante(models.Model):
 #     dimension = models.CharField(max_length=70, choices=CHOICE_DIMENSIONES)
 #     tipo_dato = models.CharField(max_length=50, choices=CHOICE_TIPO_DE_DATOS)
 #     visible_en_legajo = models.BooleanField(default=False)
-#     opciones = models.ForeignKey(TipoOpciones, on_delete=models.CASCADE, blank=True, null=True)
-#     fk_sujeto = models.ForeignKey(Sujetos, on_delete=models.CASCADE)
+#     opciones = models.ForeignKey(TipoOpciones, on_delete=models.PROTECT, blank=True, null=True)
+#     fk_sujeto = models.ForeignKey(Sujetos, on_delete=models.PROTECT)
 
 #     def __str__(self):
 #         return self.descripcion
@@ -545,7 +513,7 @@ class CupoVacante(models.Model):
 #     Permite Formularios persistidos para ser usados en distintos instancias.
 #     '''
 
-#     programa = models.ForeignKey(Programas, on_delete=models.CASCADE)
+#     programa = models.ForeignKey(Programas, on_delete=models.PROTECT)
 #     tipo = models.CharField(max_length=50, choices=CHOICE_TIPO_DE_FORMULARIO)
 #     m2m_items = models.ManyToManyField(Items)
 

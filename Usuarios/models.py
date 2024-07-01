@@ -15,7 +15,7 @@ class Usuarios(models.Model):
     Extensión del modelo USER
     '''
 
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+    usuario = models.OneToOneField(User, on_delete=models.PROTECT)
     imagen = models.ImageField(
         upload_to="usuarios/", null=True, blank=True)
     dni = models.PositiveIntegerField(null=True, blank=True, unique=True)

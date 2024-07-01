@@ -888,54 +888,73 @@ class DESCENVacantesListView(PermisosMixin, ListView):
     template_name = 'SIF_DESCEN/vacantes_list.html'
     context_object_name = 'organizaciones'
 
-    def get_queryset(self):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        centros = Vacantes.objects.filter(fk_programa_id=settings.PROG_DESCEN)
+        cupos = CupoVacante.objects.filter(fk_vacante__fk_programa_id=settings.PROG_DESCEN)
+        asignada = DESCEN_VacantesOtorgadas.objects.filter(estado_vacante="Asignada")
 
-        organizaciones = Vacantes.objects.filter(fk_programa=settings.PROG_DESCEN)
+        # Crear una lista para almacenar los resultados con el conteo
+        resultados = []
+        for cupo in cupos:
+            contador_aciertos = asignada.filter(sala_id=cupo.id).count()
+            resultados.append({'cupo': cupo, 'aciertos': contador_aciertos})
 
-        data = []
+        context["centros"] = centros
+        context["cupos"] = cupos
+        context["asignada"] = asignada
+        context["resultados"] = resultados
+        
+        return context
 
-        for organizacion in organizaciones:
-            organizacion_data = {'nombre': organizacion.nombre,
-                                 'organismo': organizacion.fk_organismo.nombre,
-                                 'calle' :organizacion.fk_organismo.calle,
-                                 'numero' :organizacion.fk_organismo.altura,
-                                 'barrio' :organizacion.fk_organismo.barrio,
-                                 'id' : organizacion.pk
-                                }  
+    #def get_queryset(self):
+
+    #   organizaciones = Vacantes.objects.filter(fk_programa=settings.PROG_DESCEN)
+
+    #   data = []
+
+        #for organizacion in organizaciones:
+        #    organizacion_data = {'nombre': organizacion.nombre,
+        #                         'organismo': organizacion.fk_organismo.nombre,
+        #                         'calle' :organizacion.fk_organismo.calle,
+        #                         'numero' :organizacion.fk_organismo.altura,
+        #                         'barrio' :organizacion.fk_organismo.barrio,
+        #                         'id' : organizacion.pk
+        #                        }  
 
             # Calcular la cantidad de vacantes por sala agrupadas (tu lógica actual aquí)
-            for sala_group in [['manianabb', 'tardebb'], ['maniana2', 'tarde2'], ['maniana3', 'tarde3']]:
-                total_vacantes = Vacantes.objects.filter(nombre=organizacion).aggregate(
-                    total=Sum(F(sala_group[0]) + F(sala_group[1]))
-                )['total'] or 0
-
-                asignadas = DESCEN_VacantesOtorgadas.objects.filter(
-                    fk_organismo__nombre=organizacion,
-                    salashort__in=sala_group
-                ).count()
-
-                disponibles = DESCEN_Admision.objects.filter(
-                    fk_preadmi__centro_postula__nombre=organizacion,
-                    fk_preadmi__sala_short__in=sala_group,
-                    estado_vacante='Lista de espera'
-                ).count()
-
-                organizacion_data['_'.join(sala_group) + '_total'] = total_vacantes
-                organizacion_data['_'.join(sala_group) + '_asignadas'] = asignadas
-                organizacion_data['_'.join(sala_group) + '_disponibles'] = disponibles
+            #for sala_group in [['manianabb', 'tardebb'], ['maniana2', 'tarde2'], ['maniana3', 'tarde3']]:
+            #    total_vacantes = Vacantes.objects.filter(nombre=organizacion).aggregate(
+            #        total=Sum(F(sala_group[0]) + F(sala_group[1]))
+            #    )['total'] or 0
+#
+            #    asignadas = DESCEN_VacantesOtorgadas.objects.filter(
+            #        fk_organismo__nombre=organizacion,
+            #        salashort__in=sala_group
+            #    ).count()
+#
+            #    disponibles = DESCEN_Admision.objects.filter(
+            #        fk_preadmi__centro_postula__nombre=organizacion,
+            #        fk_preadmi__sala_short__in=sala_group,
+            #        estado_vacante='Lista de espera'
+            #    ).count()
+#
+            #    organizacion_data['_'.join(sala_group) + '_total'] = total_vacantes
+            #    organizacion_data['_'.join(sala_group) + '_asignadas'] = asignadas
+            #    organizacion_data['_'.join(sala_group) + '_disponibles'] = disponibles
 
             # Calcular los totales de vacantes, asignadas y disponibles por organización
-            total_vacantes_org = sum([organizacion_data['_'.join(sala_group) + '_total'] for sala_group in [['manianabb', 'tardebb'], ['maniana2', 'tarde2'], ['maniana3', 'tarde3']]])
-            total_asignadas_org = sum([organizacion_data['_'.join(sala_group) + '_asignadas'] for sala_group in [['manianabb', 'tardebb'], ['maniana2', 'tarde2'], ['maniana3', 'tarde3']]])
-            total_disponibles_org = sum([organizacion_data['_'.join(sala_group) + '_disponibles'] for sala_group in [['manianabb', 'tardebb'], ['maniana2', 'tarde2'], ['maniana3', 'tarde3']]])
+            #total_vacantes_org = sum([organizacion_data['_'.join(sala_group) + '_total'] for sala_group in [['manianabb', 'tardebb'], ['maniana2', 'tarde2'], ['maniana3', 'tarde3']]])
+            #total_asignadas_org = sum([organizacion_data['_'.join(sala_group) + '_asignadas'] for sala_group in [['manianabb', 'tardebb'], ['maniana2', 'tarde2'], ['maniana3', 'tarde3']]])
+            #total_disponibles_org = sum([organizacion_data['_'.join(sala_group) + '_disponibles'] for sala_group in [['manianabb', 'tardebb'], ['maniana2', 'tarde2'], ['maniana3', 'tarde3']]])
+#
+            #organizacion_data['total_vacantes'] = total_vacantes_org
+            #organizacion_data['total_asignadas'] = total_asignadas_org
+            #organizacion_data['total_disponibles'] = total_disponibles_org
+#
+            #data.append(organizacion_data)
 
-            organizacion_data['total_vacantes'] = total_vacantes_org
-            organizacion_data['total_asignadas'] = total_asignadas_org
-            organizacion_data['total_disponibles'] = total_disponibles_org
-
-            data.append(organizacion_data)
-
-        return data
+        #return data
 
     
     #def get_context_data(self, **kwargs):
@@ -971,7 +990,7 @@ class DESCENVacantesStockListView(PermisosMixin, UpdateView):
             if crear_stock.is_valid():
                 #Actualizar stock consolidado
                 crear_stock.save()
-                stock = DESCEN_Vacantes_Stock_Consolidado.objects.filter(fk_vacante=self.kwargs["pk"],tipo=crear_stock.cleaned_data['tipo']).first()
+                stock = DESCEN_Vacantes_Stock_Consolidado.objects.filter(fk_vacante=self.kwargs["pk"],fk_producto=crear_stock.cleaned_data['fk_producto']).first()
                 if(stock != None):
                     stock.cantidad_total = stock.cantidad_total + crear_stock.cleaned_data['cantidad']
                 if(stock == None):
@@ -979,7 +998,7 @@ class DESCENVacantesStockListView(PermisosMixin, UpdateView):
                     stock.fk_vacante = Vacantes.objects.filter(id=self.kwargs["pk"]).first()
                     stock.fk_stock = DESCEN_Vacantes_Stock.objects.filter(id=crear_stock.instance.id).first()
                     stock.cantidad_total = crear_stock.cleaned_data['cantidad']
-                    stock.tipo = crear_stock.cleaned_data['tipo']
+                    stock.fk_producto = crear_stock.cleaned_data['fk_producto']
                 stock.save()
                 
             else:
@@ -993,19 +1012,20 @@ class DESCENVacantesStockEditView(PermisosMixin,SuccessMessageMixin, UpdateView)
     form_class = DESCEN_StockForm
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["select"] = DESCEN_Vacantes_Stock_Consolidado.objects.filter(fk_vacante_id=self.kwargs["pk1"]).all()
         context["stock"] = DESCEN_Vacantes_Stock.objects.get(id=self.kwargs["pk"])
         return context
     def form_valid(self, form):
-        stock = DESCEN_Vacantes_Stock_Consolidado.objects.filter(fk_stock=self.kwargs["pk"]).first()
+        stock = DESCEN_Vacantes_Stock_Consolidado.objects.filter(fk_vacante=self.kwargs["pk1"],fk_producto=form.cleaned_data['fk_producto'].id).first()
         diferencia = form.cleaned_data['cantidad'] - stock.cantidad_total
         stock.cantidad_total = stock.cantidad_total + diferencia
         if(stock.cantidad_total > 0):
             stock.save()
             form.save()
-            return redirect('DESCEN_vacantes_stock_edit', self.kwargs["pk"])
+            return redirect('DESCEN_vacantes_stock_edit', self.kwargs["pk"], self.kwargs["pk1"])
         else:
             messages.error(self.request,'No hay stock disponible para asignar.')
-            return redirect('DESCEN_vacantes_stock_edit', self.kwargs["pk"])
+            return redirect('DESCEN_vacantes_stock_edit', self.kwargs["pk"],  self.kwargs["pk1"])
 
 class DESCENVacantesStocAsignarView(PermisosMixin, UpdateView):
     permission_required = "Usuarios.rol_admin"
@@ -1018,6 +1038,7 @@ class DESCENVacantesStocAsignarView(PermisosMixin, UpdateView):
         admi = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk1"], fk_admision__estado ="Activa", estado_vacante = "Asignada").first()
         detalle_cupo = CupoVacante.objects.filter(fk_vacante_id=organizacion.id).all()
         context["object"] = Vacantes.objects.get(pk=self.kwargs["pk1"])
+        context["select"] = DESCEN_Vacantes_Stock_Consolidado.objects.filter(fk_vacante_id=self.kwargs["pk1"]).all()
         context["stock"] = DESCEN_Vacantes_Stock.objects.filter(fk_vacante=self.kwargs["pk"]).all()
         context["stock_asignado"] = DESCEN_Vacantes_Stock_Asignado.objects.filter(fk_vacante=self.kwargs["pk1"],fk_legajo=admi.fk_admision.fk_preadmi.fk_legajo.id).all()
         context["admi"] = admi
@@ -1028,12 +1049,11 @@ class DESCENVacantesStocAsignarView(PermisosMixin, UpdateView):
         asignado = DESCEN_Vacantes_Stock_Asignado()
         asignado.fk_legajo = form.cleaned_data['fk_legajo']
         asignado.fk_vacante = form.cleaned_data['fk_vacante']
-        asignado.fk_stock = form.cleaned_data['fk_stock']
+        asignado.fk_producto = form.cleaned_data['fk_producto']
         asignado.cantidad = form.cleaned_data['cantidad']
         asignado.save()
-        print(form.cleaned_data['fk_legajo'].id);
         #ACtualizar stock consolidado
-        stock = DESCEN_Vacantes_Stock_Consolidado.objects.filter(fk_stock=form.cleaned_data['fk_stock'].id,fk_vacante=form.cleaned_data['fk_vacante'].id).first()
+        stock = DESCEN_Vacantes_Stock_Consolidado.objects.filter(fk_producto=form.cleaned_data['fk_producto'],fk_vacante=form.cleaned_data['fk_vacante'].id).first()
         stock.cantidad_total = stock.cantidad_total - form.cleaned_data['cantidad']
         if(stock.cantidad_total > 0):
             stock.save()
@@ -1052,36 +1072,12 @@ class DESCENVacantesDetailView (PermisosMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         organizacion = Vacantes.objects.filter(pk=self.kwargs["pk"]).first()
-        asig_manianabb = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="Bebes", turno= "Mañana", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
-        asig_tardebb = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="Bebes", turno= "Tarde", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
-        asig_maniana2 = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="2", turno= "Mañana", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
-        asig_tarde2 = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="2", turno= "Tarde", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
-        asig_maniana3 = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="3", turno= "Mañana", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
-        asig_tarde3 = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="3", turno= "Tarde", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
-        esp_manianabb = DESCEN_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="manianabb",estado_vacante='Lista de espera').count()
-        esp_tardebb = DESCEN_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="tardebb",estado_vacante='Lista de espera').count()
-        esp_maniana2 = DESCEN_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="maniana2",estado_vacante='Lista de espera').count()
-        esp_tarde2 = DESCEN_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="tarde2",estado_vacante='Lista de espera').count()
-        esp_maniana3 = DESCEN_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="maniana3",estado_vacante='Lista de espera').count()
-        esp_tarde3 =  DESCEN_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="tarde3",estado_vacante='Lista de espera').count()
-
         admi = DESCEN_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], fk_admision__estado ="Activa", estado_vacante = "Asignada")
         admi2 = DESCEN_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"], estado ="Activa", estado_vacante = "Lista de espera")
         detalle_cupo = CupoVacante.objects.filter(fk_vacante_id=organizacion.id).all()
-        stock = DESCEN_Vacantes_Stock.objects.filter(fk_vacante_id=organizacion.id).all()
+        
+        stock = DESCEN_Vacantes_Stock_Consolidado.objects.filter(fk_vacante_id=organizacion.id).all()
         context["object"] = Vacantes.objects.get(pk=self.kwargs["pk"])
-        context["asig_manianabb"] = asig_manianabb
-        context["asig_tardebb"] = asig_tardebb
-        context["asig_maniana2"] = asig_maniana2
-        context["asig_tarde2"] = asig_tarde2
-        context["asig_maniana3"] = asig_maniana3
-        context["asig_tarde3"] = asig_tarde3
-        context["esp_manianabb"] = esp_manianabb
-        context["esp_tardebb"] = esp_tardebb
-        context["esp_maniana2"] = esp_maniana2
-        context["esp_tarde2"] = esp_tarde2
-        context["esp_maniana3"] = esp_maniana3
-        context["esp_tarde3"] = esp_tarde3
         context["admi"] = admi
         context["admi2"] = admi2
         context["detalle_cupo"] = detalle_cupo

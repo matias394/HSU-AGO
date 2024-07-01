@@ -13,7 +13,9 @@
 {% block content %}
 
 <div class="row">
-    
+  <div class="col-12 my-3 mx-2 d-print-none">
+    <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
+  </div>
     <div class="col-12">
         <div class="card card-outline card-primary h-100">
             <div class="card-header">
@@ -26,7 +28,7 @@
                     <tr>
                       <th>Fecha</th>
                       <th>Expediente</th>
-                      <th>Legajo</th>
+                      <th>Grupo familiar</th>
                       <th>Creado</th>
                       <th width="5%" class="notexport"></th>
                     </tr>
@@ -35,11 +37,11 @@
                     {% for i in equipo %}
                     <tr>
                       <td> {{ i.creado|date:'d/m/Y' }} </td>
-                      <td> {{i.fk_expediente.expediente}} </td>
-                      <td> {{i.fk_preadmi.fk_derivacion}}</td>
+                      <td>{{i.fk_expediente.expediente}}</td>
+                      <td> {{i.fk_preadmi.fk_derivacion.fk_legajo.apellido}}</td>
                       <td> {{i.creado}}</td>
                       <td class="text-right">
-                        <a href="{% url 'SL_admisiones_ver' i.fk_admi.pk %}" class="btn btn-secondary btn-sm ver"
+                        <a href="{% url 'SL_expediente_ver' i.fk_expediente.pk %}" class="btn btn-secondary btn-sm ver"
                           title="Ver detalle">Ver</a>
                       </td>
                     </tr>
