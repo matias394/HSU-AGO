@@ -936,8 +936,6 @@ class PDVVacantesAdmision(PermisosMixin, CreateView):
     form_class = PDV_VacantesOtorgadasForm
 
     def form_valid(self, form):
-        fk_organismo2 = form.cleaned_data['fk_organismo2']
-        fk_organismo = form.cleaned_data['fk_organismo']
         self.object = form.save()
     
         base1 = PDV_Admision.objects.filter(pk=self.kwargs["pk"]).first()
@@ -971,6 +969,8 @@ class PDVVacantesAdmision(PermisosMixin, CreateView):
         preadmi = PDV_PreAdmision.objects.filter(pk=pk.fk_preadmi_id).first()
         criterio = PDV_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
         foto_ivi = PDV_Foto_IVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso").first()
+        centros = Vacantes.objects.filter(fk_programa_id=settings.PROG_PDV)
+        cupos = CupoVacante.objects.filter(fk_vacante__fk_programa_id=settings.PROG_PDV)
 
         context["object"] = pk
         context["foto_ivi"] = foto_ivi
@@ -980,6 +980,8 @@ class PDVVacantesAdmision(PermisosMixin, CreateView):
         context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__iexact='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
+        context["centros"] = centros
+        context["cupos"] = cupos
         
         return context
 
@@ -990,28 +992,28 @@ class PDVVacantesAdmisionCambio(PermisosMixin, CreateView):
     form_class = PDV_VacantesOtorgadasForm
 
     def form_valid(self, form):
-        if form.cleaned_data['fecha_egreso'] == None:
-            messages.error(self.request, 'El campo fecha de egreso es requerido.')
-            return super().form_invalid(form) 
-        else:
-            form.evento = "CambioVacante"
-            # sala = form.cleaned_data['sala']
-            fk_organismo2 = form.cleaned_data['fk_organismo2']
-            fk_organismo = form.cleaned_data['fk_organismo']
-            self.object = form.save()
+        #if form.cleaned_data['fecha_egreso'] == None:
+        #    messages.error(self.request, 'El campo fecha de egreso es requerido.')
+        #    return super().form_invalid(form) 
+        #else:
+        form.evento = "CambioVacante"
+        # sala = form.cleaned_data['sala']
+        fk_organismo2 = form.cleaned_data['fk_organismo2']
+        fk_organismo = form.cleaned_data['fk_organismo']
+        self.object = form.save()
 
         
-            # --------- HISTORIAL ---------------------------------
-            pk = self.kwargs["pk"]
-            legajo = PDV_Admision.objects.filter(pk=pk).first()
-            base = PDV_Historial()
-            base.fk_legajo_id = legajo.fk_preadmi.fk_legajo.id
-            base.fk_legajo_derivacion_id = legajo.fk_preadmi.fk_derivacion_id
-            base.fk_preadmi_id = legajo.fk_preadmi.pk
-            base.fk_admision_id = pk
-            base.movimiento = "CAMBIO VACANTE"
-            base.creado_por_id = self.request.user.id
-            base.save()
+        # --------- HISTORIAL ---------------------------------
+        pk = self.kwargs["pk"]
+        legajo = PDV_Admision.objects.filter(pk=pk).first()
+        base = PDV_Historial()
+        base.fk_legajo_id = legajo.fk_preadmi.fk_legajo.id
+        base.fk_legajo_derivacion_id = legajo.fk_preadmi.fk_derivacion_id
+        base.fk_preadmi_id = legajo.fk_preadmi.pk
+        base.fk_admision_id = pk
+        base.movimiento = "CAMBIO VACANTE"
+        base.creado_por_id = self.request.user.id
+        base.save()
 
         return redirect('PDV_asignado_admisiones_ver', legajo.id)
     
@@ -1030,6 +1032,8 @@ class PDVVacantesAdmisionCambio(PermisosMixin, CreateView):
         preadmi = PDV_PreAdmision.objects.filter(pk=pk.fk_preadmi_id).first()
         criterio = PDV_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
         foto_ivi = PDV_Foto_IVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso").first()
+        centros = Vacantes.objects.filter(fk_programa_id=settings.PROG_PDV)
+        cupos = CupoVacante.objects.filter(fk_vacante__fk_programa_id=settings.PROG_PDV)
 
         context["object"] = pk
         context["observaciones"] = foto_ivi
@@ -1040,6 +1044,8 @@ class PDVVacantesAdmisionCambio(PermisosMixin, CreateView):
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
         context["vo"] = vacante_otorgada
+        context["centros"] = centros
+        context["cupos"] = cupos
         
         return context
 

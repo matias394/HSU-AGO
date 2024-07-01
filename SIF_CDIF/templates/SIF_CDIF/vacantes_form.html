@@ -181,14 +181,29 @@ Vacantes
   document.addEventListener("DOMContentLoaded", function() {
       var select1 = document.getElementById("id_fk_organismo");
       var select2 = document.getElementById("id_sala");
+      
       function updateSelect2Options() {
           var selectedValue = select1.value;
+          var hasVisibleOption = false;
+          
           Array.from(select2.options).forEach(function(option) {
-              option.style.display = option.getAttribute("data-group") === selectedValue ? "block" : "none";
+              if (option.getAttribute("data-group") === selectedValue) {
+                  option.style.display = "block";
+                  if (!hasVisibleOption) {
+                      hasVisibleOption = true;
+                      select2.value = option.value;
+                  }
+              } else {
+                  option.style.display = "none";
+              }
           });
-          // Selecciona la primera opción visible en select2
-          select2.value = Array.from(select2.options).find(option => option.style.display === "block").value;
+          
+          // Si no hay opciones visibles, deselecciona el select2
+          if (!hasVisibleOption) {
+              select2.value = "";
+          }
       }
+      
       select1.addEventListener("change", updateSelect2Options);
       // Inicializar las opciones de select2
       updateSelect2Options();
