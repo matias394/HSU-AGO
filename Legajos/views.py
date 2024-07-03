@@ -1331,10 +1331,17 @@ class indicesView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        pk = self.kwargs["pk"]
         
         legajo = Legajos.objects.filter(pk=self.kwargs["pk"]).first()
+        
+        #Obtener historial de indices IVI
+        historial_ivi = HistorialLegajoIndices.objects.filter(fk_legajo_id=pk).all().order_by('-id')[:3]
+
 
         context["legajo"] = legajo
+        context["historial_ivi"] = historial_ivi
+
         
         return context      
 
