@@ -131,6 +131,7 @@ class CDIF_PreAdmision (models.Model):
     modificado = models.DateField(auto_now=True, null=True, blank=True)
     estado = models.CharField(max_length=100, null=True, blank=True)
     tipo = models.CharField(max_length=100, null=True, blank=True)
+    observaciones = models.CharField(max_length=300, null=True, blank=True)
 
 class Criterios_IVI(models.Model):
     criterio =  models.CharField(max_length=250, null=False, blank=False)

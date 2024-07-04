@@ -362,6 +362,25 @@ class CDIFPreAdmisionesDeleteView(PermisosMixin, DeleteView):
             self.object.delete()
             return redirect(self.success_url)
 
+class CDIFPreAdmisionesRechazarView(PermisosMixin, DeleteView):
+    permission_required = "Usuarios.rol_admin"
+    model = CDIF_PreAdmision
+    template_name = "SIF_CDIF/preadmisiones_confirm_rechazar.html"
+    success_url = reverse_lazy("CDIF_preadmisiones_listar")
+
+    def form_valid(self, form):
+        if self.object.estado == "Rechazada":
+            messages.error(
+                self.request,
+                "Esta solicitud ya ha sido rechazada.",
+            )
+            return redirect("CDIF_preadmisiones_ver", pk=int(self.object.id))
+        else:
+            self.object.estado = "Rechazada"
+            self.object.observaciones = self.request.POST.get("observaciones")
+            self.object.save()
+        return redirect("CDIF_preadmisiones_ver", pk=int(self.object.id))
+
 class CDIFCriteriosIVICreateView(PermisosMixin, CreateView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_CDIF/criterios_ivi_form.html"
