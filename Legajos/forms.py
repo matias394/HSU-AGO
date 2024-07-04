@@ -186,7 +186,7 @@ class LegajosDerivacionesForm(forms.ModelForm):
         }
         labels = {
             'fk_legajo': 'Legajo',
-            'fk_organismo': 'Organismo relacionado',
+            'fk_organismo': 'Organismo desde el que se deriva',
             'm2m_alertas': 'Alertas detectadas',
             'fk_programa': 'Derivar a',
             'fk_programa_solicitante': 'Derivar de',

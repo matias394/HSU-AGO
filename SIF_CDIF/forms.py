@@ -138,7 +138,7 @@ class CDIF_IntervencionesForm (forms.ModelForm):
             'responsable' : forms.SelectMultiple(attrs={'class': 'select2 w-100', 'multiple': True}),
         }
         labels = {
-            'criterio_modificable': 'Criterio modificable trabajado',
+            'criterio_modificable': 'Criterio trabajado',
             'impacto': 'Impacto en el criterio',
             'accion': 'Acción desarrollada',
             'detalle':'Detalles',
