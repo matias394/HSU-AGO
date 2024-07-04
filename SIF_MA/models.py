@@ -6,6 +6,8 @@ from .choices import *
 from django.urls import *
 from SIF_CDIF.models import Criterios_IVI, OpcionesResponsables
 from SIF_SL.models import SL_Expedientes
+from datetime import datetime
+
 
 # Create your models here.
 class MA_Derivacion (models.Model):
@@ -33,10 +35,10 @@ class MA_PreAdmision (models.Model):
     modificado = models.DateField(auto_now=True, null=True, blank=True)
     estado = models.CharField(max_length=100, null=True, blank=True)
     tipo = models.CharField(max_length=100, null=True, blank=True)
-    i45 = models.DateField()
-    i90 = models.DateField()
-    i135 = models.DateField()
-    i180 = models.DateField()
+    i45 = models.DateField(default=datetime.now())
+    i90 = models.DateField(default=datetime.now())
+    i135 = models.DateField(default=datetime.now())
+    i180 = models.DateField(default=datetime.now())
     archivo45 = models.FileField(upload_to='MedidasAbrigo/archivos/', null=True, blank=True)
     archivo90 = models.FileField(upload_to='MedidasAbrigo/archivos/', null=True, blank=True)
     archivo135 = models.FileField(upload_to='MedidasAbrigo/archivos/', null=True, blank=True)
