@@ -267,8 +267,8 @@ class CDIFPreAdmisionesDetailView(PermisosMixin, DetailView):
             context["criterio"] = criterio
             context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
             context["cantidad"] = criterio.count()
-            context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
-            context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+            context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').count()
+            context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
             context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         if foto_ivi:
             context["foto_ivi"] = foto_ivi
@@ -564,8 +564,8 @@ class CDIFIndiceIviDetailView(PermisosMixin, DetailView):
         context["criterio"] = criterio
         context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         #context['maximo'] = foto_ivi.puntaje_max
         return context
@@ -593,8 +593,8 @@ class CDIFPreAdmisiones3DetailView(PermisosMixin, DetailView):
         context["foto_ivi"] = foto_ivi
         context["puntaje"] = foto_ivi.puntaje
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
         return context
@@ -658,8 +658,8 @@ class CDIFAdmisionesDetailView(PermisosMixin, DetailView):
         context["foto_ivi"] = foto_ivi
         context["puntaje"] = foto_ivi.puntaje
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
         
@@ -712,8 +712,8 @@ class CDIFVacantesAdmision(PermisosMixin, CreateView):
         context["foto_ivi"] = foto_ivi
         context["puntaje"] = foto_ivi.puntaje
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencialsi').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
         context["centros"] = centros
@@ -778,8 +778,8 @@ class CDIFVacantesAdmisionCambio(PermisosMixin, CreateView):
         context["observaciones"] = foto_ivi
         context["puntaje"] = foto_ivi.puntaje
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
         context["vo"] = vacante_otorgada
