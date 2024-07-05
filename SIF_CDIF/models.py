@@ -147,7 +147,7 @@ class CDIF_IndiceIVI(models.Model):
     fk_preadmi = models.ForeignKey(CDIF_PreAdmision, on_delete=models.PROTECT, null=True, blank=True)
     presencia = models.BooleanField (default=False, null=True, blank=True)
     tipo = models.CharField (max_length=350, null=True, blank=True)
-    programa = models.CharField(max_length=150, choices=CHOICE_NOSI, null=True, blank=True)
+    programa = models.CharField(max_length=150, choices=CHOICE_NOSI_MODIFICABLE, null=True, blank=True)
     clave = models.CharField (max_length=350, null=True, blank=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
