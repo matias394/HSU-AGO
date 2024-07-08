@@ -299,9 +299,41 @@ CDIF Pre-admisiones
 
 <div class="row mt-4 d-print-none">
   <div class="col-12 mx-2">
-    <div class="form-group  d-flex justify-content-between">
-      <a href="{% url 'CDIF_preadmisiones_listar' %}" class="btn btn-secondary">Volver</a>
+    {% if object.estado == 'En proceso' %}
+     <!-- Button trigger modal -->
+     <a class="btn btn-secondary" data-toggle="modal" data-target="#confirmarVolver">
+        Volver
+    </a>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="confirmarVolver" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="confirmarVolverLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmarVolverLabel">Pre-admision</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ¿Estas seguro de volver sin finalizar la pre-admision? 
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" >Cancelar</button>
+          <a class="btn btn-primary" href="{% url 'CDIF_preadmisiones_listar' %}">Aceptar</a>
+        </div>
+      </div>
     </div>
+  </div>
+      
+    {% else %}
+    <div class="form-group  d-flex justify-content-between">
+        <a href="{% url 'CDIF_preadmisiones_listar' %}" class="btn btn-secondary">Volver</a>
+      </div>
+
+    {% endif %}
+
+   
   </div>
 </div>
 
