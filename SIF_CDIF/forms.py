@@ -113,6 +113,7 @@ class CDIF_VacantesOtorgadasForm (forms.ModelForm):
             'detalles': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
         }
         labels = {
+            'fecha_ingreso': 'Fecha de ingreso a sala',
             'fk_organismo':'Centro al que ingresa',
             'sala':'Sala a la que ingresa',
             'turno':'Turno al que ingresa',
