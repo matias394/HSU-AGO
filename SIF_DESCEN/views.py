@@ -160,11 +160,13 @@ class DESCENPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixi
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
         centros = Vacantes.objects.filter(fk_programa_id=settings.PROG_DESCEN)
+        cupos = CupoVacante.objects.filter(fk_vacante__fk_programa_id=settings.PROG_DESCEN)
         context["pk"] = pk
         context["legajo"] = legajo
         context["familia"] = familia
         context["familia_inversa"] = familia_inversa
         context["centros"] = centros
+        context["cupos"] = cupos
         return context
 
     def form_valid(self, form):
@@ -177,21 +179,6 @@ class DESCENPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixi
         form.instance.vinculo5 = form.cleaned_data['vinculo5']
         form.instance.creado_por_id = self.request.user.id
 
-        sala = form.cleaned_data['sala_postula']
-        turno = form.cleaned_data['turno_postula']
-
-        if sala == 'Bebés' and turno == 'Mañana':
-            form.instance.sala_short = 'manianabb'
-        elif sala == 'Bebés' and turno == 'Tarde':
-            form.instance.sala_short = 'tardebb'
-        elif sala == 'Sala de 2' and turno == 'Mañana':
-            form.instance.sala_short = 'maniana2'
-        elif sala == 'Sala de 2' and turno == 'Tarde':
-            form.instance.sala_short = 'tarde2'
-        elif sala == 'Sala de 3' and turno == 'Mañana':
-            form.instance.sala_short = 'maniana3'
-        elif sala == 'Sala de 3' and turno == 'Tarde':
-            form.instance.sala_short = 'tarde3'
         self.object = form.save()
 
         base = LegajosDerivaciones.objects.get(pk=pk)
@@ -231,12 +218,14 @@ class DESCENPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixi
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
         centros = Vacantes.objects.filter(fk_programa_id=settings.PROG_DESCEN)
+        cupos = CupoVacante.objects.filter(fk_vacante__fk_programa_id=settings.PROG_DESCEN)
 
         context["pk"] = pk.fk_derivacion_id
         context["legajo"] = legajo
         context["familia"] = familia
         context["familia_inversa"] = familia_inversa
         context["centros"] = centros
+        context["cupos"] = cupos
         return context
 
     def form_valid(self, form):
@@ -249,20 +238,7 @@ class DESCENPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixi
         form.instance.vinculo5 = form.cleaned_data['vinculo5']
         form.instance.estado = pk.estado
         form.instance.modificado_por_id = self.request.user.id
-        sala = form.cleaned_data['sala_postula']
-        turno = form.cleaned_data['turno_postula']
-        if sala == 'Bebés' and turno == 'Mañana':
-            form.instance.sala_short = 'manianabb'
-        elif sala == 'Bebés' and turno == 'Tarde':
-            form.instance.sala_short = 'tardebb'
-        elif sala == 'Sala de 2' and turno == 'Mañana':
-            form.instance.sala_short = 'maniana2'
-        elif sala == 'Sala de 2' and turno == 'Tarde':
-            form.instance.sala_short = 'tarde2'
-        elif sala == 'Sala de 3' and turno == 'Mañana':
-            form.instance.sala_short = 'maniana3'
-        elif sala == 'Sala de 3' and turno == 'Tarde':
-            form.instance.sala_short = 'tarde3'
+
         self.object = form.save()
 
         return HttpResponseRedirect(reverse('DESCEN_preadmisiones_ver', args=[self.object.pk]))
@@ -677,20 +653,6 @@ class DESCENVacantesAdmision(PermisosMixin, CreateView):
     form_class = DESCEN_VacantesOtorgadasForm
 
     def form_valid(self, form):
-        sala = form.cleaned_data['sala']
-        turno = form.cleaned_data['turno']
-        if sala == 'Bebes' and turno == 'Mañana':
-            form.instance.salashort = 'manianabb'
-        elif sala == 'Bebes' and turno == 'Tarde':
-            form.instance.salashort = 'tardebb'
-        elif sala == '2' and turno == 'Mañana':
-            form.instance.salashort = 'maniana2'
-        elif sala == '2' and turno == 'Tarde':
-            form.instance.salashort = 'tarde2'
-        elif sala == '3' and turno == 'Mañana':
-            form.instance.salashort = 'maniana3'
-        elif sala == '3' and turno == 'Tarde':
-            form.instance.salashort = 'tarde3'
         self.object = form.save()
 
         base1 = DESCEN_Admision.objects.filter(pk=self.kwargs["pk"]).first()
@@ -724,6 +686,8 @@ class DESCENVacantesAdmision(PermisosMixin, CreateView):
         preadmi = DESCEN_PreAdmision.objects.filter(pk=pk.fk_preadmi_id).first()
         criterio = DESCEN_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
         foto_ivi = DESCEN_Foto_IVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso").first()
+        centros = Vacantes.objects.filter(fk_programa_id=settings.PROG_DESCEN)
+        cupos = CupoVacante.objects.filter(fk_vacante__fk_programa_id=settings.PROG_DESCEN)
 
         context["object"] = pk
         context["foto_ivi"] = foto_ivi
@@ -733,6 +697,8 @@ class DESCENVacantesAdmision(PermisosMixin, CreateView):
         context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
+        context['centros'] = centros
+        context['cupos'] = cupos
         
         return context
 
@@ -754,20 +720,6 @@ class DESCENVacantesAdmisionCambio(PermisosMixin, CreateView):
         vacante_anterior.save()
 
         form.evento = "CambioVacante"
-        sala = form.cleaned_data['sala']
-        turno = form.cleaned_data['turno']
-        if sala == 'Bebes' and turno == 'Mañana':
-            form.instance.salashort = 'manianabb'
-        elif sala == 'Bebes' and turno == 'Tarde':
-            form.instance.salashort = 'tardebb'
-        elif sala == '2' and turno == 'Mañana':
-            form.instance.salashort = 'maniana2'
-        elif sala == '2' and turno == 'Tarde':
-            form.instance.salashort = 'tarde2'
-        elif sala == '3' and turno == 'Mañana':
-            form.instance.salashort = 'maniana3'
-        elif sala == '3' and turno == 'Tarde':
-            form.instance.salashort = 'tarde3'
         self.object = form.save()
 
     
@@ -799,6 +751,8 @@ class DESCENVacantesAdmisionCambio(PermisosMixin, CreateView):
         preadmi = DESCEN_PreAdmision.objects.filter(pk=pk.fk_preadmi_id).first()
         criterio = DESCEN_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
         foto_ivi = DESCEN_Foto_IVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso").first()
+        centros = Vacantes.objects.filter(fk_programa_id=settings.PROG_DESCEN)
+        cupos = CupoVacante.objects.filter(fk_vacante__fk_programa_id=settings.PROG_DESCEN)
 
         context["object"] = pk
         context["observaciones"] = foto_ivi
@@ -809,6 +763,8 @@ class DESCENVacantesAdmisionCambio(PermisosMixin, CreateView):
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
         context["vo"] = vacante_otorgada
+        context['centros'] = centros
+        context['cupos'] = cupos
         
         return context
 

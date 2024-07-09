@@ -91,12 +91,8 @@ Admisiones
           <dt class="col-sm-7 mb-2">{{lastvo.fecha_ingreso|date:'d/m/Y'}}</dt>
           <dd class="col-sm-5 mb-2">Centro actual </dd>
           <dt class="col-sm-7 mb-2">{{lastvo.fk_organismo}}</dt>
-          <dd class="col-sm-5 mb-2">Sala actual</dd>
-          <dt class="col-sm-7 mb-2">{{lastvo.sala}}</dt>
           <dd class="col-sm-5 mb-2">Turno actual</dd>
-          <dt class="col-sm-7 mb-2">{{lastvo.turno}}</dt>
-          <dd class="col-sm-5 mb-2">Educador/a actual</dd>
-          <dt class="col-sm-7 mb-2">{{lastvo.educador| default:""}}</dt>
+          <dt class="col-sm-7 mb-2">{{lastvo.sala}}</dt>
         </dl>
       </div>
     </div>
@@ -266,9 +262,7 @@ Admisiones
             <tr>
               <th>Ingreso</th>
               <th>Centro</th>
-              <th>Sala</th>
               <th>Turno</th>
-              <th>Educadora</th>
               <th>Egreso</th>
               <th>Motivo</th>
             </tr>
@@ -279,8 +273,6 @@ Admisiones
               <td>{{e.fecha_ingreso|date:'d/m/Y'}}</td>
               <td>{{e.fk_organismo}}</td>
               <td>{{e.sala}}</td>
-              <td>{{e.turno}}</td>
-              <td>{{e.educador}}</td>
               <td>{{e.fecha_egreso|date:'d/m/Y'|default:"-"}}</td>
               <td>{{e.motivo|default:"-"}}</td>
             </tr>
