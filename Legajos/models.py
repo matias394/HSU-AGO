@@ -177,7 +177,7 @@ class DimensionVivienda(models.Model):
     cant_convivientes = models.SmallIntegerField(verbose_name='¿Cuántas personas viven en la vivienda?', null=True, blank=True)
     cant_menores = models.SmallIntegerField(verbose_name='¿Cuántos de ellos son menores de 18 años?', null=True, blank=True)
     cant_camas = models.SmallIntegerField(verbose_name='¿Cuántas camas/ colchones posee?', null=True, blank=True)
-    cant_hogares = models.SmallIntegerField(verbose_name='¿Cuantos hogares hay en la vivienda?', null=True, blank=True)
+    cant_hogares = models.SmallIntegerField(verbose_name='¿Cuántas viviendas hay en el terreno?', null=True, blank=True)
     hay_agua_caliente = models.BooleanField(verbose_name='¿Posee Agua caliente?', null=True, blank=True)
     hay_banio = models.BooleanField(verbose_name='¿Posee baño dentro de la vivienda con descarga?', null=True, blank=True)
     hay_desmoronamiento = models.BooleanField(verbose_name='Existe riesgo de desmoronamiento?', null=True, blank=True)
