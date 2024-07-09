@@ -40,6 +40,8 @@ class Legajos(models.Model):
     modificado_por = models.ForeignKey(Usuarios, related_name='modificado_por', on_delete=models.CASCADE, blank=True, null=True)
     creado = models.DateField(auto_now_add=True)
     modificado = models.DateField(auto_now=True)
+    latitud = models.FloatField(null=True, blank=True)
+    longitud = models.FloatField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.apellido}, {self.nombre}"
