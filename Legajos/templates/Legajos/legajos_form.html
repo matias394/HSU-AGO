@@ -257,27 +257,40 @@
     
     const peticion = async (evento) => {
         const response = await fetch(`https://geocoder.msm.gov.ar/code/${evento.target.value}`)
-        const data = await response.json()
-        let newResponse = {}
-        for (item of data){
-            newResponse[item.data] = item.value
+        try {
+            if (!response.ok) {
+                document.getElementById('latitud_id').value = 0
+                document.getElementById('longitud_id').value = 0
+                throw new Error('Error en la petición')
+            }else{
+                const data = await response.json()
+                let newResponse = {}
+                for (item of data){
+                    newResponse[item.data] = item.value
+                }
+                document.getElementById('latitud_id').value = newResponse.lat
+                document.getElementById('longitud_id').value = newResponse.lng
+                evento.target.value = newResponse.query
+            }
+        } catch (error) {
+            document.getElementById('latitud_id').value = 0
+            document.getElementById('longitud_id').value = 0
+            console.log(error)
         }
-
-        if(data.length == 0){
-            evento.target.value = ""
-            alert("No se encontraron resultados")
-        }else{
-            document.getElementById('latitud_id').value = newResponse.lat
-            document.getElementById('longitud_id').value = newResponse.lng
-            evento.target.value = newResponse.query
-        }
+        
     }
 
     let timeout = null;
     calle_field.addEventListener('keyup', evento => {
         clearTimeout(timeout)
         timeout = setTimeout( ()=> {
-            peticion(evento)
+            try {
+                peticion(evento)
+            }
+            catch(err) {
+                document.getElementById('latitud_id').value = 0
+                document.getElementById('longitud_id').value = 0
+            }
         } , 1000);
     })
 
