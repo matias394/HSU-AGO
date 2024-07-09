@@ -876,6 +876,7 @@ class CDIFVacantesDetailView (PermisosMixin, DetailView):
         admi2 = CDIF_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"], estado ="Activa", estado_vacante = "Lista de espera")
         cupos = CupoVacante.objects.filter(fk_vacante_id=self.kwargs["pk"])
         asignada = CDIF_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], estado_vacante="Asignada")
+        ivi = CDIF_Foto_IVI.objects.filter(tipo="Ingreso").all()
 
                 # Crear una lista para almacenar los resultados con el conteo
         resultados = []
@@ -889,6 +890,7 @@ class CDIFVacantesDetailView (PermisosMixin, DetailView):
         context["cupos"] = cupos
         context["asignada"] = asignada
         context["resultados"] = resultados
+        context["ivi"] = ivi
         return context
 
 class CDIFIntervencionesCreateView(PermisosMixin, CreateView):

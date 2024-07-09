@@ -7,6 +7,9 @@ from .models import *
 class DESCEN_PreadmisionesForm (forms.ModelForm):
     class Meta:
         model = DESCEN_PreAdmision
+        exclude = (
+            'turno_postula',
+        )
         fields = '__all__'
         widgets = {
             'emb_no_control_1': forms.CheckboxInput(),
@@ -148,6 +151,9 @@ class DESCEN_StockForm(forms.ModelForm):
 class DESCEN_VacantesOtorgadasForm (forms.ModelForm):
     class Meta:
         model = DESCEN_VacantesOtorgadas
+        exclude = (
+            'turno',
+        )
         fields = '__all__'
         widgets = {
             'fecha_ingreso': forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),

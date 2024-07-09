@@ -211,6 +211,10 @@ class LegajosDerivacionesForm(forms.ModelForm):
                     else:
                         self.add_error('archivos', 'Debe adjuntar archivo.')
         
+        if fk_programa and fk_programa.id == settings.PROG_CDIF:
+            if not detalles:
+                self.add_error('detalles', 'Este campo es obligatorio cuando el programa es CDIF.')
+
         if fk_programa and fk_programa.id == settings.PROG_MA:
             legajo_en_pre_admision = SL_PreAdmision.objects.filter(fk_derivacion__fk_legajo_id=fk_legajo.id).exists()
             legajo_en_grupo_familiar = SL_GrupoFamiliar.objects.filter(fk_legajo_familiar_id=fk_legajo.id).exists()

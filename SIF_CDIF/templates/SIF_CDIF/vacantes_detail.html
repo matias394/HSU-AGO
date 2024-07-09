@@ -99,7 +99,8 @@
                 <th>Nombre</th>
                 <th>Documento</th>
                 <th>Sala</th>
-                <th>Vacante</th>
+                <th>Estado</th>
+                <th>IVI ingreso</th>
                 <th style="width: 15%" class="notexport">
                 </th>
               </tr>
@@ -112,6 +113,13 @@
                 <td class="">{{a.fk_admision.fk_preadmi.fk_legajo.tipo_doc}} {{a.fk_admision.fk_preadmi.fk_legajo.documento}}</td>
                 <td>{{ a.sala }}</td>
                 <td><span class="badge badge-{% if a.estado_vacante == "Asignada" %}success{% endif %}{% if a.estado_vacante == "Lista de espera" %}warning{% endif %}">{{a.estado_vacante}}</span></td>
+                <td>
+                  {% for i in ivi %}
+                  {% if a.fk_admision.fk_preadmi_id == i.fk_preadmi_id %}
+                  {{i.puntaje}}
+                  {% endif %}
+                  {% endfor %}
+                </td>
                 <td class="project-actions text-right">
                   <div class="btn-group" role="group">
                     {% if a.estado_vacante == "Asignada" %}

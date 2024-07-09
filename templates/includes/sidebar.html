@@ -571,8 +571,6 @@
 				<p>Derivaciones</p>
 			</a>
 		</li>
-	
-	{% if request.user.is_superuser %}
 		<li class="nav-item">
 			<a href="{% url 'DESCEN_preadmisiones_listar' %}"
 				class="nav-link  {% if 'descentralizado/preadmisiones' in pagina_actual %}active{% endif %}">
@@ -595,7 +593,6 @@
 			</a>
 		</li>
 	</ul>
-	{%endif%}
 </li>
 {%endif%}
 
