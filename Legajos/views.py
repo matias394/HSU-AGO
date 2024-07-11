@@ -323,6 +323,7 @@ class LegajosCreateView(PermisosMixin, CreateView):
     form_class = LegajosForm
 
     def form_valid(self, form):
+        print(form)
         legajo = form.save(commit=False)  # Guardamos sin persistir en la base de datos
 
         if legajo.foto:

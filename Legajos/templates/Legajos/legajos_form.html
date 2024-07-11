@@ -213,6 +213,8 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <input type="hidden" name="latitud" id="latitud_id" value="{{object.id}}">
+                                        <input type="hidden" name="longitud" id="longitud_id" value="{{object.id}}">
                                         <input type="file" name="foto" id="id_foto" class="input-file" id="id_foto"
                                             accept="image/*" hidden>
                                     </div>
@@ -251,6 +253,47 @@
 
 {% block customJS %}
 <script>
+    //Activa la busqueda ajax cuando se ingresa texto de la calle
+    
+    const peticion = async (evento) => {
+        const response = await fetch(`https://geocoder.msm.gov.ar/code/${evento.target.value}`)
+        try {
+            if (!response.ok) {
+                document.getElementById('latitud_id').value = 0
+                document.getElementById('longitud_id').value = 0
+                throw new Error('Error en la petición')
+            }else{
+                const data = await response.json()
+                let newResponse = {}
+                for (item of data){
+                    newResponse[item.data] = item.value
+                }
+                document.getElementById('latitud_id').value = newResponse.lat
+                document.getElementById('longitud_id').value = newResponse.lng
+                evento.target.value = newResponse.query
+            }
+        } catch (error) {
+            document.getElementById('latitud_id').value = 0
+            document.getElementById('longitud_id').value = 0
+            console.log(error)
+        }
+        
+    }
+
+    let timeout = null;
+    calle_field.addEventListener('keyup', evento => {
+        clearTimeout(timeout)
+        timeout = setTimeout( ()=> {
+            try {
+                peticion(evento)
+            }
+            catch(err) {
+                document.getElementById('latitud_id').value = 0
+                document.getElementById('longitud_id').value = 0
+            }
+        } , 1000);
+    })
+
     id_foto.onchange = (evt) => {
         const [file] = id_foto.files;
         if (file) {
