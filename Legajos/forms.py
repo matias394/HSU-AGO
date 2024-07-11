@@ -42,6 +42,7 @@ class LegajosForm(forms.ModelForm):
             'm2m_alertas': forms.Select(attrs={'class': 'select2'}),
             'm2m_familiares': forms.Select(attrs={'class': 'select2'}),
             'calle': forms.TextInput(attrs={'class': 'form-control','id':'calle_field'}),
+            'altura': forms.TextInput(attrs={'class': 'form-control','id':'altura_field'}),
         }
         labels = {'nombre': 'Nombre', 'apellido': 'Apellidos', 'foto': '', 'm2m_alertas': ''}
 
