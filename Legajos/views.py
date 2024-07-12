@@ -533,8 +533,13 @@ class LegajoGrupoFamiliarList(ListView):
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
-        context["familiares_fk1"] = LegajoGrupoFamiliar.objects.filter(fk_legajo_1=pk)
-        context["familiares_fk2"] = LegajoGrupoFamiliar.objects.filter(fk_legajo_2=pk)
+        familiares_fk1 = LegajoGrupoFamiliar.objects.filter(fk_legajo_1=pk)
+        familiares_fk2 = LegajoGrupoFamiliar.objects.filter(fk_legajo_2=pk)
+
+        programas = LegajosDerivaciones.objects.all()
+        context["familiares_fk1"] = familiares_fk1
+        context["familiares_fk2"] = familiares_fk2
+        context["programas"] = programas
         context["count_familia"] = context["familiares_fk1"].count() + context["familiares_fk1"].count()
         context["nombre"] = Legajos.objects.filter(pk=pk).first()
         context["pk"] = pk

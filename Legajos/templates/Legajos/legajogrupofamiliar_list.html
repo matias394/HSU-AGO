@@ -78,6 +78,28 @@ Grupo familiar de {{nombre}}
                             class="img-circle img-fluid  justify-content-center" >
                             {%endif%}
                     </div>
+                    <div class="row mb-0">
+                        <dl class="row ml-2 mt-1 mb-0">
+                        <dt class="col-lg-3 font-weight-normal text-nowrap">Programas</dt>
+                        <dd class="col-lg-9">
+                            <ul>
+                                {% for p in programas %}
+                                {% if p.fk_legajo_id == f.fk_legajo_2_id %}
+                                <li>{{ p.fk_programa }} - 
+                                    {% if p.estado == "Aceptada" %}
+                                    <span class="badge bg-success">{{p.estado}}</span>
+                                    {% elif p.estado == "Rechazada" %}
+                                    <span class="badge bg-danger">{{p.estado}}</span>
+                                    {% elif p.estado == "Pendiente" %}
+                                    <span class="badge bg-warning">{{p.estado}}</span>
+                                    {% endif %}
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </dd>
+                    </dl>
+                    </div>
                 </div>
             </div>
             <div class="card-footer">
@@ -138,6 +160,28 @@ Grupo familiar de {{nombre}}
                             <img src="{% static 'custom/img/default.png'  %}"  alt="user-avatar"
                             class="img-circle img-fluid  justify-content-center" >
                             {%endif%}
+                    </div>
+                    <div class="row mb-0">
+                        <dl class="row ml-2 mt-1 mb-0">
+                        <dt class="col-lg-3 font-weight-normal text-nowrap">Programas</dt>
+                        <dd class="col-lg-9">
+                            <ul>
+                                {% for p in programas %}
+                                {% if p.fk_legajo_id == f.fk_legajo_1_id %}
+                                <li>{{ p.fk_programa }} - 
+                                    {% if p.estado == "Aceptada" %}
+                                    <span class="badge bg-success">{{p.estado}}</span>
+                                    {% elif p.estado == "Rechazada" %}
+                                    <span class="badge bg-danger">{{p.estado}}</span>
+                                    {% elif p.estado == "Pendiente" %}
+                                    <span class="badge bg-warning">{{p.estado}}</span>
+                                    {% endif %}
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </dd>
+                    </dl>
                     </div>
                 </div>
             </div>
