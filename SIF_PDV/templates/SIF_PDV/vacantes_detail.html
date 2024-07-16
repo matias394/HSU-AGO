@@ -42,12 +42,8 @@
               <dd class="col-sm-10 font-weight-bold">{{object.nombre}}</dd>
               <dt class="col-sm-2 font-weight-normal">Programa: </dt>
               <dd class="col-sm-10 font-weight-bold">{{object.fk_programa}}</dd>
-              <dt class="col-sm-2 font-weight-normal">Calle:</dt>
-              <dd class="col-sm-10 font-weight-bold"> {{object.fk_organismo.calle|default_if_none:"-" }} </dd>
-              <dt class="col-sm-2 font-weight-normal">Número: </dt>
-              <dd class="col-sm-10 font-weight-bold">{{object.fk_organismo.altura|default_if_none:"-" }}</dd>
-              <dt class="col-sm-2 font-weight-normal">Barrio: </dt>
-              <dd class="col-sm-10 font-weight-bold">{{object.fk_organismo.barrio|default_if_none:"-" }}</dd>
+              <dt class="col-sm-2 font-weight-normal">Organismo</dt>
+              <dd class="col-sm-10 font-weight-bold"> {{object.fk_organismo.nombre|default_if_none:"-" }} </dd>
             </dl>
           </div>
         </div>
@@ -71,55 +67,18 @@
                 <thead>
                   <tr>
                     <th class="text-left">Sala</th>
-                    <th class="text-left">Turno</th>
-                    <th class="text-center">Disponibles</th>
+                    <th class="text-center">Cupos</th>
                     <th class="text-center">Asignadas</th>
-                    <th class="text-center">En espera</th>
                   </tr>
                 </thead>
                 <tbody>
+                  {% for r in resultados %}
                   <tr>
-                    <td class="mailbox-date">Bebé</td>
-                    <td class="mailbox-date text-left">Mañana</td>
-                    <td class="text-center">{{ object.manianabb|default_if_none:"0" }}</td>
-                    <td class="text-center">{{ asig_manianabb|default_if_none:"0" }}</td>
-                    <td class="text-center">{{ esp_manianabb|default_if_none:"0" }}</td>
+                      <td>{{ r.cupo.nombre }}</td>
+                      <td class="text-center">{{ r.cupo.cupo }}</td>
+                      <td class="text-center">{{ r.aciertos }}</td>
                   </tr>
-                  <tr>
-                    <td class="mailbox-date">Bebé</td>
-                    <td class="mailbox-date text-left">Tarde</td>
-                    <td class="text-center">{{ object.tardebb|default_if_none:"0" }}</td>
-                    <td class="text-center">{{ asig_tardebb|default_if_none:"0" }}</td>
-                    <td class="text-center">{{ esp_tardebb|default_if_none:"0" }}</td>
-                  </tr>
-                  <tr>
-                    <td class="mailbox-date">2 años</td>
-                    <td class="mailbox-date text-left">Mañana</td>
-                    <td class="text-center">{{ object.maniana2|default_if_none:"0" }}</td>
-                    <td class="text-center">{{ asig_maniana2|default_if_none:"0" }}</td>
-                    <td class="text-center">{{ esp_maniana2|default_if_none:"0" }}</td>
-                  </tr>
-                  <tr>
-                    <td class="mailbox-date">2 años</td>
-                    <td class="mailbox-date text-left">Tarde</td>
-                    <td class="text-center">{{ object.tarde2|default_if_none:"0" }}</td>
-                    <td class="text-center">{{ asig_tarde2|default_if_none:"0" }}</td>
-                    <td class="text-center">{{ esp_tarde2|default_if_none:"0" }}</td>
-                  </tr>
-                  <tr>
-                    <td class="mailbox-date">3 años</td>
-                    <td class="mailbox-date text-left">Mañana</td>
-                    <td class="text-center">{{ object.maniana3|default_if_none:"0" }}</td>
-                    <td class="text-center">{{ asig_maniana3|default_if_none:"0" }}</td>
-                    <td class="text-center">{{ esp_maniana3|default_if_none:"0" }}</td>
-                  </tr>
-                  <tr>
-                    <td class="mailbox-date">3 años</td>
-                    <td class="mailbox-date text-left">Tarde</td>
-                    <td class="text-center">{{ object.tarde3|default_if_none:"0" }}</td>
-                    <td class="text-center">{{ asig_tarde3|default_if_none:"0" }}</td>
-                    <td class="text-center">{{ esp_tarde3|default_if_none:"0" }}</td>
-                  </tr>
+                  {% endfor %}
                 </tbody>
               </table>
             </div>
@@ -140,7 +99,6 @@
                 <th>Nombre</th>
                 <th>Documento</th>
                 <th>Sala</th>
-                <th>Turno</th>
                 <th>Vacante</th>
                 <th style="width: 15%" class="notexport">
                 </th>
@@ -153,7 +111,6 @@
                 <td class=""><a href="" title="Ver detalle de admisión">{{a.fk_admision.fk_preadmi.fk_legajo}}</a></td>
                 <td class="">{{a.fk_admision.fk_preadmi.fk_legajo.tipo_doc}} {{a.fk_admision.fk_preadmi.fk_legajo.documento}}</td>
                 <td>{{ a.sala }}{% if a.sala == "Bebes"%}{% else %} años{% endif %}</td>
-                <td>{{ a.turno }}</td>
                 <td><span class="badge badge-{% if a.estado_vacante == "Asignada" %}success{% endif %}{% if a.estado_vacante == "Lista de espera" %}warning{% endif %}">{{a.estado_vacante}}</span></td>
                 <td class="project-actions text-right">
                   <div class="btn-group" role="group">

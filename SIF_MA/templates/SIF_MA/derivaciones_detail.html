@@ -79,8 +79,10 @@ Derivaciones
             <dd class="col-sm-3 mb-2 mt-2">Archivos adjuntos</dd>
             <dt class="col-sm-9 mb-2 mt-2">
               <ul class="list-unstyled mb-1">
-                {% if object.archivos %}
-                <li><a href="{{object.archivos.url}}" target="_blank">{{object.archivos|cut:'legajos/archivos/'}}</a></li>
+                {% if archivos %}
+                {% for a in archivos %}
+                <li><a href="{{a.archivo.url}}" target="_blank">{{a.archivo|cut:'legajos/archivos/'}}</a></li>
+                {% endfor %}
                 {% else %}
                 <li>-</li>
                 {% endif %}

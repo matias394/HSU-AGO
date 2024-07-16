@@ -76,7 +76,7 @@ class CDIF_PreadmisionesForm (forms.ModelForm):
             'fk_legajo_5':'',
             'centro_postula':'Centro al que postula',
             'sala_postula':'Sala a la que postula',
-            'turno_postula':'Turno al que postula',
+            #'turno_postula':'Turno al que postula',
         }
 
 class criterios_IVI (forms.ModelForm):
@@ -113,6 +113,7 @@ class CDIF_VacantesOtorgadasForm (forms.ModelForm):
             'detalles': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
         }
         labels = {
+            'fecha_ingreso': 'Fecha de ingreso a sala',
             'fk_organismo':'Centro al que ingresa',
             'sala':'Sala a la que ingresa',
             'turno':'Turno al que ingresa',
@@ -138,7 +139,7 @@ class CDIF_IntervencionesForm (forms.ModelForm):
             'responsable' : forms.SelectMultiple(attrs={'class': 'select2 w-100', 'multiple': True}),
         }
         labels = {
-            'criterio_modificable': 'Criterio modificable trabajado',
+            'criterio_modificable': 'Criterio trabajado',
             'impacto': 'Impacto en el criterio',
             'accion': 'Acción desarrollada',
             'detalle':'Detalles',

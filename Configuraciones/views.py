@@ -1,6 +1,10 @@
 from django.contrib import messages
+from django.forms import BaseForm
+from django.http import HttpResponseRedirect
+from django.http.response import HttpResponse
 from django.shortcuts import redirect
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
+from django.views.generic.edit import FormMixin
 from Usuarios.mixins import PermisosMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from .models import *
@@ -841,6 +845,11 @@ class VacantesDetailView(PermisosMixin, DetailView):
     permission_required = ['Usuarios.rol_admin', 'Usuarios.rol_observador', 'Usuarios.rol_consultante']
     model = Vacantes
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['lista_cupos'] = CupoVacante.objects.filter(fk_vacante_id=self.kwargs["pk"]).all()
+        return context
+
 class VacantesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
     permission_required = 'Usuarios.rol_admin'
     model = Vacantes
@@ -852,7 +861,11 @@ class VacantesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
     model = Vacantes
     form_class = VacantesForm
     success_message = "%(nombre)s fue registrado correctamente"
-
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cupoform'] = CupoVacantesForm()
+        return context
 
 class VacantesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
     permission_required = 'Usuarios.rol_admin'
@@ -860,6 +873,34 @@ class VacantesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
     form_class = VacantesForm
     success_message = "%(nombre)s fue editado correctamente"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cupoform'] = CupoVacantesForm()
+        context['lista_cupos'] = CupoVacante.objects.filter(fk_vacante_id=self.kwargs["pk"]).all()
+        return context
+
+    def post(self,request,*args,**kwargs):
+
+        # Post del formulario de Cupo
+        if 'crear_cupo' in request.POST:
+            nuevo_cupo = CupoVacante()
+            nuevo_cupo.nombre = request.POST.get('nombre') 
+            nuevo_cupo.cupo = request.POST.get('cupo')
+            nuevo_cupo.observaciones = request.POST.get('observaciones')
+            nuevo_cupo.fk_vacante = self.get_object()
+            nuevo_cupo.save()
+        
+        # Post de la vacante
+        elif 'vacante_actualizar' in request.POST:
+            vacante = self.get_object()
+            for clave,valor in request.POST.items():
+                setattr(vacante,clave if not 'fk_' in clave else f'{clave}_id',valor)
+            vacante.save()
+
+        url = reverse('vacantes_ver', args=[self.kwargs["pk"]])
+        return HttpResponseRedirect(url)
+    
+    
 
 # region ############################################################### Servicio Local Equipos
 

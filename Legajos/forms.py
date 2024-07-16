@@ -4,6 +4,7 @@ from .models import *
 from .validators import MaxSizeFileValidator
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.conf import settings
+from SIF_SL.models import SL_Expedientes, SL_GrupoFamiliar, SL_PreAdmision
 
 
 class LegajosForm(forms.ModelForm):
@@ -169,10 +170,10 @@ class LegajosArchivosForm(forms.ModelForm):
         fields = ['fk_legajo', 'archivo']
 
 
-
 class LegajosDerivacionesForm(forms.ModelForm):
     archivos = forms.FileField(
-        widget=forms.ClearableFileInput(attrs={'multiple': True}),
+        widget=forms.ClearableFileInput(
+            attrs={'multiple': True}),
         required=False
     )
 
@@ -181,37 +182,63 @@ class LegajosDerivacionesForm(forms.ModelForm):
         fields = '__all__'
         exclude = ['motivo_rechazo', 'obs_rechazo', 'fecha_rechazo']
         widgets = {
-            'detalles': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+            'detalles': forms.Textarea(
+                attrs={'class': 'form-control', 'rows': 5}
+            ),
         }
         labels = {
             'fk_legajo': 'Legajo',
-            'fk_organismo': 'Organismo relacionado',
+            'fk_organismo': 'Organismo desde el que se deriva',
             'm2m_alertas': 'Alertas detectadas',
             'fk_programa': 'Derivar a',
             'fk_programa_solicitante': 'Derivar de',
         }
 
     def clean(self):
+        instance = super().save(commit=False)
         cleaned_data = super().clean()
         fk_programa = cleaned_data.get("fk_programa")
+        fk_legajo = cleaned_data.get("fk_legajo")
         detalles = cleaned_data.get("detalles")
-
-        # Verifica si estamos en un caso de actualización
-        if self.instance.pk:
-            archivos_existentes = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=self.instance).exists()
-        else:
-            archivos_existentes = False
-
-        # Obtiene los archivos directamente desde self.files
-        nuevos_archivos = self.files.getlist('archivos')
+        archivos = self.files.get("archivos")  # Obtiene los archivos directamente desde self.files
 
         if fk_programa and fk_programa.id == settings.PROG_SL:
             if not detalles:
                 self.add_error('detalles', 'Este campo es obligatorio cuando el programa es Servicio Local.')
-            if not nuevos_archivos and not archivos_existentes:
-                self.add_error('archivos', 'Debe adjuntar al menos un archivo.')
+                # Si existen archivos asociados, verificar si hay archivos nuevos adjuntados
+            if not archivos:
+                    instance = self.instance
+                    if instance and LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=instance).exists():
+                        None
+                    else:
+                        self.add_error('archivos', 'Debe adjuntar archivo.')
+        
+        if fk_programa and fk_programa.id == settings.PROG_CDIF:
+            if not detalles:
+                self.add_error('detalles', 'Este campo es obligatorio cuando el programa es CDIF.')
+
+        if fk_programa and fk_programa.id == settings.PROG_MA:
+            legajo_en_pre_admision = SL_PreAdmision.objects.filter(fk_derivacion__fk_legajo_id=fk_legajo.id).exists()
+            legajo_en_grupo_familiar = SL_GrupoFamiliar.objects.filter(fk_legajo_familiar_id=fk_legajo.id).exists()
+        
+            if not (legajo_en_pre_admision or legajo_en_grupo_familiar):
+                self.add_error('fk_programa', 'El legajo no se encuentra ingresado en Servicio Local.')
 
         return cleaned_data
+    
+    def clean_archivos(self):
+        archivos = self.files.getlist('archivos')
+        # Puedes agregar validaciones adicionales aquí si es necesario
+        return archivos
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        if commit:
+            instance.save()
+            self.save_m2m()
+            for archivo in self.cleaned_data.get('archivos', []):
+                LegajosDerivacionesArchivos.objects.create(legajo_derivacion=instance, archivo=archivo)
+        return instance
 
 
 # Dimensiones

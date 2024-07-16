@@ -91,7 +91,7 @@ Admisiones
           <dt class="col-sm-7 mb-2">{{lastvo.fecha_ingreso|date:'d/m/Y'}}</dt>-->
           <dd class="col-sm-5 mb-2">Taller actual </dd>
           <dt class="col-sm-7 mb-2">{{lastvo.fk_organismo}}</dt>
-          <dd class="col-sm-5 mb-2">Centro actual </dd>
+          <dd class="col-sm-5 mb-2">Turno actual </dd>
           <dt class="col-sm-7 mb-2">{{lastvo.fk_organismo2}}</dt>
           <dd class="col-sm-5 mb-2">Valor indice de ingreso</dd>
           <dt class="col-sm-7 mb-2"><span class=" badge badge-warning">{{puntaje.total}}</span></dt>
@@ -151,8 +151,8 @@ Admisiones
           <thead>
             <tr>
               <th>Ingreso</th>
-              <th>Taller</th>
               <th>Centro</th>
+              <th>Taller</th>
               <th>Egreso</th>
               <th>Motivo</th>
             </tr>
@@ -162,7 +162,7 @@ Admisiones
             <tr>
               <td>{{e.fecha_ingreso|date:'d/m/Y'}}</td>
               <td>{{e.fk_organismo}}</td>
-              <td>{{e.fk_organismo2}}</td>
+              <td>{{e.sala}}</td>
               <td>{{e.fecha_egreso|date:'d/m/Y'|default:"-"}}</td>
               <td>{{e.motivo|default:"-"}}</td>
             </tr>

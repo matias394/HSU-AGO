@@ -160,11 +160,13 @@ class CDIFPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
         centros = Vacantes.objects.filter(fk_programa_id=settings.PROG_CDIF)
+        cupos = CupoVacante.objects.filter(fk_vacante__fk_programa_id=settings.PROG_CDIF)
         context["pk"] = pk
         context["legajo"] = legajo
         context["familia"] = familia
         context["familia_inversa"] = familia_inversa
         context["centros"] = centros
+        context["cupos"] = cupos
         return context
 
     def form_valid(self, form):
@@ -177,21 +179,6 @@ class CDIFPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
         form.instance.vinculo5 = form.cleaned_data['vinculo5']
         form.instance.creado_por_id = self.request.user.id
 
-        sala = form.cleaned_data['sala_postula']
-        turno = form.cleaned_data['turno_postula']
-
-        if sala == 'Bebés' and turno == 'Mañana':
-            form.instance.sala_short = 'manianabb'
-        elif sala == 'Bebés' and turno == 'Tarde':
-            form.instance.sala_short = 'tardebb'
-        elif sala == 'Sala de 2' and turno == 'Mañana':
-            form.instance.sala_short = 'maniana2'
-        elif sala == 'Sala de 2' and turno == 'Tarde':
-            form.instance.sala_short = 'tarde2'
-        elif sala == 'Sala de 3' and turno == 'Mañana':
-            form.instance.sala_short = 'maniana3'
-        elif sala == 'Sala de 3' and turno == 'Tarde':
-            form.instance.sala_short = 'tarde3'
         self.object = form.save()
 
         base = LegajosDerivaciones.objects.get(pk=pk)
@@ -231,12 +218,14 @@ class CDIFPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin)
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
         centros = Vacantes.objects.filter(fk_programa_id=settings.PROG_CDIF)
+        cupos = CupoVacante.objects.filter(fk_vacante__fk_programa_id=settings.PROG_CDIF)
 
         context["pk"] = pk.fk_derivacion_id
         context["legajo"] = legajo
         context["familia"] = familia
         context["familia_inversa"] = familia_inversa
         context["centros"] = centros
+        context["cupos"] = cupos
         return context
 
     def form_valid(self, form):
@@ -250,19 +239,6 @@ class CDIFPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin)
         form.instance.estado = pk.estado
         form.instance.modificado_por_id = self.request.user.id
         sala = form.cleaned_data['sala_postula']
-        turno = form.cleaned_data['turno_postula']
-        if sala == 'Bebés' and turno == 'Mañana':
-            form.instance.sala_short = 'manianabb'
-        elif sala == 'Bebés' and turno == 'Tarde':
-            form.instance.sala_short = 'tardebb'
-        elif sala == 'Sala de 2' and turno == 'Mañana':
-            form.instance.sala_short = 'maniana2'
-        elif sala == 'Sala de 2' and turno == 'Tarde':
-            form.instance.sala_short = 'tarde2'
-        elif sala == 'Sala de 3' and turno == 'Mañana':
-            form.instance.sala_short = 'maniana3'
-        elif sala == 'Sala de 3' and turno == 'Tarde':
-            form.instance.sala_short = 'tarde3'
         self.object = form.save()
 
         return HttpResponseRedirect(reverse('CDIF_preadmisiones_ver', args=[self.object.pk]))
@@ -291,8 +267,8 @@ class CDIFPreAdmisionesDetailView(PermisosMixin, DetailView):
             context["criterio"] = criterio
             context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
             context["cantidad"] = criterio.count()
-            context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
-            context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+            context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').count()
+            context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
             context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         if foto_ivi:
             context["foto_ivi"] = foto_ivi
@@ -385,6 +361,25 @@ class CDIFPreAdmisionesDeleteView(PermisosMixin, DeleteView):
         else:
             self.object.delete()
             return redirect(self.success_url)
+
+class CDIFPreAdmisionesRechazarView(PermisosMixin, DeleteView):
+    permission_required = "Usuarios.rol_admin"
+    model = CDIF_PreAdmision
+    template_name = "SIF_CDIF/preadmisiones_confirm_rechazar.html"
+    success_url = reverse_lazy("CDIF_preadmisiones_listar")
+
+    def form_valid(self, form):
+        if self.object.estado == "Rechazada":
+            messages.error(
+                self.request,
+                "Esta solicitud ya ha sido rechazada.",
+            )
+            return redirect("CDIF_preadmisiones_ver", pk=int(self.object.id))
+        else:
+            self.object.estado = "Rechazada"
+            self.object.observaciones = self.request.POST.get("observaciones")
+            self.object.save()
+        return redirect("CDIF_preadmisiones_ver", pk=int(self.object.id))
 
 class CDIFCriteriosIVICreateView(PermisosMixin, CreateView):
     permission_required = "Usuarios.rol_admin"
@@ -569,8 +564,8 @@ class CDIFIndiceIviDetailView(PermisosMixin, DetailView):
         context["criterio"] = criterio
         context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         #context['maximo'] = foto_ivi.puntaje_max
         return context
@@ -598,8 +593,8 @@ class CDIFPreAdmisiones3DetailView(PermisosMixin, DetailView):
         context["foto_ivi"] = foto_ivi
         context["puntaje"] = foto_ivi.puntaje
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
         return context
@@ -663,8 +658,8 @@ class CDIFAdmisionesDetailView(PermisosMixin, DetailView):
         context["foto_ivi"] = foto_ivi
         context["puntaje"] = foto_ivi.puntaje
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
         
@@ -677,20 +672,6 @@ class CDIFVacantesAdmision(PermisosMixin, CreateView):
     form_class = CDIF_VacantesOtorgadasForm
 
     def form_valid(self, form):
-        sala = form.cleaned_data['sala']
-        turno = form.cleaned_data['turno']
-        if sala == 'Bebes' and turno == 'Mañana':
-            form.instance.salashort = 'manianabb'
-        elif sala == 'Bebes' and turno == 'Tarde':
-            form.instance.salashort = 'tardebb'
-        elif sala == '2' and turno == 'Mañana':
-            form.instance.salashort = 'maniana2'
-        elif sala == '2' and turno == 'Tarde':
-            form.instance.salashort = 'tarde2'
-        elif sala == '3' and turno == 'Mañana':
-            form.instance.salashort = 'maniana3'
-        elif sala == '3' and turno == 'Tarde':
-            form.instance.salashort = 'tarde3'
         self.object = form.save()
 
         base1 = CDIF_Admision.objects.filter(pk=self.kwargs["pk"]).first()
@@ -724,15 +705,19 @@ class CDIFVacantesAdmision(PermisosMixin, CreateView):
         preadmi = CDIF_PreAdmision.objects.filter(pk=pk.fk_preadmi_id).first()
         criterio = CDIF_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
         foto_ivi = CDIF_Foto_IVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso").first()
+        centros = Vacantes.objects.filter(fk_programa_id=settings.PROG_CDIF)
+        cupos = CupoVacante.objects.filter(fk_vacante__fk_programa_id=settings.PROG_CDIF)
 
         context["object"] = pk
         context["foto_ivi"] = foto_ivi
         context["puntaje"] = foto_ivi.puntaje
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencialsi').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
+        context["centros"] = centros
+        context["cupos"] = cupos
         
         return context
 
@@ -747,27 +732,14 @@ class CDIFVacantesAdmisionCambio(PermisosMixin, CreateView):
         #     messages.error(self.request, 'El campo fecha de egreso es requerido.')
         #     return super().form_invalid(form) 
         # else:
+        form.evento = "CambioVacante"
         pk = self.kwargs["pk"]
         vacante_anterior = CDIF_VacantesOtorgadas.objects.filter(fk_admision_id=pk).last()
         vacante_anterior.estado_vacante = "Cambiado"
+        vacante_anterior.motivo = form.cleaned_data['motivo']
         vacante_anterior.fecha_egreso = date.today()
         vacante_anterior.save()
 
-        form.evento = "CambioVacante"
-        sala = form.cleaned_data['sala']
-        turno = form.cleaned_data['turno']
-        if sala == 'Bebes' and turno == 'Mañana':
-            form.instance.salashort = 'manianabb'
-        elif sala == 'Bebes' and turno == 'Tarde':
-            form.instance.salashort = 'tardebb'
-        elif sala == '2' and turno == 'Mañana':
-            form.instance.salashort = 'maniana2'
-        elif sala == '2' and turno == 'Tarde':
-            form.instance.salashort = 'tarde2'
-        elif sala == '3' and turno == 'Mañana':
-            form.instance.salashort = 'maniana3'
-        elif sala == '3' and turno == 'Tarde':
-            form.instance.salashort = 'tarde3'
         self.object = form.save()
 
     
@@ -799,16 +771,20 @@ class CDIFVacantesAdmisionCambio(PermisosMixin, CreateView):
         preadmi = CDIF_PreAdmision.objects.filter(pk=pk.fk_preadmi_id).first()
         criterio = CDIF_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
         foto_ivi = CDIF_Foto_IVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso").first()
+        centros = Vacantes.objects.filter(fk_programa_id=settings.PROG_CDIF)
+        cupos = CupoVacante.objects.filter(fk_vacante__fk_programa_id=settings.PROG_CDIF)
 
         context["object"] = pk
         context["observaciones"] = foto_ivi
         context["puntaje"] = foto_ivi.puntaje
         context["cantidad"] = criterio.count()
-        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').count()
-        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
+        context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').count()
+        context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__icontains='Potencial').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         context['maximo'] = foto_ivi.puntaje_max
         context["vo"] = vacante_otorgada
+        context["centros"] = centros
+        context["cupos"] = cupos
         
         return context
 
@@ -888,61 +864,24 @@ class CDIFVacantesListView(PermisosMixin, ListView):
     template_name = 'SIF_CDIF/vacantes_list.html'
     context_object_name = 'organizaciones'
 
-    def get_queryset(self):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        centros = Vacantes.objects.filter(fk_programa_id=settings.PROG_CDIF)
+        cupos = CupoVacante.objects.filter(fk_vacante__fk_programa_id=settings.PROG_CDIF)
+        asignada = CDIF_VacantesOtorgadas.objects.filter(estado_vacante="Asignada")
 
-        organizaciones = Vacantes.objects.filter(fk_programa=settings.PROG_CDIF)
+        # Crear una lista para almacenar los resultados con el conteo
+        resultados = []
+        for cupo in cupos:
+            contador_aciertos = asignada.filter(sala_id=cupo.id).count()
+            resultados.append({'cupo': cupo, 'aciertos': contador_aciertos})
 
-        data = []
-
-        for organizacion in organizaciones:
-            organizacion_data = {'nombre': organizacion.nombre,
-                                 'organismo': organizacion.fk_organismo.nombre,
-                                 'calle' :organizacion.fk_organismo.calle,
-                                 'numero' :organizacion.fk_organismo.altura,
-                                 'barrio' :organizacion.fk_organismo.barrio,
-                                 'id' : organizacion.pk
-                                }  
-
-            # Calcular la cantidad de vacantes por sala agrupadas (tu lógica actual aquí)
-            for sala_group in [['manianabb', 'tardebb'], ['maniana2', 'tarde2'], ['maniana3', 'tarde3']]:
-                total_vacantes = Vacantes.objects.filter(nombre=organizacion).aggregate(
-                    total=Sum(F(sala_group[0]) + F(sala_group[1]))
-                )['total'] or 0
-
-                asignadas = CDIF_VacantesOtorgadas.objects.filter(
-                    fk_organismo__nombre=organizacion,
-                    salashort__in=sala_group
-                ).count()
-
-                disponibles = CDIF_Admision.objects.filter(
-                    fk_preadmi__centro_postula__nombre=organizacion,
-                    fk_preadmi__sala_short__in=sala_group,
-                    estado_vacante='Lista de espera'
-                ).count()
-
-                organizacion_data['_'.join(sala_group) + '_total'] = total_vacantes
-                organizacion_data['_'.join(sala_group) + '_asignadas'] = asignadas
-                organizacion_data['_'.join(sala_group) + '_disponibles'] = disponibles
-
-            # Calcular los totales de vacantes, asignadas y disponibles por organización
-            total_vacantes_org = sum([organizacion_data['_'.join(sala_group) + '_total'] for sala_group in [['manianabb', 'tardebb'], ['maniana2', 'tarde2'], ['maniana3', 'tarde3']]])
-            total_asignadas_org = sum([organizacion_data['_'.join(sala_group) + '_asignadas'] for sala_group in [['manianabb', 'tardebb'], ['maniana2', 'tarde2'], ['maniana3', 'tarde3']]])
-            total_disponibles_org = sum([organizacion_data['_'.join(sala_group) + '_disponibles'] for sala_group in [['manianabb', 'tardebb'], ['maniana2', 'tarde2'], ['maniana3', 'tarde3']]])
-
-            organizacion_data['total_vacantes'] = total_vacantes_org
-            organizacion_data['total_asignadas'] = total_asignadas_org
-            organizacion_data['total_disponibles'] = total_disponibles_org
-
-            data.append(organizacion_data)
-
-        return data
-
-    
-    #def get_context_data(self, **kwargs):
-    #    context = super().get_context_data(**kwargs)
-    #    context['organizaciones'] = self.get_queryset()
-    #    print(context)
-    #    return context
+        context["centros"] = centros
+        context["cupos"] = cupos
+        context["asignada"] = asignada
+        context["resultados"] = resultados
+        
+        return context
     
 class CDIFVacantesDetailView (PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
@@ -951,38 +890,26 @@ class CDIFVacantesDetailView (PermisosMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        organizacion = Vacantes.objects.filter(pk=self.kwargs["pk"])
-        asig_manianabb = CDIF_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="Bebes", turno= "Mañana", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
-        asig_tardebb = CDIF_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="Bebes", turno= "Tarde", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
-        asig_maniana2 = CDIF_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="2", turno= "Mañana", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
-        asig_tarde2 = CDIF_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="2", turno= "Tarde", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
-        asig_maniana3 = CDIF_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="3", turno= "Mañana", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
-        asig_tarde3 = CDIF_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], sala="3", turno= "Tarde", fk_admision__estado="Activa", estado_vacante = "Asignada").count()
-        esp_manianabb = CDIF_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="manianabb",estado_vacante='Lista de espera').count()
-        esp_tardebb = CDIF_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="tardebb",estado_vacante='Lista de espera').count()
-        esp_maniana2 = CDIF_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="maniana2",estado_vacante='Lista de espera').count()
-        esp_tarde2 = CDIF_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="tarde2",estado_vacante='Lista de espera').count()
-        esp_maniana3 = CDIF_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="maniana3",estado_vacante='Lista de espera').count()
-        esp_tarde3 =  CDIF_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"],fk_preadmi__sala_short="tarde3",estado_vacante='Lista de espera').count()
 
         admi = CDIF_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], fk_admision__estado ="Activa", estado_vacante = "Asignada")
         admi2 = CDIF_Admision.objects.filter(fk_preadmi__centro_postula_id=self.kwargs["pk"], estado ="Activa", estado_vacante = "Lista de espera")
+        cupos = CupoVacante.objects.filter(fk_vacante_id=self.kwargs["pk"])
+        asignada = CDIF_VacantesOtorgadas.objects.filter(fk_organismo_id=self.kwargs["pk"], estado_vacante="Asignada")
+        ivi = CDIF_Foto_IVI.objects.filter(tipo="Ingreso").all()
+
+                # Crear una lista para almacenar los resultados con el conteo
+        resultados = []
+        for cupo in cupos:
+            contador_aciertos = asignada.filter(sala_id=cupo.id).count()
+            resultados.append({'cupo': cupo, 'aciertos': contador_aciertos})
         
         context["object"] = Vacantes.objects.get(pk=self.kwargs["pk"])
-        context["asig_manianabb"] = asig_manianabb
-        context["asig_tardebb"] = asig_tardebb
-        context["asig_maniana2"] = asig_maniana2
-        context["asig_tarde2"] = asig_tarde2
-        context["asig_maniana3"] = asig_maniana3
-        context["asig_tarde3"] = asig_tarde3
-        context["esp_manianabb"] = esp_manianabb
-        context["esp_tardebb"] = esp_tardebb
-        context["esp_maniana2"] = esp_maniana2
-        context["esp_tarde2"] = esp_tarde2
-        context["esp_maniana3"] = esp_maniana3
-        context["esp_tarde3"] = esp_tarde3
         context["admi"] = admi
         context["admi2"] = admi2
+        context["cupos"] = cupos
+        context["asignada"] = asignada
+        context["resultados"] = resultados
+        context["ivi"] = ivi
         return context
 
 class CDIFIntervencionesCreateView(PermisosMixin, CreateView):

@@ -177,6 +177,12 @@ CHOICE_NOSI=[
     ('SI', 'SI'),
     ('NO', 'NO'),
 ]
+CHOICE_NOSI_MODIFICABLE=[
+    (None, ''),
+    ('Potencial', 'Potencial'),
+    ('De base', 'De base'),
+]
+
 CHOICE_RESPONSABLES=[
     ('Garcia Maria Begoña','Garcia Maria Begoña'),
     ('Vivas Antonella','Vivas Antonella'),

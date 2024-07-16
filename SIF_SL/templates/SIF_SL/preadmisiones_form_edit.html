@@ -1,0 +1,565 @@
+{% extends "includes/base.html" %}; 
+{% load crispy_forms_tags %} 
+{% load static %};
+{% block head %}
+<style>
+    /* Estilos CSS */
+    .file-preview {
+        font-size: small;
+        display: inline-block;
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #646464;
+        border-radius: 5px;
+        text-align: center;
+    }
+    /* Estilos para el contenedor Dropzone */
+.dropzone {
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    background-color: #32363b;
+    min-height: 150px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* Estilos para los archivos subidos */
+.dropzone .dz-preview {
+    margin: 5px;
+    display: inline-block;
+}
+
+/* Estilos para el enlace de eliminar archivo */
+.dropzone .dz-preview .dz-remove {
+    font-size: 16px;
+    color: red;
+    text-decoration: none;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+/* Estilos para el mensaje de error */
+.dropzone .dz-error-message {
+    color: red;
+    font-size: 14px;
+}
+
+/* Estilos para el mensaje de éxito */
+.dropzone .dz-success-mark {
+    display: none;
+}
+
+/* Estilos para el mensaje de error */
+.dropzone .dz-error-mark {
+    display: none;
+}
+</style>
+{% endblock %}
+{% block title %}Pre-admisiones formulario{%endblock %};
+ {% block titulo-pagina %} Pre-admisiones {% endblock %};
+ {% block breadcrumb %}
+<ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item">
+        <a href="{% url 'SL_derivaciones_listar'%}" title="Ver listado de Pre-admisiones">Pre-admisiones</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'legajos_ver' 69 %}" title="Ver legajo">{{legajo.fk_legajo}}</a>
+    </li>
+    {%if request.resolver_match.url_name == "SL_preadmisiones_editar" %}
+    <li class="breadcrumb-item active">Editar</li>
+    {% else %}
+    <li class="breadcrumb-item active">Agregar</li>
+    {% endif %}
+</ol>
+{% endblock %}; 
+{% block menu-adicional %} {% endblock %}; 
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-body py-0 px-2">
+                <div class="bs-stepper">
+                    <form method="POST" enctype="multipart/form-data" novalidate id="my-form">
+                        {% csrf_token %}
+                    <input type="hidden" name="fk_derivacion" value="{{pk}}" id="id_fk_derivacion">
+                    <div class="bs-stepper-header" role="tablist">
+                        <div class="step" data-target="#step1">
+                            <button type="button" class="step-trigger" role="tab" aria-controls="step1"
+                                id="step1-trigger">
+                                <span class="bs-stepper-circle">1</span>
+                                <span class="bs-stepper-label">Expediente</span>
+                            </button>
+                        </div>
+                        <div class="line"></div>
+                        <div class="step" data-target="#step2">
+                            <button type="button" class="step-trigger" role="tab" aria-controls="step2"
+                                id="step2-trigger">
+                                <span class="bs-stepper-circle">2</span>
+                                <span class="bs-stepper-label">Vulneración</span>
+                            </button>
+                        </div>
+                        <div class="line"></div>
+                        <div class="step" data-target="#step3">
+                            <button type="button" class="step-trigger" role="tab" aria-controls="step3"
+                                id="step3-trigger">
+                                <span class="bs-stepper-circle">3</span>
+                                <span class="bs-stepper-label">Grupo Familiar</span>
+                            </button>
+                        </div>
+                        <div class="line"></div>
+                        <div class="step" data-target="#step4">
+                            <button type="button" class="step-trigger" role="tab" aria-controls="step4"
+                                id="step4-trigger">
+                                <span class="bs-stepper-circle">4</span>
+                                <span class="bs-stepper-label">Alarmas</span>
+                            </button>
+                        </div>
+                        <div class="line"></div>
+                        <div class="step" data-target="#step5">
+                            <button type="button" class="step-trigger" role="tab" aria-controls="step5"
+                                id="step5-trigger">
+                                <span class="bs-stepper-circle">5</span>
+                                <span class="bs-stepper-label">Referentes</span>
+                            </button>
+                        </div>
+                        <div class="line"></div>
+                        <div class="step" data-target="#step6">
+                            <button type="button" class="step-trigger" role="tab" aria-controls="step6"
+                                id="step6-trigger">
+                                <span class="bs-stepper-circle">6</span>
+                                <span class="bs-stepper-label">Documentacón</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bs-stepper-content">
+                        <div id="step1" class="content" role="tabpanel" aria-labelledby="step1-trigger">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        {{form.expediente| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        {{form.organismo| as_crispy_field}}
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary float-right mb-3 mt-5" onclick="stepper.next(); return false;">
+                                Continuar
+                            </button>
+                        </div>
+                        <div id="step2" class="content" role="tabpanel" aria-labelledby="step2-trigger">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        {{form.motivo_ingreso| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        {{form.conocimiento_situacion| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        {{form.obs_vulneracion| as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        {{form.dinamica_familiar| as_crispy_field}}
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary float-left mb-3 mt-5" onclick="stepper.previous(); return false;">
+                                Volver
+                            </button>
+                            <button class="btn btn-primary float-right mb-3 mt-5" onclick="stepper.next(); return false;">
+                                Continuar
+                            </button>
+                        </div>
+                        <div id="step3" class="content" role="tabpanel" aria-labelledby="step3-trigger">
+                            <div class="row">
+                                {% if count_familia != 0 %}
+                                <div class="col-12">
+                                    <ul class="users-list">
+                                        {% for f in familiares_fk1 %}
+                                        <li>
+                                            {% if f.fk_legajo_2.foto %}
+                                            <img src="{{f.fk_legajo_2.foto.url}}" alt="User Image" width="60px">
+                                            {%else%}
+                                            <img src="{% static 'custom/img/default.png'  %}" alt="User Image" width="60px">
+                                            {%endif%}                        
+                                            <span class="users-list-date">{{f.fk_legajo_2}}</span>
+                                            <span class="users-list-date">{{f.vinculo}}</span>
+                                            <button type="button" class="btn btn-outline-secondary btn-sm select-btn" data-id="{{ f.fk_legajo_2.id }}">Seleccionar</button>
+                                        </li>
+                                        {% empty %}
+                                        {% endfor %}
+                                        {% for f in familiares_fk2 %}
+                                        <li>
+                                                {% if f.fk_legajo_1.foto %}
+                                                <img src="{{f.fk_legajo_1.foto.url}}" alt="User Image" width="60px">
+                                                {%else%}
+                                                <img src="{% static 'custom/img/default.png'  %}" alt="User Image" width="60px">
+                                                {%endif%}                            
+                                                <span class="users-list-date">{{f.fk_legajo_1}}</span>
+                                                <span class="users-list-date">{{f.vinculo_inverso}}</span>
+                                                <button type="button" class="btn btn-outline-secondary btn-sm select-btn" data-id="{{ f.fk_legajo_1.id }}">Seleccionar</button>
+                                        </li>
+                                        {% empty %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                {% else %}
+                                <div class="card-body bg-light p-0">
+                                    <h6 class="text-center text-muted py-3">Sin familiares</h6>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="row">
+                                <select id="id_fk_legajo_familiar" name="fk_legajo_familiar" multiple style="display:none;">
+                                </select>
+                            </div>
+                            <button class="btn btn-secondary float-left mb-3 mt-5" onclick="stepper.previous(); return false;">
+                                Volver
+                            </button>
+                            <button class="btn btn-primary float-right mb-3 mt-5" onclick="stepper.next(); return false;">
+                                Continuar
+                            </button>
+                        </div>
+                        <div id="step4" class="content" role="tabpanel" aria-labelledby="step4-trigger">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div id="div_id_fk_alarmas" class="form-group">
+                                            <label for="id_label_fk_alarmas" class="">
+                                                Categorias
+                                            </label>
+                                            <div>
+                                                <select id="categorias_alertas" class="form-control custom-select" id="id_categorias_alertas" onchange="giveSelection(this.value)">
+                                                    <option value="" selected=""></option>
+                                                    {% for c in categorias_alertas %}
+                                                    <option value="{{c.id}}">{{c}}</option>
+                                                    {% endfor %}
+                                                  </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="id_label_fk_alarmas">Alarmas</label>
+                                        <div class="d-flex align-items-center">
+                                            <select id="id_alertas" class="form-control custom-select flex-grow-1" name="alertas">
+                                                <option value="" selected></option>
+                                                {% for a in alertas %}
+                                                <option data-option="{{a.fk_categoria_id}}" value="{{a.id}}">{{a}}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <button type="button" class="btn btn-primary ml-2" onclick="agregarAlarma()">Agregar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" id="container-alertas">
+                                {% if legajos_alertas %}
+                                {% for a in legajos_alertas %}
+                                <div class="col-md-3 col-sm-6 col-12 mb-2">
+                                    <div class="callout h-100 pb-0">
+                                        <h6 class="font-weight-bold"><i class="fas fa-exclamation-triangle px-1"></i> {{a.fk_alerta}}
+                                        </h6>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                                    <!-- Campo select oculto para las alarmas seleccionadas -->
+                                <select id="id_fk_alarmas" name="fk_alarmas" multiple  style="display:none;">
+                                </select>
+                            </div>
+                            <button class="btn btn-secondary float-left mb-3 mt-5" onclick="stepper.previous(); return false;">
+                                Volver
+                            </button>
+                            <button class="btn btn-primary float-right mb-3 mt-5" onclick="stepper.next(); return false;">
+                                Continuar
+                            </button>
+                        </div>
+                        <div id="step5" class="content" role="tabpanel" aria-labelledby="step5-trigger">
+                            <div class="row">
+                                {% if count_referentes != 0 %}
+                                <div class="col-12">
+                                    <ul class="users-list">
+                                        {% for f in responsables %}
+                                        <li>
+                                            {% if f.fk_legajo_2.foto %}
+                                            <img src="{{f.fk_legajo_2.foto.url}}" alt="User Image" width="60px">
+                                            {%else%}
+                                            <img src="{% static 'custom/img/default.png'  %}" alt="User Image" width="60px">
+                                            {%endif%}                        
+                                            <span class="users-list-date">{{f.fk_legajo_2}}</span>
+                                            <span class="users-list-date">{{f.vinculo}}</span>
+                                            <button type="button" class="btn btn-outline-secondary btn-sm select-btn2" data-id="{{ f.fk_legajo_2.id }}">Seleccionar</button>
+                                        </li>
+                                        {% empty %}
+                                        {% endfor %}
+                                        {% for f in responsables2 %}
+                                        <li>
+                                                {% if f.fk_legajo_1.foto %}
+                                                <img src="{{f.fk_legajo_1.foto.url}}" alt="User Image" width="60px">
+                                                {%else%}
+                                                <img src="{% static 'custom/img/default.png'  %}" alt="User Image" width="60px">
+                                                {%endif%}                            
+                                                <span class="users-list-date">{{f.fk_legajo_1}}</span>
+                                                <span class="users-list-date">{{f.vinculo_inverso}}</span>
+                                                <button type="button" class="btn btn-outline-secondary btn-sm select-btn2" data-id="{{ f.fk_legajo_1.id }}">Seleccionar</button>
+                                        </li>
+                                        {% empty %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                {% else %}
+                                <div class="card-body bg-light p-0">
+                                    <h6 class="text-center text-muted py-3">Sin familiares</h6>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="row mt-4 text-center">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        {{ form.fk_externo|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <select id="id_fk_legajo_referente" name="fk_legajo_referente" multiple style="display:none;">
+                                </select>
+                            </div>
+                            <button class="btn btn-secondary float-left mb-3 mt-5" onclick="stepper.previous(); return false;">
+                                Volver
+                            </button>
+                            <button class="btn btn-primary float-right mb-3 mt-5" onclick="stepper.next(); return false;">
+                                Continuar
+                            </button>
+                        </div>
+                        <div id="step6" class="content" role="tabpanel" aria-labelledby="step6-trigger">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label for="exampleInputFile">Adjuntar archivos</label>
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="exampleInputFile" multiple
+                                                    name="archivos" />
+                                                <label class="custom-file-label" for="exampleInputFile"></label>
+                                            </div>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-paperclip"></i></span>
+                                            </div>
+                                        </div>
+                                        {% if form.archivos.errors %}
+                                        <div class="error">
+                                            {% for error in form.archivos.errors %}
+                                                <p style="color: red;">{{ error }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                    </div>
+                                    {% if archivos %}
+                                    <div>
+                                        <strong>Archivos cargados:</strong>
+                                        <ul>
+                                            {% for a in archivos %}
+                                                <li>
+                                                    <a href="{{ a.archivo.url }}" target="_blank">{{a.archivo|cut:'legajos/archivos/'}}</a>
+                                                    <label>
+                                                        <input type="checkbox" name="delete_files" value="{{ a.id }}">
+                                                        Eliminar
+                                                    </label>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary float-left mb-3 mt-5" onclick="stepper.previous(); return false;">
+                                Volver
+                            </button>
+                            <button type="submit" class="btn btn-primary float-right mb-3 mt-5">
+                                Confirmar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %} {% block customJS %}
+<script>
+    // BS-Stepper Init
+    document.addEventListener("DOMContentLoaded", function () {
+        window.stepper = new Stepper(document.querySelector(".bs-stepper"));
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('.select-btn').click(function() {
+            var id = $(this).data('id'); // Obtiene el ID del familiar
+    
+            if ($(this).hasClass('btn-danger')) {
+                // Cambiar a 'Seleccionar'
+                $(this).text('Seleccionar');
+                // Eliminar la opción del select oculto
+                $('#id_fk_legajo_familiar option[value="' + id + '"]').remove();
+            } else {
+                // Cambiar a 'Seleccionado'
+                $(this).text('Eliminar');
+                // Agregar la opción al select oculto
+                $('#id_fk_legajo_familiar').append($('<option>', {
+                    value: id,
+                    text: id, // O cualquier texto que desees mostrar
+                    selected: true
+                }));
+            }
+    
+            // Cambiar el estilo del botón
+            $(this).toggleClass('btn-danger');
+            $(this).toggleClass('btn-outline-secondary');
+            
+            // Verificar si algún botón está seleccionado
+            var anySelected = false;
+            $('.select-btn').each(function() {
+                if ($(this).hasClass('btn-danger')) {
+                    anySelected = true;
+                    return false; // Salir del bucle
+                }
+            });
+            
+            // Habilitar o deshabilitar el botón de submit
+            $('#btn-submit').prop('disabled', !anySelected);
+        });
+    });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.select-btn2').click(function() {
+                var id = $(this).data('id'); // Obtiene el ID del familiar
+        
+                if ($(this).hasClass('btn-danger')) {
+                    // Cambiar a 'Seleccionar'
+                    $(this).text('Seleccionar');
+                    // Eliminar la opción del select oculto
+                    $('#id_fk_legajo_referente option[value="' + id + '"]').remove();
+                } else {
+                    // Cambiar a 'Seleccionado'
+                    $(this).text('Eliminar');
+                    // Agregar la opción al select oculto
+                    $('#id_fk_legajo_referente').append($('<option>', {
+                        value: id,
+                        text: id, // O cualquier texto que desees mostrar
+                        selected: true
+                    }));
+                }
+        
+                // Cambiar el estilo del botón
+                $(this).toggleClass('btn-danger');
+                $(this).toggleClass('btn-outline-secondary');
+                
+                // Verificar si algún botón está seleccionado
+                var anySelected = false;
+                $('.select-btn2').each(function() {
+                    if ($(this).hasClass('btn-danger')) {
+                        anySelected = true;
+                        return false; // Salir del bucle
+                    }
+                });
+                
+                // Habilitar o deshabilitar el botón de submit
+                $('#btn-submit2').prop('disabled', !anySelected);
+            });
+        });
+        </script>
+<script type="text/javascript">
+    var sel1 = document.querySelector('#categorias_alertas');
+    var sel2 = document.querySelector('#id_alertas');
+    var options2 = sel2.querySelectorAll('option');
+    
+    function giveSelection(selValue) {
+      sel2.innerHTML = '';
+      for(var i = 0; i < options2.length; i++) {
+        if(options2[i].dataset.option === selValue) {
+          sel2.appendChild(options2[i]);
+        }
+      }
+    }
+    
+    giveSelection(sel1.value);
+</script>
+<script>
+    function agregarAlarma() {
+        var select = document.getElementById('id_alertas');
+        var selectedText = select.options[select.selectedIndex].text;
+        var selectedValue = select.value;
+        if (selectedValue !== "") {
+            // Agrega la alarma al contenedor visual
+            var container = document.getElementById('container-alertas');
+            var alertDiv = document.createElement('div');
+            alertDiv.className = 'col-sm-3 px-2 mb-2';
+            alertDiv.id = 'alerta-' + selectedValue;
+    
+            // Botón para eliminar la alerta
+            var closeButton = document.createElement('button');
+            closeButton.type = 'button';
+            closeButton.className = 'close pr-1 eliminar-alerta-btn';
+            closeButton.title = 'Eliminar alerta';
+            closeButton.dataset.alertaId = selectedValue;
+            closeButton.innerHTML = '×';
+            closeButton.onclick = function() { removeAlerta(alertDiv.id, selectedValue); };
+    
+            // Contenedor de la alerta
+            var calloutDiv = document.createElement('div');
+            calloutDiv.className = 'callout';
+    
+            // Título de la alerta
+            var title = document.createElement('h6');
+            title.className = 'font-weight-bold';
+            title.innerHTML = '<i class="fas fa-exclamation-triangle px-1"></i> ' + selectedText;
+    
+            // Construir estructura
+            calloutDiv.appendChild(title);
+            alertDiv.appendChild(closeButton);
+            alertDiv.appendChild(calloutDiv);
+            container.appendChild(alertDiv);
+    
+            // Agrega el valor al select oculto
+            var hiddenSelect = document.getElementById('id_fk_alarmas');
+            var option = document.createElement('option');
+            option.value = selectedValue;
+            option.text = selectedValue;
+            option.setAttribute ("selected", "selected");
+            hiddenSelect.appendChild(option);
+        }
+    }
+    
+    // Función para eliminar alertas específicas
+    function removeAlerta(alertaId, value) {
+        var alertaToRemove = document.getElementById(alertaId);
+        if (alertaToRemove) {
+            alertaToRemove.remove();
+        }
+        // Remueve también del select oculto
+        var hiddenSelect = document.getElementById('id_fk_alarmas');
+        for (var i = 0; i < hiddenSelect.options.length; i++) {
+            if (hiddenSelect.options[i].value === value) {
+                hiddenSelect.remove(i);
+            }
+        }
+    }
+    
+    </script>     
+{% endblock %}

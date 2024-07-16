@@ -15,7 +15,7 @@ class Usuarios(models.Model):
     Extensión del modelo USER
     '''
 
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+    usuario = models.OneToOneField(User, on_delete=models.PROTECT)
     imagen = models.ImageField(
         upload_to="usuarios/", null=True, blank=True)
     dni = models.PositiveIntegerField(null=True, blank=True, unique=True)
@@ -46,11 +46,13 @@ class Usuarios(models.Model):
             ("rol_admin", "Administrador"),
             ("programa_externo", "Externo"),
             ("programa_CDIF", "CDIF"),
+            ("programa_DESCEN", "DESCEN"),
             ("programa_CDLE", "CDLE"),
             ("programa_PDV", "PDV"),
             ("programa_1000D", "1000D"),
             ("programa_SL", "SL"),
             ("programa_MA", "MA"),
+            ("programa_UMI", "UMI"),
             ("programa_Reporte", "Reporte"),
             ("programa_Administracion", "Administración"),
             ("programa_Legajo", "Legajo"),

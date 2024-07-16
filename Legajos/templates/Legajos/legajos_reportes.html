@@ -130,7 +130,7 @@
                                 <div class="btn-group" role="group"> 
                                     <a href="{% url 'legajos_ver' o.fk_legajo.id %}" class="btn btn-primary btn-sm ver">Ver</a> 
                                     <a href="{% url 'legajos_editar' o.fk_legajo.id %}" class="btn btn-primary btn-sm editar">Editar</a> 
-                                    <a href="{% url 'legajos_eliminar' o.fk_legajo.id %}" class="btn btn-danger btn-sm eliminar">Eliminar</a> 
+                                    {% comment %}<a href="{% url 'legajos_eliminar' o.fk_legajo.id %}" class="btn btn-danger btn-sm eliminar">Eliminar</a> {% endcomment %}
                                     </div>
                                 {%endif%}
                             </td>

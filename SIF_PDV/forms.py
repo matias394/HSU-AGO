@@ -74,9 +74,8 @@ class PDV_PreadmisionesForm (forms.ModelForm):
             'fk_legajo_3':'',
             'fk_legajo_4':'',
             'fk_legajo_5':'',
-            'centro_postula':'',
-            'sala_postula':'',
-            'taller_postula':'',
+            'sala':'',
+            #'turno_postula':'Turno al que postula',
         }
 
 class criterios_Ingreso (forms.ModelForm):
@@ -127,7 +126,7 @@ class PDV_VacantesOtorgadasForm (forms.ModelForm):
     class Meta:
         model = PDV_VacantesOtorgadas
         fields = '__all__'
-        exclude = ['sala','turno']
+        exclude = ['turno']
         widgets = {
             'fecha_ingreso': forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
             'fecha_egreso': forms.DateInput(attrs={'type': 'date','required':'required'}, format="%Y-%m-%d"),

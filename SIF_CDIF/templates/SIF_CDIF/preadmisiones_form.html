@@ -778,10 +778,17 @@
                                     {% comment %} <p id="error_1_id_centro_postula" class="invalid-feedback"><strong>Este campo es obligatorio.</strong></p> {% endcomment %}
                                 </div>
                                 <div class="col-sm-3 form-group">
-                                    {{form.sala_postula| as_crispy_field}}
-                                </div>
-                                <div class="col-sm-3 form-group">
-                                    {{form.turno_postula| as_crispy_field}}
+                                    <label for="id_sala_postula">Sala que postula *</label>
+                                    <select name="sala_postula" class="form-control custom-select {% if messages %}is-invalid{% endif %}" id="id_sala_postula" required>
+                                        <option value="" selected=""></option>
+                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                        <option value="{{object.sala_postula.id}}" selected>{{object.sala_postula}}</option>
+                                        {% endif %}
+                                        {% for c in cupos %}
+                                        <option value="{{c.id}}" data-group="{{c.fk_vacante_id}}">{{c.nombre}}</option>
+                                        {% endfor %}
+                                      </select>
+                                    {% comment %} <p id="error_1_id_centro_postula" class="invalid-feedback"><strong>Este campo es obligatorio.</strong></p> {% endcomment %}
                                 </div>
                             </div>
                             <a class="btn btn-secondary float-left mb-3 mt-5 " onclick="stepper.previous()">Volver</a>
@@ -939,36 +946,71 @@
 });
 </script>
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var select1 = document.getElementById("id_centro_postula");
+        var select2 = document.getElementById("id_sala_postula");
+        
+        function updateSelect2Options() {
+            var selectedValue = select1.value;
+            var hasVisibleOption = false;
+            
+            Array.from(select2.options).forEach(function(option) {
+                if (option.getAttribute("data-group") === selectedValue) {
+                    option.style.display = "block";
+                    if (!hasVisibleOption) {
+                        hasVisibleOption = true;
+                        select2.value = option.value;
+                    }
+                } else {
+                    option.style.display = "none";
+                }
+            });
+            
+            // Si no hay opciones visibles, deselecciona el select2
+            if (!hasVisibleOption) {
+                select2.value = "";
+            }
+        }
+        
+        select1.addEventListener("change", updateSelect2Options);
+        // Inicializar las opciones de select2
+        updateSelect2Options();
+    });
+  </script>
+<script>
     // Disable form submissions if there are invalid fields
     (function () {
         'use strict';
         window.addEventListener('load', function () {
-          // Get the forms we want to add validation styles to
-          var forms = document.getElementsByClassName('needs-validation');
-          // Loop over them and prevent submission
-          var validation = Array.prototype.filter.call(forms, function (form) {
-            form.addEventListener('submit', function (event) {
-              var invalidFields = form.querySelectorAll(':invalid');
-              if (invalidFields.length > 0) {
-                // Si hay campos inválidos, detener la propagación del evento
-                event.preventDefault();
-                event.stopPropagation();
-      
-                // Iterar sobre los campos inválidos y agregar mensajes de obligatoriedad
-                invalidFields.forEach(function (field) {
-                  if (field.hasAttribute('required')) {
-                    // Agregar un mensaje de obligatoriedad para los campos requeridos
-                    var errorMessage = document.createElement('div');
-                    errorMessage.className = 'invalid-feedback';
-                    errorMessage.innerHTML = 'Este campo es obligatorio.';
-                    field.parentNode.appendChild(errorMessage);
-                  }
-                });
-              }
-              form.classList.add('was-validated');
-            }, false);
-          });
+            // Get the forms we want to add validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    var invalidFields = form.querySelectorAll(':invalid');
+                    if (invalidFields.length > 0) {
+                        // Si hay campos inválidos, detener la propagación del evento
+                        event.preventDefault();
+                        event.stopPropagation();
+          
+                        // Iterar sobre los campos inválidos y agregar mensajes de obligatoriedad
+                        invalidFields.forEach(function (field) {
+                            if (field.hasAttribute('required')) {
+                                // Verificar si el mensaje de error ya existe
+                                if (!field.nextElementSibling || !field.nextElementSibling.classList.contains('invalid-feedback')) {
+                                    // Agregar un mensaje de obligatoriedad para los campos requeridos
+                                    var errorMessage = document.createElement('div');
+                                    errorMessage.className = 'invalid-feedback';
+                                    errorMessage.innerHTML = 'Este campo es obligatorio.';
+                                    field.parentNode.appendChild(errorMessage);
+                                }
+                            }
+                        });
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
         }, false);
-      })();
-</script> 
+    })();
+</script>
 {% endblock %}

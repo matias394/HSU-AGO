@@ -8,13 +8,13 @@ from django.urls import *
 # Create your models here.
 
 #class legajo_CDLE (models.Model):
-#    fk_programa = models.ForeignKey(Programas, on_delete=models.CASCADE)
-#    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE)
+#    fk_programa = models.ForeignKey(Programas, on_delete=models.PROTECT)
+#    fk_legajo = models.ForeignKey(Legajos, on_delete=models.PROTECT)
 #    nombre = models.CharField(max_length=100, unique=True)
 #    estado = models.BooleanField(default=True)
 #    observaciones = models.CharField(max_length=300, null=True, blank=True)
-#    #creado_por = models.ForeignKey(Usuarios, related_name='CDLE_creado_por', on_delete=models.CASCADE, blank=True, null=True)
-#    #modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_modificado_por', on_delete=models.CASCADE, blank=True, null=True)
+#    #creado_por = models.ForeignKey(Usuarios, related_name='CDLE_creado_por', on_delete=models.PROTECT, blank=True, null=True)
+#    #modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
 #    creado = models.DateField(auto_now_add=True)
 #    modificado = models.DateField(auto_now=True)
 #
@@ -49,10 +49,10 @@ from django.urls import *
 #        verbose_name_plural = "Centros"
 
 class CDLE_PreAdmision (models.Model):
-    fk_derivacion = models.ForeignKey(LegajosDerivaciones, on_delete=models.CASCADE)
-    fk_legajo = models.ForeignKey(Legajos, related_name='CDLE_fk_legajo', on_delete=models.CASCADE, null=True, blank=True)
-    fk_legajo_1 = models.ForeignKey(Legajos, related_name='CDLE_fk_legajo_1', on_delete=models.CASCADE, null=True, blank=True)
-    fk_legajo_2 = models.ForeignKey(Legajos, related_name='CDLE_fk_legajo_2', on_delete=models.CASCADE, null=True, blank=True)
+    fk_derivacion = models.ForeignKey(LegajosDerivaciones, on_delete=models.PROTECT)
+    fk_legajo = models.ForeignKey(Legajos, related_name='CDLE_fk_legajo', on_delete=models.PROTECT, null=True, blank=True)
+    fk_legajo_1 = models.ForeignKey(Legajos, related_name='CDLE_fk_legajo_1', on_delete=models.PROTECT, null=True, blank=True)
+    fk_legajo_2 = models.ForeignKey(Legajos, related_name='CDLE_fk_legajo_2', on_delete=models.PROTECT, null=True, blank=True)
     menores_a_cargo_1 = models.CharField(max_length=50, choices=CHOICE_1A5, null=True, blank=True)
     control_gine_1 =  models.CharField(max_length=50, choices=CHOICE_SINO, null=True, blank=True)
     hijos_1 = models.CharField(max_length=50, choices=CHOICE_1A5, null=True, blank=True)
@@ -75,7 +75,7 @@ class CDLE_PreAdmision (models.Model):
     escribir_1 = models.BooleanField(verbose_name='Sabe escribir', null=True, blank=True)
     retomar_estudios_1 = models.BooleanField(verbose_name='Quiere retomar estudios', null=True, blank=True)
     aprender_oficio_1 = models.BooleanField(verbose_name='Quiere aprender un oficio', null=True, blank=True)
-    planes_sociales_1 = models.ForeignKey(PlanesSociales, related_name='CDLE_planes_sociales_1', on_delete=models.CASCADE, null=True, blank=True)
+    planes_sociales_1 = models.ForeignKey(PlanesSociales, related_name='CDLE_planes_sociales_1', on_delete=models.PROTECT, null=True, blank=True)
     trabajo_actual_1 =  models.CharField(max_length=50, choices=CHOICE_SINO, null=True, blank=True)
     ocupacion_1 = models.CharField(verbose_name='Ocupación', max_length=100, null=True, blank=True)
     modo_contrat_1 =  models.CharField(max_length=150, choices=CHOICE_CONTRATACION, null=True, blank=True)
@@ -86,11 +86,11 @@ class CDLE_PreAdmision (models.Model):
     retomar_estudios_2 = models.BooleanField(verbose_name='Quiere retomar estudios', null=True, blank=True)
     aprender_oficio_2 = models.BooleanField(verbose_name='Quiere aprender un oficio', null=True, blank=True)
     programa_Pilares_2 = models.BooleanField(verbose_name='Quiere participar del Programa Pilares', null=True, blank=True)
-    planes_sociales_2 = models.ForeignKey(PlanesSociales, related_name='CDLE_planes_sociales_2', on_delete=models.CASCADE, null=True, blank=True)
+    planes_sociales_2 = models.ForeignKey(PlanesSociales, related_name='CDLE_planes_sociales_2', on_delete=models.PROTECT, null=True, blank=True)
     trabajo_actual_2 =  models.CharField(max_length=50, choices=CHOICE_SINO, null=True, blank=True)
     ocupacion_2 = models.CharField(verbose_name='Ocupación', max_length=100, null=True, blank=True)
     modo_contrat_2 =  models.CharField(max_length=150, choices=CHOICE_CONTRATACION, null=True, blank=True)
-    fk_legajo_3 = models.ForeignKey(Legajos, related_name='CDLE_fk_legajo_3', on_delete=models.CASCADE, null=True, blank=True)
+    fk_legajo_3 = models.ForeignKey(Legajos, related_name='CDLE_fk_legajo_3', on_delete=models.PROTECT, null=True, blank=True)
     educ_maximo_3 =  models.CharField(max_length=150, choices=CHOICE_EDUCACION, null=True, blank=True)
     educ_estado_3 =  models.CharField(max_length=150, choices=CHOICE_ESTADO, null=True, blank=True)
     leer_3 = models.BooleanField(verbose_name='Sabe leer', null=True, blank=True)
@@ -98,7 +98,7 @@ class CDLE_PreAdmision (models.Model):
     retomar_estudios_3 = models.BooleanField(verbose_name='Quiere retomar estudios', null=True, blank=True)
     aprender_oficio_3 = models.BooleanField(verbose_name='Quiere aprender un oficio', null=True, blank=True)
     programa_Pilares_3 = models.BooleanField(verbose_name='Quiere participar del Programa Pilares', null=True, blank=True)
-    fk_legajo_4 = models.ForeignKey(Legajos, related_name='CDLE_fk_legajo_4', on_delete=models.CASCADE, null=True, blank=True)
+    fk_legajo_4 = models.ForeignKey(Legajos, related_name='CDLE_fk_legajo_4', on_delete=models.PROTECT, null=True, blank=True)
     educ_maximo_4 =  models.CharField(max_length=150, choices=CHOICE_EDUCACION, null=True, blank=True)
     educ_estado_4 =  models.CharField(max_length=150, choices=CHOICE_ESTADO, null=True, blank=True)
     leer_4 = models.BooleanField(verbose_name='Sabe leer', null=True, blank=True)
@@ -106,7 +106,7 @@ class CDLE_PreAdmision (models.Model):
     retomar_estudios_4 = models.BooleanField(verbose_name='Quiere retomar estudios', null=True, blank=True)
     aprender_oficio_4 = models.BooleanField(verbose_name='Quiere aprender un oficio', null=True, blank=True)
     programa_Pilares_4 = models.BooleanField(verbose_name='Quiere participar del Programa Pilares', null=True, blank=True)
-    fk_legajo_5 = models.ForeignKey(Legajos, related_name='CDLE_fk_legajo_5', on_delete=models.CASCADE, null=True, blank=True)
+    fk_legajo_5 = models.ForeignKey(Legajos, related_name='CDLE_fk_legajo_5', on_delete=models.PROTECT, null=True, blank=True)
     educ_maximo_5 =  models.CharField(max_length=150, choices=CHOICE_EDUCACION, null=True, blank=True)
     educ_estado_5 =  models.CharField(max_length=150, choices=CHOICE_ESTADO, null=True, blank=True)
     leer_5 = models.BooleanField(verbose_name='Sabe leer', null=True, blank=True)
@@ -149,8 +149,8 @@ class CDLE_PreAdmision (models.Model):
     ter_trim_control_rutina = models.BooleanField(verbose_name='Ecografía, hisopado vaginal y laboratorio', null=True, blank=True)
     ter_trim_monitoreo_fetal = models.BooleanField(verbose_name='Monitoreo fetal', null=True, blank=True)
     ter_trim_electro_cardio = models.BooleanField(verbose_name='Electro cardiograma', null=True, blank=True)
-    acompaniante = models.ForeignKey(Usuarios, related_name='CDLE_Acompaniante', on_delete=models.CASCADE, blank=True, null=True)
-    madrina = models.ForeignKey(AgentesExternos, related_name='CDLE_Madrina', on_delete=models.CASCADE, blank=True, null=True)
+    acompaniante = models.ForeignKey(Usuarios, related_name='CDLE_Acompaniante', on_delete=models.PROTECT, blank=True, null=True)
+    madrina = models.ForeignKey(AgentesExternos, related_name='CDLE_Madrina', on_delete=models.PROTECT, blank=True, null=True)
     vinculo1 = models.CharField(max_length=150, null=True, blank=True)
     vinculo2 = models.CharField(max_length=150, null=True, blank=True)
     vinculo3 = models.CharField(max_length=150, null=True, blank=True)
@@ -159,8 +159,8 @@ class CDLE_PreAdmision (models.Model):
     ivi = models.CharField(max_length=150, null=True, blank=True)
     indice_ingreso = models.CharField(max_length=150, null=True, blank=True)
     admitido = models.CharField(max_length=150, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='CDLE_PreAdm_creado_por', on_delete=models.CASCADE, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_PreAdm_modificado_por', on_delete=models.CASCADE, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='CDLE_PreAdm_creado_por', on_delete=models.PROTECT, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_PreAdm_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
     estado = models.CharField(max_length=100, null=True, blank=True)
@@ -176,9 +176,9 @@ class Criterios_IVI(models.Model):
         return self.criterio
 
 class CDLE_IndiceIVI(models.Model):
-    fk_criterios_ivi = models.ForeignKey(Criterios_IVI, on_delete=models.CASCADE)
-    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, null=True, blank=True)
-    fk_preadmi = models.ForeignKey(CDLE_PreAdmision, on_delete=models.CASCADE, null=True, blank=True)
+    fk_criterios_ivi = models.ForeignKey(Criterios_IVI, on_delete=models.PROTECT)
+    fk_legajo = models.ForeignKey(Legajos, on_delete=models.PROTECT, null=True, blank=True)
+    fk_preadmi = models.ForeignKey(CDLE_PreAdmision, on_delete=models.PROTECT, null=True, blank=True)
     presencia = models.BooleanField (default=False, null=True, blank=True)
     tipo = models.CharField (max_length=350, null=True, blank=True)
     programa = models.CharField(max_length=150, choices=CHOICE_NOSI, null=True, blank=True)
@@ -187,8 +187,8 @@ class CDLE_IndiceIVI(models.Model):
     modificado = models.DateField(auto_now=True, null=True, blank=True)
 
 class CDLE_Foto_IVI(models.Model):
-    fk_preadmi = models.ForeignKey(CDLE_PreAdmision, on_delete=models.CASCADE, null=True, blank=True)
-    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, null=True, blank=True)
+    fk_preadmi = models.ForeignKey(CDLE_PreAdmision, on_delete=models.PROTECT, null=True, blank=True)
+    fk_legajo = models.ForeignKey(Legajos, on_delete=models.PROTECT, null=True, blank=True)
     puntaje = models.SmallIntegerField(null=True, blank=True) 
     puntaje_max = models.SmallIntegerField(null=True, blank=True)
     crit_modificables = models.SmallIntegerField(null=True, blank=True)
@@ -196,8 +196,8 @@ class CDLE_Foto_IVI(models.Model):
     observaciones = models.CharField(max_length=350, null=True, blank=True)
     tipo = models.CharField (max_length=350, null=True, blank=True)
     clave = models.CharField (max_length=350, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='CDLE_IVI_creado_por', on_delete=models.CASCADE, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_IVI_modificado_por', on_delete=models.CASCADE, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='CDLE_IVI_creado_por', on_delete=models.PROTECT, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_IVI_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
 
@@ -211,9 +211,9 @@ class Criterios_Ingreso(models.Model):
         return self.criterio
 
 class CDLE_IndiceIngreso(models.Model):
-    fk_criterios_ingreso = models.ForeignKey(Criterios_Ingreso, on_delete=models.CASCADE)
-    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, null=True, blank=True)
-    fk_preadmi = models.ForeignKey(CDLE_PreAdmision, on_delete=models.CASCADE, null=True, blank=True)
+    fk_criterios_ingreso = models.ForeignKey(Criterios_Ingreso, on_delete=models.PROTECT)
+    fk_legajo = models.ForeignKey(Legajos, on_delete=models.PROTECT, null=True, blank=True)
+    fk_preadmi = models.ForeignKey(CDLE_PreAdmision, on_delete=models.PROTECT, null=True, blank=True)
     presencia = models.BooleanField (default=False, null=True, blank=True)
     tipo = models.CharField (max_length=350, null=True, blank=True)
     programa = models.CharField(max_length=150, choices=CHOICE_NOSI, null=True, blank=True)
@@ -222,8 +222,8 @@ class CDLE_IndiceIngreso(models.Model):
     modificado = models.DateField(auto_now=True, null=True, blank=True)
 
 class CDLE_Foto_Ingreso(models.Model):
-    fk_preadmi = models.ForeignKey(CDLE_PreAdmision, on_delete=models.CASCADE, null=True, blank=True)
-    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, null=True, blank=True)
+    fk_preadmi = models.ForeignKey(CDLE_PreAdmision, on_delete=models.PROTECT, null=True, blank=True)
+    fk_legajo = models.ForeignKey(Legajos, on_delete=models.PROTECT, null=True, blank=True)
     puntaje = models.SmallIntegerField(null=True, blank=True) 
     puntaje_max = models.SmallIntegerField(null=True, blank=True)
     crit_modificables = models.SmallIntegerField(null=True, blank=True)
@@ -231,20 +231,20 @@ class CDLE_Foto_Ingreso(models.Model):
     observaciones = models.CharField(max_length=350, null=True, blank=True)
     tipo = models.CharField (max_length=350, null=True, blank=True)
     clave = models.CharField (max_length=350, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='CDLE_Ingreso_creado_por', on_delete=models.CASCADE, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_Ingreso_modificado_por', on_delete=models.CASCADE, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='CDLE_Ingreso_creado_por', on_delete=models.PROTECT, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_Ingreso_modificado_por', on_delete=models.PROTECT, blank=True, null=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
 
 
 
 class CDLE_Admision(models.Model):
-    fk_preadmi = models.ForeignKey(CDLE_PreAdmision, on_delete=models.CASCADE)
+    fk_preadmi = models.ForeignKey(CDLE_PreAdmision, on_delete=models.PROTECT)
     estado = models.CharField(max_length=150, null=True, blank=True, default="Activa")
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='CDLE_Admision_creado_por', on_delete=models.CASCADE, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_Admision_modificada_por', on_delete=models.CASCADE, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='CDLE_Admision_creado_por', on_delete=models.PROTECT, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_Admision_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
 
 class OpcionesResponsables(models.Model):
     nombre = models.CharField(max_length=250, unique=True)
@@ -254,24 +254,24 @@ class OpcionesResponsables(models.Model):
 
 
 class CDLE_Intervenciones(models.Model):
-    fk_admision = models.ForeignKey(CDLE_Admision, on_delete=models.CASCADE, null=True, blank=True)
-    criterio_modificable = models.ForeignKey(Criterios_IVI, on_delete=models.CASCADE)
+    fk_admision = models.ForeignKey(CDLE_Admision, on_delete=models.PROTECT, null=True, blank=True)
+    criterio_modificable = models.ForeignKey(Criterios_IVI, on_delete=models.PROTECT)
     accion = models.CharField(max_length=250, choices=CHOICE_ACCION_DESARROLLADA, null=False, blank=False)
     responsable = models.ManyToManyField(OpcionesResponsables)
     impacto = models.CharField(max_length=250, choices=[('Trabajado','Trabajado'),('Revertido','Revertido')], null=False, blank=False)
     detalle = models.CharField(max_length=350, null=True, blank=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='CDLE_Intervenciones_creado_por', on_delete=models.CASCADE, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_Intervenciones_modificada_por', on_delete=models.CASCADE, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='CDLE_Intervenciones_creado_por', on_delete=models.PROTECT, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_Intervenciones_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
 
 
 class CDLE_Historial(models.Model):
-    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, null=True, blank=True)
-    fk_legajo_derivacion = models.ForeignKey(LegajosDerivaciones, on_delete=models.CASCADE, null=True, blank=True)
-    fk_preadmi = models.ForeignKey(CDLE_PreAdmision, on_delete=models.CASCADE, null=True, blank=True)
-    fk_admision = models.ForeignKey(CDLE_Admision, on_delete=models.CASCADE, null=True, blank=True)
+    fk_legajo = models.ForeignKey(Legajos, on_delete=models.PROTECT, null=True, blank=True)
+    fk_legajo_derivacion = models.ForeignKey(LegajosDerivaciones, on_delete=models.PROTECT, null=True, blank=True)
+    fk_preadmi = models.ForeignKey(CDLE_PreAdmision, on_delete=models.PROTECT, null=True, blank=True)
+    fk_admision = models.ForeignKey(CDLE_Admision, on_delete=models.PROTECT, null=True, blank=True)
     movimiento = models.CharField(max_length=150, null=True, blank=True)
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
-    creado_por = models.ForeignKey(Usuarios, on_delete=models.CASCADE, null=True, blank=True)
+    creado_por = models.ForeignKey(Usuarios, on_delete=models.PROTECT, null=True, blank=True)
 

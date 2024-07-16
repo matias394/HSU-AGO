@@ -13,6 +13,46 @@
         border-radius: 5px;
         text-align: center;
     }
+    /* Estilos para el contenedor Dropzone */
+.dropzone {
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    background-color: #32363b;
+    min-height: 150px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* Estilos para los archivos subidos */
+.dropzone .dz-preview {
+    margin: 5px;
+    display: inline-block;
+}
+
+/* Estilos para el enlace de eliminar archivo */
+.dropzone .dz-preview .dz-remove {
+    font-size: 16px;
+    color: red;
+    text-decoration: none;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+/* Estilos para el mensaje de error */
+.dropzone .dz-error-message {
+    color: red;
+    font-size: 14px;
+}
+
+/* Estilos para el mensaje de éxito */
+.dropzone .dz-success-mark {
+    display: none;
+}
+
+/* Estilos para el mensaje de error */
+.dropzone .dz-error-mark {
+    display: none;
+}
 </style>
 {% endblock %}
 {% block title %}Pre-admisiones formulario{%endblock %};
@@ -39,7 +79,7 @@
         <div class="card card-primary card-outline">
             <div class="card-body py-0 px-2">
                 <div class="bs-stepper">
-                    <form method="POST" enctype="multipart/form-data" novalidate>
+                    <form method="POST" enctype="multipart/form-data" novalidate id="my-form">
                         {% csrf_token %}
                     <input type="hidden" name="fk_derivacion" value="{{pk}}" id="id_fk_derivacion">
                     <div class="bs-stepper-header" role="tablist">
@@ -224,6 +264,16 @@
                                 </div>
                             </div>
                             <div class="row" id="container-alertas">
+                                {% if legajos_alertas %}
+                                {% for a in legajos_alertas %}
+                                <div class="col-md-3 col-sm-6 col-12 mb-2">
+                                    <div class="callout h-100 pb-0">
+                                        <h6 class="font-weight-bold"><i class="fas fa-exclamation-triangle px-1"></i> {{a.fk_alerta}}
+                                        </h6>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                {% endif %}
                                     <!-- Campo select oculto para las alarmas seleccionadas -->
                                 <select id="id_fk_alarmas" name="fk_alarmas" multiple  style="display:none;">
                                 </select>
@@ -274,10 +324,10 @@
                                 </div>
                                 {% endif %}
                             </div>
-                            <div class="row">
-                                <div class="col-sm-12">
+                            <div class="row mt-4 text-center">
+                                <div class="col-12">
                                     <div class="form-group">
-                                        {{ form.fk_externo| as_crispy_field }}
+                                        {{ form.fk_externo|as_crispy_field }}
                                     </div>
                                 </div>
                             </div>
@@ -294,19 +344,45 @@
                         </div>
                         <div id="step6" class="content" role="tabpanel" aria-labelledby="step6-trigger">
                             <div class="row">
-                                <div class="col-sm-12 text-center">
+                                <div class="col-sm-12">
                                     <div class="form-group">
-                                        <input type="file" id="file-input" multiple style="display:none;">
-                                        <button id="add-files-btn" class="btn btn-primary" type="button">Cargar Archivos</button>
+                                        <label for="exampleInputFile">Adjuntar archivos*</label>
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="exampleInputFile" multiple
+                                                    name="archivos" />
+                                                <label class="custom-file-label" for="exampleInputFile"></label>
+                                            </div>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fas fa-paperclip"></i></span>
+                                            </div>
+                                        </div>
+                                        {% if form.archivos.errors %}
+                                        <div class="error">
+                                            {% for error in form.archivos.errors %}
+                                                <p style="color: red;">{{ error }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
                                     </div>
+                                    {% if archivos_existentes %}
+                                    <div>
+                                        <strong>Archivos cargados:</strong>
+                                        <ul>
+                                            {% for a in archivos_existentes %}
+                                                <li>
+                                                    <a href="{{ a.archivo.url }}" target="_blank">{{a.archivo|cut:'legajos/archivos/'}}</a>
+                                                    <label>
+                                                        <input type="checkbox" name="delete_files" value="{{ a.id }}">
+                                                        Eliminar
+                                                    </label>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
                                 </div>
                             </div>
-                            <div class="row" id="file-preview-container">
-                                <!-- Aquí se mostrarán las vistas previas de los archivos cargados -->
-                            </div>
-                            <select id="id_archivos" name="archivos" multiple style="display:none;">
-                                <!-- Aquí se almacenarán los nombres de los archivos seleccionados -->
-                            </select>
                             <button class="btn btn-secondary float-left mb-3 mt-5" onclick="stepper.previous(); return false;">
                                 Volver
                             </button>
@@ -433,7 +509,7 @@
             // Agrega la alarma al contenedor visual
             var container = document.getElementById('container-alertas');
             var alertDiv = document.createElement('div');
-            alertDiv.className = 'col-sm-3 px-2';
+            alertDiv.className = 'col-sm-3 px-2 mb-2';
             alertDiv.id = 'alerta-' + selectedValue;
     
             // Botón para eliminar la alerta
@@ -485,82 +561,5 @@
         }
     }
     
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var fileInput = document.getElementById('file-input');
-            var filePreviewContainer = document.getElementById('file-preview-container');
-        
-            document.getElementById('add-files-btn').addEventListener('click', function() {
-                fileInput.click(); // Abrir el diálogo de selección de archivos al hacer clic en el botón
-        
-                // Manejar el cambio en la selección de archivos
-                fileInput.addEventListener('change', handleFileInputChange);
-        
-                // Función para manejar el cambio en la selección de archivos
-                function handleFileInputChange() {
-                    var files = fileInput.files; // Obtener los archivos seleccionados
-        
-                    // Iterar sobre los archivos seleccionados
-                    for (var i = 0; i < files.length; i++) {
-                        var file = files[i];
-        
-                        // Crear una vista previa del archivo con el nombre y un botón de eliminación
-                        var filePreview = document.createElement('div');
-                        filePreview.classList.add('file-preview');
-        
-                        // Determinar si el archivo es una imagen
-                        var isImage = file.type.startsWith('image/');
-        
-                        // Crear una vista previa del archivo con el nombre y un botón de eliminación
-                        var previewContent = document.createElement('div');
-                        previewContent.classList.add('preview-content');
-                        if (isImage) {
-                            var thumbnail = document.createElement('img');
-                            thumbnail.classList.add('img-thumbnail');
-                            thumbnail.src = URL.createObjectURL(file);
-                            thumbnail.onload = function() {
-                                URL.revokeObjectURL(this.src); // Liberar memoria una vez que la miniatura se ha cargado
-                            };
-                            thumbnail.style.maxHeight = '58px'; // Limitar el tamaño de la miniatura
-                            previewContent.appendChild(thumbnail);
-                        } else {
-                            var fileIcon = document.createElement('i');
-                            fileIcon.classList.add('far', 'fa-file');
-                            fileIcon.style.fontSize = '58px'; 
-                            previewContent.appendChild(fileIcon);
-                        }
-        
-                        // Agregar el nombre del archivo
-                        var fileName = document.createElement('p');
-                        fileName.textContent = file.name;
-                        fileName.classList.add('file-name'); // Agregar clase al elemento <p>
-                        previewContent.appendChild(fileName);
-        
-                        // Agregar el botón de eliminación
-                        var deleteBtn = document.createElement('button');
-                        deleteBtn.textContent = 'Eliminar';
-                        deleteBtn.classList.add('btn', 'btn-danger', 'btn-sm', 'delete-file-btn');
-                        deleteBtn.addEventListener('click', function() {
-                            var parentNode = this.parentNode.parentNode; // Obtener el padre del padre del botón (vista previa del archivo)
-                            filePreviewContainer.removeChild(parentNode); // Eliminar la vista previa del archivo del contenedor
-                            // Eliminar el input oculto asociado
-                            parentNode.querySelector('input[type=file]').remove();
-                        });
-                        previewContent.appendChild(deleteBtn);
-        
-                        filePreview.appendChild(previewContent); // Agregar el contenido de la vista previa al contenedor
-                        filePreviewContainer.appendChild(filePreview); // Agregar la vista previa del archivo al contenedor
-                    }
-        
-                    // Limpiar la selección de archivos
-                    fileInput.value = '';
-        
-                    // Eliminar el evento de cambio después de completar la selección de archivos
-                    fileInput.removeEventListener('change', handleFileInputChange);
-                }
-            });
-        });
-        
-</script>    
+    </script>     
 {% endblock %}

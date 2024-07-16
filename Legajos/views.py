@@ -36,7 +36,7 @@ import json
 
 # Configurar el locale para usar el idioma español
 import locale
-locale.setlocale(locale.LC_ALL, 'es_AR.UTF-8')
+#locale.setlocale(locale.LC_ALL, 'es_AR.UTF-8')
 # guardado de log de usuarios
 import logging
 logger = logging.getLogger('django')
@@ -533,8 +533,13 @@ class LegajoGrupoFamiliarList(ListView):
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
-        context["familiares_fk1"] = LegajoGrupoFamiliar.objects.filter(fk_legajo_1=pk)
-        context["familiares_fk2"] = LegajoGrupoFamiliar.objects.filter(fk_legajo_2=pk)
+        familiares_fk1 = LegajoGrupoFamiliar.objects.filter(fk_legajo_1=pk)
+        familiares_fk2 = LegajoGrupoFamiliar.objects.filter(fk_legajo_2=pk)
+
+        programas = LegajosDerivaciones.objects.all()
+        context["familiares_fk1"] = familiares_fk1
+        context["familiares_fk2"] = familiares_fk2
+        context["programas"] = programas
         context["count_familia"] = context["familiares_fk1"].count() + context["familiares_fk1"].count()
         context["nombre"] = Legajos.objects.filter(pk=pk).first()
         context["pk"] = pk
@@ -737,8 +742,19 @@ class LegajosDerivacionesUpdateView(PermisosMixin, UpdateView):
     def form_valid(self, form):
         response = super().form_valid(form)
         delete_files = self.request.POST.getlist('delete_files')
-        LegajosDerivacionesArchivos.objects.filter(id__in=delete_files).delete()
+
+        if delete_files:
+            archivos = LegajosDerivacionesArchivos.objects.filter(id__in=delete_files)
+            archivos.delete()
+
+        pk = self.kwargs["pk"]
+        archivos_check = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=pk)
+        if not archivos_check.exists():
+            form.add_error(None, "No hay archivos asociados a este legajo.")
+            return self.form_invalid(form)
+
         return response
+
 
 class LegajosDerivacionesHistorial(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"
@@ -1321,10 +1337,17 @@ class indicesView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        pk = self.kwargs["pk"]
         
         legajo = Legajos.objects.filter(pk=self.kwargs["pk"]).first()
+        
+        #Obtener historial de indices IVI
+        historial_ivi = HistorialLegajoIndices.objects.filter(fk_legajo_id=pk).all().order_by('-id')[:3]
+
 
         context["legajo"] = legajo
+        context["historial_ivi"] = historial_ivi
+
         
         return context      
 
