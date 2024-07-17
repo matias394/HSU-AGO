@@ -138,6 +138,7 @@
 				<p>Equipos</p>
 			</a>
 		</li>
+		{% comment %}
 		<li class="nav-item">
 			<a href="{% url 'slequipos_listar' %}"
 				class="nav-link {% if 'configuracion/sl_equipos' in pagina_actual%}active{% endif %}">
@@ -145,6 +146,7 @@
 				<p>Servicio Local Equipos</p>
 			</a>
 		</li>
+		{% endcomment %}
 		<li class="nav-item">
 			<a href="{% url 'slindicesvulnerabilidad_listar' %}"
 				class="nav-link {% if 'configuracion/sl_indicesvulnerabilidad' in pagina_actual%}active{% endif %}">
