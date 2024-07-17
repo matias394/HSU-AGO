@@ -101,7 +101,7 @@ Servicio Local Equipo
           equiposPorZona[selectedZona].forEach(equipo => {
               const option = document.createElement("option");
               option.text = equipo;
-              option.value = equipo.toLowerCase().replace(/\s+/g, ''); // Valor único basado en el nombre del equipo
+              option.value = equipo.slice(-1); // Valor único basado en el último carácter del nombre del equipo
               equipoSelect.add(option);
           });
       }
