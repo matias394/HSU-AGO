@@ -125,7 +125,8 @@ Vacantes
                 </select>
               {% comment %} <p id="error_1_id_centro_postula" class="invalid-feedback"><strong>Este campo es obligatorio.</strong></p> {% endcomment %}
           </div>
-            <!--div class="col-sm-2 form-group">
+          {% comment %}
+            <div class="col-sm-2 form-group">
               {{ form.turno| as_crispy_field }}
             </div>
             <div class="col-sm-3 form-group">
@@ -135,7 +136,8 @@ Vacantes
                 <div id="div_id_fecha_ingreso" class="form-group">
                     {{ form.fecha_egreso| as_crispy_field }}
                 </div>
-            </div-->
+            </div>
+            {% endcomment %}
             <div class="col-sm-3 form-group">
                 {{ form.motivo| as_crispy_field }}
               </div>
