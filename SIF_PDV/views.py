@@ -13,7 +13,7 @@ import uuid
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.conf import settings
-
+from SIF_CDIF.models import Criterios_IVI
 
 # # Create your views here.
 #derivaciones = LegajosDerivaciones.objects.filter(m2m_programas__nombr__iexact="PDV")
