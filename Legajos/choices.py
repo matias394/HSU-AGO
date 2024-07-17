@@ -290,7 +290,7 @@ CHOICE_SEXO = [
     (None, ''),
     ('Femenino', 'Femenino'),
     ('Masculino', 'Masculino'),
-    ('X', 'X'),
+    #('X', 'X'),
 ]
 
 CHOICE_GENERO = [
