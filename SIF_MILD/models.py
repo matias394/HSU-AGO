@@ -169,8 +169,10 @@ class MILD_PreAdmision (models.Model):
     observaciones_salud = models.CharField(max_length=250, null=True, blank=True, verbose_name='Observaciones/detalles de salud')
     vacunas = models.BooleanField(verbose_name='¿Recibió todas las vacunas correspondientes a su edad?', null=True, blank=True)
     
-    acompaniante_entrevista = models.ForeignKey(Usuarios,verbose_name='Acompañante que realizo la entrevista', related_name='MILD_Acompaniante_entrevista', on_delete=models.PROTECT, blank=True, null=True)
-    acompaniante_asignado = models.ForeignKey(Usuarios,verbose_name='Acompañante asignado', related_name='MILD_Acompaniante_asignado', on_delete=models.PROTECT, blank=True, null=True)
+    
+    acompaniante_entrevista = models.CharField(max_length=150, choices=CHOICE_ACOMPANANTES, null=True, blank=True,verbose_name='Acompañante Asignado')
+    acompaniante_asignado = models.CharField(max_length=150, choices=CHOICE_EQUIPO_TECNICO, null=True, blank=True,verbose_name='Acompañante Tecnico')
+    
     observaciones_gral = models.CharField(max_length=350, null=True, blank=True, verbose_name='Aquí puede detallar información adicional de la familia, o temas que es importante resaltar acerca de la misma.')
 
     vinculo1 = models.CharField(max_length=150, null=True, blank=True)
@@ -262,14 +264,18 @@ class MILD_Admision(models.Model):
 
 class OpcionesResponsables(models.Model):
     nombre = models.CharField(max_length=250, unique=True)
-
     def __str__(self):
         return self.nombre
 
+class OpcionesCriterios(models.Model):
+    nombre = models.CharField(max_length=250, unique=True)
+    def __str__(self):
+        return self.nombre
 
 class MILD_Intervenciones(models.Model):
     fk_admision = models.ForeignKey(MILD_Admision, on_delete=models.PROTECT, null=True, blank=True)
-    criterio_modificable = models.ForeignKey(Criterios_IVI, on_delete=models.PROTECT)
+    criterio_modificable = models.ManyToManyField(OpcionesCriterios)
+    #criterio_modificable = models.ForeignKey(Criterios_IVI, on_delete=models.PROTECT)
     accion = models.CharField(max_length=250, choices=CHOICE_ACCION_DESARROLLADA, null=False, blank=False)
     responsable = models.ManyToManyField(OpcionesResponsables)
     impacto = models.CharField(max_length=250, choices=[('Trabajado','Trabajado'),('Revertido','Revertido')], null=False, blank=False)

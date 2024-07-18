@@ -164,6 +164,7 @@ class MILD_IntervencionesForm (forms.ModelForm):
         widgets = {
             'detalle': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
             'responsable' : forms.SelectMultiple(attrs={'class': 'select2 w-100', 'multiple': True}),
+            'criterio_modificable' : forms.SelectMultiple(attrs={'class': 'select2 w-100', 'multiple': True}),
         }
         labels = {
             'criterio_modificable': 'Criterio modificable trabajado',
@@ -176,7 +177,7 @@ class MILD_IntervencionesForm (forms.ModelForm):
         super().__init__(*args, **kwargs)
         
         # Filtra las opciones del campo criterio_modificable aquí
-        self.fields['criterio_modificable'].queryset = Criterios_IVI.objects.filter(modificable = "SI")
+        #self.fields['criterio_modificable'].queryset = Criterios_IVI.objects.filter(modificable = "SI")
 
 class MILD_OpcionesResponsablesForm (forms.ModelForm):
     class Meta:
