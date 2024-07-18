@@ -261,6 +261,9 @@ class MILD_Admision(models.Model):
     modificado = models.DateField(auto_now=True, null=True, blank=True)
     creado_por = models.ForeignKey(Usuarios, related_name='MILD_Admision_creado_por', on_delete=models.PROTECT, blank=True, null=True)
     modificado_por = models.ForeignKey(Usuarios, related_name='MILD_Admision_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
+    inactiva_observaciones = models.CharField(max_length=300, null=True, blank=True)
+    inactiva_tipo_baja = models.CharField(max_length=100, null=True, blank=True)
+    inactiva_motivo_baja = models.CharField(max_length=100, null=True, blank=True) 
 
 class OpcionesResponsables(models.Model):
     nombre = models.CharField(max_length=250, unique=True)

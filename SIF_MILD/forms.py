@@ -177,7 +177,7 @@ class MILD_IntervencionesForm (forms.ModelForm):
         super().__init__(*args, **kwargs)
         
         # Filtra las opciones del campo criterio_modificable aquí
-        #self.fields['criterio_modificable'].queryset = Criterios_IVI.objects.filter(modificable = "SI")
+        self.fields['criterio_modificable'].queryset = Criterios_IVI.objects.filter(modificable__icontains = "De base")
 
 class MILD_OpcionesResponsablesForm (forms.ModelForm):
     class Meta:

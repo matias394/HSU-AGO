@@ -13,7 +13,7 @@ import uuid
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.conf import settings
-
+from SIF_CDIF.models import Criterios_IVI
 
 # # Create your views here.
 #derivaciones = LegajosDerivaciones.objects.filter(m2m_programas__nombr__iexact="MILD")
@@ -1168,6 +1168,8 @@ class MILDIndiceIviEgresoCreateView (PermisosMixin, CreateView):
         foto.save()
 
         admi.estado = "Inactiva"
+        admi.inactiva_motivo_baja = request.POST.get('detalle_de_baja', '')
+        admi.inactiva_tipo_baja = request.POST.get('tipo_de_baja', '')
         admi.modificado_por_id = self.request.user.id
         admi.save()
 
