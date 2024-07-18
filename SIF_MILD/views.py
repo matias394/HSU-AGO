@@ -1168,6 +1168,8 @@ class MILDIndiceIviEgresoCreateView (PermisosMixin, CreateView):
         foto.save()
 
         admi.estado = "Inactiva"
+        admi.inactiva_motivo_baja = request.POST.get('detalle_de_baja', '')
+        admi.inactiva_tipo_baja = request.POST.get('tipo_de_baja', '')
         admi.modificado_por_id = self.request.user.id
         admi.save()
 
