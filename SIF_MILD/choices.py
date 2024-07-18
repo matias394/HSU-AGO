@@ -17,7 +17,26 @@ CHOICE_JURISDICCION = [
     ('Provincial', 'Provincial'),
     ('Municipal', 'Municipal'),
 ]
+CHOICE_ACOMPANANTES = [
+    (None, ''),
+    ('Clara Felgueras', 'Clara Felgueras'),
+    ('Francisco Durand', 'Francisco Durand'),
+    ('Victoria Bareiro', 'Victoria Bareiro'),
+    ('Trinidad Gristelli', 'Trinidad Gristelli'),
+    ('Verónica Zalazar', 'Verónica Zalazar'),
+    ('Liz Díaz', 'Liz Díaz'),
+    ('Doris Díaz', 'Doris Díaz'),
+    ('Karen Romero', 'Karen Romero'),
+    ('Erika Álvarez', 'Erika Álvarez'),
+]
 
+CHOICE_EQUIPO_TECNICO = [
+    (None, ''),
+    ('Viviana Ojeda', 'Viviana Ojeda'),
+    ('Soledad Mercado', 'Soledad Mercado'),
+    ('Andrea Neselis', 'Andrea Neselis'),
+    ('Luz Durand', 'Luz Durand'),
+]
 CHOICE_CIRCUITOS = [
     (None, ''),
     ('0397A', '0397A'),
@@ -307,12 +326,50 @@ CHOICE_SEXO_NINIO = [
     ('Mujer', 'Mujer'),
 ]
 CHOICE_DONDE_ATIENDE = [
-    ('', ''),
-    ('Hospital Larcade','Hospital Larcade'),
-    ('Parto Domiciliario', 'Parto Domiciliario'),
-    ('Parto Extrapartidario', 'Parto Extrapartidario'),
-    ('Parto en institución privada', 'Parto en institución privada'),
+    (None, ''),
+    ('CAPS Cura Brochero', 'CAPS Cura Brochero'),
+    ('CAPS 20 de Julio', 'CAPS 20 de Julio'),
+    ('CAPS 29 de Septiembre', 'CAPS 29 de Septiembre'),
+    ('CAPS Antoniazzi', 'CAPS Antoniazzi'),
+    ('CAPS Barthalot', 'CAPS Barthalot'),
+    ('CAPS CIC', 'CAPS CIC'),
+    ('CAPS Camila Rolon', 'CAPS Camila Rolon'),
+    ('CAPS Carrillo', 'CAPS Carrillo'),
+    ('CAPS Castello', 'CAPS Castello'),
+    ('CAPS Favaloro', 'CAPS Favaloro'),
+    ('CAPS Leloir', 'CAPS Leloir'),
+    ('CAPS Matera', 'CAPS Matera'),
+    ('CAPS Padre Mora', 'CAPS Padre Mora'),
+    ('CAPS Podestá', 'CAPS Podestá'),
+    ('CAPS Presidente Peron', 'CAPS Presidente Peron'),
+    ('CAPS Sabin', 'CAPS Sabin'),
+    ('CAPS San Miguel Oeste', 'CAPS San Miguel Oeste'),
+    ('CAPS Suarez Paris', 'CAPS Suarez Paris'),
+    ('CAPS UFO', 'CAPS UFO'),
+    ('Hospital Larcade', 'Hospital Larcade'),
+    ('Hospital San Miguel Arcángel', 'Hospital San Miguel Arcángel'),
+    ('Hospital Santa María', 'Hospital Santa María'),
+    ('Clínica Privada', 'Clínica Privada'),
+    ('Otro', 'Otro'),
 ]
+
+CHOICE_RESPONSABLES = [
+        (None, ''),
+        ('Clara Felgueras', 'Clara Felgueras'),
+        ('Francisco Durand', 'Francisco Durand'),
+        ('Victoria Bareiro', 'Victoria Bareiro'),
+        ('Trinidad Gristelli', 'Trinidad Gristelli'),
+        ('Verónica Zalazar', 'Verónica Zalazar'),
+        ('Liz Díaz', 'Liz Díaz'),
+        ('Doris Díaz', 'Doris Díaz'),
+        ('Karen Romero', 'Karen Romero'),
+        ('Erika Álvarez', 'Erika Álvarez'),
+        ('Viviana Ojeda', 'Viviana Ojeda'),
+        ('Soledad Mercado', 'Soledad Mercado'),
+        ('Andrea Neselis', 'Andrea Neselis'),
+        ('Luz Durand', 'Luz Durand'),
+]
+
 CHOICE_TIPO_INGRESO_MILD = [
     (None, ''),
     ('Criterios sanitarios para el ingreso', 'Criterios sanitarios para el ingreso'),
