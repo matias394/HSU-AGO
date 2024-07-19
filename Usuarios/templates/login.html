@@ -62,6 +62,9 @@
                         <input type="password" class="form-control" placeholder="Contraseña" required name="password"
                             id="id_password" required="required">
                         <div class="input-group-append">
+                            <div id="verPass" class="input-group-text">
+                                <span class="fas fa-eye"></span>
+                            </div>
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
                             </div>
@@ -136,6 +139,16 @@
         //popovers
         $(function () {
             $('[data-toggle="popover"]').popover()
+            $('#verPass').click(function () {
+                var input = $('#id_password');
+                if (input.attr('type') == 'password') {
+                    input.attr('type', 'text');
+                    $('#verPass').html('<span class="fas fa-unlock"></span>');
+                } else {
+                    input.attr('type', 'password');
+                    $('#verPass').html('<span class="fas fa-lock"></span>');
+                }
+            });
         })
         $('.popover-dismiss').popover({
             trigger: 'focus'
