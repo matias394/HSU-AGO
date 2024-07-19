@@ -5,7 +5,17 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from .choices import *
 from django.urls import *
 
+class PDV_PreAdmision_EspaciosEduNoFormal(models.Model):
+    nombre = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.nombre
+
+class PDV_PreAdmision_PersonaConocimientoOficio(models.Model):
+    nombre = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nombre
 
 class PDV_PreAdmision (models.Model):
     fk_derivacion = models.ForeignKey(LegajosDerivaciones, on_delete=models.PROTECT)
@@ -22,6 +32,13 @@ class PDV_PreAdmision (models.Model):
     emb_adolescente_1 = models.BooleanField(verbose_name='Embarazo adolescente', null=True, blank=True)
     emb_riesgo_1 = models.BooleanField(verbose_name='Embarazo de riesgo', null=True, blank=True)
     cesareas_multip_1 = models.BooleanField(verbose_name='Cesáreas múltiples', null=True, blank=True)
+    patologia_fisica_1 = models.BooleanField(verbose_name='Padece alguna patología física', null=True, blank=True)
+    patologia_fisica_descripcion_1 = models.CharField(max_length=350, null=True, blank=True)
+    patologia_fisica_tratamiento_1 = models.BooleanField(verbose_name='Está en tratamiento', null=True, blank=True)
+    patologia_mental_1 = models.BooleanField(verbose_name='Padece alguna patología mental', null=True, blank=True)
+    patologia_mental_descripcion_1 = models.CharField(max_length=350, null=True, blank=True)
+    patologia_mental_tratamiento_1 = models.BooleanField(verbose_name='Está en tratamiento', null=True, blank=True)
+    observaciones_salud_general = models.CharField(max_length=350, null=True, blank=True)
     partos_multip_1 = models.BooleanField(verbose_name='Partos múltiples', null=True, blank=True)
     partos_premat_1 = models.BooleanField(verbose_name='Partos prematuros', null=True, blank=True)
     partos_menos18meses_1 = models.BooleanField(verbose_name='Partos con menos de 18 meses de intervalo', null=True, blank=True)
@@ -30,12 +47,18 @@ class PDV_PreAdmision (models.Model):
     emb_actual_1 =  models.CharField(max_length=150, choices=CHOICE_EMB_RIESGO, null=True, blank=True)
     educ_maximo_1 =  models.CharField(max_length=150, choices=CHOICE_EDUCACION, null=True, blank=True)
     educ_estado_1 =  models.CharField(max_length=150, choices=CHOICE_ESTADO, null=True, blank=True)
-    leer_1 = models.BooleanField(verbose_name='Sabe leer', null=True, blank=True)
-    escribir_1 = models.BooleanField(verbose_name='Sabe escribir', null=True, blank=True)
+    leer_1 = models.BooleanField(verbose_name='No sabe leer', null=True, blank=True)
+    escribir_1 = models.BooleanField(verbose_name='No sabe escribir', null=True, blank=True)
     retomar_estudios_1 = models.BooleanField(verbose_name='Quiere retomar estudios', null=True, blank=True)
     aprender_oficio_1 = models.BooleanField(verbose_name='Quiere aprender un oficio', null=True, blank=True)
-    planes_sociales_1 = models.ForeignKey(PlanesSociales, related_name='PDV_planes_sociales_1', on_delete=models.PROTECT, null=True, blank=True)
-    trabajo_actual_1 =  models.CharField(max_length=50, choices=CHOICE_SINO, null=True, blank=True)
+    participacion_espacio_edu_no_formal = models.BooleanField(verbose_name='Ha participado en espacios de educación no formal', null=True, blank=True)
+    espacios_edu_no_formal_1 =  models.ManyToManyField(PDV_PreAdmision_EspaciosEduNoFormal, null=True, blank=True)
+    persona_oficio_conocimientos_1 =  models.ManyToManyField(PDV_PreAdmision_PersonaConocimientoOficio, null=True, blank=True)
+    observaciones_educacion_general = models.CharField(max_length=350, null=True, blank=True)
+    planes_sociales_1 = models.ManyToManyField(PlanesSociales, related_name='PDV_planes_sociales_1', null=True, blank=True)
+    trabajo_actual_1 =  models.CharField(max_length=50, choices=[('', ''), ('Si', 'Si'), ('No', 'No'), ('Buscando trabajo actualmente', 'Buscando trabajo actualmente')], null=True, blank=True)
+    posee_microemprendimiento =  models.CharField(max_length=50, choices=CHOICE_SINO, null=True, blank=True)
+    microemprendimiento_rubro =  models.ManyToManyField(PDV_PreAdmision_PersonaConocimientoOficio, related_name='microemprendimiento_rubro', null=True, blank=True)
     ocupacion_1 = models.CharField(verbose_name='Ocupación', max_length=100, null=True, blank=True)
     modo_contrat_1 =  models.CharField(max_length=150, choices=CHOICE_CONTRATACION, null=True, blank=True)
     educ_maximo_2 =  models.CharField(max_length=150, choices=CHOICE_EDUCACION, null=True, blank=True)
@@ -45,7 +68,7 @@ class PDV_PreAdmision (models.Model):
     retomar_estudios_2 = models.BooleanField(verbose_name='Quiere retomar estudios', null=True, blank=True)
     aprender_oficio_2 = models.BooleanField(verbose_name='Quiere aprender un oficio', null=True, blank=True)
     programa_Pilares_2 = models.BooleanField(verbose_name='Quiere participar del Programa Pilares', null=True, blank=True)
-    planes_sociales_2 = models.ForeignKey(PlanesSociales, related_name='PDV_planes_sociales_2', on_delete=models.PROTECT, null=True, blank=True)
+    planes_sociales_2 = models.ManyToManyField(PlanesSociales, related_name='PDV_planes_sociales_2', null=True, blank=True)
     trabajo_actual_2 =  models.CharField(max_length=50, choices=CHOICE_SINO, null=True, blank=True)
     ocupacion_2 = models.CharField(verbose_name='Ocupación', max_length=100, null=True, blank=True)
     modo_contrat_2 =  models.CharField(max_length=150, choices=CHOICE_CONTRATACION, null=True, blank=True)
@@ -74,6 +97,7 @@ class PDV_PreAdmision (models.Model):
     aprender_oficio_5 = models.BooleanField(verbose_name='Quiere aprender un oficio', null=True, blank=True)
     programa_Pilares_5 = models.BooleanField(verbose_name='Quiere participar del Programa Pilares', null=True, blank=True)
     centro_postula = models.ForeignKey(Vacantes, on_delete=models.PROTECT, null=True, blank=True)
+    programa_postula = models.ForeignKey(Programas, on_delete=models.PROTECT, null=True, blank=True)
     sala_postula = models.ForeignKey(CupoVacante, on_delete=models.PROTECT, null=False, blank=False)
     taller_postula =  models.ForeignKey(Organismos, on_delete=models.PROTECT, null=True, blank=True)
     sala_short = models.CharField(max_length=150, null=True, blank=True)
