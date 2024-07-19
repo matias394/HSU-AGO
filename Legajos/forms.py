@@ -253,7 +253,7 @@ class DimensionFamiliaForm(forms.ModelForm):
                     'rows': 3,
                 }
             ),
-            'otro_responsable': forms.CheckboxInput(),
+            'otro_responsable': forms.Select(),
             #  'otro_responsable': forms.CheckboxInput(attrs={'class':'icheck-primary '}),
             'hay_embarazadas': forms.CheckboxInput(),
             'hay_prbl_smental': forms.CheckboxInput(),
