@@ -286,6 +286,12 @@ CHOICE_ESTADO_CIVIL = [
     ('Otro', 'Otro'),
 ]
 
+CHOICE_RESPONSABLE = [
+    ('Si', 'Si'),
+    ('No', 'No'),
+    ('No corresponde', 'No corresponde'),
+]
+
 CHOICE_SEXO = [
     (None, ''),
     ('Femenino', 'Femenino'),
