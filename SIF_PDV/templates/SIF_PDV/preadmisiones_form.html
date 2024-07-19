@@ -35,7 +35,7 @@
                         <button type="button" class="step-trigger" role="tab" aria-controls="cuidador-principal"
                             id="cuidador-principal-trigger">
                             <span class="bs-stepper-circle">1</span>
-                            <span class="bs-stepper-label">Madre o cuidador principal</span>
+                            <span class="bs-stepper-label">Datos de de la beneficiaria</span>
                         </button>
                     </div>
                     <div class="line"></div>
@@ -82,12 +82,13 @@
                                 <div class="card ">
                                     <div class="card-header">
                                         <div class="card-title font-weight-bold">
-                                            Datos de la Madre o cuidador principal
+                                            Datos de de la beneficiaria
                                         </div>
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-sm-12 ">
+
+                                            {% comment %} <div class="col-sm-12 ">
                                                 <div class="row my-3 pl-2">
                                                     1. DATOS PERSONALES
                                                 </div>
@@ -133,12 +134,16 @@
                                                     </div>
 
                                                 </div>
-                                            </div>
+                                            </div> {% endcomment %}
                                             <div class="col-sm-12">
                                                 <div class="row my-3 pl-2">
-                                                    2. FAMILIA
+                                                    1. FAMILIA
                                                 </div>
                                                 <div class="row pl-3">
+                                                    <div class="col-sm-3 form-group">
+                                                        <label>Cantidad total de hijos</label>
+                                                        {{form.hijos_1| as_crispy_field}}
+                                                    </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Cantidad de menores a cargo </label>
                                                         {{form.menores_a_cargo_1| as_crispy_field}}
@@ -148,16 +153,12 @@
                                             </div>
                                             <div class="col-sm-12">
                                                 <div class="row my-3 pl-2">
-                                                    3. SALUD
+                                                    2. SALUD
                                                 </div>
                                                 <div class="row pl-3">
-                                                    <div class="col-sm-3 form-group">
+                                                    {% comment %} <div class="col-sm-3 form-group">
                                                         <label>¿Realiza controles ginecológicos?</label>
                                                         {{form.control_gine_1| as_crispy_field}}
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Cantidad total de hijos</label>
-                                                        {{form.hijos_1| as_crispy_field}}
                                                     </div>
                                                     <div class="col-sm-3 form-group">
                                                         <label>Cantidad total de embarazos</label>
@@ -215,7 +216,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div> {% endcomment %}
 
                                                     <div class="col-sm-3 form-group">
                                                         <label>¿Está embarazada actualmente?</label>
@@ -229,11 +230,34 @@
                                                         <label>Embarazo actual</label>
                                                         {{form.emb_actual_1| as_crispy_field}}
                                                     </div>
+
+                                                    <div class="col-sm-6 form-group">
+                                                        <div class="row-sm-3 form-group">
+                                                            {{form.patologia_fisica_1| as_crispy_field}}
+                                                            {{form.patologia_fisica_tratamiento_1| as_crispy_field}}
+                                                        </div>
+                                                        {{form.patologia_fisica_descripcion_1| as_crispy_field}}
+                                                    </div>
+
+                                                    <div class="col-sm-6 form-group">
+                                                        <div class="row-sm-3 form-group">
+                                                            {{form.patologia_mental_1| as_crispy_field}}
+                                                            {{form.patologia_mental_tratamiento_1| as_crispy_field}}
+                                                        </div>
+                                                        {{form.patologia_mental_descripcion_1| as_crispy_field}}
+                                                    </div>
+
+                                                    <div class="col-sm-12 form-group">
+                                                        <label>Observaciones (cirugías, otros tratamientos, medicación, etc)</label>
+                                                        {{form.observaciones_salud_general| as_crispy_field}}
+                                                    </div>
+
+
                                                 </div>
                                             </div>
                                             <div class="col-sm-12">
                                                 <div class="row my-3 pl-2">
-                                                    4. EDUCACIÓN
+                                                    3. EDUCACIÓN
                                                 </div>
                                                 <div class="row pl-3">
                                                     <div class="col-sm-6 form-group">
@@ -261,16 +285,35 @@
                                                             {{form.retomar_estudios_1| as_crispy_field}}
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-4">
+                                                    <div class="col-sm-12">
                                                         <div class="form-group">
                                                             {{form.aprender_oficio_1| as_crispy_field}}
                                                         </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            {{form.participacion_espacio_edu_no_formal| as_crispy_field}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            {{form.espacios_edu_no_formal_1| as_crispy_field}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            {{form.persona_oficio_conocimientos_1| as_crispy_field}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 form-group">
+                                                        <label>Observaciones </label>
+                                                        {{form.observaciones_educacion_general| as_crispy_field}}
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 mt-2">
                                                 <div class="row my-3 pl-2">
-                                                    5. ECONOMÍA
+                                                    4. ECONOMÍA
                                                 </div>
                                                 <div class="row pl-3">
                                                     <div class="col-12 form-group">
@@ -281,7 +324,7 @@
                                             </div>
                                             <div class="col-sm-12 mt-2">
                                                 <div class="row my-3 pl-2">
-                                                    6. TRABAJO
+                                                    5. TRABAJO
                                                 </div>
                                                 <div class="row pl-3">
                                                     <div class="col-sm-4 form-group">
@@ -295,6 +338,16 @@
                                                     <div class="col-sm-4 form-group">
                                                         <label>Modo de contratación</label>
                                                         {{form.modo_contrat_1| as_crispy_field}}
+                                                    </div>
+                                                </div>
+                                                <div class="row pl-3">
+                                                    <div class="col-sm-4 form-group">
+                                                        {% comment %} <label>¿Tiene trabajo actualmente?</label> {% endcomment %}
+                                                        {{form.posee_microemprendimiento| as_crispy_field}}
+                                                    </div>
+                                                    <div class="col-sm-4 form-group">
+                                                        {% comment %} <label>¿Tiene trabajo actualmente?</label> {% endcomment %}
+                                                        {{form.microemprendimiento_rubro| as_crispy_field}}
                                                     </div>
                                                 </div>
                                             </div>
@@ -765,7 +818,7 @@
                         <div id="info-centro" class="content" role="tabpanel" aria-labelledby="info-centro-trigger">
                             <div class="form-row">
                                 <div class="col-sm-3 form-group">
-                                    <label for="id_centro_postula">Taller al que postula *</label>
+                                    <label for="id_centro_postula">Barrio al que postula *</label>
                                     <select name="centro_postula" class="form-control custom-select {% if messages %}is-invalid{% endif %}" id="id_centro_postula" required>
                                         <option value="" selected=""></option>
                                         {%if request.resolver_match.url_name == "PDV_preadmisiones_editar" %}
@@ -777,7 +830,14 @@
                                       </select>
                                     {% comment %} <p id="error_1_id_centro_postula" class="invalid-feedback"><strong>Este campo es obligatorio.</strong></p> {% endcomment %}
                                 </div>
+
                                 <div class="col-sm-3 form-group">
+                                    <label for="id_programa_postula">Programa al que postula *</label>
+                                    {{form.programa_postula| as_crispy_field}}
+                                    {% comment %} <p id="error_1_id_centro_postula" class="invalid-feedback"><strong>Este campo es obligatorio.</strong></p> {% endcomment %}
+                                </div>
+                               
+                                 {% comment %} <div class="col-sm-3 form-group">
                                     <label for="id_sala_postula">Turno que postula *</label>
                                     <select name="sala_postula" class="form-control custom-select {% if messages %}is-invalid{% endif %}" id="id_sala_postula" required>
                                         <option value="" selected=""></option>
@@ -788,8 +848,8 @@
                                         <option value="{{c.id}}" data-group="{{c.fk_vacante_id}}">{{c.nombre}}</option>
                                         {% endfor %}
                                       </select>
-                                    {% comment %} <p id="error_1_id_centro_postula" class="invalid-feedback"><strong>Este campo es obligatorio.</strong></p> {% endcomment %}
-                                </div>
+                                </div> {% endcomment %}
+                                
                             </div>
                             <a class="btn btn-secondary float-left mb-3 mt-5 " onclick="stepper.previous()">Volver</a>
                             <button type="submit" class="btn btn-primary float-right mb-3 mt-5">Confirmar</button>

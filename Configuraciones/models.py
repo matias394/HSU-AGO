@@ -421,7 +421,7 @@ class CupoVacante(models.Model):
     nombre = models.CharField(max_length=100)
     cupo = models.IntegerField(null=True, blank=True)
     observaciones = models.CharField(max_length=300, null=True, blank=True)
-    fk_vacante = models.ForeignKey(Vacantes,on_delete=models.CASCADE, related_name='cupovacantes')
+    fk_vacante = models.ForeignKey(Vacantes,default=13,on_delete=models.CASCADE, related_name='cupovacantes')
     fecha_creacion = models.DateField(auto_now=True)
 
     def __str__(self):

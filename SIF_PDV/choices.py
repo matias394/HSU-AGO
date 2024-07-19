@@ -122,6 +122,33 @@ CHOICE_EDUCACION=[
     ('Terciario', 'Terciario'),
     ('Universitario', 'Universitario'),
 ]
+
+CHOICE_ESTADO_EDUCACION_NO_FORMAL=[
+    (None, ''),
+    ('Talleres', 'Talleres'),
+    ('Capacitaciones', 'Capacitaciones'),
+    ('Cursos', 'Cursos'),
+    ('Espacios grupales', 'Espacios grupales'),
+]
+
+CHOICE_PERSONA_OFICIO_CONOCIMIENTOS=[
+    (None, ''),
+    ('Textil', 'Textil'),
+    ('Tejido', 'Tejido'),
+    ('Bordado', 'Bordado'),
+    ('Carpinteria', 'Carpinteria'),
+    ('Pintura', 'Pintura'),
+    ('Jardineria', 'Jardineria'),
+    ('Reciclaje', 'Reciclaje'),
+    ('Cosmetologia', 'Cosmetologia'),
+    ('Peluqueria', 'Peluqueria'),
+    ('Manicura', 'Manicura'),
+    ('Albañileria', 'Albañileria'),
+    ('Reposteria', 'Reposteria'),
+    ('Bijouterie', 'Bijouterie'),
+    ('Otros', 'Otros'),
+]
+
 CHOICE_ESTADO=[
     (None, ''),
     ('Completo', 'Completo'),
