@@ -87,6 +87,7 @@ class CDIFDerivacionesDetailView(PermisosMixin, DetailView):
         legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=settings.PROG_CDIF).first()
         ivi = CDIF_IndiceIVI.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
         resultado = ivi.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ivi__puntaje')).order_by('-creado')
+        context["archivos"] = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=pk)
         context["pk"] = pk
         context["ivi"] = ivi
         context["resultado"] = resultado
