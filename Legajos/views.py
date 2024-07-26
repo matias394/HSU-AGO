@@ -811,7 +811,13 @@ class LegajosDerivacionesDetailView(PermisosMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
+        preadmi_MILD = MILD_PreAdmision.objects.filter(fk_derivacion_id=pk).first()
+
         context = super().get_context_data(**kwargs)
+        
+        if preadmi_MILD:
+            context["acompaniante_asignado"] = preadmi_MILD.acompaniante_asignado
+            context["acompaniante_entrevista"] = preadmi_MILD.acompaniante_entrevista
         context["archivos"] = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=pk)
         return context
 
