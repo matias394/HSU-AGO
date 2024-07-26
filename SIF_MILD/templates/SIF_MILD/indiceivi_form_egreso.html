@@ -185,14 +185,11 @@
                             <label for="detalle_de_baja">Motivo de Baja:</label>
                             <select class="form-control" id="detalle_de_baja">
                                 <option value="">Seleccione una opción</option>
-                                <option value="Egreso">Egreso</option>
+                                <option value="Familia lista para el alta (en un futuro se aplica IVI egreso en esta instancia)">Familia lista para el alta (en un futuro se aplica IVI egreso en esta instancia)</option>
+                                <option value="Falta de adherencia al programa">Falta de adherencia al programa</option>
                                 <option value="Mudanza">Mudanza</option>
-                                <option value="Falta de organización familiar">Falta de organización familiar</option>
-                                <option value="Desiste de la vacante">Desiste de la vacante</option>
-                                <option value="No se adaptó">No se adaptó</option>
-                                <option value="Problemas de salud">Problemas de salud</option>
-                                <option value="Asiste a jardín">Asiste a jardín</option>
-                                <option value="Pase a otro CDIF">Pase a otro CDIF</option>
+                                <option value="No responde, no se puede acompañar">No responde, no se puede acompañar</option>
+                                <option value="Medida de abrigo del Servicio Local">Medida de abrigo del Servicio Local</option>
                                 <option value="Otro">Otro</option>
                             </select>
                         </div>
@@ -219,8 +216,8 @@
         const tipoDeBaja = document.getElementById("tipo_de_baja").value;
         const detalleDeBaja = document.getElementById("detalle_de_baja");
 
-        const altaOptions = ["Egreso"];
-        const bajaOptions = ["Mudanza", "Falta de organización familiar", "Desiste de la vacante", "No se adaptó", "Problemas de salud", "Asiste a jardín", "Pase a otro CDIF", "Otro"];
+        const altaOptions = ["Familia lista para el alta (en un futuro se aplica IVI egreso en esta instancia)"];
+        const bajaOptions = ["Falta de adherencia al programa", "Mudanza", "No responde, no se puede acompañar", "Medida de abrigo del Servicio Local", "Otro"];
 
         detalleDeBaja.innerHTML = '<option value="">Seleccione una opción</option>';  // Limpiar opciones
 

@@ -170,8 +170,8 @@ class MILD_PreAdmision (models.Model):
     vacunas = models.BooleanField(verbose_name='¿Recibió todas las vacunas correspondientes a su edad?', null=True, blank=True)
     
     
-    acompaniante_entrevista = models.CharField(max_length=150, choices=CHOICE_ACOMPANANTES, null=True, blank=True,verbose_name='Acompañante Asignado')
-    acompaniante_asignado = models.CharField(max_length=150, choices=CHOICE_EQUIPO_TECNICO, null=True, blank=True,verbose_name='Acompañante Tecnico')
+    acompaniante_entrevista = models.CharField(max_length=150, choices=CHOICE_ACOMPANANTES, null=True, blank=True,verbose_name='Acompañante familiar')
+    acompaniante_asignado = models.CharField(max_length=150, choices=CHOICE_EQUIPO_TECNICO, null=True, blank=True,verbose_name='Equipo técnico')
     
     observaciones_gral = models.CharField(max_length=350, null=True, blank=True, verbose_name='Aquí puede detallar información adicional de la familia, o temas que es importante resaltar acerca de la misma.')
 
@@ -277,8 +277,7 @@ class OpcionesCriterios(models.Model):
 
 class MILD_Intervenciones(models.Model):
     fk_admision = models.ForeignKey(MILD_Admision, on_delete=models.PROTECT, null=True, blank=True)
-    criterio_modificable = models.ManyToManyField(OpcionesCriterios)
-    #criterio_modificable = models.ForeignKey(Criterios_IVI, on_delete=models.PROTECT)
+    criterio_modificable = models.ManyToManyField(Criterios_IVI)
     accion = models.CharField(max_length=250, choices=CHOICE_ACCION_DESARROLLADA, null=False, blank=False)
     responsable = models.ManyToManyField(OpcionesResponsables)
     impacto = models.CharField(max_length=250, choices=[('Trabajado','Trabajado'),('Revertido','Revertido')], null=False, blank=False)
