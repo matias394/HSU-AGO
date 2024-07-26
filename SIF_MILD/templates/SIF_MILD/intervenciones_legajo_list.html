@@ -147,7 +147,7 @@ Intervenciones
               <tr>
                 <td> {{i.creado|date:'d/m/Y' }} </td>
                 <td> {{i.creado_por}} </td>
-                <td> {{i.criterio_modificable}}</td>
+                <td> <ul class="ml-2 pl-0">{% for r in i.criterio_modificable.all %} <li>{{r}}</li> {% endfor%}</ul></td>
                 <td> {{i.impacto}}</td>
                 <td> {{i.accion}}</td>
                 <td class="text-right">

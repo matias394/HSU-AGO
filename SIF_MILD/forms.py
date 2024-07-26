@@ -167,7 +167,7 @@ class MILD_IntervencionesForm (forms.ModelForm):
             'criterio_modificable' : forms.SelectMultiple(attrs={'class': 'select2 w-100', 'multiple': True}),
         }
         labels = {
-            'criterio_modificable': 'Criterio modificable trabajado',
+            'criterio_modificable': 'Criterio potencial trabajado',
             'impacto': 'Impacto en el criterio',
             'accion': 'Acción desarrollada',
             'detalle':'Detalles',
