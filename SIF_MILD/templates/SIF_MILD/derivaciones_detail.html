@@ -82,6 +82,13 @@ Derivaciones
             {% endif %}
             <dd class="col-sm-3 mb-2">Programa solicitante</dd>
             <dt class="col-sm-9 mb-2"> {{object.fk_programa_solicitante}}</dt>
+            {% if acompaniante_asignado %}
+            <dd class="col-sm-3 mb-2">Acompañante asignado</dd>
+            <dt class="col-sm-9 mb-2">{{acompaniante_asignado|default_if_none:"-"}}</dt>
+            {% if acompaniante_entrevista %}
+            <dd class="col-sm-3 mb-2">Acompañante de entrevista</dd>
+            <dt class="col-sm-9 mb-2">{{acompaniante_entrevista|default_if_none:"-"}}</dt>
+            {% endif %}
             <dd class="col-sm-3 mb-2">Usuario solicitante</dd>
             <dt class="col-sm-9 mb-2"> {{object.fk_usuario.last_name}} {{object.fk_usuario.first_name}}</dt>
           </dl>

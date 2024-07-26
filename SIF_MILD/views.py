@@ -87,6 +87,11 @@ class MILDDerivacionesDetailView(PermisosMixin, DetailView):
         legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=settings.PROG_MILD).first()
         ivi = MILD_IndiceIVI.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
         resultado = ivi.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ivi__puntaje')).order_by('-creado')
+        preadmi = MILD_PreAdmision.objects.filter(fk_derivacion_id=pk).first()
+
+        if preadmi:
+            context["acompaniante_asignado"] = preadmi.acompaniante_asignado
+            context["acompaniante_entrevista"] = preadmi.acompaniante_entrevista
         context["archivos"] = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=pk)
         context["pk"] = pk
         context["ivi"] = ivi
@@ -770,15 +775,23 @@ class MILDPreAdmisiones3DetailView(PermisosMixin, DetailView):
         context["familia"] = familia
         context["foto_ivi"] = foto_ivi
         context["foto_ingreso"] = foto_ingreso
-        context["puntaje"] = foto_ivi.puntaje
-        context["puntaje_ingreso"] = foto_ingreso.puntaje
+        if foto_ivi:
+            context["puntaje"] = foto_ivi.puntaje
+            context["puntaje_ingreso"] = foto_ingreso.puntaje
+            context['maximo'] = foto_ivi.puntaje_max
+        else:
+            context["puntaje"] = 0
+            context["puntaje_ingreso"] = 0
+            context['maximo'] = 0
+        if foto_ingreso:
+            context['maximo_ingreso'] = foto_ingreso.puntaje_max
+        else:
+            context['maximo_ingreso'] = 0
         context["cantidad"] = criterio.count()
         context["cantidad_ingreso"] = criterio_ingreso.count()
         context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__iexact='SI').count()
         context["mod_puntaje"] = criterio.filter(fk_criterios_ivi__modificable__iexact='SI').aggregate(total=Sum('fk_criterios_ivi__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
-        context['maximo'] = foto_ivi.puntaje_max
-        context['maximo_ingreso'] = foto_ingreso.puntaje_max
         context["resultado"] = resultado
         context["resultado_ingreso"] = resultado_ingreso
         context["legajo"] = legajo
@@ -882,6 +895,8 @@ class MILDAsignadoAdmisionDetail(PermisosMixin, DetailView):
         foto_ivi_fin = MILD_Foto_IVI.objects.filter(fk_preadmi_id=admi.fk_preadmi_id, tipo="Ingreso").last()
         foto_ivi_inicio = MILD_Foto_IVI.objects.filter(fk_preadmi_id=admi.fk_preadmi_id, tipo="Ingreso").first()
 
+        context["acompaniantes_tecnico"] = CHOICE_EQUIPO_TECNICO
+        context["acompaniantes_asignado"] = CHOICE_ACOMPANANTES
         context["foto_ivi_fin"] = foto_ivi_fin
         context["foto_ivi_inicio"] = foto_ivi_inicio
         context["observaciones"] = observaciones
@@ -897,6 +912,18 @@ class MILDAsignadoAdmisionDetail(PermisosMixin, DetailView):
         context["intervenciones_last"] = intervenciones_last
         
         return context
+    
+    def post(self, request, *args, **kwargs):
+        if 'acompaniante_asignado' in request.POST:
+            admi = MILD_Admision.objects.filter(pk=self.kwargs["pk"]).first()
+            preadmi = MILD_PreAdmision.objects.filter(pk=admi.fk_preadmi_id).first()
+            if preadmi:
+                nuevo_acompaniante = request.POST.get('acompaniante_asignado')
+                print(nuevo_acompaniante)
+                preadmi.acompaniante_asignado = nuevo_acompaniante
+                preadmi.save()
+
+        return HttpResponseRedirect(self.request.path_info)
 
 class MILDInactivaAdmisionDetail(PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
