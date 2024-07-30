@@ -96,7 +96,7 @@ Intervenciones
       <div class="row h-100">
         <div class="col-12">
           <div class="info-box mb-2">
-            <span class="info-box-icon bg-warning">{{puntaje.total}}</span>
+            <span class="info-box-icon bg-warning">{{puntaje.total|default:'-'}}</span>
             <div class="info-box-content">
               <span class="info-box-text">IVI de ingreso</span>
               <span class="info-box-number h6">{{observaciones.creado|date:'d/m/Y'}}</span>
@@ -114,7 +114,7 @@ Intervenciones
         </div>
         <div class="col-12">
           <div class="info-box">
-            <span class="info-box-icon bg-success">{{puntaje2.total}}</span>
+            <span class="info-box-icon bg-success">{{puntaje2.total|default:'-'}}</span>
             <div class="info-box-content">
               <span class="info-box-text">IVI actual</span>
               <span class="info-box-number h6">{{observaciones2.creado|date:'d/m/Y'}}</span>
