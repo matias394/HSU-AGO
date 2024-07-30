@@ -1034,10 +1034,13 @@ class MILDIntervencionesLegajosListView(PermisosMixin, DetailView):
         intervenciones = MILD_Intervenciones.objects.filter(fk_admision_id=admi.id).all()
         intervenciones_last = MILD_Intervenciones.objects.filter(fk_admision_id=admi.id).last()
         preadmi = MILD_PreAdmision.objects.filter(pk=admi.fk_preadmi_id).first()
-        criterio = MILD_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
-        observaciones = MILD_Foto_IVI.objects.filter(clave=criterio.first().clave, tipo="Ingreso").first()
+        if criterio:
+            observaciones = MILD_Foto_IVI.objects.filter(clave=criterio.first().clave, tipo="Ingreso").first()
+            context["observaciones"] = observaciones
         criterio2 = MILD_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
-        observaciones2 = MILD_Foto_IVI.objects.filter(clave=criterio2.last().clave, tipo="Ingreso").first()
+        if criterio2:
+            observaciones2 = MILD_Foto_IVI.objects.filter(clave=criterio2.last().clave, tipo="Ingreso").first()
+            context["observaciones2"] = observaciones2
 
         context["object"] = admi
         context["intervenciones"] = intervenciones

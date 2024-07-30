@@ -32,6 +32,7 @@ from .forms import *
 from .choices import *
 from django.conf import settings
 from .models import IntercepcionSaludPersona
+from SIF_MILD.models import MILD_PreAdmision
 import json
 
 # Configurar el locale para usar el idioma español
