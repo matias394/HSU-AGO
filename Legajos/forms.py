@@ -192,6 +192,7 @@ class LegajosDerivacionesForm(forms.ModelForm):
             'm2m_alertas': 'Alertas detectadas',
             'fk_programa': 'Derivar a',
             'fk_programa_solicitante': 'Derivar de',
+            'detalles': 'Motivo de la derivación o comentarios',
         }
 
     def clean(self):

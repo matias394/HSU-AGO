@@ -142,7 +142,7 @@ class CDIF_IntervencionesForm (forms.ModelForm):
             'criterio_modificable': 'Criterio trabajado',
             'impacto': 'Impacto en el criterio',
             'accion': 'Acción desarrollada',
-            'detalle':'Detalles',
+            'detalle':'Observaciones',
         }
         
     def __init__(self, *args, **kwargs):

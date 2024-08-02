@@ -101,7 +101,7 @@ class LegajosListView(TemplateView):
         mostrar_btn_resetear = False
         query = self.request.GET.get("busqueda")
         if query:
-            object_list = Legajos.objects.filter(Q(apellido__iexact=query) | Q(documento__iexact=query)).distinct()
+            object_list = Legajos.objects.filter(Q(apellido__iexact=query) | Q(documento__iexact=query) | Q(nombre__iexact=query) | Q(calle__iexact=query)).distinct()
             if object_list and object_list.count() == 1:
                 id = None
                 for o in object_list:
