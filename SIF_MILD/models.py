@@ -286,7 +286,7 @@ class MILD_Intervenciones(models.Model):
     modificado = models.DateField(auto_now=True, null=True, blank=True)
     creado_por = models.ForeignKey(Usuarios, related_name='MILD_Intervenciones_creado_por', on_delete=models.PROTECT, blank=True, null=True)
     modificado_por = models.ForeignKey(Usuarios, related_name='MILD_Intervenciones_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
-
+    fecha = models.DateField(null=True, blank=True)
 
 class MILD_Historial(models.Model):
     fk_legajo = models.ForeignKey(Legajos, on_delete=models.PROTECT, null=True, blank=True)

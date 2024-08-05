@@ -80,4 +80,4 @@ class MA_Intervenciones(models.Model):
     modificado = models.DateField(auto_now=True, null=True, blank=True)
     creado_por = models.ForeignKey(Usuarios, related_name='MA_Intervenciones_creado_por', on_delete=models.PROTECT, blank=True, null=True)
     modificado_por = models.ForeignKey(Usuarios, related_name='MA_Intervenciones_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
-
+    fecha = models.DateField(null=True, blank=True)
