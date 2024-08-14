@@ -14,6 +14,7 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.conf import settings
 from Legajos.models import HistorialLegajoIndices,HistoricoIVI
+from Legajos.forms import NuevoLegajoFamiliarForm
 
 # # Create your views here.
 #derivaciones = LegajosDerivaciones.objects.filter(m2m_programas__nombr__iexact="CDIF")
@@ -152,6 +153,7 @@ class CDIFPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
     template_name = "SIF_CDIF/preadmisiones_form.html"
     model = CDIF_PreAdmision
     form_class = CDIF_PreadmisionesForm
+    form_nuevo_grupo_familiar_class = NuevoLegajoFamiliarForm()
     success_message = "Preadmisión creada correctamente"
 
     def get_context_data(self, **kwargs):
@@ -167,6 +169,7 @@ class CDIFPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
         context["familia"] = familia
         context["familia_inversa"] = familia_inversa
         context["centros"] = centros
+        context["nuevo_grupo_familiar_form"] = self.form_nuevo_grupo_familiar_class
         context["cupos"] = cupos
         return context
 
