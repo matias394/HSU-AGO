@@ -1308,7 +1308,7 @@ if (allFieldsSelected) {
     $.ajax({
         url: '{% url "grupofamiliar_ajax_crear" %}',
         data: {
-            'fk_legajo_1': '{{pk}}',
+            'fk_legajo_1': '{{legajo.fk_legajo_id}}',
             'fk_legajo_2': pk,
             'vinculo': addParentesco,
             'estado_relacion': addRelacion,
