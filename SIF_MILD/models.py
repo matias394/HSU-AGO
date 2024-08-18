@@ -170,8 +170,8 @@ class MILD_PreAdmision (models.Model):
     vacunas = models.BooleanField(verbose_name='¿Recibió todas las vacunas correspondientes a su edad?', null=True, blank=True)
     
     
-    acompaniante_entrevista = models.CharField(max_length=150, choices=CHOICE_ACOMPANANTES, null=True, blank=True,verbose_name='Acompañante familiar')
-    acompaniante_asignado = models.CharField(max_length=150, choices=CHOICE_EQUIPO_TECNICO, null=True, blank=True,verbose_name='Equipo técnico')
+    acompaniante_entrevista = models.CharField(max_length=150, choices=CHOICE_ACOMPANANTES, null=True, blank=True,verbose_name='Acompañante que realiza la entrevista')
+    acompaniante_asignado = models.CharField(max_length=150, choices=CHOICE_EQUIPO_TECNICO, null=True, blank=True,verbose_name='Acompañante asignado')
     
     observaciones_gral = models.CharField(max_length=350, null=True, blank=True, verbose_name='Aquí puede detallar información adicional de la familia, o temas que es importante resaltar acerca de la misma.')
 

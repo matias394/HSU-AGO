@@ -70,7 +70,7 @@
                         {% endif %}
                         <a href="{% url 'MILD_preadmisiones_ver' o.id %}" class="btn btn-secondary btn-sm">Ver</a>
                         {% endif %}
-                        {% if o.estado == 'En proceso' %}
+                        {% if o.estado == 'Pendiente' or o.estado == 'Lista de espera'%}
                         <a href="{% url 'MILD_preadmisiones_ver' o.id %}" class="btn btn-primary btn-sm ver">Ver</a>
                         <a href="{% url 'MILD_preadmisiones_editar' o.id %}" class="btn btn-secondary btn-sm editar">Editar</a>
                         {% endif %}

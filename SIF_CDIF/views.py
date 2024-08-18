@@ -88,7 +88,6 @@ class CDIFDerivacionesDetailView(PermisosMixin, DetailView):
         legajo = LegajosDerivaciones.objects.filter(pk=pk, fk_programa=settings.PROG_CDIF).first()
         ivi = CDIF_IndiceIVI.objects.filter(fk_legajo_id=legajo.fk_legajo_id)
         resultado = ivi.values('clave', 'creado', 'programa').annotate(total=Sum('fk_criterios_ivi__puntaje')).order_by('-creado')
-        context["archivos"] = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=pk)
         context["pk"] = pk
         context["ivi"] = ivi
         context["resultado"] = resultado
@@ -175,7 +174,7 @@ class CDIFPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
 
     def form_valid(self, form):
         pk = self.kwargs["pk"]
-        form.instance.estado = 'En proceso'
+        form.instance.estado = 'Pendiente'
         form.instance.vinculo1 = form.cleaned_data['vinculo1']
         form.instance.vinculo2 = form.cleaned_data['vinculo2']
         form.instance.vinculo3 = form.cleaned_data['vinculo3']
@@ -283,8 +282,8 @@ class CDIFPreAdmisionesDetailView(PermisosMixin, DetailView):
         if 'finalizar_preadm' in request.POST:
             # Realiza la actualización del campo aquí
             objeto = self.get_object()
-            objeto.estado = 'Finalizada'
-            objeto.ivi = "NO"
+            objeto.estado = 'Pendiente'
+            objeto.ivi = "Pendiente"
             objeto.admitido = "NO"
             objeto.save()
 
@@ -296,6 +295,44 @@ class CDIFPreAdmisionesDetailView(PermisosMixin, DetailView):
             base.fk_legajo_derivacion_id = legajo.fk_derivacion_id
             base.fk_preadmi_id = pk
             base.movimiento = "FINALIZADO PREADMISION"
+            base.creado_por_id = self.request.user.id
+            base.save()
+            # Redirige de nuevo a la vista de detalle actualizada
+            return HttpResponseRedirect(self.request.path_info)
+        
+        if 'listaespera' in request.POST:
+            # Realiza la actualización del campo aquí
+            objeto = self.get_object()
+            objeto.estado = 'Lista de espera'
+            objeto.save()
+
+            #---------HISTORIAL---------------------------------
+            pk=self.kwargs["pk"]
+            legajo = CDIF_PreAdmision.objects.filter(pk=pk).first()
+            base = CDIF_Historial()
+            base.fk_legajo_id = legajo.fk_legajo.id
+            base.fk_legajo_derivacion_id = legajo.fk_derivacion_id
+            base.fk_preadmi_id = pk
+            base.movimiento = "LISTA DE ESPERA"
+            base.creado_por_id = self.request.user.id
+            base.save()
+            # Redirige de nuevo a la vista de detalle actualizada
+            return HttpResponseRedirect(self.request.path_info)
+        
+        if 'rechazar' in request.POST:
+            # Realiza la actualización del campo aquí
+            objeto = self.get_object()
+            objeto.estado = 'Rechazado'
+            objeto.save()
+
+            #---------HISTORIAL---------------------------------
+            pk=self.kwargs["pk"]
+            legajo = CDIF_PreAdmision.objects.filter(pk=pk).first()
+            base = CDIF_Historial()
+            base.fk_legajo_id = legajo.fk_legajo.id
+            base.fk_legajo_derivacion_id = legajo.fk_derivacion_id
+            base.fk_preadmi_id = pk
+            base.movimiento = "Rechazado"
             base.creado_por_id = self.request.user.id
             base.save()
             # Redirige de nuevo a la vista de detalle actualizada
@@ -344,7 +381,7 @@ class CDIFPreAdmisionesDeleteView(PermisosMixin, DeleteView):
     success_url = reverse_lazy("CDIF_preadmisiones_listar")
 
     def form_valid(self, form):
-        if self.object.estado != "En proceso":
+        if self.object.estado != "Pendiente":
             messages.error(
                 self.request,
                 "No es posible eliminar una solicitud en estado " + self.object.estado,
@@ -373,14 +410,14 @@ class CDIFPreAdmisionesRechazarView(PermisosMixin, DeleteView):
     success_url = reverse_lazy("CDIF_preadmisiones_listar")
 
     def form_valid(self, form):
-        if self.object.estado == "Rechazada":
+        if self.object.estado == "Rechazado":
             messages.error(
                 self.request,
                 "Esta solicitud ya ha sido rechazada.",
             )
             return redirect("CDIF_preadmisiones_ver", pk=int(self.object.id))
         else:
-            self.object.estado = "Rechazada"
+            self.object.estado = "Rechazado"
             self.object.observaciones = self.request.POST.get("observaciones")
             self.object.save()
         return redirect("CDIF_preadmisiones_ver", pk=int(self.object.id))
