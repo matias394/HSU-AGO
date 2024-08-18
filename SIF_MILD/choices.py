@@ -28,10 +28,23 @@ CHOICE_ACOMPANANTES = [
     ('Doris Díaz', 'Doris Díaz'),
     ('Karen Romero', 'Karen Romero'),
     ('Erika Álvarez', 'Erika Álvarez'),
+    ('Viviana Ojeda', 'Viviana Ojeda'),
+    ('Soledad Mercado', 'Soledad Mercado'),
+    ('Andrea Neselis', 'Andrea Neselis'),
+    ('Luz Durand', 'Luz Durand'),
 ]
 
 CHOICE_EQUIPO_TECNICO = [
     (None, ''),
+    ('Clara Felgueras', 'Clara Felgueras'),
+    ('Francisco Durand', 'Francisco Durand'),
+    ('Victoria Bareiro', 'Victoria Bareiro'),
+    ('Trinidad Gristelli', 'Trinidad Gristelli'),
+    ('Verónica Zalazar', 'Verónica Zalazar'),
+    ('Liz Díaz', 'Liz Díaz'),
+    ('Doris Díaz', 'Doris Díaz'),
+    ('Karen Romero', 'Karen Romero'),
+    ('Erika Álvarez', 'Erika Álvarez'),
     ('Viviana Ojeda', 'Viviana Ojeda'),
     ('Soledad Mercado', 'Soledad Mercado'),
     ('Andrea Neselis', 'Andrea Neselis'),

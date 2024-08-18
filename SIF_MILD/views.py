@@ -92,6 +92,7 @@ class MILDDerivacionesDetailView(PermisosMixin, DetailView):
         if preadmi:
             context["acompaniante_asignado"] = preadmi.acompaniante_asignado
             context["acompaniante_entrevista"] = preadmi.acompaniante_entrevista
+            
         context["archivos"] = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=pk)
         context["pk"] = pk
         context["ivi"] = ivi
@@ -173,7 +174,7 @@ class MILDPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
 
     def form_valid(self, form):
         pk = self.kwargs["pk"]
-        form.instance.estado = 'En proceso'
+        form.instance.estado = 'Pendiente'
         form.instance.vinculo1 = form.cleaned_data['vinculo1']
         form.instance.vinculo2 = form.cleaned_data['vinculo2']
         form.instance.vinculo3 = form.cleaned_data['vinculo3']
@@ -263,7 +264,7 @@ class MILDPreAdmisionesDetailView(PermisosMixin, DetailView):
         if 'finalizar_preadm' in request.POST:
             # Realiza la actualización del campo aquí
             objeto = self.get_object()
-            objeto.estado = 'Finalizada'
+            objeto.estado = 'Pendiente'
             objeto.ivi = "NO"
             objeto.indice_ingreso = "NO"
             objeto.admitido = "NO"
@@ -277,6 +278,44 @@ class MILDPreAdmisionesDetailView(PermisosMixin, DetailView):
             base.fk_legajo_derivacion_id = legajo.fk_derivacion_id
             base.fk_preadmi_id = pk
             base.movimiento = "FINALIZADO PREADMISION"
+            base.creado_por_id = self.request.user.id
+            base.save()
+            # Redirige de nuevo a la vista de detalle actualizada
+            return HttpResponseRedirect(self.request.path_info)
+        
+        if 'listaespera' in request.POST:
+            # Realiza la actualización del campo aquí
+            objeto = self.get_object()
+            objeto.estado = 'Lista de espera'
+            objeto.save()
+
+            #---------HISTORIAL---------------------------------
+            pk=self.kwargs["pk"]
+            legajo = MILD_PreAdmision.objects.filter(pk=pk).first()
+            base = MILD_Historial()
+            base.fk_legajo_id = legajo.fk_legajo.id
+            base.fk_legajo_derivacion_id = legajo.fk_derivacion_id
+            base.fk_preadmi_id = pk
+            base.movimiento = "LISTA DE ESPERA"
+            base.creado_por_id = self.request.user.id
+            base.save()
+            # Redirige de nuevo a la vista de detalle actualizada
+            return HttpResponseRedirect(self.request.path_info)
+        
+        if 'rechazar' in request.POST:
+            # Realiza la actualización del campo aquí
+            objeto = self.get_object()
+            objeto.estado = 'Rechazado'
+            objeto.save()
+
+            #---------HISTORIAL---------------------------------
+            pk=self.kwargs["pk"]
+            legajo = MILD_PreAdmision.objects.filter(pk=pk).first()
+            base = MILD_Historial()
+            base.fk_legajo_id = legajo.fk_legajo.id
+            base.fk_legajo_derivacion_id = legajo.fk_derivacion_id
+            base.fk_preadmi_id = pk
+            base.movimiento = "Rechazado"
             base.creado_por_id = self.request.user.id
             base.save()
             # Redirige de nuevo a la vista de detalle actualizada
@@ -325,7 +364,7 @@ class MILDPreAdmisionesDeleteView(PermisosMixin, DeleteView):
     success_url = reverse_lazy("MILD_preadmisiones_listar")
 
     def form_valid(self, form):
-        if self.object.estado != "En proceso":
+        if self.object.estado != "Pendiente":
             messages.error(
                 self.request,
                 "No es posible eliminar una solicitud en estado " + self.object.estado,
@@ -787,6 +826,7 @@ class MILDPreAdmisiones3DetailView(PermisosMixin, DetailView):
             context['maximo_ingreso'] = foto_ingreso.puntaje_max
         else:
             context['maximo_ingreso'] = 0
+
         context["cantidad"] = criterio.count()
         context["cantidad_ingreso"] = criterio_ingreso.count()
         context["modificables"] = criterio.filter(fk_criterios_ivi__modificable__iexact='SI').count()
@@ -894,7 +934,7 @@ class MILDAsignadoAdmisionDetail(PermisosMixin, DetailView):
         intervenciones_last = MILD_Intervenciones.objects.filter(fk_admision_id=admi.id).last()
         foto_ivi_fin = MILD_Foto_IVI.objects.filter(fk_preadmi_id=admi.fk_preadmi_id, tipo="Ingreso").last()
         foto_ivi_inicio = MILD_Foto_IVI.objects.filter(fk_preadmi_id=admi.fk_preadmi_id, tipo="Ingreso").first()
-
+        
         context["acompaniantes_tecnico"] = CHOICE_EQUIPO_TECNICO
         context["acompaniantes_asignado"] = CHOICE_ACOMPANANTES
         context["foto_ivi_fin"] = foto_ivi_fin
@@ -924,6 +964,7 @@ class MILDAsignadoAdmisionDetail(PermisosMixin, DetailView):
                 preadmi.save()
 
         return HttpResponseRedirect(self.request.path_info)
+
 
 class MILDInactivaAdmisionDetail(PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
@@ -1034,6 +1075,7 @@ class MILDIntervencionesLegajosListView(PermisosMixin, DetailView):
         intervenciones = MILD_Intervenciones.objects.filter(fk_admision_id=admi.id).all()
         intervenciones_last = MILD_Intervenciones.objects.filter(fk_admision_id=admi.id).last()
         preadmi = MILD_PreAdmision.objects.filter(pk=admi.fk_preadmi_id).first()
+        criterio = MILD_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
         if criterio:
             observaciones = MILD_Foto_IVI.objects.filter(clave=criterio.first().clave, tipo="Ingreso").first()
             context["observaciones"] = observaciones
@@ -1046,10 +1088,7 @@ class MILDIntervencionesLegajosListView(PermisosMixin, DetailView):
         context["intervenciones"] = intervenciones
         context["intervenciones_count"] = intervenciones.count()
         context["intervenciones_last"] = intervenciones_last
-
         context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
-        context["observaciones"] = observaciones
-        context["observaciones2"] = observaciones2
         context["puntaje2"] = criterio2.aggregate(total=Sum('fk_criterios_ivi__puntaje'))
 
         return context

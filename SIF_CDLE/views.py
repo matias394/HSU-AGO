@@ -13,7 +13,7 @@ import uuid
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.conf import settings
-from SIF_CDIF.models import Criterios_IVI
+from SIF_CDLE.models import Criterios_IVI
 
 # # Create your views here.
 #derivaciones = LegajosDerivaciones.objects.filter(m2m_programas__nombr__iexact="CDLE")
@@ -167,7 +167,7 @@ class CDLEPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
 
     def form_valid(self, form):
         pk = self.kwargs["pk"]
-        form.instance.estado = 'En proceso'
+        form.instance.estado = 'Pendiente'
         form.instance.vinculo1 = form.cleaned_data['vinculo1']
         form.instance.vinculo2 = form.cleaned_data['vinculo2']
         form.instance.vinculo3 = form.cleaned_data['vinculo3']
@@ -257,7 +257,7 @@ class CDLEPreAdmisionesDetailView(PermisosMixin, DetailView):
         if 'finalizar_preadm' in request.POST:
             # Realiza la actualización del campo aquí
             objeto = self.get_object()
-            objeto.estado = 'Finalizada'
+            objeto.estado = 'Pendiente'
             objeto.ivi = "NO"
             objeto.indice_ingreso = "NO"
             objeto.admitido = "NO"
@@ -275,7 +275,45 @@ class CDLEPreAdmisionesDetailView(PermisosMixin, DetailView):
             base.save()
             # Redirige de nuevo a la vista de detalle actualizada
             return HttpResponseRedirect(self.request.path_info)
+        
+        if 'listaespera' in request.POST:
+            # Realiza la actualización del campo aquí
+            objeto = self.get_object()
+            objeto.estado = 'Lista de espera'
+            objeto.save()
 
+            #---------HISTORIAL---------------------------------
+            pk=self.kwargs["pk"]
+            legajo = CDLE_PreAdmision.objects.filter(pk=pk).first()
+            base = CDLE_Historial()
+            base.fk_legajo_id = legajo.fk_legajo.id
+            base.fk_legajo_derivacion_id = legajo.fk_derivacion_id
+            base.fk_preadmi_id = pk
+            base.movimiento = "LISTA DE ESPERA"
+            base.creado_por_id = self.request.user.id
+            base.save()
+            # Redirige de nuevo a la vista de detalle actualizada
+            return HttpResponseRedirect(self.request.path_info)
+        
+        if 'rechazar' in request.POST:
+            # Realiza la actualización del campo aquí
+            objeto = self.get_object()
+            objeto.estado = 'Rechazado'
+            objeto.save()
+
+            #---------HISTORIAL---------------------------------
+            pk=self.kwargs["pk"]
+            legajo = CDLE_PreAdmision.objects.filter(pk=pk).first()
+            base = CDLE_Historial()
+            base.fk_legajo_id = legajo.fk_legajo.id
+            base.fk_legajo_derivacion_id = legajo.fk_derivacion_id
+            base.fk_preadmi_id = pk
+            base.movimiento = "Rechazado"
+            base.creado_por_id = self.request.user.id
+            base.save()
+            # Redirige de nuevo a la vista de detalle actualizada
+            return HttpResponseRedirect(self.request.path_info)
+            
 class CDLEPreAdmisionesListView(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_CDLE/preadmisiones_list.html"
@@ -319,7 +357,7 @@ class CDLEPreAdmisionesDeleteView(PermisosMixin, DeleteView):
     success_url = reverse_lazy("CDLE_preadmisiones_listar")
 
     def form_valid(self, form):
-        if self.object.estado != "En proceso":
+        if self.object.estado != "Pendiente":
             messages.error(
                 self.request,
                 "No es posible eliminar una solicitud en estado " + self.object.estado,
