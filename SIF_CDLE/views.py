@@ -862,6 +862,43 @@ class CDLEPreAdmisiones3DetailView(PermisosMixin, DetailView):
 
             # Redirige de nuevo a la vista de detalle actualizada
             return redirect('CDLE_asignado_admisiones_ver', redirigir)
+        if 'listaespera' in request.POST:
+            # Realiza la actualización del campo aquí
+            objeto = self.get_object()
+            objeto.estado = 'Lista de espera'
+            objeto.save()
+
+            #---------HISTORIAL---------------------------------
+            pk=self.kwargs["pk"]
+            legajo = CDLE_PreAdmision.objects.filter(pk=pk).first()
+            base = CDLE_Historial()
+            base.fk_legajo_id = legajo.fk_legajo.id
+            base.fk_legajo_derivacion_id = legajo.fk_derivacion_id
+            base.fk_preadmi_id = pk
+            base.movimiento = "LISTA DE ESPERA"
+            base.creado_por_id = self.request.user.id
+            base.save()
+            # Redirige de nuevo a la vista de detalle actualizada
+            return HttpResponseRedirect(self.request.path_info)
+        
+        if 'rechazar' in request.POST:
+            # Realiza la actualización del campo aquí
+            objeto = self.get_object()
+            objeto.estado = 'Rechazado'
+            objeto.save()
+
+            #---------HISTORIAL---------------------------------
+            pk=self.kwargs["pk"]
+            legajo = CDLE_PreAdmision.objects.filter(pk=pk).first()
+            base = CDLE_Historial()
+            base.fk_legajo_id = legajo.fk_legajo.id
+            base.fk_legajo_derivacion_id = legajo.fk_derivacion_id
+            base.fk_preadmi_id = pk
+            base.movimiento = "Rechazado"
+            base.creado_por_id = self.request.user.id
+            base.save()
+            # Redirige de nuevo a la vista de detalle actualizada
+            return HttpResponseRedirect(self.request.path_info)
 
 class CDLEAdmisionesListView(PermisosMixin, ListView):
     permission_required = "Usuarios.rol_admin"
