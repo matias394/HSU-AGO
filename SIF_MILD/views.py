@@ -144,6 +144,7 @@ class MILDDerivacionesUpdateView(PermisosMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(id=pk).first()
         context["legajo"] = Legajos.objects.filter(id=legajo.fk_legajo.id).first()
+        context['archivos_existentes'] = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=self.object)
         return context
     
     def form_invalid(self, form):
