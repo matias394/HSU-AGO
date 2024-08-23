@@ -279,6 +279,32 @@ class CDIFPreAdmisionesDetailView(PermisosMixin, DetailView):
         return context
     
     def post(self, request, *args, **kwargs):
+        if 'admitir' in request.POST:
+            preadmi = CDIF_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
+            preadmi.admitido = "SI"
+            preadmi.estado = "Admitido"
+            preadmi.save()
+
+            base1 = CDIF_Admision()
+            base1.fk_preadmi_id = preadmi.pk
+            base1.creado_por_id = self.request.user.id
+            base1.save()
+            redirigir = base1.pk
+
+            #---------HISTORIAL---------------------------------
+            pk=self.kwargs["pk"]
+            legajo = CDIF_PreAdmision.objects.filter(pk=pk).first()
+            base = CDIF_Historial()
+            base.fk_legajo_id = legajo.fk_legajo.id
+            base.fk_legajo_derivacion_id = legajo.fk_derivacion_id
+            base.fk_preadmi_id = pk
+            base.fk_admision_id = redirigir
+            base.movimiento = "ADMITIDO"
+            base.creado_por_id = self.request.user.id
+            base.save()
+
+            # Redirige de nuevo a la vista de detalle actualizada
+            return redirect('CDIF_asignado_admisiones_ver', redirigir)
         if 'finalizar_preadm' in request.POST:
             # Realiza la actualización del campo aquí
             objeto = self.get_object()

@@ -846,6 +846,7 @@ class MILDPreAdmisiones3DetailView(PermisosMixin, DetailView):
         if 'admitir' in request.POST:
             preadmi = MILD_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
             preadmi.admitido = "SI"
+            preadmi.estado = "Admitido"
             preadmi.save()
 
             base1 = MILD_Admision()
