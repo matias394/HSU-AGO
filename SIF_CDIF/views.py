@@ -142,13 +142,6 @@ class CDIFDerivacionesUpdateView(PermisosMixin, UpdateView):
         return context
     
     def form_invalid(self, form):
-        print("Errores del formulario:", form.errors)
-
-    # Iterar sobre los errores del formulario y registrar los campos inválidos
-        for field, errors in form.errors.items():
-            print(f"Campo inválido: {field}")
-            for error in errors:
-                print(f" - Error: {error}")
         return super().form_invalid(form)   
     
     def form_valid(self, form):
@@ -253,6 +246,7 @@ class CDIFPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin)
         context["familia_inversa"] = familia_inversa
         context["centros"] = centros
         context["cupos"] = cupos
+        context["nuevo_grupo_familiar_form"] = NuevoLegajoFamiliarForm()
         return context
 
     def form_valid(self, form):
