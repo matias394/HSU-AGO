@@ -835,6 +835,7 @@ class CDIFVacantesAdmisionCambio(PermisosMixin, CreateView):
         vacante_anterior.fecha_egreso = date.today()
         vacante_anterior.save()
 
+        form.cleaned_data['motivo'] = ""
         self.object = form.save()
 
     
