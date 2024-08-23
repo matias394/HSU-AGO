@@ -98,7 +98,7 @@ class PDV_PreAdmision (models.Model):
     programa_Pilares_5 = models.BooleanField(verbose_name='Quiere participar del Programa Pilares', null=True, blank=True)
     centro_postula = models.ForeignKey(Vacantes, on_delete=models.PROTECT, null=True, blank=True)
     programa_postula = models.ForeignKey(Programas, on_delete=models.PROTECT, null=True, blank=True)
-    sala_postula = models.ForeignKey(CupoVacante, on_delete=models.PROTECT, null=False, blank=False)
+    sala_postula = models.ForeignKey(CupoVacante, on_delete=models.PROTECT, null=True, blank=True)
     taller_postula =  models.ForeignKey(Organismos, on_delete=models.PROTECT, null=True, blank=True)
     sala_short = models.CharField(max_length=150, null=True, blank=True)
     vinculo1 = models.CharField(max_length=150, null=True, blank=True)
