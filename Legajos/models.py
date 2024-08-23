@@ -515,7 +515,7 @@ class LegajosDerivaciones(models.Model):
         return reverse('legajosderivaciones_ver', kwargs={'pk': self.pk})
 
 class LegajosDerivacionesArchivos(models.Model):
-    legajo_derivacion = models.ForeignKey(LegajosDerivaciones, related_name='archivos', on_delete=models.PROTECT)
+    legajo_derivacion = models.ForeignKey(LegajosDerivaciones, related_name='archivos', on_delete=models.CASCADE)
     archivo = models.FileField(upload_to='legajos/archivos')
 
     def __str__(self):

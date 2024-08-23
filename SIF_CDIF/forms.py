@@ -122,6 +122,13 @@ class CDIF_VacantesOtorgadasForm (forms.ModelForm):
             'motivo':'Motivo principal',
             'detalles':'Detalles',
         }
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        # Establecer el campo 'motivo' a una cadena vacía
+        instance.motivo = ""
+        if commit:
+            instance.save()
+        return instance
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

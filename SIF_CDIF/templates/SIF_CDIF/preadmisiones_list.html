@@ -68,12 +68,13 @@
                           {% csrf_token %}
                         </form>
                         {% endif %}
-                        <a href="{% url 'CDIF_preadmisiones_ver' o.id %}" class="btn btn-secondary btn-sm">Ver</a>
+                        
                         {% endif %}
+                        <a href="{% url 'CDIF_preadmisiones_ver' o.id %}" class="btn btn-secondary btn-sm">Ver</a>
                         {% if o.estado == 'Pendiente' or o.estado == 'Lista de espera'%}
-                        <a href="{% url 'CDIF_preadmisiones_ver' o.id %}" class="btn btn-primary btn-sm ver">Ver</a>
                         <a href="{% url 'CDIF_preadmisiones_editar' o.id %}" class="btn btn-secondary btn-sm editar">Editar</a>
                         {% endif %}
+                        
                       </div>
                     </td>
                   </tr>

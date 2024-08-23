@@ -1,3 +1,4 @@
+from django.forms import BaseModelForm
 from django.views.generic import CreateView,ListView,DetailView,UpdateView,DeleteView,TemplateView, FormView
 from Legajos.models import LegajosDerivaciones
 from Legajos.forms import DerivacionesRechazoForm, LegajosDerivacionesForm
@@ -7,7 +8,7 @@ from Configuraciones.models import *
 from .forms import *
 from Usuarios.mixins import PermisosMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.db.models import Sum, F, ExpressionWrapper, IntegerField, Count, Max
 import uuid
 from django.shortcuts import redirect
@@ -91,6 +92,7 @@ class CDIFDerivacionesDetailView(PermisosMixin, DetailView):
         context["pk"] = pk
         context["ivi"] = ivi
         context["resultado"] = resultado
+        context["archivos"] = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=pk)
         return context
 
 class CDIFDerivacionesRechazo(PermisosMixin, CreateView):
@@ -138,10 +140,27 @@ class CDIFDerivacionesUpdateView(PermisosMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(id=pk).first()
         context["legajo"] = Legajos.objects.filter(id=legajo.fk_legajo.id).first()
+        context['archivos_existentes'] = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=self.object)
         return context
     
     def form_invalid(self, form):
         return super().form_invalid(form)   
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        delete_files = self.request.POST.getlist('delete_files')
+
+        if delete_files:
+            archivos = LegajosDerivacionesArchivos.objects.filter(id__in=delete_files)
+            archivos.delete()
+
+        pk = self.kwargs["pk"]
+        archivos_check = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=pk)
+        if not archivos_check.exists():
+            form.add_error(None, "No hay archivos asociados a este legajo.")
+            return self.form_invalid(form)
+
+        return response
     
     def get_success_url(self):
         pk = self.kwargs['pk']
@@ -201,10 +220,6 @@ class CDIFPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
         return HttpResponseRedirect(reverse('CDIF_preadmisiones_ver', args=[self.object.pk]))
     
     def form_invalid(self, form):
-        for field, errors in form.errors.items():
-            label = form.fields[field].label
-            for error in errors:
-                messages.error(self.request, f"Error en el campo '{label}': {error}")
         return super().form_invalid(form)
 
 class CDIFPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin):
@@ -229,8 +244,21 @@ class CDIFPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin)
         context["familia_inversa"] = familia_inversa
         context["centros"] = centros
         context["cupos"] = cupos
+        context["nuevo_grupo_familiar_form"] = NuevoLegajoFamiliarForm()
         return context
+    
+    def form_invalid(self, form):
+        # Imprimir todos los errores del formulario
+        print("Errores del formulario:", form.errors)
 
+        # Iterar sobre los errores del formulario y registrar los campos inválidos
+        for field, errors in form.errors.items():
+            print(f"Campo inválido: {field}")
+            for error in errors:
+                print(f" - Error: {error}")
+
+        return super().form_invalid(form)
+    
     def form_valid(self, form):
         pk = CDIF_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
         form.instance.creado_por_id = pk.creado_por_id
@@ -245,7 +273,7 @@ class CDIFPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin)
         self.object = form.save()
 
         return HttpResponseRedirect(reverse('CDIF_preadmisiones_ver', args=[self.object.pk]))
-
+    
 class CDIFPreAdmisionesDetailView(PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_CDIF/preadmisiones_detail.html"
@@ -807,6 +835,7 @@ class CDIFVacantesAdmisionCambio(PermisosMixin, CreateView):
         vacante_anterior.fecha_egreso = date.today()
         vacante_anterior.save()
 
+        form.cleaned_data['motivo'] = ""
         self.object = form.save()
 
     
