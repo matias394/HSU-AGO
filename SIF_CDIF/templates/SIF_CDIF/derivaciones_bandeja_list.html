@@ -106,8 +106,8 @@
                 <td> <span class="font-weight-bold">{{o.fk_usuario}}</span>
                 <td class=""><a href="{% url 'CDIF_derivaciones_ver' o.id %}" title="Ver detalle">{{o.fk_legajo}}</a></td>
                 <td class="">{{o.m2m_alertas.all.count}} alerta{% if o.m2m_alertas.all.count > 1 %}s{% endif %}</td>
-                <td class="text-center ">{% if o.archivos %}<a href="{{ o.archivos.url}}" target="_blank"><i
-                      class="fas fa-paperclip text-white"></i></a>{% else %}-{% endif %}</td>
+                <td class="text-center ">{% if o.archivos %}<i
+                      class="fas fa-paperclip text-white"></i>{% else %}-{% endif %}</td>
                 <td class="text-right">
                         <a href="{% url 'CDIF_derivaciones_ver' o.id %}" class="btn btn-primary btn-sm ver"
                           title="Ver detalle">Ver</a>
