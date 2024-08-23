@@ -169,7 +169,7 @@
       if (filtro !== 'todos') {
         $('#tabla-derivaciones tbody tr').each(function () {
           const fila = $(this);
-          const columna = fila.find('td:nth-child(3)'); // Obtener la columna 3 (índice 2)
+          const columna = fila.find('td:nth-child(4)'); // Obtener la columna 3 (índice 2)
 
           // Comparar el valor de la columna con el filtro y ocultar la fila si no coincide
           if (columna.text().trim() !== filtro) {
