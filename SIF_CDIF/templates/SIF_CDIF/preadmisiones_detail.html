@@ -33,7 +33,7 @@ CDIF Pre-admisiones
     </a>
     <a href="{% url 'CDIF_preadmisiones_editar' object.pk %}" class="btn btn-secondary mr-1">Editar</a>
     {% endif %}
-    {% if object.ivi == 'NO' %}
+    {% if object.ivi != 'SI' %}
     <a href="{% url 'CDIF_indiceivi_crear' object.pk %}" class="btn btn-primary mr-1">Generar IVI</a>
     {% endif %}
     {% if object.admitido == 'NO' and object.ivi == 'SI' %}
