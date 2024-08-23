@@ -138,10 +138,34 @@ class CDIFDerivacionesUpdateView(PermisosMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(id=pk).first()
         context["legajo"] = Legajos.objects.filter(id=legajo.fk_legajo.id).first()
+        context['archivos_existentes'] = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=self.object)
         return context
     
     def form_invalid(self, form):
+        print("Errores del formulario:", form.errors)
+
+    # Iterar sobre los errores del formulario y registrar los campos inválidos
+        for field, errors in form.errors.items():
+            print(f"Campo inválido: {field}")
+            for error in errors:
+                print(f" - Error: {error}")
         return super().form_invalid(form)   
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        delete_files = self.request.POST.getlist('delete_files')
+
+        if delete_files:
+            archivos = LegajosDerivacionesArchivos.objects.filter(id__in=delete_files)
+            archivos.delete()
+
+        pk = self.kwargs["pk"]
+        archivos_check = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=pk)
+        if not archivos_check.exists():
+            form.add_error(None, "No hay archivos asociados a este legajo.")
+            return self.form_invalid(form)
+
+        return response
     
     def get_success_url(self):
         pk = self.kwargs['pk']
