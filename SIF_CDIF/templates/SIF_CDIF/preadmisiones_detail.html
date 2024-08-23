@@ -36,7 +36,7 @@ CDIF Pre-admisiones
     {% if object.ivi != 'SI' %}
     <a href="{% url 'CDIF_indiceivi_crear' object.pk %}" class="btn btn-primary mr-1">Generar IVI</a>
     {% endif %}
-    {% if object.admitido == 'NO' and object.ivi == 'SI' %}
+    {% if object.admitido != 'SI' and object.ivi == 'SI' %}
     <form method="post" action="{% url 'CDIF_preadmisiones_ver3' object.id %}" id="admitirForm" class="d-inline">
       {% csrf_token %}
       <button type="submit" name="admitir" class="btn btn-primary mr-1" form="admitirForm">Admitir</button>
