@@ -238,7 +238,6 @@ class PDVPreAdmisionesDetailView(PermisosMixin, DetailView):
         if 'admitir' in request.POST:
             preadmi = PDV_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
             preadmi.admitido = "SI"
-            preadmi.estado = "Admitido"
             preadmi.save()
 
             base1 = PDV_Admision()
@@ -897,6 +896,7 @@ class PDVPreAdmisiones3DetailView(PermisosMixin, DetailView):
         if 'admitir' in request.POST:
             preadmi = PDV_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
             preadmi.admitido = "SI"
+            preadmi.estado = "Admitido"
             preadmi.save()
 
             base1 = PDV_Admision()

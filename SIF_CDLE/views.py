@@ -866,6 +866,7 @@ class CDLEPreAdmisiones3DetailView(PermisosMixin, DetailView):
         if 'admitir' in request.POST:
             preadmi = CDLE_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
             preadmi.admitido = "SI"
+            preadmi.estado = "Admitido"
             preadmi.save()
 
             base1 = CDLE_Admision()

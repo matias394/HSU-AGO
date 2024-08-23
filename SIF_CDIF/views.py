@@ -282,7 +282,6 @@ class CDIFPreAdmisionesDetailView(PermisosMixin, DetailView):
         if 'admitir' in request.POST:
             preadmi = CDIF_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
             preadmi.admitido = "SI"
-            preadmi.estado = "Admitido"
             preadmi.save()
 
             base1 = CDIF_Admision()
@@ -670,6 +669,7 @@ class CDIFPreAdmisiones3DetailView(PermisosMixin, DetailView):
         if 'admitir' in request.POST:
             preadmi = CDIF_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
             preadmi.admitido = "SI"
+            preadmi.estado = "Admitido"
             preadmi.save()
 
             base1 = CDIF_Admision()
