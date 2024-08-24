@@ -222,7 +222,6 @@ CHOICE_ACCION_DESARROLLADA=[
     ('Se articulo con una institución no municipal','Se articulo con una institución no municipal'),
 ]
 
-CHOICE_1to4=[(i, str(i)) for i in range(1, 5)]
 CHOICE_1to40=[(i, str(i)) for i in range(1, 41)]
 
 CHOICE_4to40=[(i, str(i)) for i in range(4, 41)]
