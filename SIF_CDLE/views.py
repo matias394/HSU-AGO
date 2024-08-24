@@ -164,7 +164,7 @@ class CDLEPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
         legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
-        context["pk_preadmision"] = pk.id
+        context["pk_preadmision"] = pk
         context["pk"] = pk
         context["legajo"] = legajo
         context["familia"] = familia
@@ -202,7 +202,6 @@ class CDLEPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
     
     def crear_grupo_hogar(self,form: QueryDict):
         copy_form = dict(**form.dict())
-        print(copy_form)
         del copy_form['csrfmiddlewaretoken']
         legajo_derivacion = LegajosDerivaciones.objects.filter(pk=copy_form.get('pk')).first()
         vinculo = copy_form.get('vinculo')
@@ -222,7 +221,6 @@ class CDLEPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
                 sexo= copy_form.get('sexo'),
             )
 
-            print(nuevo_legajo)
             DimensionFamilia.objects.create(fk_legajo=nuevo_legajo)
             DimensionVivienda.objects.create(fk_legajo=nuevo_legajo)
             DimensionSalud.objects.create(fk_legajo=nuevo_legajo)
@@ -311,7 +309,6 @@ class CDLEPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin)
 
     def crear_grupo_hogar(self,form: QueryDict):
         copy_form = dict(**form.dict())
-        print(copy_form)
         del copy_form['csrfmiddlewaretoken']
         legajo_derivacion = LegajosDerivaciones.objects.filter(pk=copy_form.get('pk')).first()
         vinculo = copy_form.get('vinculo')
