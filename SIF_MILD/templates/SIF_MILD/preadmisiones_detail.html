@@ -31,7 +31,7 @@
       <a class="btn btn-primary mr-1" data-toggle="modal" data-target="#confirmarFinalizar">
         Finalizar entrevista
       </a>
-      <a href="{% url 'CDIF_preadmisiones_editar' object.pk %}" class="btn btn-secondary mr-1">Editar</a>
+      <a href="{% url 'MILD_preadmisiones_editar' object.pk %}" class="btn btn-secondary mr-1">Editar</a>
       {% endif %}
     {% if object.estado == 'Pendiente' %}
     {% if object.indice_ingreso == 'NO' %}
@@ -68,7 +68,7 @@
         <div class="card-header">
           <h3 class="card-title">Detalle Admisión</h3>
           <div class="card-tools d-inline">
-            <a href="{% url 'MILD_preadmisiones_ver3' object.id %}" class="ml-3 mr-2">Ver pre-admisión</a>
+            <a href="{% url 'MILD_preadmisiones_ver2' object.id %}" class="ml-3 mr-2">Ver pre-admisión</a>
             <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
               <i class="fas fa-minus"></i>
             </button>

@@ -15,6 +15,7 @@ urlpatterns = [
     path('MILD/preadmisiones/crear/<pk>', login_required(MILDPreAdmisionesCreateView.as_view()), name='MILD_preadmisiones_crear'),
     path('MILD/preadmisiones/editar/<pk>', login_required(MILDPreAdmisionesUpdateView.as_view()), name='MILD_preadmisiones_editar'),
     path('MILD/preadmisiones/ver/<pk>', login_required(MILDPreAdmisionesDetailView.as_view()), name='MILD_preadmisiones_ver'),
+    path('MILD/preadmisiones/ver2/<pk>', login_required(MILDPreAdmisiones2DetailView.as_view()), name='MILD_preadmisiones_ver2'),
     path('MILD/preadmisiones/ver3/<pk>', login_required(MILDPreAdmisiones3DetailView.as_view()), name='MILD_preadmisiones_ver3'),
     path('MILD/preadmisiones/listar', login_required(MILDPreAdmisionesListView.as_view()), name='MILD_preadmisiones_listar'),
     path('MILD/preadmisiones/buscar', login_required(MILDPreAdmisionesBuscarListView.as_view()), name='MILD_preadmisiones_buscar'),

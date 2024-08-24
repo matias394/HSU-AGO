@@ -33,9 +33,40 @@ Admisiones
 
 </div>
 <div class="row p-0 m-0 " id="seleccion">
-
+  <!-- Datos de Admisión -->
+  <div class="col-sm-3 pb-3">
+    <div class="card card-outline card-primary h-100 mb-0">
+      <div class="card-header">
+        <h3 class="card-title">Detalle Admisión</h3>
+        <div class="card-tools d-inline">
+          <a href="{% url 'MILD_preadmisiones_ver2' object.id %}" class="ml-3 mr-2">Ver pre-admisión</a>
+          <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
+            <i class="fas fa-minus"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card-body pb-1">
+        <dl class="row mb-0">
+          <dd class="col-sm-5 mb-2">Estado</dd>
+          <dt class="col-sm-7 mb-2"><span class="badge {% if object.estado == 'Admitido' %}badge-success{% endif %}{% if object.estado == 'Pendiente' %}badge-primary{% endif %}{% if object.estado == 'Lista de espera' %}badge-warning{% endif %}{% if object.estado == 'Rechazado' %}badge-danger{% endif %}">{{ object.estado }}</span></dt>
+          <dd class="col-sm-5 mb-2">Fecha de solicitud</dd>
+          <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
+          <dd class="col-sm-5 mb-2">Solicitud creada por</dd>
+          <dt class="col-sm-7 mb-2">{{object.creado_por}}</dt>
+          <dd class="col-sm-5 mb-2">Acompañante entrevista</dd>
+          <dt class="col-sm-7 mb-2">{{object.acompaniante_entrevista}}</dt>
+          <dd class="col-sm-5 mb-2">Acompañante asignado</dd>
+          <dt class="col-sm-7 mb-2">{{object.acompaniante_asignado}}</dt>
+          {% if object.modificado_por %}
+          <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Modificado por {{object.modificado_por}} - {{object.modificado|date:'d/m/Y'}}</dd>
+          {% endif %}
+        </dl>
+      </div>
+    </div>
+  </div>
+  <!-- /  -->
   <!-- Datos de legajo -->
-  <div class="col-sm-4 pb-3">
+  <div class="col-sm-3 pb-3">
     <div class="card card-outline card-primary h-100 mb-0">
       <div class="card-header">
         <h3 class="card-title">Detalle Legajo</h3>
@@ -63,7 +94,7 @@ Admisiones
   <!-- /  -->
 
   <!-- Datos de pre-admisión -->
-  <div class="col-sm-4 pb-3">
+  <div class="col-sm-3 pb-3">
     <div class="card card-outline card-primary h-100 mb-0">
       <div class="card-header">
         <h3 class="card-title">Detalle Admisión</h3>
@@ -91,7 +122,7 @@ Admisiones
   <!-- /  -->
 
   <!-- Datos de Indice -->
-  <div class="col-sm-4 pb-3">
+  <div class="col-sm-3 pb-3">
     <div class="card card-outline card-primary h-100 mb-0">
       <div class="card-header">
         <h3 class="card-title">Detalle IVI de ingreso</h3>

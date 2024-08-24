@@ -138,7 +138,17 @@ class MILDDerivacionesUpdateView(PermisosMixin, UpdateView):
         initial = super().get_initial()
         initial["fk_usuario"] = self.request.user
         return initial
-        
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        delete_files = self.request.POST.getlist('delete_files')
+
+        if delete_files:
+            archivos = LegajosDerivacionesArchivos.objects.filter(id__in=delete_files)
+            archivos.delete()
+
+        return response
+    
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
@@ -789,7 +799,12 @@ class MILDIndiceIviDetailView(PermisosMixin, DetailView):
         context["ajustes"] = criterio.filter(fk_criterios_ivi__tipo='Ajustes').count()
         #context['maximo'] = foto_ivi.puntaje_max
         return context
-    
+
+class MILDPreAdmisiones2DetailView(PermisosMixin, DetailView):
+    permission_required = "Usuarios.rol_admin"
+    template_name = "SIF_MILD/preadmisiones_detail2.html"
+    model = MILD_PreAdmision  
+
 class MILDPreAdmisiones3DetailView(PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"
     template_name = "SIF_MILD/preadmisiones_detail3.html"
