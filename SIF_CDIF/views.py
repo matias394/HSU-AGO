@@ -154,12 +154,6 @@ class CDIFDerivacionesUpdateView(PermisosMixin, UpdateView):
             archivos = LegajosDerivacionesArchivos.objects.filter(id__in=delete_files)
             archivos.delete()
 
-        pk = self.kwargs["pk"]
-        archivos_check = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=pk)
-        if not archivos_check.exists():
-            form.add_error(None, "No hay archivos asociados a este legajo.")
-            return self.form_invalid(form)
-
         return response
     
     def get_success_url(self):
