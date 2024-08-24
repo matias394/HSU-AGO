@@ -167,34 +167,7 @@ class PDVPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin):
         base.movimiento = "ACEPTADO A PREADMISION"
         base.creado_por_id = self.request.user.id
         base.save()
-        
-        return HttpResponseRedirect(reverse('PDV_preadmisiones_ver', args=[self.object.pk]))
-    
-    def post(self,form):
-        pk = self.kwargs["pk"]
-        form.instance.estado = 'En proceso'
-        form.instance.vinculo1 = form.cleaned_data['vinculo1']
-        form.instance.vinculo2 = form.cleaned_data['vinculo2']
-        form.instance.vinculo3 = form.cleaned_data['vinculo3']
-        form.instance.vinculo4 = form.cleaned_data['vinculo4']
-        form.instance.vinculo5 = form.cleaned_data['vinculo5']
-        form.instance.creado_por_id = self.request.user.id
-        self.object = form.save()
 
-        base = LegajosDerivaciones.objects.get(pk=pk)
-        base.estado = "Aceptada"
-        base.save() 
-        
-        #---- Historial--------------
-        legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
-        base = PDV_Historial()
-        base.fk_legajo_id = legajo.fk_legajo.id
-        base.fk_legajo_derivacion_id = pk
-        base.fk_preadmi_id = self.object.id
-        base.movimiento = "ACEPTADO A PREADMISION"
-        base.creado_por_id = self.request.user.id
-        base.save()
-        print('ahora si hace todo piola gato')
         return HttpResponseRedirect(reverse('PDV_preadmisiones_ver', args=[self.object.pk]))
 
 class PDVPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin):
