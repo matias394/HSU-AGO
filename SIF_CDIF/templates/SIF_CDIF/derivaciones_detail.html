@@ -76,10 +76,18 @@ Derivaciones
             </dt>
             <dd class="col-sm-3 mb-2">Observaciones</dt>
             <dt class="col-sm-9 mb-2">{{object.detalles|default_if_none:"-"}}</dt>
-            {% if object.archivos %}
-            <dt class="col-sm-3 font-weight-normal">Archivos adjuntos</dt>
-            <dd class="col-sm-9 font-weight-bold"><ul>{% for a in archivos %}<li><a href="{{ a.archivo.url}}" target="_blank">{{a.archivo|cut:'legajos/archivos/'}}</a></li>{% endfor %}</ul></dd>
-            {% endif %}
+            <dd class="col-sm-3 mb-2 mt-2">Archivos adjuntos</dd>
+            <dt class="col-sm-9 mb-2 mt-2">
+              <ul class="list-unstyled mb-1">
+                {% if object.archivos %}
+                  {% for a in archivos %}
+                    <li><a href="{{ a.archivo.url}}" target="_blank">{{a.archivo|cut:'legajos/archivos/'}}</a></li>
+                  {% endfor %}
+                {% else %}
+                <li>-</li>
+                {% endif %}
+              </ul>
+            </dt>
             <dd class="col-sm-3 mb-2">Programa solicitante</dd>
             <dt class="col-sm-9 mb-2"> {{object.fk_programa_solicitante}}</dt>
             <dd class="col-sm-3 mb-2">Usuario solicitante</dd>

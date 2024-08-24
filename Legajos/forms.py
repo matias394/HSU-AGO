@@ -192,6 +192,7 @@ class LegajosDerivacionesForm(forms.ModelForm):
             'm2m_alertas': 'Alertas detectadas',
             'fk_programa': 'Derivar a',
             'fk_programa_solicitante': 'Derivar de',
+            'detalles': 'Motivo de la derivación o comentarios*',
         }
 
     def clean(self):
@@ -202,6 +203,10 @@ class LegajosDerivacionesForm(forms.ModelForm):
         detalles = cleaned_data.get("detalles")
         archivos = self.files.get("archivos")  # Obtiene los archivos directamente desde self.files
 
+        if fk_programa and fk_programa.id == settings.PROG_MILD:
+            if not detalles:
+                self.add_error('detalles', 'Este campo es obligatorio.')
+    
         if fk_programa and fk_programa.id == settings.PROG_SL:
             if not detalles:
                 self.add_error('detalles', 'Este campo es obligatorio cuando el programa es Servicio Local.')

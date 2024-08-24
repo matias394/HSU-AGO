@@ -4,7 +4,7 @@ from Legajos.models import *
 from django.core.validators import MinValueValidator, MaxValueValidator
 from .choices import *
 from django.urls import *
-
+from SIF_CDIF.models import Criterios_IVI 
 # Create your models here.
 
 #class legajo_CDLE (models.Model):
@@ -246,14 +246,14 @@ class CDLE_PreAdmision (models.Model):
     #SubTexto ; aclaración "Derivar el legajo en caso de ser candidata"
     CONCLUS_acompaniante = models.CharField(max_length=150,verbose_name="Participar de", choices=CHOISE_CDLE_ACOMPANIANTES, null=True, blank=True)
 
-class Criterios_IVI(models.Model):
-    criterio =  models.CharField(max_length=250, null=False, blank=False)
-    tipo =  models.CharField(max_length=250, choices=CHOICE_TIPO_IVI, null=False, blank=False)
-    puntaje =  models.SmallIntegerField(null=False, blank=False)
-    modificable =  models.CharField(max_length=50, choices=CHOICE_NOSI, null=False, blank=False)
+# class Criterios_IVI(models.Model):
+#     criterio =  models.CharField(max_length=250, null=False, blank=False)
+#     tipo =  models.CharField(max_length=250, choices=CHOICE_TIPO_IVI, null=False, blank=False)
+#     puntaje =  models.SmallIntegerField(null=False, blank=False)
+#     modificable =  models.CharField(max_length=50, choices=CHOICE_NOSI, null=False, blank=False)
     
-    def __str__(self):
-        return self.criterio
+#     def __str__(self):
+#         return self.criterio
 
 class CDLE_IndiceIVI(models.Model):
     fk_criterios_ivi = models.ForeignKey(Criterios_IVI, on_delete=models.PROTECT)
@@ -339,12 +339,12 @@ class CDLE_Intervenciones(models.Model):
     accion = models.CharField(max_length=250, choices=CHOICE_ACCION_DESARROLLADA, null=False, blank=False)
     responsable = models.ManyToManyField(OpcionesResponsables)
     impacto = models.CharField(max_length=250, choices=[('Trabajado','Trabajado'),('Revertido','Revertido')], null=False, blank=False)
-    detalle = models.CharField(max_length=350, null=True, blank=True)
+    detalle = models.CharField(max_length=350, null=True, blank=True, verbose_name='Observaciones')
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
     creado_por = models.ForeignKey(Usuarios, related_name='CDLE_Intervenciones_creado_por', on_delete=models.PROTECT, blank=True, null=True)
     modificado_por = models.ForeignKey(Usuarios, related_name='CDLE_Intervenciones_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
-
+    fecha = models.DateField(null=True, blank=True)
 
 class CDLE_Historial(models.Model):
     fk_legajo = models.ForeignKey(Legajos, on_delete=models.PROTECT, null=True, blank=True)

@@ -49,7 +49,7 @@
             <div class="card card-primary card-outline">
                 <div class="card-header">
                     <h3 class="card-title">
-                        Índice de vulnerabilidad infantil (IVI)
+                        IV
                     </h3>
                 </div>
 
@@ -185,7 +185,7 @@
                             <label for="detalle_de_baja">Motivo de Baja:</label>
                             <select class="form-control" id="detalle_de_baja">
                                 <option value="">Seleccione una opción</option>
-                                <option value="Familia lista para el alta (en un futuro se aplica IVI egreso en esta instancia)">Familia lista para el alta (en un futuro se aplica IVI egreso en esta instancia)</option>
+                                <option value="Familia lista para el alta">Familia lista para el alta</option>
                                 <option value="Falta de adherencia al programa">Falta de adherencia al programa</option>
                                 <option value="Mudanza">Mudanza</option>
                                 <option value="No responde, no se puede acompañar">No responde, no se puede acompañar</option>
@@ -216,7 +216,7 @@
         const tipoDeBaja = document.getElementById("tipo_de_baja").value;
         const detalleDeBaja = document.getElementById("detalle_de_baja");
 
-        const altaOptions = ["Familia lista para el alta (en un futuro se aplica IVI egreso en esta instancia)"];
+        const altaOptions = ["Familia lista para el alta"];
         const bajaOptions = ["Falta de adherencia al programa", "Mudanza", "No responde, no se puede acompañar", "Medida de abrigo del Servicio Local", "Otro"];
 
         detalleDeBaja.innerHTML = '<option value="">Seleccione una opción</option>';  // Limpiar opciones

@@ -262,10 +262,35 @@ class PDVPreAdmisionesDetailView(PermisosMixin, DetailView):
         return context
     
     def post(self, request, *args, **kwargs):
+        if 'admitir' in request.POST:
+            preadmi = PDV_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
+            preadmi.admitido = "SI"
+            preadmi.save()
+
+            base1 = PDV_Admision()
+            base1.fk_preadmi_id = preadmi.pk
+            base1.creado_por_id = self.request.user.id
+            base1.save()
+            redirigir = base1.pk
+
+            #---------HISTORIAL---------------------------------
+            pk=self.kwargs["pk"]
+            legajo = PDV_PreAdmision.objects.filter(pk=pk).first()
+            base = PDV_Historial()
+            base.fk_legajo_id = legajo.fk_legajo.id
+            base.fk_legajo_derivacion_id = legajo.fk_derivacion_id
+            base.fk_preadmi_id = pk
+            base.fk_admision_id = redirigir
+            base.movimiento = "ADMITIDO"
+            base.creado_por_id = self.request.user.id
+            base.save()
+
+            # Redirige de nuevo a la vista de detalle actualizada
+            return redirect('PDV_asignado_admisiones_ver', redirigir)
         if 'finalizar_preadm' in request.POST:
             # Realiza la actualización del campo aquí
             objeto = self.get_object()
-            objeto.estado = 'Finalizada'
+            objeto.estado = 'Pendiente'
             objeto.ivi = "NO"
             objeto.indice_ingreso = "NO"
             objeto.admitido = "NO"
@@ -283,12 +308,42 @@ class PDVPreAdmisionesDetailView(PermisosMixin, DetailView):
             base.save()
             # Redirige de nuevo a la vista de detalle actualizada
             return HttpResponseRedirect(self.request.path_info)
+        
+        if 'listaespera' in request.POST:
+            # Realiza la actualización del campo aquí
+            objeto = self.get_object()
+            objeto.estado = 'Lista de espera'
+            objeto.save()
 
-            
+            #---------HISTORIAL---------------------------------
+            pk=self.kwargs["pk"]
+            legajo = PDV_PreAdmision.objects.filter(pk=pk).first()
+            base = PDV_Historial()
+            base.fk_legajo_id = legajo.fk_legajo.id
+            base.fk_legajo_derivacion_id = legajo.fk_derivacion_id
+            base.fk_preadmi_id = pk
+            base.movimiento = "LISTA DE ESPERA"
+            base.creado_por_id = self.request.user.id
+            base.save()
+            # Redirige de nuevo a la vista de detalle actualizada
+            return HttpResponseRedirect(self.request.path_info)
+        
+        if 'rechazar' in request.POST:
+            # Realiza la actualización del campo aquí
+            objeto = self.get_object()
+            objeto.estado = 'Rechazado'
+            objeto.save()
 
-            
-
-
+            #---------HISTORIAL---------------------------------
+            pk=self.kwargs["pk"]
+            legajo = PDV_PreAdmision.objects.filter(pk=pk).first()
+            base = PDV_Historial()
+            base.fk_legajo_id = legajo.fk_legajo.id
+            base.fk_legajo_derivacion_id = legajo.fk_derivacion_id
+            base.fk_preadmi_id = pk
+            base.movimiento = "Rechazado"
+            base.creado_por_id = self.request.user.id
+            base.save()
             # Redirige de nuevo a la vista de detalle actualizada
             return HttpResponseRedirect(self.request.path_info)
         
@@ -868,6 +923,7 @@ class PDVPreAdmisiones3DetailView(PermisosMixin, DetailView):
         if 'admitir' in request.POST:
             preadmi = PDV_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
             preadmi.admitido = "SI"
+            preadmi.estado = "Admitido"
             preadmi.save()
 
             base1 = PDV_Admision()

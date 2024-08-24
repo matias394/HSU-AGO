@@ -88,12 +88,12 @@ class SL_Intervenciones(models.Model):
     accion = models.CharField(max_length=250, choices=CHOICE_ACCION_DESARROLLADA, null=False, blank=False)
     responsable = models.ManyToManyField(OpcionesResponsables)
     impacto = models.CharField(max_length=250, choices=[('Trabajado','Trabajado'),('Revertido','Revertido')], null=False, blank=False)
-    detalle = models.CharField(max_length=350, null=True, blank=True)
+    detalle = models.CharField(max_length=350, null=True, blank=True, verbose_name='Observaciones')
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
     creado_por = models.ForeignKey(Usuarios, related_name='SL_Intervenciones_creado_por', on_delete=models.PROTECT, blank=True, null=True)
     modificado_por = models.ForeignKey(Usuarios, related_name='SL_Intervenciones_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
-
+    fecha = models.DateField(null=True, blank=True)
 
 
 class PreadmArchivos(models.Model):

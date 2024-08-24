@@ -27,24 +27,34 @@
   <!-- botones -->
   <div class="col-12 my-3 d-print-none">
     <div class="btn-toolbar" role="toolbar">
-    {% if object.estado == 'En proceso' %}
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit" name="finalizar_preadm" class="btn btn-primary mr-1" >Finalizar</button>
-    </form>
-    <a href="{% url 'MILD_preadmisiones_editar' object.pk %}" class="btn btn-secondary mr-1">Editar</a>
-    <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
-    <a href="{% url 'MILD_preadmisiones_eliminar' object.pk %}" class="btn btn-danger mr-1 mt-2 mt-sm-0">Eliminar</a>
-    {% endif %}
-    {% if object.estado == 'Finalizada' %}
+      {% if object.estado == 'Pendiente' and object.indice_ingreso == None %}
+      <a class="btn btn-primary mr-1" data-toggle="modal" data-target="#confirmarFinalizar">
+        Finalizar entrevista
+      </a>
+      <a href="{% url 'MILD_preadmisiones_editar' object.pk %}" class="btn btn-secondary mr-1">Editar</a>
+      {% endif %}
+    {% if object.estado == 'Pendiente' %}
     {% if object.indice_ingreso == 'NO' %}
     <a href="{% url 'MILD_indiceingreso_crear' object.pk %}" class="btn btn-primary mr-1">Generar índice ingreso</a>
     {% endif %}
     {% if object.ivi == 'NO' and object.indice_ingreso == 'SI' %}
     <a href="{% url 'MILD_indiceivi_crear' object.pk %}" class="btn btn-primary mr-1">Generar IVI</a>
     {% endif %}
-    <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
+    {% if object.admitido == 'NO' and object.ivi == 'SI' %}
+    <form method="post" action="{% url 'CDIF_preadmisiones_ver3' object.id %}" id="admitirForm" class="d-inline">
+      {% csrf_token %}
+      <button type="submit" name="admitir" class="btn btn-primary mr-1" form="admitirForm">Admitir</button>
+    </form>
+    <form method="post" class="d-inline">
+      {% csrf_token %}
+      <button type="submit" name="listaespera" class="btn btn-primary mr-1" >Lista de espera</button>
+    </form>
+  <a class="btn btn-danger mr-1" data-toggle="modal" data-target="#rechazar">
+    Rechazar
+  </a>
     {% endif %}
+    {% endif %}
+    <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     </div>
   </div>
   <!-- ./botones -->
@@ -58,7 +68,7 @@
         <div class="card-header">
           <h3 class="card-title">Detalle Admisión</h3>
           <div class="card-tools d-inline">
-            <a href="{% url 'MILD_preadmisiones_ver3' object.id %}" class="ml-3 mr-2">Ver pre-admisión</a>
+            <a href="{% url 'MILD_preadmisiones_ver2' object.id %}" class="ml-3 mr-2">Ver pre-admisión</a>
             <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
               <i class="fas fa-minus"></i>
             </button>
@@ -67,7 +77,7 @@
         <div class="card-body pb-1">
           <dl class="row mb-0">
             <dd class="col-sm-5 mb-2">Estado</dd>
-            <dt class="col-sm-7 mb-2"><span class="badge {% if object.estado == 'Finalizada' %}badge-success{% else %}badge-warning{% endif %}">{{ object.estado }}</span></dt>
+            <dt class="col-sm-7 mb-2"><span class="badge {% if object.estado == 'Admitido' %}badge-success{% endif %}{% if object.estado == 'Pendiente' %}badge-primary{% endif %}{% if object.estado == 'Lista de espera' %}badge-warning{% endif %}{% if object.estado == 'Rechazado' %}badge-danger{% endif %}">{{ object.estado }}</span></dt>
             <dd class="col-sm-5 mb-2">Fecha de solicitud</dd>
             <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
             <dd class="col-sm-5 mb-2">Solicitud creada por</dd>
@@ -295,5 +305,52 @@
     </div>
   </div>
 </div>
+  <!-- Modal Finalizar Preadmi-->
+  <div class="modal fade" id="confirmarFinalizar" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="confirmarFinalizarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmarFinalizarLabel">Confirma?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Una vez finalizada la entrevista no se podran modificar los datos de la misma.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" >Cancelar</button>
+          <form method="post">
+            {% csrf_token %}
+            <button type="submit" name="finalizar_preadm" class="btn btn-primary mr-1" >Finalizar entrevista</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
+
+    <!-- Modal Rechazar Preadmi-->
+    <div class="modal fade" id="rechazar" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="rechazarLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="rechazarLabel">Confirma?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Una vez rechazado no se podra modificar.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" >Cancelar</button>
+            <form method="post">
+              {% csrf_token %}
+              <button type="submit" name="rechazar" class="btn btn-danger mr-1" >Rechazar</button>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
 {% endblock %};

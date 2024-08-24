@@ -51,12 +51,13 @@ class MA_IntervencionesForm (forms.ModelForm):
         widgets = {
             'detalle': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
             'responsable' : forms.SelectMultiple(attrs={'class': 'select2 w-100', 'multiple': True}),
+            'fecha': forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
         }
         labels = {
             'criterio_modificable': 'Criterio modificable trabajado',
             'impacto': 'Impacto en el criterio',
             'accion': 'Acción desarrollada',
-            'detalle':'Detalles',
+            'detalle':'Observaciones',
         }
         
     def __init__(self, *args, **kwargs):

@@ -122,6 +122,13 @@ class CDIF_VacantesOtorgadasForm (forms.ModelForm):
             'motivo':'Motivo principal',
             'detalles':'Detalles',
         }
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        # Establecer el campo 'motivo' a una cadena vacía
+        instance.motivo = ""
+        if commit:
+            instance.save()
+        return instance
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -137,12 +144,13 @@ class CDIF_IntervencionesForm (forms.ModelForm):
         widgets = {
             'detalle': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
             'responsable' : forms.SelectMultiple(attrs={'class': 'select2 w-100', 'multiple': True}),
+            'fecha': forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
         }
         labels = {
             'criterio_modificable': 'Criterio trabajado',
             'impacto': 'Impacto en el criterio',
             'accion': 'Acción desarrollada',
-            'detalle':'Detalles',
+            'detalle':'Observaciones',
         }
         
     def __init__(self, *args, **kwargs):

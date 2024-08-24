@@ -98,7 +98,7 @@ class PDV_PreAdmision (models.Model):
     programa_Pilares_5 = models.BooleanField(verbose_name='Quiere participar del Programa Pilares', null=True, blank=True)
     centro_postula = models.ForeignKey(Vacantes, on_delete=models.PROTECT, null=True, blank=True)
     programa_postula = models.ForeignKey(Programas, on_delete=models.PROTECT, null=True, blank=True)
-    sala_postula = models.ForeignKey(CupoVacante, on_delete=models.PROTECT, null=False, blank=False)
+    sala_postula = models.ForeignKey(CupoVacante, on_delete=models.PROTECT, null=True, blank=True)
     taller_postula =  models.ForeignKey(Organismos, on_delete=models.PROTECT, null=True, blank=True)
     sala_short = models.CharField(max_length=150, null=True, blank=True)
     vinculo1 = models.CharField(max_length=150, null=True, blank=True)
@@ -259,12 +259,12 @@ class PDV_Intervenciones(models.Model):
     accion = models.CharField(max_length=250, choices=CHOICE_ACCION_DESARROLLADA, null=False, blank=False)
     responsable = models.ManyToManyField(OpcionesResponsables)
     impacto = models.CharField(max_length=250, choices=[('Trabajado','Trabajado'),('Revertido','Revertido')], null=False, blank=False)
-    detalle = models.CharField(max_length=350, null=True, blank=True)
+    detalle = models.CharField(max_length=350, null=True, blank=True, verbose_name='Observaciones')
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
     creado_por = models.ForeignKey(Usuarios, related_name='PDV_Intervenciones_creado_por', on_delete=models.PROTECT, blank=True, null=True)
     modificado_por = models.ForeignKey(Usuarios, related_name='PDV_Intervenciones_modificada_por', on_delete=models.PROTECT, blank=True, null=True)
-
+    fecha = models.DateField(null=True, blank=True)
 
 class PDV_Historial(models.Model):
     fk_legajo = models.ForeignKey(Legajos, on_delete=models.PROTECT, null=True, blank=True)

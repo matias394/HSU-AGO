@@ -30,10 +30,7 @@
     <!-- <a href="{% url 'admisiones_historial'%}" class="btn btn-primary mr-1">Ver admisiones</a> -->
     <!--<a href="{% url 'CDIF_vacantes_form' object.id %}" class="btn btn-primary mr-1">Otorgar Vacante</a>-->
     {% if object.admitido == 'NO' and object.ivi == 'SI'%}
-    <button type="submit" name="admitir" class="btn btn-primary mr-1" form="admitirForm">Admitir</button>
-    <form method="post" action="{% url 'CDIF_preadmisiones_ver3' object.id %}" id="admitirForm" class="d-inline">
-      {% csrf_token %}
-    </form>
+    <a href="{% url 'CDIF_preadmisiones_ver' object.id %}" class="btn btn-primary mr-1">Volver</a>
     <a href="{% url 'CDIF_indiceivi_editar' object.id %}" class="btn btn-secondary mr-1">Editar</a>
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
@@ -52,7 +49,7 @@
       <div class="card-body">
         <dl class="row mb-0">
           <dd class="col-sm-3 mb-2">Índice</dd>
-          <dt class="col-sm-9 mb-2">Índice de vulnerabilidad infantil (IVI)</dt>
+          <dt class="col-sm-9 mb-2">IV</dt>
           <dd class="col-sm-3 mb-2">Tipo</dd>
           <dt class="col-sm-9 mb-2">{{foto_ivi.tipo}}</dt>
           <dd class="col-sm-3 mb-2">Fecha</dd>
