@@ -434,6 +434,33 @@ CHOICE_CENTROS_SALUD = [
     ('Clínica Privada', 'Clínica Privada'),
 ]
 
+CHOISE_CDLE_PARTICIPARDE = [
+    (None, ''),
+    ("Proyecto 360", "Proyecto 360"),
+    ("Proyecto de Vida", "Proyecto de Vida")
+]
+
+CHOISE_CDLE_ACOMPANIANTES = [
+    (None, ''),
+    ("Rafaela Cabanillas", "Rafaela Cabanillas"),
+    ("Rafaela Cabanillas", "Rafaela Cabanillas"),
+    ("Noelia Ponce", "Noelia Ponce"),
+    ("Josefina Dubini", "Josefina Dubini"),
+    ("Melanie Mur", "Melanie Mur"),
+    ("Dolores Capelletti", "Dolores Capelletti")
+]
+
+CHOISE_ANTICONCEPTIVOS = [
+    (None, ''),
+    ("Preservativo", "Preservativo"),
+    ("Inyectable", "Inyectable"),
+    ("Implante anticonceptivo", "Implante anticonceptivo"),
+    ("DIU", "DIU"),
+    ("Parche anticonceptivo", "Parche anticonceptivo"),
+    ("Anticonceptivo oral", "Anticonceptivo oral"),
+    ("Ligadura tubaria", "Ligadura tubaria"),
+]
+
 CHOICE_FRECUENCIA = [
     (None, ''),
     ('6 meses o menos', '6 meses o menos'),
@@ -565,6 +592,27 @@ CHOICE_BARRIOS = [
     ('Sarmiento', 'Sarmiento'),
     ('Trujui', 'Trujui'),
 ]
+
+CHOICE_INGRESOPOR = [
+    (None, ''),
+    ('Operativo','Operativo'),
+    ('Red Madre','Red Madre'),
+    ('Otro','Otro'),
+]
+
+CHOICE_DERIVACIONDE = [
+    (None, ''),
+    ('Rastrillaje','Rastrillaje'),
+    ('Red Madre','Red Madre'),
+    ('Servicio Social HL','Servicio Social HL'),
+    ('Consejeria','Consejeria'),
+    ('EMB en programa','EMB en programa'),
+    ('Subsecretaria de Primera Infancia','Subsecretaria de Primera Infancia'),
+    ('CAPS','CAPS'),
+    ('Otro','Otro'),
+]
+
+
 CHOICE_IMPORTANCIA = [
     (None, ''),
     ('Alta', 'Alta'),
