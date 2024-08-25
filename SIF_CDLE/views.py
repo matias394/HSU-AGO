@@ -164,7 +164,7 @@ class CDLEPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
         legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
-        context["pk_preadmision"] = pk.id
+        context["pk_preadmision"] = pk
         context["pk"] = pk
         context["legajo"] = legajo
         context["familia"] = familia
