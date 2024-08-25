@@ -1,13 +1,13 @@
 from django.views.generic import CreateView,ListView,DetailView,UpdateView,DeleteView,TemplateView, FormView
 from Legajos.models import LegajosDerivaciones,HistorialLegajoIndices
-from Legajos.forms import DerivacionesRechazoForm, LegajosDerivacionesForm
+from Legajos.forms import DerivacionesRechazoForm, LegajosDerivacionesForm, NuevoLegajoFamiliarForm
 from django.db.models import Q
 from .models import *
 from Configuraciones.models import *
 from .forms import *
 from Usuarios.mixins import PermisosMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,QueryDict
 from django.db.models import Sum, F, ExpressionWrapper, IntegerField, Count, Max
 import uuid
 from django.shortcuts import redirect
@@ -169,9 +169,13 @@ class MILDPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
     template_name = "SIF_MILD/preadmisiones_form.html"
     model = MILD_PreAdmision
     form_class = MILD_PreadmisionesForm
+    form_nuevo_grupo_familiar_class = NuevoLegajoFamiliarForm()
     success_message = "Preadmisión creada correctamente"
 
     def get_context_data(self, **kwargs):
+        if 'conviven' in self.request.POST:
+            self.crear_grupo_hogar(self.request.POST)
+            messages.success(self.request, "Familair agregado correctamente.")
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
@@ -180,8 +184,78 @@ class MILDPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
         context["pk"] = pk
         context["legajo"] = legajo
         context["familia"] = familia
+        context["nuevo_grupo_familiar_form"] = self.form_nuevo_grupo_familiar_class
         context["familia_inversa"] = familia_inversa
         return context
+    
+
+    def crear_grupo_hogar(self,form: QueryDict):
+        copy_form = dict(**form.dict())
+        del copy_form['csrfmiddlewaretoken']
+        legajo_derivacion = LegajosDerivaciones.objects.filter(pk=copy_form.get('pk')).first()
+        vinculo = copy_form.get('vinculo')
+        conviven = copy_form.get('conviven')
+        estado_relacion = copy_form.get('estado_relacion')
+        cuidador_principal = copy_form.get('cuidador_principal')
+
+        # Crea el objeto Legajos
+        try:
+             
+            nuevo_legajo = Legajos.objects.create(
+                nombre= copy_form.get('nombre'),
+                apellido= copy_form.get('apellido'),
+                fecha_nacimiento= copy_form.get('fecha_nacimiento'),
+                tipo_doc= copy_form.get('tipo_doc'),
+                documento= copy_form.get('documento'),
+                sexo= copy_form.get('sexo'),
+            )
+
+            DimensionFamilia.objects.create(fk_legajo=nuevo_legajo)
+            DimensionVivienda.objects.create(fk_legajo=nuevo_legajo)
+            DimensionSalud.objects.create(fk_legajo=nuevo_legajo)
+            DimensionEconomia.objects.create(fk_legajo=nuevo_legajo)
+            DimensionEducacion.objects.create(fk_legajo=nuevo_legajo)
+            DimensionTrabajo.objects.create(fk_legajo=nuevo_legajo)
+        except Exception as e:
+            print(e)
+            return messages.error(self.request, "Verifique que no exista un legajo con ese DNI y NÚMERO.")
+
+        # Crea el objeto LegajoGrupoFamiliar con los valores del formulario
+        vinculo_data = VINCULO_MAP.get(vinculo)
+        if not vinculo_data:
+            return messages.error(self.request, "Vinculo inválido.")
+
+        # crea la relacion de grupo familiar
+        legajo_principal = legajo_derivacion.fk_legajo
+        try:
+            legajo_grupo_familiar = LegajoGrupoFamiliar.objects.create(
+                fk_legajo_1=legajo_principal,
+                fk_legajo_2=nuevo_legajo,
+                vinculo=vinculo_data["vinculo"],
+                vinculo_inverso=vinculo_data["vinculo_inverso"],
+                conviven=conviven,
+                estado_relacion=estado_relacion,
+                cuidador_principal=cuidador_principal,
+            )
+
+            familiar = {
+                "id": legajo_grupo_familiar.id,
+                "fk_legajo_1": legajo_grupo_familiar.fk_legajo_1.id,
+                "fk_legajo_2": legajo_grupo_familiar.fk_legajo_2.id,
+                "vinculo": legajo_grupo_familiar.vinculo,
+                "nombre": legajo_grupo_familiar.fk_legajo_2.nombre,
+                "apellido": legajo_grupo_familiar.fk_legajo_2.apellido,
+                "foto": legajo_grupo_familiar.fk_legajo_2.foto.url if legajo_grupo_familiar.fk_legajo_2.foto else None,
+                "cuidador_principal": legajo_grupo_familiar.cuidador_principal,
+            }
+        except Exception as e:
+            print(e)
+            return messages.error(self.request, "Verifique que no exista un legajo con ese DNI y NÚMERO.")
+
+        
+        # Redireccionar a la misma página después de realizar la acción con éxito
+        # return HttpResponseRedirect(reverse('CDLE_preadmisiones_editar', args=[self.object.pk]))
+
 
     def form_valid(self, form):
         pk = self.kwargs["pk"]
@@ -216,9 +290,13 @@ class MILDPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin)
     template_name = "SIF_MILD/preadmisiones_form.html"
     model = MILD_PreAdmision
     form_class = MILD_PreadmisionesForm
+    form_nuevo_grupo_familiar_class = NuevoLegajoFamiliarForm()
     success_message = "Preadmisión creada correctamente"
 
     def get_context_data(self, **kwargs):
+        if 'conviven' in self.request.POST:
+            self.crear_grupo_hogar(self.request.POST)
+            messages.success(self.request, "Familair agregado correctamente.")
         pk = MILD_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(pk=pk.fk_derivacion_id).first()
@@ -230,6 +308,74 @@ class MILDPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin)
         context["familia"] = familia
         context["familia_inversa"] = familia_inversa
         return context
+    
+    def crear_grupo_hogar(self,form: QueryDict):
+        copy_form = dict(**form.dict())
+        del copy_form['csrfmiddlewaretoken']
+        legajo_derivacion = LegajosDerivaciones.objects.filter(pk=copy_form.get('pk')).first()
+        vinculo = copy_form.get('vinculo')
+        conviven = copy_form.get('conviven')
+        estado_relacion = copy_form.get('estado_relacion')
+        cuidador_principal = copy_form.get('cuidador_principal')
+
+        # Crea el objeto Legajos
+        try:
+             
+            nuevo_legajo = Legajos.objects.create(
+                nombre= copy_form.get('nombre'),
+                apellido= copy_form.get('apellido'),
+                fecha_nacimiento= copy_form.get('fecha_nacimiento'),
+                tipo_doc= copy_form.get('tipo_doc'),
+                documento= copy_form.get('documento'),
+                sexo= copy_form.get('sexo'),
+            )
+
+            print(nuevo_legajo)
+            DimensionFamilia.objects.create(fk_legajo=nuevo_legajo)
+            DimensionVivienda.objects.create(fk_legajo=nuevo_legajo)
+            DimensionSalud.objects.create(fk_legajo=nuevo_legajo)
+            DimensionEconomia.objects.create(fk_legajo=nuevo_legajo)
+            DimensionEducacion.objects.create(fk_legajo=nuevo_legajo)
+            DimensionTrabajo.objects.create(fk_legajo=nuevo_legajo)
+        except Exception as e:
+            print(e)
+            return messages.error(self.request, "Verifique que no exista un legajo con ese DNI y NÚMERO.")
+
+        # Crea el objeto LegajoGrupoFamiliar con los valores del formulario
+        vinculo_data = VINCULO_MAP.get(vinculo)
+        if not vinculo_data:
+            return messages.error(self.request, "Vinculo inválido.")
+
+        # crea la relacion de grupo familiar
+        legajo_principal = legajo_derivacion.fk_legajo
+        try:
+            legajo_grupo_familiar = LegajoGrupoFamiliar.objects.create(
+                fk_legajo_1=legajo_principal,
+                fk_legajo_2=nuevo_legajo,
+                vinculo=vinculo_data["vinculo"],
+                vinculo_inverso=vinculo_data["vinculo_inverso"],
+                conviven=conviven,
+                estado_relacion=estado_relacion,
+                cuidador_principal=cuidador_principal,
+            )
+
+            familiar = {
+                "id": legajo_grupo_familiar.id,
+                "fk_legajo_1": legajo_grupo_familiar.fk_legajo_1.id,
+                "fk_legajo_2": legajo_grupo_familiar.fk_legajo_2.id,
+                "vinculo": legajo_grupo_familiar.vinculo,
+                "nombre": legajo_grupo_familiar.fk_legajo_2.nombre,
+                "apellido": legajo_grupo_familiar.fk_legajo_2.apellido,
+                "foto": legajo_grupo_familiar.fk_legajo_2.foto.url if legajo_grupo_familiar.fk_legajo_2.foto else None,
+                "cuidador_principal": legajo_grupo_familiar.cuidador_principal,
+            }
+        except Exception as e:
+            print(e)
+            return messages.error(self.request, "Verifique que no exista un legajo con ese DNI y NÚMERO.")
+
+        
+        # Redireccionar a la misma página después de realizar la acción con éxito
+        # return HttpResponseRedirect(reverse('CDLE_preadmisiones_editar', args=[self.object.pk]))
 
     def form_valid(self, form):
         pk = MILD_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()

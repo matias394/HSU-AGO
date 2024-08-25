@@ -27,16 +27,85 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-md-12">
-        <div class="card card-primary card-outline">
-            <div class="bs-stepper">
-                <div class="bs-stepper-header" role="tablist">
-                    <div class="step" data-target="#cuidador-principal">
-                        <button type="button" class="step-trigger" role="tab" aria-controls="cuidador-principal"
-                            id="cuidador-principal-trigger">
-                            <span class="bs-stepper-circle">1</span>
-                            <span class="bs-stepper-label">Madre o cuidador principal</span>
-                        </button>
+  <div class="col-md-12">
+    <div class="card card-primary card-outline">
+      <div class="bs-stepper linear">
+        <div class="bs-stepper-header" role="tablist" style="align-items: flex-start;">
+
+          <div class="step active" data-target="#grupo-familiar"> 
+              <button type="button" class="step-trigger" role="tab" aria-controls="grupo-familiar" id="grupo-familiar-trigger" aria-selected="true"> 
+                <span class="bs-stepper-circle">1</span> <span class="bs-stepper-label" style="text-wrap: pretty;">Grupo familiar</span> 
+              </button> 
+          </div>
+          
+          <div class="step" data-target="#entrevista"> <button type="button" class="step-trigger" role="tab"
+              aria-controls="entrevista" id="entrevista-trigger" aria-selected="false" disabled="disabled"> <span
+                class="bs-stepper-circle">2</span> <span class="bs-stepper-label"
+                style="text-wrap: pretty;">Entrevista</span> </button> </div>
+          <div class="step" data-target="#embarazo"> <button type="button" class="step-trigger" role="tab"
+              aria-controls="embarazo" id="embarazo-trigger" aria-selected="false" disabled="disabled"> <span
+                class="bs-stepper-circle">3</span> <span class="bs-stepper-label"
+                style="text-wrap: pretty;">Embarazo</span> </button> </div>
+          <div class="step" data-target="#salud-embarazada"> <button type="button" class="step-trigger" role="tab"
+              aria-controls="salud-embarazada" id="salud-embarazada-trigger" aria-selected="false" disabled="disabled">
+              <span class="bs-stepper-circle">4</span> <span class="bs-stepper-label" style="text-wrap: pretty;">Salud
+                de la embarazada</span> </button> </div>
+          <div class="step" data-target="#info-controles"> <button type="button" class="step-trigger" role="tab"
+              aria-controls="info-controles" id="info-controles-trigger" aria-selected="false" disabled="disabled">
+              <span class="bs-stepper-circle">5</span> <span class="bs-stepper-label"
+                style="text-wrap: pretty;">Controles</span> </button> </div>
+          <div class="step" data-target="#pareja-apoyo-crianza"> <button type="button" class="step-trigger" role="tab"
+              aria-controls="pareja-apoyo-crianza" id="pareja-apoyo-crianza-trigger" aria-selected="false"
+              disabled="disabled"> <span class="bs-stepper-circle">6</span> <span class="bs-stepper-label"
+                style="text-wrap: pretty;">Apoyo en la crianza</span> </button> </div>
+          <div class="step" data-target="#info-familiar"> <button type="button" class="step-trigger" role="tab"
+              aria-controls="info-familiar" id="info-familiar-trigger" aria-selected="false" disabled="disabled"> <span
+                class="bs-stepper-circle">7</span> <span class="bs-stepper-label" style="text-wrap: pretty;">Información
+                Familiar</span> </button> </div>
+          <div class="step" data-target="#acompaniante-conclusiones"> <button type="button" class="step-trigger"
+              role="tab" aria-controls="acompaniante-conclusiones" id="acompaniante-conclusiones-trigger"
+              aria-selected="false" disabled="disabled"> <span class="bs-stepper-circle">8</span> <span
+                class="bs-stepper-label" style="text-wrap: pretty;">Acompañante y conclusiones</span> </button> </div>
+          <div class="step" data-target="#candidata-a"> <button type="button" class="step-trigger" role="tab"
+              aria-controls="candidata-a" id="candidata-a-trigger" aria-selected="false" disabled="disabled"> <span
+                class="bs-stepper-circle">9</span> <span class="bs-stepper-label" style="text-wrap: pretty;">Candidata
+                a</span> </button> </div>
+        </div>
+        <div class="card-body py-0 px-2 mt-2">
+          <div class="bs-stepper-content">
+            <div class="content active dstepper-block" aria-labelledby="grupo-familiar-trigger" id="grupo-familiar"
+              role="tabpanel">
+              <!-- <div class="form-row justify-content-between p-1"> <a href="/CDLE/derivaciones/listar"
+                  class="btn btn-danger align-left">Cancelar</a><a class="btn btn-primary align-right"
+                  onclick="stepper.next()">Continuar</a>
+              </div> -->
+
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title font-weight-bold">
+                    Grupo familiar
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div id="tablaResultado"
+                    class="row text-center d-flex justify-content-center justify-content-sm-start px-2">
+                    {% if familia or familia_inversa %}
+                    {% for f in familia %}
+                    <div id="familiar-{{f.id}}" class="px-2">
+                      <ul class="users-list">
+                        <li style="width:auto">
+                          {% if f.foto %}
+
+                          <img src="{{MEDIA_URL}}{{f.familia_inversa.foto.url}}" alt="User Image" width="60px">
+                          {%else%}
+                          <img src="{% static 'custom/img/default.png'  %}" alt="User Image" width="60px">
+                          {%endif%}
+                          <span class="users-list-name">{{f.fk_legajo_1}}</span>
+                          <span class="users-list-date">{{f.vinculo}}</span>
+                          <span class="users-list-date"><button class="btn btn-danger btn-sm"
+                              onclick='deleteFamiliar("{{f.id}}")' type="submit">Eliminar</button></span>
+                        </li>
+                      </ul>
                     </div>
                     <!--<div class="line"></div>-->
                     <div class="step" data-target="#cuidador-secundario">
@@ -62,13 +131,119 @@
                             <span class="bs-stepper-label">Embarazo</span>
                         </button>
                     </div>
-                    <!--<div class="line"></div>-->
-                    <div class="step" data-target="#info-controles">
-                        <button type="button" class="step-trigger" role="tab" aria-controls="info-controles"
-                            id="info-controles-trigger">
-                            <span class="bs-stepper-circle">5</span>
-                            <span class="bs-stepper-label">Controles del embarazo</span>
-                        </button>
+                    <div class="col-sm-8">
+                      <form id="search-form" autocomplete="off">
+                        {% csrf_token %}
+                        <div class="form-row justify-content-sm-end">
+                          <div class="form-group col-sm-3 mb-0 mb-0 pb-0">
+                            <input type="text" class="form-control " id="search-input" placeholder="Buscar">
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body p-0">
+                  <div class="table-responsive text-nowrap">
+                    <table id="tabla" class="table">
+                      <thead>
+                        <tr>
+                          <th>Apellido</th>
+                          <th>Nombre</th>
+                          <th>Documento</th>
+                          <th>Vínculo</th>
+                          <th>Estado Relación</th>
+                          <th class="text-center">Convive</th>
+                          <th class="text-center">Cuidador Principal</th>
+                          <th class="text-right"></th>
+                        </tr>
+                      </thead>
+                      <tbody id="results-box">
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="row d-none" id="nuevo_legajo_familiar">
+                    {% if '/CDLE/preadmisiones/editar/' in request.path %}
+                    <form autocomplete="off" method="POST" novalidate action="{% url 'CDLE_preadmisiones_editar' pk_preadmision %}" id="formulario-nuevo">
+                    {% else %}
+                    <form autocomplete="off" method="POST" novalidate action="{% url 'CDLE_preadmisiones_crear' pk %}" id="formulario-nuevo">
+                    {% endif %}
+                      {% csrf_token %}
+                      <div class="form-row px-3 px-sm-5 mt-3">
+                        <div class="form-group col-12">
+                          <div class="text-center text-muted h4 pt-3">La búsqueda no arrojó
+                            resultados.</div>
+                          <div class="text-center text-muted h4 pb-3">Realice una nueva
+                            búsqueda o bien utilice el siguiente formulario para agregar un
+                            familiar nuevo.</div>
+                        </div>
+                        <input type="hidden" name="pk" value="{{ pk }}">
+                        <div class="form-group col-sm-6">
+                          {{ nuevo_grupo_familiar_form.nombre|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-sm-6">
+                          {{ nuevo_grupo_familiar_form.apellido|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-sm-3">
+                          {{ nuevo_grupo_familiar_form.sexo|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-sm-3">
+                          {{ nuevo_grupo_familiar_form.fecha_nacimiento|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-sm-3">
+                          {{ nuevo_grupo_familiar_form.tipo_doc|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-sm-3">
+                          {{ nuevo_grupo_familiar_form.documento|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-sm-3">
+                          {{ nuevo_grupo_familiar_form.vinculo|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-sm-3">
+                          {{ nuevo_grupo_familiar_form.estado_relacion|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-sm-3">
+                          {{ nuevo_grupo_familiar_form.conviven|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-sm-3">
+                          {{ nuevo_grupo_familiar_form.cuidador_principal|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-12 text-right">
+                          <button type="submit" name="form_nuevo_familiar" id="form_nuevo_familiar"
+                            class="btn btn-primary mb-3">Agregar</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row justify-content-between p-1"> <a href="/CDLE/derivaciones/listar"
+                  class="btn btn-danger align-left">Cancelar</a><a class="btn btn-primary align-right"
+                  onclick="stepper.next()">Continuar</a>
+              </div>
+
+            </div>
+            <div>
+              <form novalidate method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" id="id_fk_derivacion" name="fk_derivacion" value={{pk}}>
+                <input type="hidden" id="id_fk_legajo" name="fk_legajo" value={{legajo.fk_legajo.id}}>
+                {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+                <input type="hidden" id="id_modificado_por" name="modificado_por" value={{ user.id }}>
+                {% else %}
+                <input type="hidden" id="id_creado_por" name="creado_por" value={{ user.id }}>
+                {% endif %}
+                <div class="content" aria-labelledby="entrevista-trigger" id="entrevista" role="tabpanel">
+                  <div class="form-row justify-content-between p-1"> <a class="btn btn-secondary align-left  "
+                      onclick="stepper.previous()">Volver</a><a class="btn btn-primary align-right "
+                      onclick="stepper.next()">Continuar</a>
+                  </div>
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="card-title font-weight-bold">
+                        Entrevista
+                      </div>
                     </div>
                     <!--<div class="line"></div>-->
                     <div class="step" data-target="#info-acompaniante">
