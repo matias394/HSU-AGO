@@ -749,10 +749,6 @@ class LegajosDerivacionesUpdateView(PermisosMixin, UpdateView):
             archivos.delete()
 
         pk = self.kwargs["pk"]
-        archivos_check = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=pk)
-        if not archivos_check.exists():
-            form.add_error(None, "No hay archivos asociados a este legajo.")
-            return self.form_invalid(form)
 
         return response
 

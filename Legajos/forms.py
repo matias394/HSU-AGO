@@ -201,13 +201,14 @@ class LegajosDerivacionesForm(forms.ModelForm):
         fk_programa = cleaned_data.get("fk_programa")
         fk_legajo = cleaned_data.get("fk_legajo")
         detalles = cleaned_data.get("detalles")
-        archivos = self.files.get("archivos")  # Obtiene los archivos directamente desde self.files
+       
 
         if fk_programa and fk_programa.id == settings.PROG_MILD:
             if not detalles:
                 self.add_error('detalles', 'Este campo es obligatorio.')
     
         if fk_programa and fk_programa.id == settings.PROG_SL:
+            archivos = self.files.get("archivos")  # Obtiene los archivos directamente desde self.files
             if not detalles:
                 self.add_error('detalles', 'Este campo es obligatorio cuando el programa es Servicio Local.')
                 # Si existen archivos asociados, verificar si hay archivos nuevos adjuntados
