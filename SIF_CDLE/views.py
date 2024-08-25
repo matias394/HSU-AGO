@@ -1,16 +1,17 @@
 from django.views.generic import CreateView,ListView,DetailView,UpdateView,DeleteView,TemplateView, FormView
 from Legajos.models import LegajosDerivaciones,HistorialLegajoIndices
-from Legajos.forms import DerivacionesRechazoForm, LegajosDerivacionesForm
+from Legajos.forms import DerivacionesRechazoForm, LegajosDerivacionesForm, NuevoLegajoFamiliarForm
 from django.db.models import Q
+from django.forms import BaseModelForm
 from .models import *
 from Configuraciones.models import *
 from .forms import *
 from Usuarios.mixins import PermisosMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,HttpRequest,JsonResponse,QueryDict,HttpResponse
 from django.db.models import Sum, F, ExpressionWrapper, IntegerField, Count, Max
 import uuid
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.conf import settings
 from SIF_CDLE.models import Criterios_IVI
@@ -151,9 +152,13 @@ class CDLEPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
     template_name = "SIF_CDLE/preadmisiones_form.html"
     model = CDLE_PreAdmision
     form_class = CDLE_PreadmisionesForm
+    form_nuevo_grupo_familiar_class = NuevoLegajoFamiliarForm()
     success_message = "Preadmisión creada correctamente"
 
     def get_context_data(self, **kwargs):
+        if 'conviven' in self.request.POST:
+            self.crear_grupo_hogar(self.request.POST)
+            messages.success(self.request, "Familair agregado correctamente.")
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
@@ -163,17 +168,18 @@ class CDLEPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
         context["pk"] = pk
         context["legajo"] = legajo
         context["familia"] = familia
+        context["nuevo_grupo_familiar_form"] = self.form_nuevo_grupo_familiar_class
         context["familia_inversa"] = familia_inversa
         return context
 
-    def form_valid(self, form):
+    def form_valid(self, form: BaseModelForm):
         pk = self.kwargs["pk"]
         form.instance.estado = 'Pendiente'
-        form.instance.vinculo1 = form.cleaned_data['vinculo1']
-        form.instance.vinculo2 = form.cleaned_data['vinculo2']
-        form.instance.vinculo3 = form.cleaned_data['vinculo3']
-        form.instance.vinculo4 = form.cleaned_data['vinculo4']
-        form.instance.vinculo5 = form.cleaned_data['vinculo5']
+        # form.instance.vinculo1 = form.cleaned_data['vinculo1']
+        # form.instance.vinculo2 = form.cleaned_data['vinculo2']
+        # form.instance.vinculo3 = form.cleaned_data['vinculo3']
+        # form.instance.vinculo4 = form.cleaned_data['vinculo4']
+        # form.instance.vinculo5 = form.cleaned_data['vinculo5']
         form.instance.creado_por_id = self.request.user.id
 
         self.object = form.save()
@@ -196,6 +202,7 @@ class CDLEPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
     
     def crear_grupo_hogar(self,form: QueryDict):
         copy_form = dict(**form.dict())
+        print(copy_form)
         del copy_form['csrfmiddlewaretoken']
         legajo_derivacion = LegajosDerivaciones.objects.filter(pk=copy_form.get('pk')).first()
         vinculo = copy_form.get('vinculo')
@@ -215,6 +222,7 @@ class CDLEPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
                 sexo= copy_form.get('sexo'),
             )
 
+            print(nuevo_legajo)
             DimensionFamilia.objects.create(fk_legajo=nuevo_legajo)
             DimensionVivienda.objects.create(fk_legajo=nuevo_legajo)
             DimensionSalud.objects.create(fk_legajo=nuevo_legajo)
@@ -266,29 +274,35 @@ class CDLEPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin)
     template_name = "SIF_CDLE/preadmisiones_form.html"
     model = CDLE_PreAdmision
     form_class = CDLE_PreadmisionesForm
+    form_nuevo_grupo_familiar_class = NuevoLegajoFamiliarForm()
     success_message = "Preadmisión creada correctamente"
 
     def get_context_data(self, **kwargs):
+        if 'conviven' in self.request.POST:
+            self.crear_grupo_hogar(self.request.POST)
+            messages.success(self.request, "Familair agregado correctamente.")
         pk = CDLE_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(pk=pk.fk_derivacion_id).first()
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
-
+        context["pk_preadmision"] = pk
         context["pk"] = pk.fk_derivacion_id
         context["legajo"] = legajo
         context["familia"] = familia
+        context["nuevo_grupo_familiar_form"] = self.form_nuevo_grupo_familiar_class
         context["familia_inversa"] = familia_inversa
         return context
 
     def form_valid(self, form):
+        
         pk = CDLE_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
         form.instance.creado_por_id = pk.creado_por_id
-        form.instance.vinculo1 = form.cleaned_data['vinculo1']
-        form.instance.vinculo2 = form.cleaned_data['vinculo2']
-        form.instance.vinculo3 = form.cleaned_data['vinculo3']
-        form.instance.vinculo4 = form.cleaned_data['vinculo4']
-        form.instance.vinculo5 = form.cleaned_data['vinculo5']
+        # form.instance.vinculo1 = form.cleaned_data['vinculo1']
+        # form.instance.vinculo2 = form.cleaned_data['vinculo2']
+        # form.instance.vinculo3 = form.cleaned_data['vinculo3']
+        # form.instance.vinculo4 = form.cleaned_data['vinculo4']
+        # form.instance.vinculo5 = form.cleaned_data['vinculo5']
         form.instance.estado = pk.estado
         form.instance.modificado_por_id = self.request.user.id
         self.object = form.save()
@@ -297,6 +311,7 @@ class CDLEPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin)
 
     def crear_grupo_hogar(self,form: QueryDict):
         copy_form = dict(**form.dict())
+        print(copy_form)
         del copy_form['csrfmiddlewaretoken']
         legajo_derivacion = LegajosDerivaciones.objects.filter(pk=copy_form.get('pk')).first()
         vinculo = copy_form.get('vinculo')

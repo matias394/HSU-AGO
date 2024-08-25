@@ -10,15 +10,15 @@
 
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right">
-    <li class="breadcrumb-item"><a href="{% url 'CDLE_derivaciones_listar'%}"
-            title="Ver listado de Pre-admisiones">Pre-admisiones</a></li>
-    <li class="breadcrumb-item "><a href="{% url 'legajos_ver' legajo.fk_legajo.id %}"
-            title="Ver legajo">{{legajo.fk_legajo}}</a></li>
-            {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-            <li class="breadcrumb-item active">Editar</li>
-            {% else %}
-            <li class="breadcrumb-item active">Agregar</li>
-            {% endif %}
+  <li class="breadcrumb-item"><a href="{% url 'CDLE_derivaciones_listar'%}"
+      title="Ver listado de Pre-admisiones">Pre-admisiones</a></li>
+  <li class="breadcrumb-item "><a href="{% url 'legajos_ver' legajo.fk_legajo.id %}"
+      title="Ver legajo">{{legajo.fk_legajo}}</a></li>
+  {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
+  <li class="breadcrumb-item active">Editar</li>
+  {% else %}
+  <li class="breadcrumb-item active">Agregar</li>
+  {% endif %}
 </ol>
 {% endblock %};
 
@@ -31,13 +31,10 @@
     <div class="card card-primary card-outline">
       <div class="bs-stepper linear">
         <div class="bs-stepper-header" role="tablist" style="align-items: flex-start;">
-
-          <div class="step active" data-target="#grupo-familiar"> 
-              <button type="button" class="step-trigger" role="tab" aria-controls="grupo-familiar" id="grupo-familiar-trigger" aria-selected="true"> 
-                <span class="bs-stepper-circle">1</span> <span class="bs-stepper-label" style="text-wrap: pretty;">Grupo familiar</span> 
-              </button> 
-          </div>
-
+          <div class="step active" data-target="#grupo-familiar"> <button type="button" class="step-trigger" role="tab"
+              aria-controls="grupo-familiar" id="grupo-familiar-trigger" aria-selected="true"> <span
+                class="bs-stepper-circle">1</span> <span class="bs-stepper-label" style="text-wrap: pretty;">Grupo
+                familiar</span> </button> </div>
           <div class="step" data-target="#entrevista"> <button type="button" class="step-trigger" role="tab"
               aria-controls="entrevista" id="entrevista-trigger" aria-selected="false" disabled="disabled"> <span
                 class="bs-stepper-circle">2</span> <span class="bs-stepper-label"
@@ -107,29 +104,41 @@
                         </li>
                       </ul>
                     </div>
-                    <!--<div class="line"></div>-->
-                    <div class="step" data-target="#cuidador-secundario">
-                        <button type="button" class="step-trigger" role="tab" aria-controls="cuidador-secundario"
-                            id="cuidador-secundario-trigger">
-                            <span class="bs-stepper-circle">2</span>
-                            <span class="bs-stepper-label">Padre o apoyo en la crianza</span>
-                        </button>
+                    {% empty %}
+                    {% endfor %}
+                    {% for f in familia_inversa %}
+                    <div id="familiar-{{f.id}}" class="px-2">
+                      <ul class="users-list">
+                        <li style="width:auto">
+                          {% if f.foto %}
+                          <img src="{{MEDIA_URL}}{{f.fk_legajo_1.foto.url}}" alt="User Image" width="60px">
+                          {%else%}
+                          <img src="{% static 'custom/img/default.png'  %}" alt="User Image" width="60px">
+                          {%endif%}
+                          <span class="users-list-name">{{f.fk_legajo_2}}</span>
+                          <span class="users-list-date">{{f.vinculo}}</span>
+                          <span class="users-list-date"><button class="btn btn-danger btn-sm"
+                              onclick='deleteFamiliar("{{f.id}}")' type="submit">Eliminar</button></span>
+                        </li>
+                      </ul>
                     </div>
-                    <!--<div class="line"></div>-->
-                    <div class="step" data-target="#convivientes">
-                        <button type="button" class="step-trigger" role="tab" aria-controls="convivientes"
-                            id="convivientes-trigger">
-                            <span class="bs-stepper-circle">3</span>
-                            <span class="bs-stepper-label">Otros convivientes</span>
-                        </button>
+                    {% empty %}
+                    {% endfor %}
+                    {%else%}
+                    <div class="col-12 text-center" id="sin-familiares">
+                      <h6 class="text-muted">Sin grupo familiar</h6>
                     </div>
-                    <!--<div class="line"></div>-->
-                    <div class="step" data-target="#info-embarazos">
-                        <button type="button" class="step-trigger" role="tab" aria-controls="info-embarazos"
-                            id="info-embarazos-trigger">
-                            <span class="bs-stepper-circle">4</span>
-                            <span class="bs-stepper-label">Embarazo</span>
-                        </button>
+                    {%endif%}
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+
+                  <div class="row align-items-between">
+                    <div class="col mb-3 mb-sm-none ">
+                      <h3 class="card-title font-weight-bold pt-1 mr-3"> Agregar familiar</h3>
                     </div>
                     <div class="col-sm-8">
                       <form id="search-form" autocomplete="off">
@@ -244,997 +253,351 @@
                       <div class="card-title font-weight-bold">
                         Entrevista
                       </div>
+
                     </div>
-                    <!--<div class="line"></div>-->
-                    <div class="step" data-target="#info-acompaniante">
-                        <button type="button" class="step-trigger" role="tab" aria-controls="info-acompaniante"
-                            id="info-controles-trigger">
-                            <span class="bs-stepper-circle">6</span>
-                            <span class="bs-stepper-label">Acompañante</span>
-                        </button>
+                    <div class="card-body">
+                      {{form.ENTR_fec_entr|as_crispy_field}}
+                      {{form.ENTR_barrio_operativo|as_crispy_field}}
+                      {{form.ENTR_ingreso_por|as_crispy_field}}
+                      {{form.ENTR_derivacion_de|as_crispy_field}}
+                      {{form.ENTR_derivacion_otro|as_crispy_field}}
+                      {{form.ENTR_reinc_en_programa|as_crispy_field}}
+
                     </div>
+
+                  </div>
+                  <div class="form-row justify-content-between p-1"> <a class="btn btn-secondary align-left  "
+                      onclick="stepper.previous()">Volver</a><a class="btn btn-primary align-right "
+                      onclick="stepper.next()">Continuar</a>
+                  </div>
+
                 </div>
-                <div class="card-body py-0 px-2 mt-5">
-                    <form novalidate method="POST" enctype="multipart/form-data">
-                        <!-- Security token -->
-                        {% csrf_token %}
-                        <input type="hidden" id="id_fk_derivacion" name="fk_derivacion" value={{pk}}>
-                        <input type="hidden" id="id_fk_legajo" name="fk_legajo" value={{legajo.fk_legajo.id}}>
-                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                        <input type="hidden" id="id_modificado_por" name="modificado_por" value={{ user.id }}>
-                        {% else %}
-                        <input type="hidden" id="id_creado_por" name="creado_por" value={{ user.id }}>
-                        {% endif %}
-                    <div class="bs-stepper-content">
+                <div class="content" aria-labelledby="embarazo-trigger" id="embarazo" role="tabpanel">
+                  <div class="form-row justify-content-between p-1"> <a class="btn btn-secondary align-left  "
+                      onclick="stepper.previous()">Volver</a><a class="btn btn-primary align-right "
+                      onclick="stepper.next()">Continuar</a>
+                  </div>
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="card-title font-weight-bold">
+                        Embarazo
+                      </div>
 
-                        <div id="cuidador-principal" class="content" role="tabpanel"
-                            aria-labelledby="cuidador-principal-trigger">
-                            <div class="col-12 mt-3">
-                                <div class="card ">
-                                    <div class="card-header">
-                                        <div class="card-title font-weight-bold">
-                                            Datos de la Madre o cuidador principal
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-12 ">
-                                                <div class="row my-3 pl-2">
-                                                    1. DATOS PERSONALES
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Madre o cuidador principal</label>
-                                                        <select name="fk_legajo_1" class="form-control custom-select" id="id_fk_legajo_1">
-                                                            <option value=""></option>
-                                                            {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                                                            <option value="{{object.fk_legajo_1.id}}" selected>{{object.fk_legajo_1}}</option>
-                                                            {% endif %}
-                                                            {% for f in familia %}
-                                                            <option value="{{f.fk_legajo_1.id}}">{{f.fk_legajo_1}}</option>
-                                                            {% endfor %}
-                                                            {% for f in familia_inversa %}
-                                                            <option value="{{f.fk_legajo_2.id}}">{{f.fk_legajo_2}}</option>
-                                                            {% endfor %}
-                                                          </select>
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Vínculo</label>
-                                                        <input type="text" class="form-control" id="vinculo1" name="vinculo1" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                                                        value="{{object.vinculo1}}"
-                                                        {% endif %}
-                                                        readonly>
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Tipo de documento</label>
-                                                        <input type="text" class="form-control" id="tipo_doc"
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                                                        value="{{object.fk_legajo_1.tipo_doc}}"
-                                                        {% endif %}
-                                                        readonly>
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Numero documento</label>
-                                                        <input type="text" class="form-control" id="documento" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                                                        value="{{object.fk_legajo_1.documento}}"
-                                                        {% endif %}
-                                                        readonly>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <div class="row my-3 pl-2">
-                                                    2. FAMILIA
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Cantidad de menores a cargo </label>
-                                                        {{form.menores_a_cargo_1| as_crispy_field}}
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <div class="row my-3 pl-2">
-                                                    3. SALUD
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>¿Realiza controles ginecológicos?</label>
-                                                        {{form.control_gine_1| as_crispy_field}}
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Cantidad total de hijos</label>
-                                                        {{form.hijos_1| as_crispy_field}}
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Cantidad total de embarazos</label>
-                                                        {{form.embarazos_1| as_crispy_field}}
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Cantidad de abortos espontáneos</label>
-                                                        {{form.abortos_esp_1| as_crispy_field}}
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Cantidad de abortos provocados</label>
-                                                        {{form.abortos_prov_1| as_crispy_field}}
-                                                    </div>
-                                                    <div class="col-12  form-group">
-                                                        <div class="row my-3 font-weight-bold pl-2">¿Tiene
-                                                            alguno
-                                                            de estos
-                                                            Antecedentes? <span
-                                                                class="text-muted font-weight-normal pl-2 font-italic">(Marcar
-                                                                todos los que correspondan)</span></div>
-                                                        <div class="row pl-2">
-                                                            <div class="col-sm-4">
-                                                                <div class="form-group">
-                                                                    {{form.emb_no_control_1| as_crispy_field}}
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-4">
-                                                                <div class="form-group">
-                                                                    {{form.emb_adolescente_1| as_crispy_field}}
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-4">
-                                                                <div class="form-group">
-                                                                    {{form.emb_riesgo_1| as_crispy_field}}
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-4">
-                                                                <div class="form-group">
-                                                                    {{form.cesareas_multip_1| as_crispy_field}}
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-4">
-                                                                <div class="form-group">
-                                                                    {{form.partos_multip_1| as_crispy_field}}
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-4">
-                                                                <div class="form-group">
-                                                                    {{form.partos_premat_1| as_crispy_field}}
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-4">
-                                                                <div class="form-group">
-                                                                    {{form.partos_menos18meses_1| as_crispy_field}}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>¿Está embarazada actualmente?</label>
-                                                        {{form.emb_actualmente_1| as_crispy_field}}
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>¿Tiene los controles?</label>
-                                                        {{form.controles_1| as_crispy_field}}
-                                                    </div>
-                                                    <div class="col-sm-6 form-group">
-                                                        <label>Embarazo actual</label>
-                                                        {{form.emb_actual_1| as_crispy_field}}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <div class="row my-3 pl-2">
-                                                    4. EDUCACIÓN
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-sm-6 form-group">
-                                                        <label>Máximo nivel alcanzado</label>
-                                                        {{form.educ_maximo_1| as_crispy_field}}
-                                                    </div>
-                                                    <div class="col-sm-6 form-group">
-                                                        <label>Estado</label>
-                                                        {{form.educ_estado_1| as_crispy_field}}
-                                                    </div>
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.leer_1| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.escribir_1| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.retomar_estudios_1| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.aprender_oficio_1| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 mt-2">
-                                                <div class="row my-3 pl-2">
-                                                    5. ECONOMÍA
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-12 form-group">
-                                                        <label>Planes sociales que recibe</label>
-                                                        {{form.planes_sociales_1| as_crispy_field}}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 mt-2">
-                                                <div class="row my-3 pl-2">
-                                                    6. TRABAJO
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-sm-4 form-group">
-                                                        <label>¿Tiene trabajo actualmente?</label>
-                                                        {{form.trabajo_actual_1| as_crispy_field}}
-                                                    </div>
-                                                    <div class="col-sm-4 form-group">
-                                                        <label>Ocupación</label>
-                                                        {{form.ocupacion_1| as_crispy_field}}
-                                                    </div>
-                                                    <div class="col-sm-4 form-group">
-                                                        <label>Modo de contratación</label>
-                                                        {{form.modo_contrat_1| as_crispy_field}}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="{% url 'CDLE_derivaciones_listar' %}"
-                                class="btn btn-secondary float-left mb-3 mt-5">Cancelar</a>
-                                <a class="btn btn-primary float-right mb-3 mt-5 " onclick="stepper.next()">Continuar</a>
-                        </div>
-
-                        <div id="cuidador-secundario" class="content" role="tabpanel"
-                            aria-labelledby="cuidador-secundario-trigger">
-                            <div class="col-12 mt-3">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <div class="card-title font-weight-bold">
-                                            Datos del padre o apoyo en la crianza
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="row my-3 pl-2">
-                                                    1. DATOS PERSONALES
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Padre o apoyo en la crianza</label>
-                                                        <select name="fk_legajo_2" class="form-control custom-select" id="id_fk_legajo_2">
-                                                            <option value="" selected=""></option>
-                                                            {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                                                            <option value="{{object.fk_legajo_2.id}}" selected>{{object.fk_legajo_2}}</option>
-                                                            {% endif %}
-                                                            {% for f in familia %}
-                                                            <option value="{{f.fk_legajo_1.id}}">{{f.fk_legajo_1}}</option>
-                                                            {% endfor %}
-                                                            {% for f in familia_inversa %}
-                                                            <option value="{{f.fk_legajo_2.id}}">{{f.fk_legajo_2}}</option>
-                                                            {% endfor %}
-                                                          </select>
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Vínculo</label>
-                                                        <input type="text" class="form-control" id="vinculo2" name="vinculo2" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                                                        value="{{object.vinculo2}}"
-                                                        {% endif %}readonly>
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Tipo de documento</label>
-                                                        <input type="text" class="form-control" id="tipo_doc2" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                                                        value="{{object.fk_legajo_2.tipo_doc}}"
-                                                        {% endif %}readonly>
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Numero documento</label>
-                                                        <input type="text" class="form-control" id="documento2" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                                                        value="{{object.fk_legajo_2.documento}}"
-                                                        {% endif %}readonly>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-12">
-                                                <div class="row my-3 pl-2">
-                                                    2. EDUCACIÓN
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-sm-6 form-group">
-                                                        <label>Máximo nivel alcanzado</label>
-                                                        {{form.educ_maximo_2| as_crispy_field}}
-                                                    </div>
-                                                    <div class="col-sm-6 form-group">
-                                                        <label>Estado</label>
-                                                        {{form.educ_estado_2| as_crispy_field}}
-                                                    </div>
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.leer_2| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.escribir_2| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.retomar_estudios_2| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.aprender_oficio_2| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.programa_Pilares_2| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 mt-2">
-                                                <div class="row my-3 pl-2">
-                                                    3. ECONOMÍA
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-12 form-group">
-                                                        <label>Planes sociales que recibe</label>
-                                                        {{form.planes_sociales_2| as_crispy_field}}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 mt-2">
-                                                <div class="row my-3 pl-2">
-                                                    4. TRABAJO
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-sm-4 form-group">
-                                                        <label>¿Tiene trabajo actualmente?</label>
-                                                        {{form.trabajo_actual_2| as_crispy_field}}
-                                                    </div>
-                                                    <div class="col-sm-4 form-group">
-                                                        <label>Ocupación</label>
-                                                        {{form.ocupacion_2| as_crispy_field}}
-                                                    </div>
-                                                    <div class="col-sm-4 form-group">
-                                                        <label>Modo de contratación</label>
-                                                        {{form.modo_contrat_2| as_crispy_field}}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- ./padre o apoyo a la crianza -->
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                                <a class="btn btn-secondary float-left mb-3 mt-5 " onclick="stepper.previous()">Volver</a>
-                                <a class="btn btn-primary float-right mb-3 mt-5 " onclick="stepper.next()">Continuar</a>
-                        </div>
-
-                        <div id="convivientes" class="content" role="tabpanel" aria-labelledby="convivientes-trigger">
-                            <div class="col-12 mt-3">
-
-                                <div class="card  collapsed-card">
-                                    <div class="card-header">
-                                        <div class="card-title font-weight-bold">
-                                            Conviviente
-                                        </div>
-                                        <div class="card-tools">
-                                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="row my-3 pl-2">
-                                                    1. DATOS PERSONALES
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Conviviente</label>
-                                                        <select name="fk_legajo_3" class="form-control custom-select" id="id_fk_legajo_3">
-                                                            <option value="" selected=""></option>
-                                                            {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                                                            <option value="{{object.fk_legajo_3.id}}" selected>{{object.fk_legajo_3}}</option>
-                                                            {% endif %}
-                                                            {% for f in familia %}
-                                                            <option value="{{f.fk_legajo_1.id}}">{{f.fk_legajo_1}}</option>
-                                                            {% endfor %}
-                                                            {% for f in familia_inversa %}
-                                                            <option value="{{f.fk_legajo_2.id}}">{{f.fk_legajo_2}}</option>
-                                                            {% endfor %}
-                                                          </select>
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Vínculo</label>
-                                                        <input type="text" class="form-control" id="vinculo3" name="vinculo3" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                                                        value="{{object.vinculo3}}"
-                                                        {% endif %}readonly>
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Tipo de documento</label>
-                                                        <input type="text" class="form-control" id="tipo_doc3" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                                                        value="{{object.fk_legajo_3.tipo_doc}}"
-                                                        {% endif %}readonly>
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Numero documento</label>
-                                                        <input type="text" class="form-control" id="documento3" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                                                        value="{{object.fk_legajo_3.documento}}"
-                                                        {% endif %}readonly>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-12">
-                                                <div class="row my-3 pl-2">
-                                                    2. EDUCACIÓN
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-sm-6 form-group">
-                                                        <label>Máximo nivel alcanzado</label>
-                                                        {{form.educ_maximo_3| as_crispy_field}}
-                                                    </div>
-                                                    <div class="col-sm-6 form-group">
-                                                        <label>Estado</label>
-                                                        {{form.educ_estado_3| as_crispy_field}}
-                                                    </div>
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.leer_3| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.escribir_3| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.retomar_estudios_3| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.aprender_oficio_3| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.programa_Pilares_3| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="card  collapsed-card">
-                                    <div class="card-header">
-                                        <div class="card-title font-weight-bold">
-                                            Conviviente
-                                        </div>
-                                        <div class="card-tools">
-                                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="row my-3 pl-2">
-                                                    1. DATOS PERSONALES
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Conviviente</label>
-                                                        <select name="fk_legajo_4" class="form-control custom-select" id="id_fk_legajo_4">
-                                                            <option value="" selected=""></option>
-                                                            {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                                                            <option value="{{object.fk_legajo_4.id}}" selected>{{object.fk_legajo_4}}</option>
-                                                            {% endif %}
-                                                            {% for f in familia %}
-                                                            <option value="{{f.fk_legajo_1.id}}">{{f.fk_legajo_1}}</option>
-                                                            {% endfor %}
-                                                            {% for f in familia_inversa %}
-                                                            <option value="{{f.fk_legajo_2.id}}">{{f.fk_legajo_2}}</option>
-                                                            {% endfor %}
-                                                          </select>
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Vínculo</label>
-                                                        <input type="text" class="form-control" id="vinculo4" name="vinculo4" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                                                        value="{{object.vinculo4}}"
-                                                        {% endif %}readonly>
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Tipo de documento</label>
-                                                        <input type="text" class="form-control" id="tipo_doc4" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                                                        value="{{object.fk_legajo_4.tipo_doc}}"
-                                                        {% endif %}readonly>
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Numero documento</label>
-                                                        <input type="text" class="form-control" id="documento4" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                                                        value="{{object.fk_legajo_4.documento}}"
-                                                        {% endif %}readonly>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-12">
-                                                <div class="row my-3 pl-2">
-                                                    2. EDUCACIÓN
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-sm-6 form-group">
-                                                        <label>Máximo nivel alcanzado</label>
-                                                        {{form.educ_maximo_4| as_crispy_field}}
-                                                    </div>
-                                                    <div class="col-sm-6 form-group">
-                                                        <label>Estado</label>
-                                                        {{form.educ_estado_4| as_crispy_field}}
-                                                    </div>
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.leer_4| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.escribir_4| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.retomar_estudios_4| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.aprender_oficio_4| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.programa_Pilares_4| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="card  collapsed-card">
-                                    <div class="card-header">
-                                        <div class="card-title font-weight-bold">
-                                            Conviviente
-                                        </div>
-                                        <div class="card-tools">
-                                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="row my-3 pl-2">
-                                                    1. DATOS PERSONALES
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Conviviente</label>
-                                                        <select name="fk_legajo_5" class="form-control custom-select" id="id_fk_legajo_5">
-                                                            <option value="" selected=""></option>
-                                                            {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                                                            <option value="{{object.fk_legajo_5.id}}" selected>{{object.fk_legajo_5}}</option>
-                                                            {% endif %}
-                                                            {% for f in familia %}
-                                                            <option value="{{f.fk_legajo_1.id}}">{{f.fk_legajo_1}}</option>
-                                                            {% endfor %}
-                                                            {% for f in familia_inversa %}
-                                                            <option value="{{f.fk_legajo_2.id}}">{{f.fk_legajo_2}}</option>
-                                                            {% endfor %}
-                                                          </select>
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Vínculo</label>
-                                                        <input type="text" class="form-control" id="vinculo5" name="vinculo5" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                                                        value="{{object.vinculo5}}"
-                                                        {% endif %}readonly>
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Tipo de documento</label>
-                                                        <input type="text" class="form-control" id="tipo_doc5" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                                                        value="{{object.fk_legajo_5.tipo_doc}}"
-                                                        {% endif %}readonly>
-                                                    </div>
-                                                    <div class="col-sm-3 form-group">
-                                                        <label>Numero documento</label>
-                                                        <input type="text" class="form-control" id="documento5" 
-                                                        {%if request.resolver_match.url_name == "CDLE_preadmisiones_editar" %}
-                                                        value="{{object.fk_legajo_5.documento}}"
-                                                        {% endif %}readonly>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-12">
-                                                <div class="row my-3 pl-2">
-                                                    2. EDUCACIÓN
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-sm-6 form-group">
-                                                        <label>Máximo nivel alcanzado</label>
-                                                        {{form.educ_maximo_5| as_crispy_field}}
-                                                    </div>
-                                                    <div class="col-sm-6 form-group">
-                                                        <label>Estado</label>
-                                                        {{form.educ_estado_5| as_crispy_field}}
-                                                    </div>
-                                                </div>
-                                                <div class="row pl-3">
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.leer_5| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.escribir_5| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.retomar_estudios_5| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.aprender_oficio_5| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="form-group">
-                                                            {{form.programa_Pilares_5| as_crispy_field}}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                            <a class="btn btn-secondary float-left mb-3 mt-5 " onclick="stepper.previous()">Volver</a>
-                            <a class="btn btn-primary float-right mb-3 mt-5 " onclick="stepper.next()">Continuar</a>
-                        </div>
-
-                        <div id="info-embarazos" class="content" role="tabpanel" aria-labelledby="info-embarazos-trigger">
-                            <div class="col-12 mt-3">
-                                <div class="card ">
-                                    <div class="card-header">
-                                        <div class="card-title font-weight-bold">
-                                            Datos embarazo
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-12 ">
-                            <div class="form-row">
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        {{form.fum| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        {{form.sem_embarazo| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        {{form.fpp| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        {{form.centro_controla| as_crispy_field}}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-row mt-3">
-                                <div class="col-sm-3">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.test_embarazo| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        {{form.primer_control| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.primer_embarazo| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.libreta_sanitaria| as_crispy_field}}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-row mt-3">
-                                <div class="col-sm-3">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.metodos_anticonceptivos| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        {{form.cuales_met_anticon_conoces| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.utilizabas_alguno| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        {{form.cual_usabas| as_crispy_field}}
-                                    </div>
-                                </div>
-                            </div>
-
-                            
-                            <div class="form-row mt-3">
-                                <div class="col-sm-4">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.sifilis_anterior| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.sifilis_ahora| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group pt-2">
-                                        {{form.sifilis_tratamiento_pareja| as_crispy_field}}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-row mt-3">
-                                <div class="col-sm-3">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.consumio_drogas| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.drogas_ahora| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.alcohol_ahora| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.sospecha_consumo| as_crispy_field}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
+                    <div class="card-body">
+                      {{form.EMBA_primer_emba|as_crispy_field}}
+                      {{form.EMBA_fec_ultima_mentru|as_crispy_field}}
+                      {{form.EMBA_sems_emba|as_crispy_field}}
+                      {{form.EMBA_fpp|as_crispy_field}}
+                      {{form.EMBA_centro_salud_controla|as_crispy_field}}
+                      {{form.EMBA_obstetrica|as_crispy_field}}
+                      {{form.EMBA_hizo_test_emba|as_crispy_field}}
+                      {{form.EMBA_sem_primer_ctrl|as_crispy_field}}
+                      {{form.EMBA_tiene_lib_sanitaria|as_crispy_field}}
+                      {{form.EMBA_recibio_en|as_crispy_field}}
+                      {{form.EMBA_conoce_metod_anticoncep|as_crispy_field}}
+                      {{form.EMBA_list_conoce_metod_anticoncep|as_crispy_field}}
+                      {{form.EMBA_uso_en_estado_emba|as_crispy_field}}
+                      {{form.EMBA_list_uso_en_estado_emba|as_crispy_field}}
+                      {{form.EMBA_sifilis_en_anterior_emba|as_crispy_field}}
+                      {{form.EMBA_sifilis_realizo_tratam|as_crispy_field}}
+                      {{form.EMBA_sifilis_tratam_completado|as_crispy_field}}
+                      {{form.EMBA_sifilis_actual|as_crispy_field}}
+                      {{form.EMBA_sifilis_actual_tratamiento|as_crispy_field}}
+                      {{form.EMBA_sifilis_actual_tratamiento_completado|as_crispy_field}}
+                      {{form.EMBA_sifilis_pareja_tratamiento|as_crispy_field}}
+                      {{form.EMBA_sifilis_pareja_tratamiento_completado|as_crispy_field}}
+
+                      <h3>1. Antecedentes de embarazo y parto</h3>
+                      {{form.EMBA_cantidad_emba|as_crispy_field}}
+                      {{form.EMBA_cantidad_hijos|as_crispy_field}}
+                      {{form.EMBA_cantidad_menores|as_crispy_field}}
+                      {{form.EMBA_cantidad_mayores|as_crispy_field}}
+                      {{form.EMBA_cantidad_abortos|as_crispy_field}}
+                      {{form.EMBA_cantidad_abortos_expon|as_crispy_field}}
+                      {{form.EMBA_cantidad_abortos_provoc|as_crispy_field}}
+
+                      <h3>¿Tiene alguno de estos antecedentes?</h3>
+                      {{form.EMBA_check_emba_no_ctrl|as_crispy_field}}
+                      {{form.EMBA_check_emba_adol|as_crispy_field}}
+                      {{form.EMBA_check_emba_riesgo|as_crispy_field}}
+                      {{form.EMBA_check_cesareas_multi|as_crispy_field}}
+                      {{form.EMBA_check_partos_multi|as_crispy_field}}
+                      {{form.EMBA_check_partos_prema|as_crispy_field}}
+                      {{form.EMBA_check_partos_menos_meses_interval|as_crispy_field}}
+                      {{form.EMBA_check_emba_perdidas_recurrentes|as_crispy_field}}
+                      {{form.EMBA_check_feto_muerto|as_crispy_field}}
+
+                    </div>
+
+                  </div>
+                  <div class="form-row justify-content-between p-1"> <a class="btn btn-secondary align-left  "
+                      onclick="stepper.previous()">Volver</a><a class="btn btn-primary align-right "
+                      onclick="stepper.next()">Continuar</a>
+                  </div>
+
                 </div>
+                <div class="content" aria-labelledby="salud-embarazada-trigger" id="salud-embarazada" role="tabpanel">
+                  <div class="form-row justify-content-between p-1"> <a class="btn btn-secondary align-left  "
+                      onclick="stepper.previous()">Volver</a><a class="btn btn-primary align-right "
+                      onclick="stepper.next()">Continuar</a>
+                  </div>
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="card-title font-weight-bold">
+                        Salud de la embarazada
+                      </div>
+
+                    </div>
+                    <div class="card-body">
+                      {{form.SALUDEMBA_obra_social|as_crispy_field}}
+                      {{form.SALUDEMBA_obra_social_desc|as_crispy_field}}
+                      {{form.SALUDEMBA_padece_enf_fisica|as_crispy_field}}
+                      {{form.SALUDEMBA_padece_enf_fisica_desc|as_crispy_field}}
+                      {{form.SALUDEMBA_padece_enf_psiquica|as_crispy_field}}
+                      {{form.SALUDEMBA_padece_enf_psiquica_desc|as_crispy_field}}
+                      {{form.SALUDEMBA_tratam_x_enf|as_crispy_field}}
+                      {{form.SALUDEMBA_tratam_x_enf_desc|as_crispy_field}}
+                      {{form.SALUDEMBA_cap_reducida_o_afec|as_crispy_field}}
+
+                      <h3>1. Salud de la embarazada - Consumo</h3>
+                      {{form.SALUDEMBA_consumio_drogas|as_crispy_field}}
+                      {{form.SALUDEMBA_consumio_drogas_actual|as_crispy_field}}
+                      {{form.SALUDEMBA_consumio_drogas_desc|as_crispy_field}}
+                      {{form.SALUDEMBA_consume_alcohol_actual|as_crispy_field}}
+                      {{form.SALUDEMBA_sospecha_consumo|as_crispy_field}}
+                      {{form.SALUDEMBA_fuma_cigarro_actual|as_crispy_field}}
+                      {{form.SALUDEMBA_dao|as_crispy_field}}
+                      {{form.SALUDEMBA_momento_consumo|as_crispy_field}}
+                      {{form.SALUDEMBA_causa_consumo|as_crispy_field}}
+
+                    </div>
+
+                  </div>
+                  <div class="form-row justify-content-between p-1"> <a class="btn btn-secondary align-left  "
+                      onclick="stepper.previous()">Volver</a><a class="btn btn-primary align-right "
+                      onclick="stepper.next()">Continuar</a>
+                  </div>
+
+                </div>
+                <div class="content" aria-labelledby="info-controles-trigger" id="info-controles" role="tabpanel">
+                  <div class="form-row justify-content-between p-1"> <a class="btn btn-secondary align-left  "
+                      onclick="stepper.previous()">Volver</a><a class="btn btn-primary align-right "
+                      onclick="stepper.next()">Continuar</a>
+                  </div>
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="card-title font-weight-bold">
+                        Controles
+                      </div>
+
+                    </div>
+                    <div class="card-body">
+                      {{form.CTRL_fec_aprox_primer_ctrl|as_crispy_field}}
+                      {{form.CTRL_centro_salud|as_crispy_field}}
+                      {{form.CTRL_en_cantidad_sem_emba|as_crispy_field}}
+                      {{form.CTRL_fec_ultimo_ctrl|as_crispy_field}}
+                      {{form.CTRL_fec_proximo_ctrl|as_crispy_field}}
+                      {{form.CTRL_emb_controlado|as_crispy_field}}
+                      {{form.CTRL_check_comienza_control_op|as_crispy_field}}
+
+                      <div class="form-row mt-3 bg-dark p-3">Primer Trimestre (0-14 semanas)</div>
+                      {{form.CTRL_check_pt_obstetra|as_crispy_field}}
+                      {{form.CTRL_check_pt_laboratorio|as_crispy_field}}
+                      {{form.CTRL_check_pt_ecografia|as_crispy_field}}
+                      {{form.CTRL_check_pt_pap|as_crispy_field}}
+                      {{form.CTRL_check_pt_grupofactor|as_crispy_field}}
+                      {{form.CTRL_check_pt_odontologico|as_crispy_field}}
+
+                      <div class="form-row mt-3 bg-dark p-3">Segundo Trimestre (15 a 28 semanas)</div>
+                      {{form.CTRL_check_st_obstetra|as_crispy_field}}
+                      {{form.CTRL_check_st_scanfetal|as_crispy_field}}
+                      {{form.CTRL_check_st_p75|as_crispy_field}}
+
+                      <div class="form-row mt-3 bg-dark p-3">Tercer Trimestre (29 a 41 semanas)</div>
+                      {{form.CTRL_check_tt_obstetra|as_crispy_field}}
+                      {{form.CTRL_check_tt_eco_hiso_labo|as_crispy_field}}
+                      {{form.CTRL_check_tt_monitoreo_fetal|as_crispy_field}}
+                      {{form.CTRL_check_tt_electrocardio|as_crispy_field}}
+
+                    </div>
+
+                  </div>
+                  <div class="form-row justify-content-between p-1"> <a class="btn btn-secondary align-left  "
+                      onclick="stepper.previous()">Volver</a><a class="btn btn-primary align-right "
+                      onclick="stepper.next()">Continuar</a>
+                  </div>
+
+                </div>
+                <div class="content" aria-labelledby="pareja-apoyo-crianza-trigger" id="pareja-apoyo-crianza"
+                  role="tabpanel">
+                  <div class="form-row justify-content-between p-1"> <a class="btn btn-secondary align-left  "
+                      onclick="stepper.previous()">Volver</a><a class="btn btn-primary align-right "
+                      onclick="stepper.next()">Continuar</a>
+                  </div>
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="card-title font-weight-bold">
+                        Apoyo en la crianza
+                      </div>
+
+                    </div>
+                    <div class="card-body">
+                      <h3>1. DATOS PERSONALES</h3>
+                      {{form.POACRI_pareja_apoyo_crianza|as_crispy_field}}
+                      {{form.POACRI_vinculo|as_crispy_field}}
+                      {{form.POACRI_tipo_doc|as_crispy_field}}
+                      {{form.POACRI_num_doc|as_crispy_field}}
+
+                      <h3>2. EDUCACION</h3>
+                      {{form.POACRI_edu_max_nivel|as_crispy_field}}
+                      {{form.POACRI_edu_estado|as_crispy_field}}
+                      {{form.POACRI_check_edu_sabe_leer|as_crispy_field}}
+                      {{form.POACRI_check_edu_sabe_escribir|as_crispy_field}}
+                      {{form.POACRI_check_edu_quiere_retomar_estudios|as_crispy_field}}
+                      {{form.POACRI_check_edu_quiere_aprender_oficio|as_crispy_field}}
+                      {{form.POACRI_check_edu_quiere_parti_prog_pilates|as_crispy_field}}
+
+                      <h3>3. ECONOMIA</h3>
+                      {{form.POACRI_eco_planes_sociales_recibe|as_crispy_field}}
+
+                      <h3>4. TRABAJO</h3>
+                      {{form.POACRI_trab_tiene_trabajo_actual|as_crispy_field}}
+                      {{form.POACRI_trab_ocupacion|as_crispy_field}}
+                      {{form.POACRI_trab_modo_contratacion|as_crispy_field}}
+
+                    </div>
+
+                  </div>
+                  <div class="form-row justify-content-between p-1"> <a class="btn btn-secondary align-left  "
+                      onclick="stepper.previous()">Volver</a><a class="btn btn-primary align-right "
+                      onclick="stepper.next()">Continuar</a>
+                  </div>
+
+                </div>
+                <div class="content" aria-labelledby="info-familiar-trigger" id="info-familiar" role="tabpanel">
+                  <div class="form-row justify-content-between p-1"> <a class="btn btn-secondary align-left  "
+                      onclick="stepper.previous()">Volver</a><a class="btn btn-primary align-right "
+                      onclick="stepper.next()">Continuar</a>
+                  </div>
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="card-title font-weight-bold">
+                        Información Familiar
+                      </div>
+
+                    </div>
+                    <div class="card-body">
+                      {{form.INFOFAMI_check_convivientes_tienen_dni|as_crispy_field}}
+                      {{form.INFOFAMI_convivientes_tienen_dni_desc|as_crispy_field}}
+                      {{form.INFOFAMI_check_menores_escolarizados|as_crispy_field}}
+                      {{form.INFOFAMI_menores_escolarizados_desc|as_crispy_field}}
+                      {{form.INFOFAMI_check_menor_con_bajopes_sobrepes|as_crispy_field}}
+                      {{form.INFOFAMI_menor_con_bajopes_sobrepes_desc|as_crispy_field}}
+                      {{form.INFOFAMI_check_menor_con_ante_acci_dom|as_crispy_field}}
+                      {{form.INFOFAMI_menor_con_ante_acci_dom_desc|as_crispy_field}}
+                      {{form.INFOFAMI_check_menor_con_ante_acci_dom_seguimiento|as_crispy_field}}
+                      {{form.INFOFAMI_check_menores_con_ctrl_vacunas|as_crispy_field}}
+                      {{form.INFOFAMI_menores_con_ctrl_vacunas_desc|as_crispy_field}}
+                      {{form.INFOFAMI_check_menor_con_patologia|as_crispy_field}}
+                      {{form.INFOFAMI_check_menor_con_patologia_seguimiento|as_crispy_field}}
+                      {{form.INFOFAMI_menor_con_patologia_desc|as_crispy_field}}
+                      {{form.INFOFAMI_check_menor_capas_reduc_afec|as_crispy_field}}
+                      {{form.INFOFAMI_menor_capas_reduc_afec_desc|as_crispy_field}}
+                      {{form.INFOFAMI_conviviente_enf_infec_contagiosa|as_crispy_field}}
+                      {{form.INFOFAMI_conviviente_enf_infec_contagiosa_desc|as_crispy_field}}
+                      {{form.INFOFAMI_check_conviviente_consum_drogas|as_crispy_field}}
+                      {{form.INFOFAMI_conviviente_consum_drogas_desc|as_crispy_field}}
+                      {{form.INFOFAMI_check_emba_con_situacion_conflicto|as_crispy_field}}
+                      {{form.INFOFAMI_check_emba_con_situacion_conflicto_denuncio|as_crispy_field}}
+                      {{form.INFOFAMI_check_emba_con_situacion_conflicto_protegida|as_crispy_field}}
+                      {{form.INFOFAMI_emba_con_situacion_conflicto_desc|as_crispy_field}}
+                      {{form.INFOFAMI_check_familiar_con_problema_legal|as_crispy_field}}
+                      {{form.INFOFAMI_familiar_con_problema_legal_desc|as_crispy_field}}
+                      {{form.INFOFAMI_check_familiar_con_problema_legal_denuncio|as_crispy_field}}
+                      {{form.INFOFAMI_check_antecedente_duelo_trauma_reciente|as_crispy_field}}
+
+                      <h3>Ingresos familiares</h3>
+                      {{form.INFOFAMI_ingreso_aprox|as_crispy_field}}
+                      {{form.INFOFAMI_check_ingresos_plan_social|as_crispy_field}}
+                      {{form.INFOFAMI_check_ingreso_alcanza_alimentos|as_crispy_field}}
+                      {{form.INFOFAMI_veces_comen_aldia|as_crispy_field}}
+                    </div>
+
+                  </div>
+                  <div class="form-row justify-content-between p-1"> <a class="btn btn-secondary align-left  "
+                      onclick="stepper.previous()">Volver</a><a class="btn btn-primary align-right "
+                      onclick="stepper.next()">Continuar</a>
+                  </div>
+
+                </div>
+                <div class="content" aria-labelledby="acompaniante-conclusiones-trigger" id="acompaniante-conclusiones"
+                  role="tabpanel">
+                  <div class="form-row justify-content-between p-1"> <a class="btn btn-secondary align-left  "
+                      onclick="stepper.previous()">Volver</a><a class="btn btn-primary align-right "
+                      onclick="stepper.next()">Continuar</a>
+                  </div>
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="card-title font-weight-bold">
+                        Acompañante y conclusiones
+                      </div>
+
+                    </div>
+                    <div class="card-body">
+
+                      <h3>Conclusiones (No preguntar)</h3>
+                      {{form.CONCLUS_check_cuidador_tiene_red_proteccion|as_crispy_field}}
+                      {{form.CONCLUS_check_mujer_falta_valoracion|as_crispy_field}}
+                      {{form.CONCLUS_check_dificultad_vinculo_crianza|as_crispy_field}}
+                      {{form.CONCLUS_check_dificultad_compr_com|as_crispy_field}}
+                      {{form.CONCLUS_check_adh_sis_salud|as_crispy_field}}
+                      {{form.CONCLUS_check_fam_acceso_limitado_info|as_crispy_field}}
+
+                    </div>
+
+                  </div>
+                  <div class="form-row justify-content-between p-1"> <a class="btn btn-secondary align-left  "
+                      onclick="stepper.previous()">Volver</a><a class="btn btn-primary align-right "
+                      onclick="stepper.next()">Continuar</a>
+                  </div>
+
+                </div>
+                <div class="content" aria-labelledby="candidata-a-trigger" id="candidata-a" role="tabpanel">
+                  <div class="form-row justify-content-between p-1"> <a class="btn btn-secondary float-left"
+                      onclick="stepper.previous()">Volver</a><button type="submit"
+                      class="btn btn-success float-right">Confirmar</button>
+                  </div>
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="card-title font-weight-bold">
+                        Candidata a
+                      </div>
+
+                    </div>
+                    <div class="card-body">
+                      {{form.CONCLUS_check_recibir_catre|as_crispy_field}}
+                      {{form.CONCLUS_participar_de|as_crispy_field}}
+                      <small>Derivar el legajo en caso de ser candidata</small>
+                      {{form.CONCLUS_acompaniante|as_crispy_field}}
+
+                    </div>
+
+                  </div>
+                  <div class="form-row justify-content-between p-1"> <a class="btn btn-secondary float-left"
+                      onclick="stepper.previous()">Volver</a><button type="submit"
+                      class="btn btn-success float-right">Confirmar</button>
+                  </div>
+
+                </div>
+              </form>
             </div>
+
+          </div>
         </div>
-
-                            <a class="btn btn-secondary float-left mb-3 mt-5 " onclick="stepper.previous()">Volver</a>
-                            <a class="btn btn-primary float-right mb-3 mt-5 " onclick="stepper.next()">Continuar</a>
-                        </div>
-
-                        <div id="info-controles" class="content" role="tabpanel" aria-labelledby="info-controles-trigger">
-                            <div class="col-12 mt-3">
-                                <div class="card ">
-                                    <div class="card-header">
-                                        <div class="card-title font-weight-bold">
-                                            Controles del embarazo
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-12 ">
-                            <div class="form-row flex justify-content-center">
-                                <div class="col-sm-4 pl-5 pr-5">
-                                    <div class="form-group">
-                                        {{form.embarazo_controlado| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-4 pl-5 pr-5">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.comienza_control| as_crispy_field}}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row mt-3 bg-dark p-3">
-                                Primer Trimestre
-                            </div>
-                            <div class="form-row mt-3 pl-5 pr-5">
-                                <div class="col-sm-4">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.prim_trim_control_obstetra| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.prim_trim_estudios_labo| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.prim_trim_estudios_eco| as_crispy_field}}
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="form-row mt-3 pl-5 pr-5">
-                                <div class="col-sm-4">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.prim_trim_estudios_pap| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.prim_trim_estudios_grupo_factor| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.prim_trim_control_odonto| as_crispy_field}}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row mt-3 bg-dark p-3">
-                                Segundo Trimestre
-                            </div>
-                            <div class="form-row mt-3 pl-5 pr-5">
-                                <div class="col-sm-4">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.seg_trim_control_obsetra| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.seg_trim_control_fetal| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.seg_trim_p75| as_crispy_field}}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row mt-3 bg-dark p-3">
-                                Tercer Trimestre
-                            </div>
-                            <div class="form-row mt-3 pl-5 pr-5">
-                                <div class="col-sm-4">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.ter_trim_control_rutina| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.ter_trim_monitoreo_fetal| as_crispy_field}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group mt-4 pt-2">
-                                        {{form.ter_trim_electro_cardio| as_crispy_field}}
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            
-
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <a class="btn btn-secondary float-left mb-3 mt-5 " onclick="stepper.previous()">Volver</a>
-        <a class="btn btn-primary float-right mb-3 mt-5 " onclick="stepper.next()">Continuar</a>
-                    </div>
-                    <div id="info-acompaniante" class="content" role="tabpanel" aria-labelledby="info-acompaniante-trigger">
-                        <div class="col-12 mt-3">
-                            <div class="card ">
-                                <div class="card-header">
-                                    <div class="card-title font-weight-bold">
-                                        Acompañante
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-sm-12 ">
-                        <div class="form-row flex justify-content-center">
-                            <div class="col-sm-4 pl-5 pr-5">
-                                <div class="form-group">
-                                    {{form.acompaniante| as_crispy_field}}
-                                </div>
-                            </div>
-                            {% comment %} <div class="col-sm-4 pl-5 pr-5">
-                                <div class="form-group">
-                                    {{form.madrina| as_crispy_field}}
-                                </div>
-                            </div> {% endcomment %}
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
+      </div>
     </div>
-    <a class="btn btn-secondary float-left mb-3 mt-5 " onclick="stepper.previous()">Volver</a>
-    <button type="submit" class="btn btn-primary float-right mb-3 mt-5">Confirmar</button>
-
-                </div>
-                </form>
-                </div>
-            </div>
-        </div>
-    </div>
+  </div>
 </div>
 
 
@@ -1243,141 +606,398 @@
 
 {% block customJS %}
 <script>
-    // BS-Stepper Init
-    document.addEventListener('DOMContentLoaded', function () {
-        window.stepper = new Stepper(document.querySelector('.bs-stepper'))
-    });
-    //Date picker
-    $('#reservationdate').datetimepicker({
-        format: 'L'
-    });
+  // BS-Stepper Init
+  document.addEventListener('DOMContentLoaded', function () {
+    window.stepper = new Stepper(document.querySelector('.bs-stepper'))
+  });
+  //Date picker
+  $('#reservationdate').datetimepicker({
+    format: 'L'
+  });
 </script>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     // Asocia un evento change al SELECT
-    $('#id_fk_legajo_1').change(function() {
-        // Obtiene el valor seleccionado
-        var seleccion = $(this).val();
-        var tipo_doc = document.getElementById("tipo_doc");
-        var documento = document.getElementById("documento");
-        var vinculo = document.getElementById("vinculo1");
+    $('#id_fk_legajo_1').change(function () {
+      // Obtiene el valor seleccionado
+      var seleccion = $(this).val();
+      var tipo_doc = document.getElementById("tipo_doc");
+      var documento = document.getElementById("documento");
+      var vinculo = document.getElementById("vinculo1");
 
-        // Lógica para determinar el contenido del div basado en la selección
-        {% for f in familia %}
-        if (seleccion === '{{f.fk_legajo_1.id}}') {
-            tipo_doc.value = '{{f.fk_legajo_1.tipo_doc}}';
-            documento.value = '{{f.fk_legajo_1.documento}}';
-            vinculo.value = '{{f.vinculo_inverso}}';
-        }
-        {% endfor %}
-        {% for f in familia_inversa %}
-        if (seleccion === '{{f.fk_legajo_2.id}}') {
-            tipo_doc.value = '{{f.fk_legajo_2.tipo_doc}}';
-            documento.value = '{{f.fk_legajo_2.documento}}';
-            vinculo.value = '{{f.vinculo}}';
-        }
-        {% endfor %}
+      // Lógica para determinar el contenido del div basado en la selección
+      {% for f in familia %}
+      if (seleccion === '{{f.fk_legajo_1.id}}') {
+        tipo_doc.value = '{{f.fk_legajo_1.tipo_doc}}';
+        documento.value = '{{f.fk_legajo_1.documento}}';
+        vinculo.value = '{{f.vinculo_inverso}}';
+      }
+      {% endfor %}
+      {% for f in familia_inversa %}
+      if (seleccion === '{{f.fk_legajo_2.id}}') {
+        tipo_doc.value = '{{f.fk_legajo_2.tipo_doc}}';
+        documento.value = '{{f.fk_legajo_2.documento}}';
+        vinculo.value = '{{f.vinculo}}';
+      }
+      {% endfor %}
     });
 
     // Asocia un evento change al SELECT
-    $('#id_fk_legajo_2').change(function() {
-        // Obtiene el valor seleccionado
-        var seleccion = $(this).val();
-        var tipo_doc = document.getElementById("tipo_doc2");
-        var documento = document.getElementById("documento2");
-        var vinculo = document.getElementById("vinculo2");
+    $('#id_fk_legajo_2').change(function () {
+      // Obtiene el valor seleccionado
+      var seleccion = $(this).val();
+      var tipo_doc = document.getElementById("tipo_doc2");
+      var documento = document.getElementById("documento2");
+      var vinculo = document.getElementById("vinculo2");
 
-        // Lógica para determinar el contenido del div basado en la selección
-        {% for f in familia %}
-        if (seleccion === '{{f.fk_legajo_1.id}}') {
-            tipo_doc.value = '{{f.fk_legajo_1.tipo_doc}}';
-            documento.value = '{{f.fk_legajo_1.documento}}';
-            vinculo.value = '{{f.vinculo_inverso}}';
-        }
-        {% endfor %}
-        {% for f in familia_inversa %}
-        if (seleccion === '{{f.fk_legajo_2.id}}') {
-            tipo_doc.value = '{{f.fk_legajo_2.tipo_doc}}';
-            documento.value = '{{f.fk_legajo_2.documento}}';
-            vinculo.value = '{{f.vinculo}}';
-        }
-        {% endfor %}
+      // Lógica para determinar el contenido del div basado en la selección
+      {% for f in familia %}
+      if (seleccion === '{{f.fk_legajo_1.id}}') {
+        tipo_doc.value = '{{f.fk_legajo_1.tipo_doc}}';
+        documento.value = '{{f.fk_legajo_1.documento}}';
+        vinculo.value = '{{f.vinculo_inverso}}';
+      }
+      {% endfor %}
+      {% for f in familia_inversa %}
+      if (seleccion === '{{f.fk_legajo_2.id}}') {
+        tipo_doc.value = '{{f.fk_legajo_2.tipo_doc}}';
+        documento.value = '{{f.fk_legajo_2.documento}}';
+        vinculo.value = '{{f.vinculo}}';
+      }
+      {% endfor %}
     });
 
     // Asocia un evento change al SELECT
-    $('#id_fk_legajo_3').change(function() {
-        // Obtiene el valor seleccionado
-        var seleccion = $(this).val();
-        var tipo_doc = document.getElementById("tipo_doc3");
-        var documento = document.getElementById("documento3");
-        var vinculo = document.getElementById("vinculo3");
+    $('#id_fk_legajo_3').change(function () {
+      // Obtiene el valor seleccionado
+      var seleccion = $(this).val();
+      var tipo_doc = document.getElementById("tipo_doc3");
+      var documento = document.getElementById("documento3");
+      var vinculo = document.getElementById("vinculo3");
 
-        // Lógica para determinar el contenido del div basado en la selección
-        {% for f in familia %}
-        if (seleccion === '{{f.fk_legajo_1.id}}') {
-            tipo_doc.value = '{{f.fk_legajo_1.tipo_doc}}';
-            documento.value = '{{f.fk_legajo_1.documento}}';
-            vinculo.value = '{{f.vinculo_inverso}}';
-        }
-        {% endfor %}
-        {% for f in familia_inversa %}
-        if (seleccion === '{{f.fk_legajo_2.id}}') {
-            tipo_doc.value = '{{f.fk_legajo_2.tipo_doc}}';
-            documento.value = '{{f.fk_legajo_2.documento}}';
-            vinculo.value = '{{f.vinculo}}';
-        }
-        {% endfor %}
+      // Lógica para determinar el contenido del div basado en la selección
+      {% for f in familia %}
+      if (seleccion === '{{f.fk_legajo_1.id}}') {
+        tipo_doc.value = '{{f.fk_legajo_1.tipo_doc}}';
+        documento.value = '{{f.fk_legajo_1.documento}}';
+        vinculo.value = '{{f.vinculo_inverso}}';
+      }
+      {% endfor %}
+      {% for f in familia_inversa %}
+      if (seleccion === '{{f.fk_legajo_2.id}}') {
+        tipo_doc.value = '{{f.fk_legajo_2.tipo_doc}}';
+        documento.value = '{{f.fk_legajo_2.documento}}';
+        vinculo.value = '{{f.vinculo}}';
+      }
+      {% endfor %}
     });
 
     // Asocia un evento change al SELECT
-    $('#id_fk_legajo_4').change(function() {
-        // Obtiene el valor seleccionado
-        var seleccion = $(this).val();
-        var tipo_doc = document.getElementById("tipo_doc4");
-        var documento = document.getElementById("documento4");
-        var vinculo = document.getElementById("vinculo4");
+    $('#id_fk_legajo_4').change(function () {
+      // Obtiene el valor seleccionado
+      var seleccion = $(this).val();
+      var tipo_doc = document.getElementById("tipo_doc4");
+      var documento = document.getElementById("documento4");
+      var vinculo = document.getElementById("vinculo4");
 
-        // Lógica para determinar el contenido del div basado en la selección
-        {% for f in familia %}
-        if (seleccion === '{{f.fk_legajo_1.id}}') {
-            tipo_doc.value = '{{f.fk_legajo_1.tipo_doc}}';
-            documento.value = '{{f.fk_legajo_1.documento}}';
-            vinculo.value = '{{f.vinculo_inverso}}';
-        }
-        {% endfor %}
-        {% for f in familia_inversa %}
-        if (seleccion === '{{f.fk_legajo_2.id}}') {
-            tipo_doc.value = '{{f.fk_legajo_2.tipo_doc}}';
-            documento.value = '{{f.fk_legajo_2.documento}}';
-            vinculo.value = '{{f.vinculo}}';
-        }
-        {% endfor %}
+      // Lógica para determinar el contenido del div basado en la selección
+      {% for f in familia %}
+      if (seleccion === '{{f.fk_legajo_1.id}}') {
+        tipo_doc.value = '{{f.fk_legajo_1.tipo_doc}}';
+        documento.value = '{{f.fk_legajo_1.documento}}';
+        vinculo.value = '{{f.vinculo_inverso}}';
+      }
+      {% endfor %}
+      {% for f in familia_inversa %}
+      if (seleccion === '{{f.fk_legajo_2.id}}') {
+        tipo_doc.value = '{{f.fk_legajo_2.tipo_doc}}';
+        documento.value = '{{f.fk_legajo_2.documento}}';
+        vinculo.value = '{{f.vinculo}}';
+      }
+      {% endfor %}
     });
 
     // Asocia un evento change al SELECT
-    $('#id_fk_legajo_5').change(function() {
-        // Obtiene el valor seleccionado
-        var seleccion = $(this).val();
-        var tipo_doc = document.getElementById("tipo_doc5");
-        var documento = document.getElementById("documento5");
-        var vinculo = document.getElementById("vinculo5");
+    $('#id_fk_legajo_5').change(function () {
+      // Obtiene el valor seleccionado
+      var seleccion = $(this).val();
+      var tipo_doc = document.getElementById("tipo_doc5");
+      var documento = document.getElementById("documento5");
+      var vinculo = document.getElementById("vinculo5");
 
-        // Lógica para determinar el contenido del div basado en la selección
-        {% for f in familia %}
-        if (seleccion === '{{f.fk_legajo_1.id}}') {
-            tipo_doc.value = '{{f.fk_legajo_1.tipo_doc}}';
-            documento.value = '{{f.fk_legajo_1.documento}}';
-            vinculo.value = '{{f.vinculo_inverso}}';
-        }
-        {% endfor %}
-        {% for f in familia_inversa %}
-        if (seleccion === '{{f.fk_legajo_2.id}}') {
-            tipo_doc.value = '{{f.fk_legajo_2.tipo_doc}}';
-            documento.value = '{{f.fk_legajo_2.documento}}';
-            vinculo.value = '{{f.vinculo}}';
-        }
-        {% endfor %}
+      // Lógica para determinar el contenido del div basado en la selección
+      {% for f in familia %}
+      if (seleccion === '{{f.fk_legajo_1.id}}') {
+        tipo_doc.value = '{{f.fk_legajo_1.tipo_doc}}';
+        documento.value = '{{f.fk_legajo_1.documento}}';
+        vinculo.value = '{{f.vinculo_inverso}}';
+      }
+      {% endfor %}
+      {% for f in familia_inversa %}
+      if (seleccion === '{{f.fk_legajo_2.id}}') {
+        tipo_doc.value = '{{f.fk_legajo_2.tipo_doc}}';
+        documento.value = '{{f.fk_legajo_2.documento}}';
+        vinculo.value = '{{f.vinculo}}';
+      }
+      {% endfor %}
     });
-});
+  });
+</script>
+
+{% comment %} SCRIPT DE GRUPO FAMILIAR {% endcomment %}
+<script>
+  // Disable form submissions if there are invalid fields
+  (function () {
+    'use strict';
+    window.addEventListener('load', function () {
+      // Get the forms we want to add validation styles to
+      var forms = document.getElementsByClassName('needs-validation');
+      var enviarFormulario = document.getElementById('enviarFormulario');
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function (form) {
+        enviarFormulario.addEventListener('submit', function (event) {
+          var invalidFields = form.querySelectorAll(':invalid');
+          if (invalidFields.length > 0) {
+            // Si hay campos inválidos, detener la propagación del evento
+            event.preventDefault();
+            event.stopPropagation();
+
+            // Iterar sobre los campos inválidos y agregar mensajes de obligatoriedad
+            invalidFields.forEach(function (field) {
+              if (field.hasAttribute('required')) {
+                // Verificar si el mensaje de error ya existe
+                if (!field.nextElementSibling || !field.nextElementSibling.classList.contains('invalid-feedback')) {
+                  // Agregar un mensaje de obligatoriedad para los campos requeridos
+                  var errorMessage = document.createElement('div');
+                  errorMessage.className = 'invalid-feedback';
+                  errorMessage.innerHTML = 'Este campo es obligatorio.';
+                  field.parentNode.appendChild(errorMessage);
+                }
+              }
+            });
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+
+    const url = window.location.href;
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const calle_field = document.getElementById('calle_field');
+    const resultsBox = $('#results-box');
+    const formNuevo = $('#nuevo_legajo_familiar');
+
+    resultsBox.append('<td colspan="8" class="text-center text-muted h4">Realice una busqueda.</td>');
+    const csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+
+    const sendSearchData = (busqueda) => {
+      $.ajax({
+        type: 'POST',
+        url: "{% url 'familiares_buscar' %}",
+        data: {
+          'csrfmiddlewaretoken': csrf,
+          'busqueda': busqueda,
+          'id': '{{ pk }}',
+        },
+        success: (res) => {
+          const data = res.data
+          if (Array.isArray(data)) {
+
+            resultsBox.empty(); // Vaciar contenido anterior
+            data.forEach(r => {
+              resultsBox.append(`
+                          <tr id="id_tr${r.pk}" >
+                              <td>${r.apellido}</td>
+                              <td>${r.nombre}</td>
+                              <td>${r.documento}</td>
+                              <td>{{nuevo_grupo_familiar_form.vinculo}}</td>
+                              <td>{{nuevo_grupo_familiar_form.estado_relacion}}</td>
+                              <td class="text-center">{{nuevo_grupo_familiar_form.conviven}}</td>
+                              <td class="text-center">{{nuevo_grupo_familiar_form.cuidador_principal}}</td>
+                              <td class="text-right">
+                                  <button class="btn btn-primary btn-sm" id="btn_1" onclick="submitForms('id_tr${r.pk}','${r.pk}');" type="button">Agregar</button>
+                              </td>
+                          </tr>
+                      `);
+            });
+          } else {
+            if (searchInput.value.length > 0) {
+              resultsBox.empty(); // Vaciar contenido anterior
+              formNuevo.removeClass('d-none')
+            }
+          }
+        },
+        error: (err) => {
+          console.log("Error: ", err)
+        }
+      })
+    }
+
+    // Activa la búsqueda ajax cuando se ingresa texto
+    searchInput.addEventListener('keyup', e => {
+      $('#formulario-nuevo')[0].reset(); // Resetear el formulario
+      formNuevo.addClass('d-none'); // Ocultar el formulario
+      $('.is-invalid').removeClass('is-invalid'); // Quitar la clase 'is-invalid' de los campos inválidos
+      $('.invalid-feedback').remove(); // Eliminar los mensajes de validación
+      if (e.target.value.length > 1) {
+        sendSearchData(e.target.value, "busqueda")
+      } else {
+        resultsBox.innerHTML = '<td colspan="8" class="text-center text-muted h4">Realice una búsqueda.</td>'
+      }
+    });
+
+    $('#formulario-nuevo').submit(function (event) {
+      event.preventDefault(); // Evitar el envío del formulario
+
+      // Validar campos antes de enviar el formulario
+      if (validarCampos()) {
+        this.submit(); // Enviar el formulario si los campos son válidos
+      }
+    });
+
+
+
+
+    // Verificar si hay errores en el formulario
+    const form = $('#formulario-nuevo')
+    let hasErrors = false;
+    form.querySelectorAll('.is-invalid').forEach(function (field) {
+      hasErrors = true;
+      return false; // Salir del bucle si se encuentra un campo inválido
+    });
+
+    if (hasErrors) {
+      document.getElementById('nuevo_legajo_familiar').classList.remove('d-none');
+    } else {
+      document.getElementById('nuevo_legajo_familiar').classList.add('d-none');
+    }
+  })();
+
+  // Crea Django Ajax Call
+  function submitForms(trId, pk) {
+
+    var tr = document.getElementById(trId);
+    var tdValues = tr.getElementsByTagName('td');
+    var selectValues = tr.getElementsByTagName('select');
+    var values = {};
+    const addNombre = tdValues[0].innerHTML;
+    const addApellido = tdValues[1].innerHTML;
+    const addDocumento = tdValues[2].innerHTML;
+    const addParentesco = selectValues[0].value;
+    const addRelacion = selectValues[1].value;
+    const addConviven = selectValues[2].value;
+    const addCuidador = selectValues[3].value;
+
+    // Validar que todos los campos select estén seleccionados
+    var allFieldsSelected = true;
+    Array.from(selectValues).forEach(function (select) {
+      if (select.value === "") {
+        allFieldsSelected = false;
+        select.classList.add("is-invalid"); // Agregar clase 'is-invalid' para resaltar el campo inválido
+      } else {
+        select.classList.remove("is-invalid"); // Quitar clase 'is-invalid' si el campo es válido
+      }
+    });
+
+    if (allFieldsSelected) {
+      // Create Ajax Call
+      $.ajax({
+        url: '{% url "grupofamiliar_ajax_crear" %}',
+        data: {
+          'fk_legajo_1': '{{legajo.fk_legajo_id}}',
+          'fk_legajo_2': pk,
+          'vinculo': addParentesco,
+          'estado_relacion': addRelacion,
+          'conviven': addConviven,
+          'cuidador_principal': addCuidador,
+        },
+        dataType: 'json',
+        success: function (data) {
+          $("#tablaResultado").append(`
+          <div id="familiar-${data.familiar.id} class="col-md-3">
+              <ul class="users-list">
+                  <li style="width:auto">
+                      {% if data.familiar.foto is not None %}
+                      <img src="{{MEDIA_URL}}${data.familiar.foto}" alt="User Image" width="60px">
+                      {%else%}
+                      <img src="{% static 'custom/img/default.png'  %}" alt="User Image" width="60px">
+                      {%endif%}
+                      <span class="users-list-name">${data.familiar.apellido}, ${data.familiar.nombre}</span>
+                      <span class="users-list-date">${data.familiar.vinculo}</span>
+                      <span class="users-list-date"><button
+                          class="btn btn-danger btn-sm"
+                          onclick='deleteFamiliar("${data.familiar.id}")'
+                          type="submit">Eliminar</button></span>
+                  </li>
+              </ul>
+          </div>
+          `);
+          $(searchInput).val(""); // Vaciar el campo de búsqueda
+          resultsBox.empty(); // Vaciar contenido anterior   
+          $('#sin-familiares').remove()
+          toastr.options = { "positionClass": "toast-bottom-right", }
+          toastr[data.data.tipo_mensaje](data.data.mensaje);
+        }
+      });
+    } else {
+      // Mostrar un mensaje de error o realizar alguna acción en caso de campos incompletos
+      console.log("Todos los campos deben estar completos");
+    }
+  }
+
+  function deleteFamiliar(id) {
+    $.ajax({
+      url: '{% url "grupofamiliar_ajax_borrar" %}',
+      data: {
+        'id': id,
+      },
+      dataType: 'json',
+      success: function (data) {
+        $("#familiar-" + id).remove();
+        $('#tablaResultado').load(window.location.href + ' #tablaResultado');
+        $(searchInput).val(""); // Vaciar el campo de búsqueda
+        resultsBox.empty(); // Vaciar contenido anterior
+        resultsBox.append('<td colspan="8" class="text-center text-muted h4">Realice una busqueda.</td>')
+        $('#formulario-nuevo')[0].reset();
+        formNuevo.addClass('d-none')
+        toastr.options = { "positionClass": "toast-bottom-right", }
+        toastr[data.tipo_mensaje](data.mensaje);
+
+      }
+    });
+  }
+
+  function insertErrorMessage(element, message) {
+    var small = document.createElement('small');
+    small.classList.add('text-danger');
+    small.textContent = message;
+
+    var divWrapper = document.createElement('div');
+    divWrapper.appendChild(small);
+
+    var wrapper = document.createElement('div');
+    wrapper.classList.add('error-wrapper');
+    wrapper.appendChild(divWrapper);
+
+    element.parentNode.insertBefore(wrapper, element.nextSibling);
+  }
+
+  function validarCampos() {
+    let valido = true;
+
+    // Validar cada campo individualmente
+    $('#formulario-nuevo input, #formulario-nuevo select').each(function () {
+      if ($(this).prop('required') && $(this).val() === '') {
+        // Agregar clase de advertencia al campo vacío
+        $(this).addClass('is-invalid');
+        valido = false;
+      } else {
+        $(this).removeClass('is-invalid');
+      }
+    });
+
+    return valido;
+  }
 </script>
 {% endblock %}
