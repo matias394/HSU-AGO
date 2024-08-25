@@ -172,8 +172,11 @@
                     </table>
                   </div>
                   <div class="row d-none" id="nuevo_legajo_familiar">
+                    {% if '/CDLE/preadmisiones/editar/' in request.path %}
                     <form autocomplete="off" method="POST" novalidate action="{% url 'CDLE_preadmisiones_editar' pk_preadmision %}" id="formulario-nuevo">
-                      {% csrf_token %}
+                    {% else %}
+                    <form autocomplete="off" method="POST" novalidate action="{% url 'CDLE_preadmisiones_crear' pk %}" id="formulario-nuevo">
+                    {% endif %}                      {% csrf_token %}
                       <div class="form-row px-3 px-sm-5 mt-3">
                         <div class="form-group col-12">
                           <div class="text-center text-muted h4 pt-3">La búsqueda no arrojó
