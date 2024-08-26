@@ -149,8 +149,6 @@ CHOICE_EMB_RIESGO=[
 
 CHOICE_EDUCACION=[
     (None, ''),
-    ('No sabe leer', 'No sabe leer'),
-    ('No sabe escribir', 'No sabe escribir'),
     ('Primario', 'Primario'),
     ('Secundario', 'Secundario'),
     ('Terciario', 'Terciario'),

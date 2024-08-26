@@ -307,6 +307,7 @@ class MILDPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin)
         context["legajo"] = legajo
         context["familia"] = familia
         context["familia_inversa"] = familia_inversa
+        context["nuevo_grupo_familiar_form"] = self.form_nuevo_grupo_familiar_class
         return context
     
     def crear_grupo_hogar(self,form: QueryDict):

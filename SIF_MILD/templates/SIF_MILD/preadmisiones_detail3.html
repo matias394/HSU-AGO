@@ -26,6 +26,14 @@ Pre-admisiones
   <!-- botones -->
   <div class="col-12 my-3 mx-2 d-print-none">
     <div class="btn-toolbar" role="toolbar">
+      {% if object.estado == 'Pendiente' %}
+        {% if object.ivi == 'NO' and object.indice_ingreso == 'SI' %}
+        <a href="{% url 'MILD_indiceivi_crear' object.pk %}" class="btn btn-primary mr-1">Generar IVI</a>
+        {% endif %}
+        {% if object.indice_ingreso == 'NO' %}
+          <a href="{% url 'MILD_indiceingreso_crear' object.pk %}" class="btn btn-primary mr-1">Generar índice ingreso</a>
+        {% endif %}
+      {% endif %}
       {% if object.admitido == 'NO' and object.ivi == 'SI' %}
       <form method="post" action="{% url 'MILD_preadmisiones_ver3' object.id %}" id="admitirForm" class="d-inline">
         {% csrf_token %}
