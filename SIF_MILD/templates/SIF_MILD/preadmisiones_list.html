@@ -74,8 +74,11 @@
                           {% if o.estado == 'Lista de espera'%}
                           <a href="{% url 'MILD_preadmisiones_ver3' o.id %}" class="btn btn-primary btn-sm ver">Ver</a>
                           {% endif %}
-                          {% if o.estado == 'Admitido' or o.estado == 'Rechazado'%}
+                          {% if o.estado == 'Admitido'%}
                           <a href="{% url 'MILD_preadmisiones_ver3' o.id %}" class="btn btn-primary btn-sm ver">Ver</a>
+                          {% endif %}
+                          {% if o.estado == 'Rechazado'%}
+                          <a href="{% url 'MILD_preadmisiones_ver' o.id %}" class="btn btn-primary btn-sm ver">Ver</a>
                           {% endif %}
                           {% if o.estado == 'Pendiente'%}
                             {% if o.ivi == 'NO' or o.ivi == None%}
