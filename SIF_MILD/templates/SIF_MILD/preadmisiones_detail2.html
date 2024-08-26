@@ -2,11 +2,11 @@
 {% load static %};
 
 {% block title %}
-CDIF Pre-admisiones detalle
+MILD Pre-admisiones detalle
 {%endblock %};
 
 {% block titulo-pagina %}
-CDIF Pre-admisiones
+MILD Pre-admisiones
 {% endblock %};
 
 {% block breadcrumb %}
@@ -382,6 +382,299 @@ CDIF Pre-admisiones
           {% endif %}
           {% endif %}
 
+
+          
+          
+          <!-- Concluciones -->
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Otros Salud del niño -->
+    <div class="col-12">
+      <div class="card card-outline card-primary">
+        <div class="card-header">
+          <h3 class="card-title">Salud del niño</h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <dl class="row">
+            <dt class="col-sm-9 mb-2">Tiene Obra Social</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.obra_social %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Tiene Libreta Sanitaria</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.libreta_sanitaria %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">¿Dónde se atiende?</dt>
+            <dd class="col-sm-3 mb-2">{{ object.sexo_ninio }}</dd>
+          
+            <dt class="col-sm-9 mb-2">¿Cuándo fue su último control pediátrico?</dt>
+            <dd class="col-sm-3 mb-2">{{ object.ultimo_control }}</dd>
+          
+            <dt class="col-sm-9 mb-2">Padece enfermedad recurrente EN tratamiento</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.enf_recu_con_trata %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Padece enfermedad recurrente SIN tratamiento</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.enf_recu_sin_trata %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Padece enfermedad infecto-contagiosa EN tratamiento</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.enf_conta_con_trata %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Padece enfermedad infecto-contagiosa SIN tratamiento</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.enf_conta_sin_trata %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Padece problemas de salud mental EN tratamiento</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.enf_mental_con_trata %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Padece problemas de salud mental SIN tratamiento</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.enf_mental_sin_trata %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Capacidades reducidas o afectadas</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.capa_reducidas %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Tiene certificado único de discapacidad</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.certif_discap %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Toma medicamento</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.medicamento %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Niño con bajo peso</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.bajo_peso %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Niño con sobrepeso</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.sobrepeso %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Prematuro que requiere seguimiento</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.prematuro %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Intervenciones quirúrgicas</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.interv_quirurgicas %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Accidentes domésticos (lastimadura, quemadura, corte, golpe fuerte)</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.accidentes_domesticos %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Colecho</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.colecho %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Si padece enfermedad ¿cuál? ¿Dónde se trata?</dt>
+            <dd class="col-sm-3 mb-2">{{ object.enfermedad }}</dd>
+          
+            <dt class="col-sm-9 mb-2">Dificultad auditiva</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.auditiva %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Dificultad respiratoria</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.respiratoria %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Dificultad visual</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.visual %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Dificultad traumatologica</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.traumatologica %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Dificultad emocional</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.emocional %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Dificultad psiquica o psicologica</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.psiquica %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Dificultad digestiva</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.digestiva %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Alergias</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.alergias %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Observaciones/detalles de salud</dt>
+            <dd class="col-sm-3 mb-2">{{ object.observaciones_salud }}</dd>
+          
+            <dt class="col-sm-9 mb-2">¿Recibió todas las vacunas correspondientes a su edad?</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.vacunas %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          </dl>
+        </div>
+      </div>
+    </div>  
+
+    <div class="col-12">
+      <div class="card card-outline card-primary">
+        <div class="card-header">
+          <h3 class="card-title">Concluciones</h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <dl class="row">
+            <dt class="col-sm-9 mb-2">Acompañante que realiza la entrevista</dt>
+            <dd class="col-sm-3 mb-2">{{ object.acompaniante_entrevista }}</dd>
+          
+            <dt class="col-sm-9 mb-2">Acompañante asignado</dt>
+            <dd class="col-sm-3 mb-2">{{ object.acompaniante_asignado }}</dd>
+          
+            <dt class="col-sm-9 mb-2">Aquí puede detallar información adicional de la familia, o temas que es importante resaltar acerca de la misma.</dt>
+            <dd class="col-sm-3 mb-2">{{ object.observaciones_gral }}</dd>
+          </dl>
         </div>
       </div>
     </div>

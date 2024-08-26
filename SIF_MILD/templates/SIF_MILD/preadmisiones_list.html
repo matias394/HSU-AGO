@@ -71,6 +71,13 @@
                           {% if o.estado == 'Pendiente' or o.estado == 'Lista de espera'%}
                           <a href="{% url 'MILD_preadmisiones_ver3' o.id %}" class="btn btn-primary btn-sm ver">Ver</a>
                           {% endif %}
+                          {% if o.estado == 'Pendiente'%}
+                            {% if o.ivi == 'NO' or o.ivi == None%}
+                              {% if o.indice_ingreso == 'NO' or o.indice_ingreso == None%}
+                                <!--a href="{% url 'MILD_preadmisiones_editar' o.id %}" class="btn btn-primary btn-sm ver">Editar</a-->
+                              {% endif %}
+                            {% endif %}
+                          {% endif %}
                         {% endif %}
                       </div>
                     </td>

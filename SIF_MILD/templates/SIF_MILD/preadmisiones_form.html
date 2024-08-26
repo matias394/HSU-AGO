@@ -216,7 +216,7 @@
                                 </div>
                                 <div class="row d-none" id="nuevo_legajo_familiar">
                                     {% if '/MILD/preadmisiones/editar/' in request.path %}
-                                    <form autocomplete="off" method="POST" novalidate action="{% url 'MILD_preadmisiones_editar' pk_preadmision %}" id="formulario-nuevo">
+                                    <form autocomplete="off" method="POST" novalidate action="{% url 'MILD_preadmisiones_editar' pk %}" id="formulario-nuevo">
                                     {% else %}
                                     <form autocomplete="off" method="POST" novalidate action="{% url 'MILD_preadmisiones_crear' pk %}" id="formulario-nuevo">
                                     {% endif %}
@@ -496,8 +496,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <a href="{% url 'MILD_derivaciones_listar' %}"
-                                    class="btn btn-secondary float-left mb-3 mt-5">Cancelar</a>
+                                <a class="btn btn-secondary float-left mb-3 mt-5 "
+                                onclick="stepper.previous()">Volver</a>
                                 <a class="btn btn-primary float-right mb-3 mt-5 " onclick="stepper.next()">Continuar</a>
                             </div>
 
