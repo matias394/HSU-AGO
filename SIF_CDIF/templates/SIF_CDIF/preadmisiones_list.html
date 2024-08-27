@@ -59,7 +59,7 @@
                     <td class="project-actions text-right">
                       <div class="btn-group" role="group">
                         {% if o.estado == 'Finalizada' %}
-                        {% if o.ivi == 'NO' %}
+                        {% if o.ivi == 'NO' or o.ivi == 'None'%}
                         <a href="{% url 'CDIF_indiceivi_crear' o.id %}" class="btn btn-primary btn-sm">Agregar IVI</a>
                         {% endif %}
                         {% if o.admitido == 'NO' and o.ivi == 'SI'%}
@@ -72,7 +72,7 @@
                         {% endif %}
                         <a href="{% url 'CDIF_preadmisiones_ver' o.id %}" class="btn btn-secondary btn-sm">Ver</a>
                         {% if o.estado == 'Pendiente' or o.estado == 'Lista de espera'%}
-                        <a href="{% url 'CDIF_preadmisiones_editar' o.id %}" class="btn btn-secondary btn-sm editar">Editar</a>
+                        <!--a href="{% url 'CDIF_preadmisiones_editar' o.id %}" class="btn btn-secondary btn-sm editar">Editar</a-->
                         {% endif %}
                         
                       </div>
