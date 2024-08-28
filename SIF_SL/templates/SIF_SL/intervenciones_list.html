@@ -39,6 +39,7 @@ Intervenciones
               <th>Criterio</th>
               <th>Gestión</th>
               <th>Acción realizada</th>
+              <th>Detalles</th>
               <th width="5%" class="notexport"></th>
             </tr>
           </thead>
@@ -51,6 +52,7 @@ Intervenciones
               <td> {{i.criterio_modificable}}</td>
               <td> {{i.impacto}}</td>
               <td> {{i.accion}}</td>
+              <td> {{i.detalle}}</td>
               <td class="text-right">
                 <a href="{% url 'SL_intervencion_ver' i.id %}" class="btn btn-secondary btn-sm ver"
                   title="Ver detalle">Ver</a>
