@@ -69,7 +69,8 @@ App web que permite visualizar y gestionar información de personas en situació
         python manage.py collectstatic
     ```
 
----
+4. Ejecutar scriptsSM de la carpeta scripts, esto va a agregar todos los datos de las secretarias, sub secretarias, programas, organismos, planes sociales,vacantes
+   categorias alertas y alertas 
 
 ## ESTRUCTURA DE LAS APPS PROYECTO DJANGO
 
