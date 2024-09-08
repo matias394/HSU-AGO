@@ -8,7 +8,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Secretarias(models.Model):
-    nombre = models.CharField(max_length=40, unique=True)
+    nombre = models.CharField(max_length=100, unique=True)
     observaciones = models.CharField(max_length=300, null=True, blank=True)
     estado = models.BooleanField(default=True)
 
@@ -29,7 +29,7 @@ class Secretarias(models.Model):
 
 class Subsecretarias(models.Model):
     fk_secretaria = models.ForeignKey(Secretarias, on_delete=models.PROTECT)
-    nombre = models.CharField(max_length=40, unique=True)
+    nombre = models.CharField(max_length=100, unique=True)
     observaciones = models.CharField(
         max_length=300,
         null=True,
