@@ -244,7 +244,7 @@ class CDLE_PreAdmision (models.Model):
     CONCLUS_check_recibir_catre = models.BooleanField(verbose_name="Recibir catre", null=True, blank=True)
     CONCLUS_participar_de = models.CharField(max_length=150,verbose_name="Participar de", choices=CHOISE_CDLE_PARTICIPARDE, null=True, blank=True)
     #SubTexto ; aclaración "Derivar el legajo en caso de ser candidata"
-    CONCLUS_acompaniante = models.CharField(max_length=150,verbose_name="Participar de", choices=CHOISE_CDLE_ACOMPANIANTES, null=True, blank=True)
+    CONCLUS_acompaniante = models.CharField(max_length=150,verbose_name="Acompañante", choices=CHOISE_CDLE_ACOMPANIANTES, null=True, blank=True)
 
 # class Criterios_IVI(models.Model):
 #     criterio =  models.CharField(max_length=250, null=False, blank=False)
