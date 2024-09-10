@@ -1385,7 +1385,9 @@ class CDLEIndiceIviEgresoCreateView (PermisosMixin, CreateView):
         admi = CDLE_Admision.objects.filter(pk=pk).first()
         # Genera una clave única utilizando uuid4 (versión aleatoria)
         preadmi = CDLE_PreAdmision.objects.filter(fk_legajo_id=admi.fk_preadmi.fk_legajo.id).first()
+        print(preadmi.id)
         foto_ivi = CDLE_Foto_IVI.objects.filter(fk_preadmi_id=preadmi.id).first()
+        print(foto_ivi.id)
         clave = foto_ivi.clave
         nombres_campos = request.POST.keys()
         puntaje_maximo = Criterios_IVI.objects.aggregate(total=Sum('puntaje'))['total']
@@ -1433,6 +1435,8 @@ class CDLEIndiceIviEgresoCreateView (PermisosMixin, CreateView):
         foto.save()
 
         admi.estado = "Inactiva"
+        admi.inactiva_motivo_baja = request.POST.get('detalle_de_baja', '')
+        admi.inactiva_tipo_baja = request.POST.get('tipo_de_baja', '')
         admi.modificado_por_id = self.request.user.id
         admi.save()
 
