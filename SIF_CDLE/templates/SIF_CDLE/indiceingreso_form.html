@@ -127,6 +127,23 @@
                             </tr>
                             {% endif %}
                             {% endfor %}
+
+                            <tr>
+                                <td colspan="4" class="text-center bg-secondary py-1">Criterios de monitoreo</td>
+                            </tr>
+                            {% for c in criterio %}
+                            {% if c.tipo == 'Criterios de monitoreo' %}
+                            <tr>
+                                <td>{{c.criterio}}</td>
+                                <td class="text-center px-0">
+                                    <div class="icheck-primary d-inline">
+                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}">
+                                        <label for="{{c.id}}"></label>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
