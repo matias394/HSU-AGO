@@ -1151,6 +1151,7 @@ class MILDAsignadoAdmisionDetail(PermisosMixin, DetailView):
         context["vo"] = self.object
         context["intervenciones_count"] = intervenciones.count()
         context["intervenciones_last"] = intervenciones_last
+        context["preadmi"] = preadmi
         
         return context
     
