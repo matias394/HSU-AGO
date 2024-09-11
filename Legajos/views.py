@@ -34,7 +34,7 @@ from django.conf import settings
 from .models import IntercepcionSaludPersona
 from SIF_MILD.models import MILD_PreAdmision
 import json
-
+import dotenv
 # Configurar el locale para usar el idioma español
 import locale
 #locale.setlocale(locale.LC_ALL, 'es_AR.UTF-8')
@@ -42,7 +42,7 @@ import locale
 import logging
 logger = logging.getLogger('django')
 
-
+dotenv.load_dotenv()
 # region ############################################################### LEGAJOS
 
 class LegajosReportesListView(ListView):
@@ -1277,13 +1277,13 @@ class intervencionesSaludView(TemplateView):
 
     def get_token_salud(self):
         auth = requests.post(
-            url='http://172.20.30.145:3000/v1/auth',
+            url=os.getenv('URL_SALUD'),
             headers={
                 'Content-type':'application/json',
             },
             data=json.dumps({
-                "user": "AP1_s4lud",
-                "password": "5118a)iCb-vfUNz"
+                "user":os.getenv('USER_SALUD'),
+                "password":os.getenv('PASS_SALUD')
             })
         ).json()
         return auth['access_token']

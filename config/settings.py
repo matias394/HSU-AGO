@@ -5,6 +5,10 @@ from datetime import datetime
 from pathlib import Path
 from django.contrib.messages import constants as messages
 from .validators import UppercaseValidator, LowercaseValidator
+import dotenv
+
+# Cargar variables de entorno desde el archivo .env
+dotenv.load_dotenv()
 
 # Obtener la ruta del directorio actual (donde se encuentra este script)
 current_directory = os.path.dirname(os.path.abspath(__file__))
