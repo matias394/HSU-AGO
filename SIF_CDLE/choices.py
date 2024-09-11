@@ -268,3 +268,9 @@ CHOICE_EMBARAZO_CONTROLADO = [
     ('No', 'No'),
     ('Insuficiente', 'Insuficiente'),
 ]
+
+CHOICE_TIPO_PARTO = [
+    ('Prematuro', 'Prematuro'),
+    ('A término', 'A término'),
+    ('Post término', 'Post término'),
+]

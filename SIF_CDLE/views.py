@@ -403,9 +403,21 @@ class CDLEPreAdmisionesDetailView(PermisosMixin, DetailView):
         context["resultado_ingreso"] = resultado_ingreso
         context["legajo"] = legajo
         context["familia"] = familia
+        context["object"] = pk
+        context["acompaniantes_asignado"] = CHOISE_CDLE_ACOMPANIANTES
         return context
     
     def post(self, request, *args, **kwargs):
+        if 'acompaniante_asignado' in request.POST:
+            preadmi = CDLE_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
+            if preadmi:
+                nuevo_acompaniante = request.POST.get('acompaniante_asignado')
+                print(nuevo_acompaniante)
+                preadmi.CONCLUS_acompaniante = nuevo_acompaniante
+                preadmi.save()
+
+            return HttpResponseRedirect(self.request.path_info)
+    
         if 'admitir' in request.POST:
             preadmi = CDLE_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
             preadmi.admitido = "SI"
@@ -1145,6 +1157,7 @@ class CDLEAsignadoAdmisionDetail(PermisosMixin, DetailView):
         foto_ivi_fin = CDLE_Foto_IVI.objects.filter(fk_preadmi_id=admi.fk_preadmi_id, tipo="Ingreso").last()
         foto_ivi_inicio = CDLE_Foto_IVI.objects.filter(fk_preadmi_id=admi.fk_preadmi_id, tipo="Ingreso").first()
 
+        context['inhabilitacion_form'] = CDLE_InhabilitarAdmisionEgresoForm()
         context["foto_ivi_fin"] = foto_ivi_fin
         context["foto_ivi_inicio"] = foto_ivi_inicio
         context["observaciones"] = observaciones
@@ -1160,6 +1173,40 @@ class CDLEAsignadoAdmisionDetail(PermisosMixin, DetailView):
         context["intervenciones_last"] = intervenciones_last
         
         return context
+    
+    def boolean_onoff(self,value):
+        if value == 'on' : return True
+        return False
+
+
+    def post(self, request, *args, **kwargs):
+        if 'vacante_asignada' in request.POST:
+            admi = CDLE_Admision.objects.filter(pk=self.kwargs["pk"]).first()
+            if admi:
+                nuevo_acompaniante = request.POST.get('vacante_asignada')
+                print(nuevo_acompaniante)
+                admi.vacante_asignada = nuevo_acompaniante
+                admi.save()
+        
+        if 'preform_inhabilitacion' in request.POST:
+            admi = CDLE_Admision.objects.filter(pk=self.kwargs["pk"]).first()
+            post_request = request.POST.copy()
+            del post_request['preform_inhabilitacion']
+            if admi:
+                admi.check_con_control = self.boolean_onoff(post_request.get('check_con_control'))
+                admi.check_sin_control = self.boolean_onoff(post_request.get('check_sin_control'))
+                admi.check_control_insuficiente = self.boolean_onoff(post_request.get('check_control_insuficiente'))
+                admi.check_no_aplica = self.boolean_onoff(post_request.get('check_no_aplica'))
+                admi.check_se_desconoce = self.boolean_onoff(post_request.get('check_se_desconoce'))
+                admi.edad_gestacional = post_request.get('edad_gestacional')
+                admi.tipo_parto = post_request.get('tipo_parto')
+                admi.check_internacion_en_neonatologia = self.boolean_onoff(post_request.get('check_internacion_en_neonatologia'))
+                admi.cuanto_tiempo = post_request.get('cuanto_tiempo')
+                admi.check_turno_para_cierre_hc = self.boolean_onoff(post_request.get('check_turno_para_cierre_hc'))
+                admi.save()
+                return redirect('CDLE_indiceiviegreso_crear', admi.id)
+
+        return HttpResponseRedirect(self.request.path_info)
 
 class CDLEInactivaAdmisionDetail(PermisosMixin, DetailView):
     permission_required = "Usuarios.rol_admin"

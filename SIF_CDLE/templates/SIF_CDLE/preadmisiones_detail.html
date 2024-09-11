@@ -31,6 +31,9 @@ CDLE Pre-admisiones
       <a class="btn btn-primary mr-1" data-toggle="modal" data-target="#confirmarFinalizar">
         Finalizar entrevista
       </a>
+      <button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#cambiarAcompananteModal">
+        Cambiar acompañante
+        </button>
       <a href="{% url 'CDLE_preadmisiones_editar' object.pk %}" class="btn btn-secondary mr-1">Editar</a>
       {% endif %}
     {% if object.indice_ingreso == 'NO' %}
@@ -81,7 +84,7 @@ CDLE Pre-admisiones
             <dd class="col-sm-5 mb-2">Solicitud creada por</dd>
             <dt class="col-sm-7 mb-2">{{object.creado_por}}</dt>
             <dd class="col-sm-5 mb-2">Acompañante</dd>
-            <dt class="col-sm-7 mb-2">{{object.acompaniante|default_if_none:'-'}}</dt>
+            <dt class="col-sm-7 mb-2">{{object.CONCLUS_acompaniante|default_if_none:'-'}}</dt>
             {% comment %} <dd class="col-sm-5 mb-2">Madrina</dd>
             <dt class="col-sm-7 mb-2">{{object.madrina}}</dt> {% endcomment %}
             {% if object.modificado_por %}
@@ -293,6 +296,33 @@ CDLE Pre-admisiones
   </div>
   <!-- ./ -->
 
+
+  <!-- Datos Acompañante -->
+  <div class="col-12">
+    <div class="card card-outline card-primary">
+      <div class="card-header">
+        <h3 class="card-title">Acompañante</h3>
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-card-widget="collapse">
+            <i class="fas fa-minus"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <ul class="products-list product-list-in-card pl-2 pr-2">
+            <div class="callout">
+                <h5>{{object.CONCLUS_acompaniante|default_if_none:'-'}}</h5>
+            </div>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+  <!-- ./ -->
+
+
+
 </div>
 </div>
 
@@ -353,4 +383,36 @@ CDLE Pre-admisiones
       </div>
     </div>
 
+
+<!-- Modal cambio acompañante -->
+<div class="modal fade" id="cambiarAcompananteModal" tabindex="-1" role="dialog" aria-labelledby="cambiarAcompananteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cambiarAcompananteModalLabel">Cambiar Acompañante</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form  method="POST" action="#">
+                {% csrf_token %}
+                    <div class="form-group">
+                      <label for="acompaniante_asignado">Acompañante asignado</label>
+                       <select id="acompaniante_asignado" name="acompaniante_asignado" class="form-control">
+                                <option value="{{object.CONCLUS_acompaniante}}" selected>{{object.CONCLUS_acompaniante}}</option>
+                           {% for value, label in acompaniantes_asignado %}
+                               <option value="{{ value }}">{{ value }}</option>
+                           {% endfor %}
+                       </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="cambio_acompaniante" class="btn btn-primary">Confirmar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %};

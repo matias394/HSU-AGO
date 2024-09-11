@@ -1,5 +1,6 @@
 {% extends "includes/base.html" %};
 {% load static %};
+{% load crispy_forms_tags %}
 
 {% block title %}
 Admisiones Formulario
@@ -27,10 +28,15 @@ Admisiones
   <div class="col-12 my-3 mx-2 d-print-none">
     {% if object.estado != "Inactiva" %}
     <a href="{% url 'CDLE_intervenciones_legajos_listar' object.id %}" class="btn btn-primary mr-1">Ver intervenciones</a>
+    <button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#cambiarVacanteModal">
+        Cambiar vacante
+    </button>
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     {% if object.estado != "Inactiva" %}
-    <a href="{% url 'CDLE_indiceiviegreso_crear' object.id %}" class="btn btn-danger mr-1">Inactivar</a>
+    <button type="button" class="btn btn-danger mr-1" data-toggle="modal" data-target="#inhabilitarAdmisionModal">
+        Inactivar
+    </button>
     {% endif %}
   </div>
   <!-- ./botones -->
@@ -249,7 +255,29 @@ Admisiones
   </div>
  -->
 
+  <!-- Datos Vacante -->
+  <div class="col-12">
+    <div class="card card-outline card-primary">
+      <div class="card-header">
+        <h3 class="card-title">Vacante</h3>
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-card-widget="collapse">
+            <i class="fas fa-minus"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
 
+        <ul class="products-list product-list-in-card pl-2 pr-2">
+            <div class="callout">
+                <h5>{{object.vacante_asignada|default_if_none:'-'}}</h5>
+            </div>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+  <!-- ./ -->
 
 </div>
 <!-- /  -->
@@ -260,6 +288,105 @@ Admisiones
       <a href="{% url 'CDLE_admisiones_listar' %}" class="btn btn-secondary">Volver</a>
     </div>
   </div>
+</div>
+
+<!-- Modal cambio acompañante -->
+<div class="modal fade" id="cambiarVacanteModal" tabindex="-1" role="dialog" aria-labelledby="cambiarVacanteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cambiarVacanteModalLabel">Cambiar Vacante</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form  method="POST" action="#">
+                {% csrf_token %}
+                    <div class="form-group">
+                      <label for="vacante_asignada">Vacante asignada</label>
+                       <select id="vacante_asignada" name="vacante_asignada" class="form-control">
+                                <option value="" selected></option>
+                                <option value="Acompañamiento" selected>Acompañamiento</option>
+                                <option value="Monitoreo" >Monitoreo</option>
+                       </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="cambio_vacante" class="btn btn-primary">Confirmar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal cambio acompañante -->
+<div class="modal fade" id="cambiarVacanteModal" tabindex="-1" role="dialog" aria-labelledby="cambiarVacanteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cambiarVacanteModalLabel">Cambiar Vacante</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form  method="POST" action="#">
+                {% csrf_token %}
+                    <div class="form-group">
+                      <label for="vacante_asignada">Vacante asignada</label>
+                       <select id="vacante_asignada" name="vacante_asignada" class="form-control">
+                                <option value="" selected></option>
+                                <option value="Acompañamiento" selected>Acompañamiento</option>
+                                <option value="Monitoreo" >Monitoreo</option>
+                       </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="cambio_vacante" class="btn btn-primary">Confirmar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Inhabilitar  -->
+<div class="modal fade" id="inhabilitarAdmisionModal" tabindex="-1" role="dialog" aria-labelledby="inhabilitarAdmisionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="inhabilitarAdmisionModalLabel">Inhabilitar Admision</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form  method="POST" >
+                {% csrf_token %}
+                <input type="hidden" name="preform_inhabilitacion"/>
+                {{ inhabilitacion_form.check_con_control| as_crispy_field }}
+                {{ inhabilitacion_form.check_sin_control| as_crispy_field }}
+                {{ inhabilitacion_form.check_control_insuficiente| as_crispy_field }}
+                {{ inhabilitacion_form.check_no_aplica| as_crispy_field }}
+                {{ inhabilitacion_form.check_se_desconoce| as_crispy_field }}
+                {{ inhabilitacion_form.edad_gestacional| as_crispy_field }}
+                {{ inhabilitacion_form.tipo_parto| as_crispy_field }}
+                {{ inhabilitacion_form.check_internacion_en_neonatologia| as_crispy_field }}
+                {{ inhabilitacion_form.cuanto_tiempo| as_crispy_field }}
+                {{ inhabilitacion_form.check_turno_para_cierre_hc| as_crispy_field }}
+
+
+                    <div class="modal-footer">
+                        <button type="submit" id="cambio_vacante" class="btn btn-primary">Confirmar</button>
+                        {% comment %} <a href="{% url 'CDLE_indiceiviegreso_crear' object.id %}" class="btn btn-danger mr-1">Inactivar</a> {% endcomment %}
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %};
 

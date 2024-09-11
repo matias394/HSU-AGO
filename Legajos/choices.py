@@ -443,7 +443,6 @@ CHOISE_CDLE_PARTICIPARDE = [
 CHOISE_CDLE_ACOMPANIANTES = [
     (None, ''),
     ("Rafaela Cabanillas", "Rafaela Cabanillas"),
-    ("Rafaela Cabanillas", "Rafaela Cabanillas"),
     ("Noelia Ponce", "Noelia Ponce"),
     ("Josefina Dubini", "Josefina Dubini"),
     ("Melanie Mur", "Melanie Mur"),

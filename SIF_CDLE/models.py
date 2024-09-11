@@ -328,6 +328,19 @@ class CDLE_Admision(models.Model):
     inactiva_observaciones = models.CharField(max_length=300, null=True, blank=True)
     inactiva_tipo_baja = models.CharField(max_length=100, null=True, blank=True)
     inactiva_motivo_baja = models.CharField(max_length=100, null=True, blank=True) 
+    vacante_asignada = models.CharField(max_length=100, null=True, blank=True)
+
+    # CAMPOS PARA INHABILITAR LA ADMISION
+    check_con_control                   = models.BooleanField(verbose_name="Con control (5 o más)", null=True, blank=True)
+    check_sin_control                   = models.BooleanField(verbose_name="Sin control", null=True, blank=True)
+    check_control_insuficiente          = models.BooleanField(verbose_name="Controles insuficientes (menos de 5 controles obstétricos y escasos estudios médicos", null=True, blank=True)
+    check_no_aplica                     = models.BooleanField(verbose_name="No aplica", null=True, blank=True)
+    check_se_desconoce                  = models.BooleanField(verbose_name="Se desconoce", null=True, blank=True)
+    edad_gestacional                    = models.CharField(verbose_name="Edad gestacional (semanas)", max_length=150,choices=CHOICE_1to40, null=True, blank=True)
+    tipo_parto                          = models.CharField(verbose_name="Tipo de parto", max_length=150,choices=CHOICE_TIPO_PARTO, null=True, blank=True)
+    check_internacion_en_neonatologia   = models.BooleanField(verbose_name="Internación en neonatología", null=True, blank=True)
+    cuanto_tiempo                       = models.CharField(verbose_name="¿Por qué? ¿Cuánto tiempo?", max_length=200, null=True, blank=True)
+    check_turno_para_cierre_hc          = models.BooleanField(verbose_name="Turno para cierre de HC", null=True, blank=True)
 
 class OpcionesResponsables(models.Model):
     nombre = models.CharField(max_length=250, unique=True)

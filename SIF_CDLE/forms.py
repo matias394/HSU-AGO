@@ -262,3 +262,21 @@ class CDLE_OpcionesResponsablesForm (forms.ModelForm):
         fields = '__all__'
         widgets = {}
         labels = {}
+
+class CDLE_InhabilitarAdmisionEgresoForm (forms.ModelForm):
+    class Meta:
+        model = CDLE_Admision 
+        fields = '__all__'
+        widgets = {
+            'check_con_control': forms.CheckboxInput(),
+            'check_sin_control': forms.CheckboxInput(),
+            'check_control_insuficiente': forms.CheckboxInput(),
+            'check_no_aplica': forms.CheckboxInput(),
+            'check_se_desconoce': forms.CheckboxInput(),
+            'edad_gestacional': forms.Select(),
+            'tipo_parto': forms.Select(),
+            'check_internacion_en_neonatologia': forms.CheckboxInput(),
+            'cuanto_tiempo': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
+            'check_turno_para_cierre_hc': forms.CheckboxInput(),
+        }
+        labels = {}
