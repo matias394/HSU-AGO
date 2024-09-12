@@ -596,6 +596,7 @@ CHOICE_INGRESOPOR = [
     (None, ''),
     ('Operativo','Operativo'),
     ('Red Madre','Red Madre'),
+    ('Postulación por formulario','Postulación por formulario'),
     ('Otro','Otro'),
 ]
 

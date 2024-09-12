@@ -171,6 +171,12 @@ class CDLEPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
         context["nuevo_grupo_familiar_form"] = self.form_nuevo_grupo_familiar_class
         context["familia_inversa"] = familia_inversa
         return context
+    
+    def form_invalid(self, form):
+        print(form.errors)
+        response = super().form_invalid(form)
+        return response
+    
 
     def form_valid(self, form: BaseModelForm):
         pk = self.kwargs["pk"]
