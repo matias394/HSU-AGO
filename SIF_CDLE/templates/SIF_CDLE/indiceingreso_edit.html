@@ -79,7 +79,7 @@
                             </tr>
                             {% endif %}
                             {% endfor %}
-                            <tr>
+                            <!--tr>
                                 <td colspan="4" class="text-center bg-secondary py-1">Motivo de falta de control o control insuficiente</td>
                             </tr>
                             {% for c in criterio %}
@@ -92,7 +92,7 @@
                                         <label for="{{c.id}}"></label>
                                     </div>
                                 </td>
-                            </tr>
+                            </tr-->
                             {% endif %}
                             {% endfor %}
                             <tr>
@@ -111,11 +111,28 @@
                             </tr>
                             {% endif %}
                             {% endfor %}
-                            <tr>
+                            <!--tr>
                                 <td colspan="4" class="text-center bg-secondary py-1">Criterios sociales para el ingreso</td>
                             </tr>
                             {% for c in criterio %}
                             {% if c.tipo == 'Criterios sociales para el ingreso' %}
+                            <tr>
+                                <td>{{c.criterio}}</td>
+                                <td class="text-center px-0">
+                                    <div class="icheck-primary d-inline">
+                                        <input type="checkbox" id="{{c.id}}" name="{{c.id}}"  {% for a in activos %}{% if a.fk_criterios_ingreso_id == c.id %} checked {% endif %}{% endfor %}>
+                                        <label for="{{c.id}}"></label>
+                                    </div>
+                                </td>
+                            </tr-->
+                            {% endif %}
+                            {% endfor %}
+
+                            <tr>
+                                <td colspan="4" class="text-center bg-secondary py-1">>Criterios de monitoreo</td>
+                            </tr>
+                            {% for c in criterio %}
+                            {% if c.tipo == 'Criterios de monitoreo' %}
                             <tr>
                                 <td>{{c.criterio}}</td>
                                 <td class="text-center px-0">
