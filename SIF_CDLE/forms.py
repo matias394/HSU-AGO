@@ -19,19 +19,20 @@ class CDLE_PreadmisionesForm (forms.ModelForm):
             # # Misma funcionalidad del legajo
 
             # # Paso 2 : Entrevista
-            # 'ENTR_fec_entr',
+            'ENTR_fec_entr' : forms.DateInput(attrs={'type': 'date'}, format="%d-%m-%Y"),
             # 'ENTR_barrio_operativo',
             # 'ENTR_ingreso_por',
             # 'ENTR_derivacion_de',
             # 'ENTR_derivacion_otro',
             # 'ENTR_reinc_en_programa',
             # # Si se marca que si el campo "Reincidencia en el programa Si/No" se debe ver el campo "Año" Tipo: Año
-
+            'ENTR_reinc_en_programa_anio': forms.NumberInput(attrs={'min': '0'}),
+            
             # # Paso 3 : Embarazo
             # 'EMBA_primer_emba',
-            # 'EMBA_fec_ultima_mentru',
+            'EMBA_fec_ultima_mentru' : forms.DateInput(attrs={'type': 'date'}, format="%d-%m-%Y"),
             # 'EMBA_sems_emba',
-            # 'EMBA_fpp',
+            'EMBA_fpp': forms.DateInput(attrs={'type': 'date'}, format="%d-%m-%Y"),
             # 'EMBA_centro_salud_controla',
             # 'EMBA_obstetrica',
             # 'EMBA_hizo_test_emba',
@@ -39,9 +40,9 @@ class CDLE_PreadmisionesForm (forms.ModelForm):
             # 'EMBA_tiene_lib_sanitaria',
             # 'EMBA_recibio_en',
             # 'EMBA_conoce_metod_anticoncep',
-            # 'EMBA_list_conoce_metod_anticoncep',
+            'EMBA_list_conoce_metod_anticoncep': forms.SelectMultiple(),
             # 'EMBA_uso_en_estado_emba',
-            # 'EMBA_list_uso_en_estado_emba',
+            'EMBA_list_uso_en_estado_emba': forms.SelectMultiple(),
             # 'EMBA_sifilis_en_anterior_emba',
             # 'EMBA_sifilis_realizo_tratam',
             # 'EMBA_sifilis_tratam_completado',
@@ -51,13 +52,13 @@ class CDLE_PreadmisionesForm (forms.ModelForm):
             # 'EMBA_sifilis_pareja_tratamiento',
             # 'EMBA_sifilis_pareja_tratamiento_completado',
             # # Sección 3.1 : Antecedentes de embarazo y parto
-            # 'EMBA_cantidad_emba',
-            # 'EMBA_cantidad_hijos',
-            # 'EMBA_cantidad_menores',
-            # 'EMBA_cantidad_mayores',
-            # 'EMBA_cantidad_abortos',
-            # 'EMBA_cantidad_abortos_expon',
-            # 'EMBA_cantidad_abortos_provoc',
+            'EMBA_cantidad_emba' : forms.NumberInput(attrs={'min': '0'}),
+            'EMBA_cantidad_hijos': forms.NumberInput(attrs={'min': '0'}),
+            'EMBA_cantidad_menores': forms.NumberInput(attrs={'min': '0'}),
+            'EMBA_cantidad_mayores': forms.NumberInput(attrs={'min': '0'}),
+            'EMBA_cantidad_abortos': forms.NumberInput(attrs={'min': '0'}),
+            'EMBA_cantidad_abortos_expon': forms.NumberInput(attrs={'min': '0'}),
+            'EMBA_cantidad_abortos_provoc': forms.NumberInput(attrs={'min': '0'}),
             # # ¿Tiene alguno de estos antecedentes?
             'EMBA_check_emba_no_ctrl': forms.CheckboxInput(),
             'EMBA_check_emba_adol': forms.CheckboxInput(),
@@ -91,11 +92,11 @@ class CDLE_PreadmisionesForm (forms.ModelForm):
             # 'SALUDEMBA_causa_consumo',
 
             # # Sección 5 : Controles-
-            # 'CTRL_fec_aprox_primer_ctrl',
+            'CTRL_fec_aprox_primer_ctrl': forms.DateInput(attrs={'type': 'date'}, format="%d-%m-%Y"),
             # 'CTRL_centro_salud',
             # 'CTRL_en_cantidad_sem_emba',
-            # 'CTRL_fec_ultimo_ctrl',
-            # 'CTRL_fec_proximo_ctrl',
+            'CTRL_fec_ultimo_ctrl': forms.DateInput(attrs={'type': 'date'}, format="%d-%m-%Y"),
+            'CTRL_fec_proximo_ctrl': forms.DateInput(attrs={'type': 'date'}, format="%d-%m-%Y"),
             # 'CTRL_emb_controlado',
             'CTRL_check_comienza_control_op' : forms.CheckboxInput(),
             # "Primer Trimestre (0-14 semanas)"
@@ -169,7 +170,7 @@ class CDLE_PreadmisionesForm (forms.ModelForm):
             'INFOFAMI_check_familiar_con_problema_legal_denuncio': forms.CheckboxInput(),
             'INFOFAMI_check_antecedente_duelo_trauma_reciente': forms.CheckboxInput(),
             # # Seccion 7.1. "Ingresos familiares" (dentro del paso 6)
-            # 'INFOFAMI_ingreso_aprox',
+            'INFOFAMI_ingreso_aprox': forms.NumberInput(attrs={'min': '0'}),
             'INFOFAMI_check_ingresos_plan_social': forms.CheckboxInput(),
             'INFOFAMI_check_ingreso_alcanza_alimentos': forms.CheckboxInput(),
             # 'INFOFAMI_veces_comen_aldia',

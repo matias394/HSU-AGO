@@ -48,6 +48,13 @@ from SIF_CDIF.models import Criterios_IVI
 #        verbose_name = 'Centro'
 #        verbose_name_plural = "Centros"
 
+class OpcionesAnticonceptivos(models.Model):
+    nombre = models.CharField(max_length=250, unique=True)
+
+    def __str__(self):
+        return self.nombre
+
+
 class CDLE_PreAdmision (models.Model):
     fk_derivacion = models.ForeignKey(LegajosDerivaciones, on_delete=models.PROTECT)
     fk_legajo = models.ForeignKey(Legajos, related_name='CDLE_fk_legajo', on_delete=models.PROTECT, null=True, blank=True)
@@ -80,25 +87,26 @@ class CDLE_PreAdmision (models.Model):
     ENTR_barrio_operativo = models.CharField(max_length=150,verbose_name="Barrio de operativo", choices=CHOICE_BARRIOS, null=True, blank=True)
     ENTR_ingreso_por = models.CharField(max_length=150,verbose_name="Ingresó por", choices=CHOICE_INGRESOPOR, null=True, blank=True)
     ENTR_derivacion_de = models.CharField(max_length=150,verbose_name="Derivación de", choices=CHOICE_DERIVACIONDE, null=True, blank=True)
-    ENTR_derivacion_otro = models.CharField(max_length=150,verbose_name="Otro", null=True, blank=True)
-    ENTR_reinc_en_programa = models.BooleanField(verbose_name="Reincidencia en el programa Si/No", null=True, blank=True)
+    ENTR_derivacion_otro = models.CharField(max_length=250,verbose_name="Otro", null=True, blank=True)
+    ENTR_reinc_en_programa = models.CharField(max_length=150,verbose_name="Reincidencia en el programa Si/No", choices=CHOICE_SINO, null=True, blank=True)
+    ENTR_reinc_en_programa_anio = models.IntegerField(verbose_name="En caso afirmativo, ingrese el año", null=True, blank=True)
     # Si se marca que si el campo "Reincidencia en el programa Si/No" se debe ver el campo "Año" Tipo: Año
 
     # Paso 3 : Embarazo
     EMBA_primer_emba = models.CharField(max_length=150,verbose_name="Primer embarazo", choices=CHOICE_SINO, null=True, blank=True)
     EMBA_fec_ultima_mentru = models.DateField(verbose_name="Fecha última mestruación", null=True, blank=True)
-    EMBA_sems_emba = models.CharField(max_length=150,verbose_name="Semanas de embarazo" ,choices=CHOICE_1to40, null=True, blank=True)
+    EMBA_sems_emba = models.IntegerField(max_length=150,verbose_name="Semanas de embarazo" ,choices=CHOICE_1to40, null=True, blank=True)
     EMBA_fpp = models.DateField(verbose_name="FPP", null=True, blank=True)
     EMBA_centro_salud_controla = models.CharField(max_length=150,verbose_name="Centro de salud que se controla", choices=CHOICE_CENTRO_CONTROL, null=True, blank=True)
-    EMBA_obstetrica = models.CharField(max_length=150,verbose_name="Obstétrica", null=True, blank=True)
+    EMBA_obstetrica = models.CharField(max_length=250,verbose_name="Obstétrica", null=True, blank=True)
     EMBA_hizo_test_emba = models.CharField(max_length=150,verbose_name="¿Te hiciste test de embarazo?", choices=CHOICE_SINO, null=True, blank=True)
-    EMBA_sem_primer_ctrl = models.CharField(max_length=150,verbose_name="¿Semana del primer control?" ,choices=CHOICE_1to40, null=True, blank=True)
+    EMBA_sem_primer_ctrl = models.IntegerField(max_length=150,verbose_name="¿Semana del primer control?" ,choices=CHOICE_1to40, null=True, blank=True)
     EMBA_tiene_lib_sanitaria = models.CharField(max_length=150,verbose_name="¿Tiene libreta sanitaria?" , choices=CHOICE_SINO, null=True, blank=True)
-    EMBA_recibio_en = models.CharField(max_length=150,verbose_name="Recibió en", null=True, blank=True)
+    EMBA_recibio_en = models.CharField(max_length=250,verbose_name="Recibió en", null=True, blank=True)
     EMBA_conoce_metod_anticoncep = models.CharField(max_length=150,verbose_name="¿Conoces los métodos anticonceptivos?" , choices=CHOICE_SINO, null=True, blank=True)
-    EMBA_list_conoce_metod_anticoncep = models.CharField(max_length=150,verbose_name="¿Cuáles conoces?",choices=CHOICE_METODOS_ANTICONCEPTIVOS, null=True, blank=True)
+    EMBA_list_conoce_metod_anticoncep = models.ManyToManyField(OpcionesAnticonceptivos, related_name='conoce_anticonceptivos', max_length=150,verbose_name="¿Cuáles conoces?", null=True, blank=True)
     EMBA_uso_en_estado_emba = models.CharField(max_length=150,verbose_name="¿Utilizabas alguno cuando quedaste embarazada?" , choices=CHOICE_SINO, null=True, blank=True)
-    EMBA_list_uso_en_estado_emba = models.CharField(max_length=150,verbose_name="¿Cuál usabas?",choices=CHOICE_METODOS_ANTICONCEPTIVOS, null=True, blank=True)
+    EMBA_list_uso_en_estado_emba = models.ManyToManyField(OpcionesAnticonceptivos,max_length=150,verbose_name="¿Cuál usabas?", null=True, blank=True)
     EMBA_sifilis_en_anterior_emba = models.CharField(max_length=150,verbose_name="¿Tuviste sífilis en embarazos anteriores?", choices=CHOICE_SINO, null=True, blank=True)
     EMBA_sifilis_realizo_tratam = models.CharField(max_length=150,verbose_name="¿Realizaste el tratamiento?", choices=CHOICE_RESPONSABLE, null=True, blank=True)
     EMBA_sifilis_tratam_completado = models.CharField(max_length=150,verbose_name="¿Lo completaste?", choices=CHOICE_RESPONSABLE, null=True, blank=True)
@@ -144,8 +152,8 @@ class CDLE_PreAdmision (models.Model):
     SALUDEMBA_sospecha_consumo = models.CharField(max_length=150,verbose_name="¿Sospecha de consumo?", choices=CHOICE_SINO, null=True, blank=True)
     SALUDEMBA_fuma_cigarro_actual = models.CharField(max_length=150,verbose_name="¿Fuma cigarrillo actualmente?", choices=CHOICE_SINO, null=True, blank=True)
     SALUDEMBA_dao = models.CharField(max_length=150,verbose_name="¿DAO+?", choices=CHOICE_SINO, null=True, blank=True)
-    SALUDEMBA_momento_consumo = models.CharField(max_length=150,verbose_name="Identifica en qué momento empezó a consumir", null=True, blank=True)
-    SALUDEMBA_causa_consumo = models.CharField(max_length=150,verbose_name="Identifica la causa del consumo", null=True, blank=True)
+    SALUDEMBA_momento_consumo = models.CharField(max_length=250,verbose_name="Identifica en qué momento empezó a consumir", null=True, blank=True)
+    SALUDEMBA_causa_consumo = models.CharField(max_length=250,verbose_name="Identifica la causa del consumo", null=True, blank=True)
 
     # Sección 5 : Controles-
     CTRL_fec_aprox_primer_ctrl = models.DateField(verbose_name="Fecha aprox. 1° control", null=True, blank=True)
@@ -175,7 +183,7 @@ class CDLE_PreAdmision (models.Model):
 
     # Paso 6 : "Pareja o apoyo en la crianza" (Igual a "Padre o apoyo en la crianza, cambiar el nombre del Paso)
     # 6.1 DATOS PERSONALES
-    POACRI_pareja_apoyo_crianza = models.CharField(max_length=150,verbose_name="Padre o apoyo en la crianza", null=True, blank=True)
+    POACRI_pareja_apoyo_crianza = models.CharField(max_length=150,verbose_name="Pareja o apoyo en la crianza", null=True, blank=True)
     POACRI_vinculo = models.CharField(max_length=150,verbose_name="Vínculo", null=True, blank=True)
     POACRI_tipo_doc = models.CharField(max_length=150,verbose_name="Tipo de documento", null=True, blank=True)
     POACRI_num_doc = models.CharField(max_length=150,verbose_name="Numero documento", null=True, blank=True)
@@ -198,29 +206,29 @@ class CDLE_PreAdmision (models.Model):
 
     # Paso 7. "Información Familiar"
     INFOFAMI_check_convivientes_tienen_dni = models.BooleanField(verbose_name="¿Todos los convivientes tienen DNI?" , null=True, blank=True)
-    INFOFAMI_convivientes_tienen_dni_desc = models.CharField(max_length=150,verbose_name="Datos", null=True, blank=True)
+    INFOFAMI_convivientes_tienen_dni_desc = models.CharField(max_length=250,verbose_name="Datos", null=True, blank=True)
     INFOFAMI_check_menores_escolarizados = models.BooleanField(verbose_name="¿Todos los menores de 18 años están escolarizados?" , null=True, blank=True)
-    INFOFAMI_menores_escolarizados_desc = models.CharField(max_length=150,verbose_name="Datos", null=True, blank=True)
+    INFOFAMI_menores_escolarizados_desc = models.CharField(max_length=250,verbose_name="Datos", null=True, blank=True)
     INFOFAMI_check_menor_con_bajopes_sobrepes = models.BooleanField(verbose_name="¿Hay algún menor de edad con bajo peso o sobrepeso?" , null=True, blank=True)
-    INFOFAMI_menor_con_bajopes_sobrepes_desc = models.CharField(max_length=150,verbose_name="Datos", null=True, blank=True)
+    INFOFAMI_menor_con_bajopes_sobrepes_desc = models.CharField(max_length=250,verbose_name="Datos", null=True, blank=True)
     INFOFAMI_check_menor_con_ante_acci_dom = models.BooleanField(verbose_name="¿Hay algún menor de edad con antecedentes de accidentes domésticos graves o a repetición?" , null=True, blank=True)
-    INFOFAMI_menor_con_ante_acci_dom_desc = models.CharField(max_length=150,verbose_name="Datos", null=True, blank=True)
+    INFOFAMI_menor_con_ante_acci_dom_desc = models.CharField(max_length=250,verbose_name="Datos", null=True, blank=True)
     INFOFAMI_check_menor_con_ante_acci_dom_seguimiento = models.BooleanField(verbose_name="¿En seguimiento?" , null=True, blank=True)
     INFOFAMI_check_menores_con_ctrl_vacunas = models.BooleanField(verbose_name="¿Todos los menores de 18 tienen controles de salud y vacunas correspondientes?" , null=True, blank=True)
-    INFOFAMI_menores_con_ctrl_vacunas_desc = models.CharField(max_length=150,verbose_name="Datos", null=True, blank=True)
+    INFOFAMI_menores_con_ctrl_vacunas_desc = models.CharField(max_length=250,verbose_name="Datos", null=True, blank=True)
     INFOFAMI_check_menor_con_patologia = models.BooleanField(verbose_name="¿Algún menor de 18 años padece una patología?" , null=True, blank=True)
     INFOFAMI_check_menor_con_patologia_seguimiento = models.BooleanField(verbose_name="¿En seguimiento?" , null=True, blank=True)
-    INFOFAMI_menor_con_patologia_desc = models.CharField(max_length=150,verbose_name="Datos", null=True, blank=True)
+    INFOFAMI_menor_con_patologia_desc = models.CharField(max_length=250,verbose_name="Datos", null=True, blank=True)
     INFOFAMI_check_menor_capas_reduc_afec = models.BooleanField(verbose_name="¿Hay algún menor de edad con capacidades reducidas o afectadas (CUD)?" , null=True, blank=True)
-    INFOFAMI_menor_capas_reduc_afec_desc = models.CharField(max_length=150,verbose_name="Datos", null=True, blank=True)
+    INFOFAMI_menor_capas_reduc_afec_desc = models.CharField(max_length=250,verbose_name="Datos", null=True, blank=True)
     INFOFAMI_conviviente_enf_infec_contagiosa = models.CharField(max_length=150,verbose_name="¿Hay algún conviviente con enfermedad infecto-contagiosa? (tuberculosis, sarampión, sífilis, HIV)", choices=CHOICE_SINO, null=True, blank=True)
-    INFOFAMI_conviviente_enf_infec_contagiosa_desc = models.CharField(max_length=150,verbose_name="Datos", null=True, blank=True)
+    INFOFAMI_conviviente_enf_infec_contagiosa_desc = models.CharField(max_length=250,verbose_name="Datos", null=True, blank=True)
     INFOFAMI_check_conviviente_consum_drogas = models.BooleanField(verbose_name="¿Hay algún conviviente con consumo problemático de sustancias o sospecha de consumo?" , null=True, blank=True)
-    INFOFAMI_conviviente_consum_drogas_desc = models.CharField(max_length=150,verbose_name="Datos", null=True, blank=True)
+    INFOFAMI_conviviente_consum_drogas_desc = models.CharField(max_length=250,verbose_name="Datos", null=True, blank=True)
     INFOFAMI_check_emba_con_situacion_conflicto = models.BooleanField(verbose_name="¿La embarazada atraviesa o atravesó alguna situación conflictiva, de violencia o problema legal?" , null=True, blank=True)
     INFOFAMI_check_emba_con_situacion_conflicto_denuncio = models.BooleanField(verbose_name="¿Denunció?" , null=True, blank=True)
     INFOFAMI_check_emba_con_situacion_conflicto_protegida = models.BooleanField(verbose_name="¿Protegida por medida judicial/perimetral?" , null=True, blank=True)
-    INFOFAMI_emba_con_situacion_conflicto_desc = models.CharField(max_length=150,verbose_name="Datos", null=True, blank=True)
+    INFOFAMI_emba_con_situacion_conflicto_desc = models.CharField(max_length=250,verbose_name="Datos", null=True, blank=True)
     INFOFAMI_check_familiar_con_problema_legal = models.BooleanField(verbose_name="¿Algún integrante de la familia tiene un problema legal?" , null=True, blank=True)
     INFOFAMI_familiar_con_problema_legal_desc = models.CharField(max_length=150,verbose_name="Detallar", null=True, blank=True)
     INFOFAMI_check_familiar_con_problema_legal_denuncio = models.BooleanField(verbose_name="¿Denunciaron esta situación?" , null=True, blank=True)

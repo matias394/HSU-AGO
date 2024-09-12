@@ -37,6 +37,7 @@ CHOICE_LOCALIDAD = [
     ('Muñiz', 'Muñiz'),
     ('Santa María', 'Santa María'),
 ]
+
 CHOICE_BARRIOS = [
     (None, ''),
     ('Barrufaldi', 'Barrufaldi'),
@@ -189,6 +190,7 @@ CHOICE_TIPO_INGRESO=[
     ('Motivo de falta de control o control insuficiente', 'Motivo de falta de control o control insuficiente'),
     ('Criterios combinables de ingreso', 'Criterios combinables de ingreso'),
     ('Criterios sociales para el ingreso', 'Criterios sociales para el ingreso'),
+    ('Criterios de monitoreo', 'Criterios de monitoreo'),
 ]
 CHOICE_TIPO_IVI=[
     (None, ''),
@@ -246,38 +248,41 @@ CHOICE_1to40=[(i, str(i)) for i in range(1, 41)]
 CHOICE_4to40=[(i, str(i)) for i in range(4, 41)]
 
 CHOICE_CENTRO_CONTROL=[
-    ('20_de_Julio', '20 de Julio'),
-    ('29_de_Septiembre', '29 de Septiembre'),
-    ('Ana_Teresa_Barthalot', 'Ana Teresa Barthalot'),
-    ('C_1_C_Maria_Lobato', 'C.1.C. «Maria Lobato»'),
-    ('Camila_Rolen', 'Camila Rolén'),
-    ('Candido_Castello', 'Candido Castello'),
-    ('Rodolfo_Podesta', 'Rodolfo Podesta'),
-    ('Cura_Brochero', 'Cura Brochero'),
-    ('Alberto_Sabin', 'Alberto Sabin'),
-    ('Federico_Leloir', 'Federico Leloir'),
-    ('Suarez_Paris', 'Suarez Paris'),
-    ('Ratil_Matera', 'Ratil Matera'),
-    ('Rene_Favaloro', 'René Favaloro'),
-    ('Marta_Antoniazzi', 'Marta Antoniazzi'),
-    ('Padre_Mora', 'Padre Mora'),
-    ('Pte_Peren', 'Pte. Perén'),
-    ('Ramen_Carrillo', 'Ramén Carrillo'),
-    ('San_Miguel_Oeste', 'San Miguel Oeste'),
-    ('UF0_Manuelita', 'U.F.0 (Manuelita)'),
-    ('Hospital_Larcade', 'Hospital Larcade'),
-    ('Privado', 'Privado'),
-    ('Extrapartidario', 'Extrapartidario'),
+    ('20 de Julio', '20 de Julio'),
+    ('29 de Septiembre', '29 de Septiembre'),
+    ('Ana Teresa Barthalot', 'Ana Teresa Barthalot'),
+    ('C.1.C. «Maria Lobato»', 'C.1.C. «Maria Lobato»'),
+    ('Camila Rolón', 'Camila Rolón'),
+    ('Candido Castello', 'Candido Castello'),
+    ('Rodolfo Podesta', 'Rodolfo Podesta'),
+    ('Cura Brochero', 'Cura Brochero'),
+    ('Alberto Sabin', 'Alberto Sabin'),
+    ('Federico Leloir', 'Federico Leloir'),
+    ('Suarez Paris', 'Suarez Paris'),
+    ('Ratil Matera', 'Ratil Matera'),
+    ('René Favaloro', 'René Favaloro'),
+    ('Marta Antoniazzi', 'Marta Antoniazzi'),
+    ('Padre Mora', 'Padre Mora'),
+    ('Presidente Perón', 'Presidente Perón'),
+    ('Ramén Carrillo', 'Ramén Carrillo'),
+    ('San Miguel Oeste', 'San Miguel Oeste'),
+    ('U.F.0 (Manuelita)', 'U.F.0 (Manuelita)'),
+    ('Hospital Santa María', 'Hospital Santa María'),
+    ('Hospital San Miguel Arcángel', 'Hospital San Miguel Arcángel'),
+    ('Clínica Privada', 'Clínica Privada'),
+    ('Hospital Larcade', 'Hospital Larcade'),
+    # ('Privado', 'Privado'),
+    # ('Extrapartidario', 'Extrapartidario'),
 ]
 
 CHOICE_METODOS_ANTICONCEPTIVOS = [
     ('Preservativo', 'Preservativo'),
     ('Inyectable', 'Inyectable'),
-    ('Implante_Anticonceptivo', 'Implante Anticonceptivo'),
+    ('Implante Anticonceptivo', 'Implante Anticonceptivo'),
     ('DIU', 'DIU'),
-    ('Parche_Anticonceptivo', 'Parche Anticonceptivo'),
-    ('Anticonceptivo_Oral', 'Anticonceptivo Oral'),
-    ('Ligadura_Tubaria', 'Ligadura Tubaria'),
+    ('Parche Anticonceptivo', 'Parche Anticonceptivo'),
+    ('Anticonceptivo Oral', 'Anticonceptivo Oral'),
+    ('Ligadura Tubaria', 'Ligadura Tubaria'),
     ('Ninguno', 'Ninguno'),
 ]
 
