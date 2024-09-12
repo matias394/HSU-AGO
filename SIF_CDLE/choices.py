@@ -37,7 +37,6 @@ CHOICE_LOCALIDAD = [
     ('Muñiz', 'Muñiz'),
     ('Santa María', 'Santa María'),
 ]
-
 CHOICE_BARRIOS = [
     (None, ''),
     ('Barrufaldi', 'Barrufaldi'),
