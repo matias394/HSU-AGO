@@ -403,7 +403,7 @@ class CDLEPreAdmisionesDetailView(PermisosMixin, DetailView):
         context["ingreso"] = ingreso
         context['criterios_total'] = ingreso.count()
         context["cant_combinables"] = ingreso.filter(fk_criterios_ingreso__tipo='Criterios combinables para el ingreso').count()
-        context["cant_sociales"] = ingreso.filter(fk_criterios_ingreso__tipo='Criterios sociales para el ingreso').count() 
+        context["cant_sociales"] = ingreso.filter(fk_criterios_ingreso__tipo='Criterios de monitoreo').count() 
         context["autonomos"] = ingreso.filter(fk_criterios_ingreso__tipo='Criteros autónomos de ingreso').all()
         context["resultado"] = resultado
         context["resultado_ingreso"] = resultado_ingreso
@@ -770,7 +770,7 @@ class CDLEIndiceIngresoDetailView(PermisosMixin, DetailView):
         context["puntaje"] = criterio.aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
         context["cantidad"] = criterio.count()
         context["cant_combinables"] = criterio.filter(fk_criterios_ingreso__tipo='Criterios combinables para el ingreso').count()
-        context["cant_sociales"] = criterio.filter(fk_criterios_ingreso__tipo='Criterios sociales para el ingreso').count()
+        context["cant_sociales"] = criterio.filter(fk_criterios_ingreso__tipo='Criterios de monitoreo').count()
         context["mod_puntaje"] = criterio.filter(fk_criterios_ingreso__modificable__icontains='si').aggregate(total=Sum('fk_criterios_ingreso__puntaje'))
         context["ajustes"] = criterio.filter(fk_criterios_ingreso__tipo='Ajustes').count()
         context['fechaActual'] = date.today()
@@ -1028,7 +1028,7 @@ class CDLEPreAdmisiones3DetailView(PermisosMixin, DetailView):
         context["resultado_ingreso"] = resultado_ingreso
         context['criterios_total'] = criterio_ingreso.count()
         context["cant_combinables"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='Criterios combinables para el ingreso').count()
-        context["cant_sociales"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='Criterios sociales para el ingreso').count() 
+        context["cant_sociales"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='Criterios de monitoreo').count() 
         context["autonomos"] = criterio_ingreso.filter(fk_criterios_ingreso__tipo='Criteros autónomos de ingreso').all()
         return context
     

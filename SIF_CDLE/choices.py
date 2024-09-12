@@ -37,6 +37,7 @@ CHOICE_LOCALIDAD = [
     ('Muñiz', 'Muñiz'),
     ('Santa María', 'Santa María'),
 ]
+
 CHOICE_BARRIOS = [
     (None, ''),
     ('Barrufaldi', 'Barrufaldi'),
@@ -189,6 +190,7 @@ CHOICE_TIPO_INGRESO=[
     ('Motivo de falta de control o control insuficiente', 'Motivo de falta de control o control insuficiente'),
     ('Criterios combinables de ingreso', 'Criterios combinables de ingreso'),
     ('Criterios sociales para el ingreso', 'Criterios sociales para el ingreso'),
+    ('Criterios de monitoreo', 'Criterios de monitoreo'),
 ]
 CHOICE_TIPO_IVI=[
     (None, ''),
