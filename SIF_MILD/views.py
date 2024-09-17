@@ -580,6 +580,21 @@ class MILDIndiceIngresoCreateView (PermisosMixin, CreateView):
         puntaje_maximo = Criterios_Ingreso.objects.aggregate(total=Sum('puntaje'))['total']
         total_puntaje = 0
         historico = HistorialLegajoIndices()
+
+        #----------------------------------
+        #valida que por lomenos un criterio este seleciconado
+        validacion = False
+        for f in nombres_campos:
+            if f.isdigit():
+                validacion = True
+                break
+        
+        if not validacion:
+            messages.error(self.request, "Debe seleccionar al menos un criterio.")
+            return redirect('MILD_indiceingreso_crear', pk)
+        #----------------------------------
+
+
         for f in nombres_campos:
             if f.isdigit():
                 criterio_ingreso = Criterios_Ingreso.objects.filter(id=f).first()
