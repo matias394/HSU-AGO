@@ -331,7 +331,6 @@ class MILDPreAdmisionesUpdateView(PermisosMixin,UpdateView, SuccessMessageMixin)
                 sexo= copy_form.get('sexo'),
             )
 
-            print(nuevo_legajo)
             DimensionFamilia.objects.create(fk_legajo=nuevo_legajo)
             DimensionVivienda.objects.create(fk_legajo=nuevo_legajo)
             DimensionSalud.objects.create(fk_legajo=nuevo_legajo)
@@ -531,8 +530,6 @@ class MILDPreAdmisionesDeleteView(PermisosMixin, DeleteView):
             return redirect("MILD_preadmisiones_ver", pk=int(self.object.id))
 
         if self.request.user.id != self.object.creado_por.id:
-            print(self.request.user)
-            print(self.object.creado_por)
             messages.error(
                 self.request,
                 "Solo el usuario que generó esta derivación puede eliminarla.",
@@ -580,6 +577,23 @@ class MILDIndiceIngresoCreateView (PermisosMixin, CreateView):
         puntaje_maximo = Criterios_Ingreso.objects.aggregate(total=Sum('puntaje'))['total']
         total_puntaje = 0
         historico = HistorialLegajoIndices()
+
+        #----------------------------------
+        #valida que por lomenos un criterio este seleciconado
+        validacion = False
+        for f in nombres_campos:
+            if f.isdigit():
+                criterio_ingreso = Criterios_Ingreso.objects.filter(id=f).first()
+                if(criterio_ingreso.tipo == "Criterios sanitarios para el ingreso"):
+                    validacion = True
+                    break
+        
+        if not validacion:
+            messages.error(self.request, "Debe seleccionar al menos un criterio sanitario.")
+            return redirect('MILD_indiceingreso_crear', pk)
+        #----------------------------------
+
+
         for f in nombres_campos:
             if f.isdigit():
                 criterio_ingreso = Criterios_Ingreso.objects.filter(id=f).first()
@@ -1161,7 +1175,6 @@ class MILDAsignadoAdmisionDetail(PermisosMixin, DetailView):
             preadmi = MILD_PreAdmision.objects.filter(pk=admi.fk_preadmi_id).first()
             if preadmi:
                 nuevo_acompaniante = request.POST.get('acompaniante_asignado')
-                print(nuevo_acompaniante)
                 preadmi.acompaniante_asignado = nuevo_acompaniante
                 preadmi.save()
 
@@ -1330,8 +1343,6 @@ class MILDIntervencionesDeleteView(PermisosMixin, DeleteView):
     def form_valid(self, form):
 
         if self.request.user.id != self.object.creado_por.id:
-            print(self.request.user)
-            print(self.object.creado_por)
             messages.error(
                 self.request,
                 "Solo el usuario que generó esta derivación puede eliminarla.",
