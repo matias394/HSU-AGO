@@ -151,9 +151,7 @@
   </div>
 
 </div>
-{% endblock content %}
 
-{% block customJS %}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   $(document).ready(function () {
@@ -169,9 +167,10 @@
       if (filtro !== 'todos') {
         $('#tabla-derivaciones tbody tr').each(function () {
           const fila = $(this);
-          const columna = fila.find('td:nth-child(3)'); // Obtener la columna 3 (índice 2)
+          const columna = fila.find('td:nth-child(4)'); // Obtener la columna 3 (índice 2)
 
           // Comparar el valor de la columna con el filtro y ocultar la fila si no coincide
+          console.log(columna.text().trim());
           if (columna.text().trim() !== filtro) {
             fila.hide();
           }
@@ -180,5 +179,7 @@
     });
   });
 </script>
+{% endblock content %}
 
+{% block customJS %}
 {% endblock %}
