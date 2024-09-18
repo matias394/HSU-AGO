@@ -79,6 +79,7 @@ class MILD_PreadmisionesForm (forms.ModelForm):
 
         }
         labels = {
+            'areaacompanamiento': 'Área de Acompañamiento',
             'fk_legajo_1':'',
             'menores_a_cargo_1':'',
             'control_gine_1':'',

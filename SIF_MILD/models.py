@@ -189,6 +189,7 @@ class MILD_PreAdmision (models.Model):
     modificado = models.DateField(auto_now=True, null=True, blank=True)
     estado = models.CharField(max_length=100, null=True, blank=True)
     tipo = models.CharField(max_length=100, null=True, blank=True)
+    areaacompanamiento = models.CharField(max_length=100,choices=CHOICE_AREAACOMPA, null=True, blank=True)
 
 
 class MILD_IndiceIVI(models.Model):
