@@ -91,6 +91,7 @@ class CDLEDerivacionesDetailView(PermisosMixin, DetailView):
         context["pk"] = pk
         context["ivi"] = ivi
         context["resultado"] = resultado
+        context["archivos"] = LegajosDerivacionesArchivos.objects.filter(legajo_derivacion=pk)
         return context
 
 class CDLEDerivacionesRechazo(PermisosMixin, CreateView):
