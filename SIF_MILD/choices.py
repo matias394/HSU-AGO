@@ -443,3 +443,15 @@ CHOICE_TIPO_INGRESO_MILD = [
     ('Criterios sanitarios para el ingreso', 'Criterios sanitarios para el ingreso'),
     ('Criterios sociales para el ingreso', 'Criterios sociales para el ingreso'),
 ]
+
+CHOICE_AREAACOMPA = [
+    (None, ''),
+    ('Barrufaldi','Barrufaldi'),
+    ('Don Alfonso','Don Alfonso'),
+    ('Mitre','Mitre'),
+    ('Obligado','Obligado'),
+    ('Sarmiento', 'Sarmiento'),
+    ('Santa Brígida','Santa Brígida'),
+    ('San Miguel Centro','San Miguel Centro'),
+    ('Trujui','Trujui'),
+]
