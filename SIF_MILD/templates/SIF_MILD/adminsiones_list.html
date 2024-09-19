@@ -39,6 +39,7 @@
                 <th>Admisión</th>
                 <th>Nombre</th>
                 <th>Documento</th>
+                <th>Area de acompañamiento</th>
                 <th>Criterios ingreso</th>
                 <th>IVI de ingreso</th>
                 <th>IVI de egreso</th>
@@ -53,6 +54,7 @@
                 <td class="mailbox-date">{{a.creado|date:'d/m/Y'}}</td>
                 <td class=""> <a href="{% url 'MILD_admisiones_ver' a.id %}" title="Ver detalle de admisión">{{a.fk_preadmi.fk_legajo}}</a></td>
                 <td class="">{{a.fk_preadmi.fk_legajo.documento}}</td>
+                <td class="">{{a.fk_preadmi.areaacompanamiento}}</td>
                 <td class="text-center">
                   {% for item in conteo %}
                   {% if item.fk_preadmi_id == a.fk_preadmi.id %}
