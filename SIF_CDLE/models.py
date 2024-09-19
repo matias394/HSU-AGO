@@ -196,7 +196,7 @@ class CDLE_PreAdmision (models.Model):
     POACRI_check_edu_quiere_aprender_oficio = models.BooleanField(verbose_name="Quiere aprender un oficio", null=True, blank=True)
     POACRI_check_edu_quiere_parti_prog_pilates = models.BooleanField(verbose_name="Quiere participar del Programa Pilares", null=True, blank=True)
     # 6.3 ECONOMIA
-    POACRI_eco_planes_sociales_recibe = models.ForeignKey(PlanesSociales,verbose_name="Planes sociales que recibe", on_delete=models.PROTECT, null=True, blank=True)
+    POACRI_eco_planes_sociales_recibe = models.ManyToManyField(PlanesSociales,verbose_name="Planes sociales que recibe")
     
     # 6.4 TRABAJO
     POACRI_trab_tiene_trabajo_actual = models.CharField(max_length=150,verbose_name="¿Tiene trabajo actualmente?", choices=CHOICE_SINO, null=True, blank=True)

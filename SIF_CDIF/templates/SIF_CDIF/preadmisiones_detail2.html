@@ -129,14 +129,14 @@ CDIF Pre-admisiones
             <dt class="col-sm-9 mb-2">{{object.retomar_estudios_1|yesno:"Sí,No"}}</dt>
             <dd class="col-sm-3 mb-2">¿Quiere aprender un oficio?</dd>
             <dt class="col-sm-9 mb-2">{{object.aprender_oficio_1|yesno:"Sí,No"}}</dt>
-            <dd class="col-sm-3 mb-2">Planes sociales que recibe</dd>
-            <dt class="col-sm-9 mb-2">{{object.planes_sociales_1|default_if_none:"-"}}</dt>
             <dd class="col-sm-3 mb-2">¿Tiene trabajo actualmente?</dd>
             <dt class="col-sm-9 mb-2">{{object.trabajo_actual_1|yesno:"Sí,No"}}</dt>
             <dd class="col-sm-3 mb-2">Ocupacion</dd>
             <dt class="col-sm-9 mb-2">{{object.ocupacion_1|default_if_none:"-"}}</dt>
             <dd class="col-sm-3 mb-2">Modo de contratación</dd>
             <dt class="col-sm-9 mb-2">{{object.modo_contrat_1|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Planes sociales que recibe</dd>
+            <dt class="col-sm-3 mb-2">{% for plan in object.planes_sociales_1.all %}{{ plan.nombre }}<br/>{% endfor %}</dt>
           </dl>
           {% endif %}
           {% if object.fk_legajo_2 %}
@@ -193,14 +193,14 @@ CDIF Pre-admisiones
             </dt>
             <dd class="col-sm-3 mb-2">Quiere participar del Programa Pilares</dd>
             <dt class="col-sm-9 mb-2">{{object.programa_Pilares_2|yesno:"Sí,No"}}</dt>
-            <dd class="col-sm-3 mb-2">Planes sociales que recibe</dd>
-            <dt class="col-sm-9 mb-2">{{object.planes_sociales_2|default_if_none:"-"}}</dt>
             <dd class="col-sm-3 mb-2">¿Tiene trabajo actualmente?</dd>
             <dt class="col-sm-9 mb-2">{{object.trabajo_actual_2|yesno:"Sí,No"}}</dt>
             <dd class="col-sm-3 mb-2">Ocupación</dd>
             <dt class="col-sm-9 mb-2">{{object.ocupacion_2|default_if_none:"-"}}</dt>
             <dd class="col-sm-3 mb-2">Modo de contratación</dd>
             <dt class="col-sm-9 mb-2">{{object.modo_contrat_2|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Planes sociales que recibe</dd>
+            <dt class="col-sm-3 mb-2">{% for plan in object.planes_sociales_2.all %}{{ plan.nombre }}<br/>{% endfor %}</dt>
           </dl>
           {% endif %}
 
