@@ -86,6 +86,20 @@
             <dt class="col-sm-7 mb-2">{{object.acompaniante_entrevista}}</dt>
             <dd class="col-sm-5 mb-2">Acompañante asignado</dd>
             <dt class="col-sm-7 mb-2">{{object.acompaniante_asignado}}</dt>
+            <dt class="col-sm-7 mb-2">
+
+              Area de acompañamiento
+                <div class="card-body" style="width: 180%;padding-left: 0px;">
+          
+                  <ul class="products-list product-list-in-card col-12">
+                      <div class="callout">
+                          <h5>{{object.areaacompanamiento|default_if_none:"-"}}</h5>
+                      </div>
+                  </ul>
+          
+                </div>
+
+          </dt>
             {% if object.modificado_por %}
             <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Modificado por {{object.modificado_por}} - {{object.modificado|date:'d/m/Y'}}</dd>
             {% endif %}
