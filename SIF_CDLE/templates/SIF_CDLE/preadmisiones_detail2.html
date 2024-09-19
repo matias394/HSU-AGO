@@ -37,7 +37,7 @@ CDLE Pre-admisiones
 <div class="row p-0 m-0 " id="seleccion">
 
   <!-- Datos de Admisión -->
-  <div class="col-8 pb-3">
+  {% comment %} <div class="col-8 pb-3">
     <div class="card card-outline card-primary h-100 mb-0">
       <div class="card-header">
         <h3 class="card-title">Informacion de la postulacion</h3>
@@ -54,452 +54,425 @@ CDLE Pre-admisiones
         </dl>
       </div>
     </div>
-  </div>
+  </div> {% endcomment %}
 
   <!-- /  -->
 
-  
-  <!-- Datos de Embarazo -->
+  <!-- Entrevista -->
   <div class="col-8 pb-3">
     <div class="card card-outline card-primary h-100 mb-0">
       <div class="card-header">
-        <h3 class="card-title">Datos del Embarazo</h3>
-        <div class="card-tools">
-          <button type="button" class="btn btn-tool" data-card-widget="collapse">
-            <i class="fas fa-minus"></i>
-          </button>
-        </div>
+        <h3 class="card-title">Entrevista</h3>
       </div>
       <div class="card-body pb-1">
         <dl class="row mb-0">
-          <dd class="col-sm-5 mb-2">Fecha última mestruación</dd>
-          <dt class="col-sm-7 mb-2">{{object.fum|default_if_none:"-"}}</dt>
-          <dd class="col-sm-5 mb-2">Semanas de embarazo</dd>
-          <dt class="col-sm-7 mb-2">{{object.sem_embarazo|default_if_none:"-"}}</dt>
-          <dd class="col-sm-5 mb-2">FPP</dd>
-          <dt class="col-sm-7 mb-2">{{object.fpp|default_if_none:"-"}}</dt>
-          <dd class="col-sm-5 mb-2">Centro de salud que se controla</dd>
-          <dt class="col-sm-7 mb-2">{{object.centro_controla|default_if_none:"-"}}</dt>
-          <dd class="col-sm-5 mb-2">¿Te hiciste test de embarazo?</dd>
-          <dt class="col-sm-7 mb-2">{{object.test_embarazo|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-5 mb-2">¿Semana del primer control?</dd>
-          <dt class="col-sm-7 mb-2">{{object.primer_control|default_if_none:"-"}}</dt>
-          <dd class="col-sm-5 mb-2">¿Es tu primer embarazo?</dd>
-          <dt class="col-sm-7 mb-2">{{object.primer_embarazo|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-5 mb-2">¿Tiene libreta sanitaria?</dd>
-          <dt class="col-sm-7 mb-2">{{object.libreta_sanitaria|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-5 mb-2">¿Conoces los métodos anticonceptivos?</dd>
-          <dt class="col-sm-7 mb-2">{{object.metodos_anticonceptivos|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-5 mb-2">¿Cuáles conoces?</dd>
-          <dt class="col-sm-7 mb-2">{{object.cuales_met_anticon_conoces|default_if_none:"-"}}</dt>
-          <dd class="col-sm-5 mb-2">¿Utilizabas alguno cuando quedaste embarazada?</dd>
-          <dt class="col-sm-7 mb-2">{{object.utilizabas_alguno|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-5 mb-2">¿Cual usabas?</dd>
-          <dt class="col-sm-7 mb-2">{{object.cual_usabas|default_if_none:"-"}}</dt>
-          <dd class="col-sm-5 mb-2">¿Tuviste sifilis en embarazos anteriores?</dd>
-          <dt class="col-sm-7 mb-2">{{object.sifilis_anterior|default_if_none:"-"}}</dt>
-          <dd class="col-sm-5 mb-2">¿Tenes sifilis actualmente?</dd>
-          <dt class="col-sm-7 mb-2">{{object.sifilis_ahora|default_if_none:"-"}}</dt>
-          <dd class="col-sm-5 mb-2">En caso de haber tenido o tener sifilis: ¿Tu pareja hizo el tratamiento?</dd>
-          <dt class="col-sm-7 mb-2">{{object.sifilis_tratamiento_pareja|default_if_none:"-"}}</dt>
-          <dd class="col-sm-5 mb-2">¿Alguna vez consumió drogas?</dd>
-          <dt class="col-sm-7 mb-2">{{object.consumio_drogas|default_if_none:"-"}}</dt>
-          <dd class="col-sm-5 mb-2">¿Consume drogas actualmente?</dd>
-          <dt class="col-sm-7 mb-2">{{object.drogas_ahora|default_if_none:"-"}}</dt>
-          <dd class="col-sm-5 mb-2">¿Consume alcohol actualmente?</dd>
-          <dt class="col-sm-7 mb-2">{{object.alcohol_ahora|default_if_none:"-"}}</dt>
-          <dd class="col-sm-5 mb-2">Sospecha de consumo</dd>
-          <dt class="col-sm-7 mb-2">{{object.sospecha_consumo|default_if_none:"-"}}</dt>
+            <!-- # Paso 2 : Entrevista -->
+            <dd class="col-sm-5 mb-2">Fecha de la entrevista</dd>
+            <dt class="col-sm-7 mb-2">{{object.ENTR_fec_entr|date:'d/m/Y'}}</dt>
+            <dd class="col-sm-5 mb-2">Barrio de operativo</dd>
+            <dt class="col-sm-7 mb-2">{{object.ENTR_barrio_operativo|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Ingresó por</dd>
+            <dt class="col-sm-7 mb-2">{{object.ENTR_ingreso_por|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Derivación de</dd>
+            <dt class="col-sm-7 mb-2">{{object.ENTR_derivacion_de|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Otro</dd>
+            <dt class="col-sm-7 mb-2">{{object.ENTR_derivacion_otro|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Reincidencia en el programa Si/No</dd>
+            <dt class="col-sm-7 mb-2">{{object.ENTR_reinc_en_programa|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">En caso afirmativo, ingrese el año</dd>
+            <dt class="col-sm-7 mb-2">{{object.ENTR_reinc_en_programa_anio|default_if_none:"-"}}</dt>
+            <!-- # Si se marca que si el campo "Reincidencia en el programa Si/No" se debe ver el campo "Año" Tipo: Año -->
         </dl>
       </div>
     </div>
   </div>
-
   <!-- /  -->
 
-    <!-- Controles Embarazo -->
-    <div class="col-8 pb-3">
-      <div class="card card-outline card-primary h-100 mb-0">
-        <div class="card-header">
-          <h3 class="card-title">Controles del Embarazo</h3>
-          <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-              <i class="fas fa-minus"></i>
-            </button>
-          </div>
-        </div>
-        <div class="card-body pb-1">
-          <dl class="row mb-0">
-            <dd class="col-sm-5 mb-2">Embarazo controlado</dd>
-            <dt class="col-sm-7 mb-2">{{object.embarazo_controlado|default_if_none:"-"}}</dt>
-            <dd class="col-sm-5 mb-2">¿Comienza control en operativo?</dd>
-            <dt class="col-sm-7 mb-2">{{object.comienza_control|yesno:"Sí,No"}}</dt>
-          </dl>
-          <div class="form-row bg-light p-3 my-3">Primer Trimestre</div>
-          <dl class="row mb-0">
-            <dd class="col-sm-5 mb-2">Al menos 1 control con la obstetra</dd>
-            <dt class="col-sm-7 mb-2">{{object.prim_trim_control_obstetra|yesno:"Sí,No"}}</dt>
-            <dd class="col-sm-5 mb-2">Laboratorio- Rutina 1er trimestre</dd>
-            <dt class="col-sm-7 mb-2">{{object.prim_trim_estudios_labo|yesno:"Sí,No"}}</dt>
-            <dd class="col-sm-5 mb-2">Ecografía</dd>
-            <dt class="col-sm-7 mb-2">{{object.prim_trim_estudios_eco|yesno:"Sí,No"}}</dt>
-            <dd class="col-sm-5 mb-2">PAP</dd>
-            <dt class="col-sm-7 mb-2">{{object.prim_trim_estudios_pap|yesno:"Sí,No"}}</dt>
-            <dd class="col-sm-5 mb-2">Grupo y Factor</dd>
-            <dt class="col-sm-7 mb-2">{{object.prim_trim_estudios_grupo_factor|yesno:"Sí,No"}}</dt>
-            <dd class="col-sm-5 mb-2">Control odontologico</dd>
-            <dt class="col-sm-7 mb-2">{{object.prim_trim_control_odonto|yesno:"Sí,No"}}</dt>
-          </dl>
-          <div class="form-row bg-light p-3 my-3">Segundo Trimestre</div>
-          <dl class="row mb-0">
-            <dd class="col-sm-5 mb-2">Al menos 2 controles con la obstetra</dd>
-            <dt class="col-sm-7 mb-2">{{object.seg_trim_control_obsetra|yesno:"Sí,No"}}</dt>
-            <dd class="col-sm-5 mb-2">Scan fetal</dd>
-            <dt class="col-sm-7 mb-2">{{object.seg_trim_control_fetal|yesno:"Sí,No"}}</dt>
-            <dd class="col-sm-5 mb-2">P75</dd>
-            <dt class="col-sm-7 mb-2">{{object.seg_trim_p75|yesno:"Sí,No"}}</dt>
-          </dl>
-          <div class="form-row bg-light p-3 my-3">Tercer Trimestre</div>
-          <dl class="row mb-0">
-            <dd class="col-sm-5 mb-2">Ecografía, hisopado vaginal y laboratorio</dd>
-            <dt class="col-sm-7 mb-2">{{object.ter_trim_control_rutina|yesno:"Sí,No"}}</dt>
-            <dd class="col-sm-5 mb-2">Monitoreo fetal</dd>
-            <dt class="col-sm-7 mb-2">{{object.ter_trim_monitoreo_fetal|yesno:"Sí,No"}}</dt>
-            <dd class="col-sm-5 mb-2">Electro cardiograma</dd>
-            <dt class="col-sm-7 mb-2">{{object.ter_trim_electro_cardio|yesno:"Sí,No"}}</dt>
-          </dl>
-        </div>
-      </div>
-    </div>
-  
-    <!-- /  -->
-
-  <!-- Datos grupo familiar -->
-  <div class="col-8">
-    <div class="card card-outline card-primary">
+  <!-- Embarazo -->
+  <div class="col-8 pb-3">
+    <div class="card card-outline card-primary h-100 mb-0">
       <div class="card-header">
-        <h3 class="card-title">Detalle grupo familiar conviviente</h3>
-        <div class="card-tools">
-          <button type="button" class="btn btn-tool" data-card-widget="collapse">
-            <i class="fas fa-minus"></i>
-          </button>
-        </div>
+        <h3 class="card-title">Embarazo</h3>
       </div>
-      <div class="card-body">
-        {% if object.fk_legajo_1 %}
-        <div class="row bg-secondary pl-2 my-2 font-weight-bold"> Madre o cuidador principal</div>
+      <div class="card-body pb-1">
         <dl class="row mb-0">
-          <dd class="col-sm-3 mb-2">Nombre</dd>
-          <dt class="col-sm-9 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_1_id %}"
-              title="Ver legajo">{{object.fk_legajo_1}}</a> </dt>
-          <dd class="col-sm-3 mb-2">Vínculo</dd>
-          <dt class="col-sm-9 mb-2">{{object.vinculo1}}</dt>
-          <dd class="col-sm-3 mb-2">Documento</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_1.tipo_doc|default_if_none:"-"}}
-            {{object.fk_legajo_1.documento|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_1.fecha_nacimiento|date:'d/m/Y'}}</dt>
-          <dd class="col-sm-3 mb-2">Sexo</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_1.sexo|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">Cantidad de menores a cargo</dd>
-          <dt class="col-sm-9 mb-2">{{object.menores_a_cargo_1|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">¿Realiza controles ginecológicos?</dd>
-          <dt class="col-sm-9 mb-2">{{object.control_gine_1|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-3 mb-2">Cantidad total de hijos</dd>
-          <dt class="col-sm-9 mb-2">{{object.hijos_1|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">Cantidad total de embarazos</dd>
-          <dt class="col-sm-9 mb-2">{{object.embarazos_1|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">Cantidad de abortos espontáneos</dd>
-          <dt class="col-sm-9 mb-2">{{object.abortos_esp_1|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">Cantidad de abortos provocados</dd>
-          <dt class="col-sm-9 mb-2">{{object.abortos_prov_1|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">¿Embarazo NO controlado?</dd>
-          <dt class="col-sm-9 mb-2">{{object.emb_no_control_1|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-3 mb-2">¿Embarazo adolescente?</dd>
-          <dt class="col-sm-9 mb-2">{{object.emb_adolescente_1|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-3 mb-2">¿Embarazo de riesgo?</dd>
-          <dt class="col-sm-9 mb-2">{{object.emb_riesgo_1|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-3 mb-2">¿Cesáreas múltiples?</dd>
-          <dt class="col-sm-9 mb-2">{{object.cesareas_multip_1|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-3 mb-2">¿Partos múltiples?</dd>
-          <dt class="col-sm-9 mb-2">{{object.partos_multip_1|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-3 mb-2">¿Partos prematuros?</dd>
-          <dt class="col-sm-9 mb-2">{{object.partos_premat_1|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-3 mb-2">¿Partos con menos de 18 meses de intervalo?</dd>
-          <dt class="col-sm-9 mb-2">{{object.partos_menos18meses_1|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-3 mb-2">¿Está embarazada actualmente?</dd>
-          <dt class="col-sm-9 mb-2">{{object.emb_actualmente_1|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-3 mb-2">¿Tiene los controles?</dd>
-          <dt class="col-sm-9 mb-2">{{object.controles_1|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">Máximo nivel alcanzado</dd>
-          <dt class="col-sm-9 mb-2">{{object.educ_maximo_1|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">Estado</dd>
-          <dt class="col-sm-9 mb-2">{{object.educ_estado_1|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">¿Sabe leer?</dd>
-          <dt class="col-sm-9 mb-2">{{object.leer_1|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-3 mb-2">¿Sabe escribir?</dd>
-          <dt class="col-sm-9 mb-2">{{object.escribir_1|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-3 mb-2">¿Quiere retomar estudios?</dd>
-          <dt class="col-sm-9 mb-2">{{object.retomar_estudios_1|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-3 mb-2">¿Quiere aprender un oficio?</dd>
-          <dt class="col-sm-9 mb-2">{{object.aprender_oficio_1|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-3 mb-2">Planes sociales que recibe</dd>
-          <dt class="col-sm-9 mb-2">{{object.planes_sociales_1|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">¿Tiene trabajo actualmente?</dd>
-          <dt class="col-sm-9 mb-2">{{object.trabajo_actual_1|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-3 mb-2">Ocupacion</dd>
-          <dt class="col-sm-9 mb-2">{{object.ocupacion_1|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">Modo de contratación</dd>
-          <dt class="col-sm-9 mb-2">{{object.modo_contrat_1|default_if_none:"-"}}</dt>
-        </dl>
-        {% endif %}
-        {% if object.fk_legajo_2 %}
-        <!-- Padre o cuidador secundario -->
-        <div class="row bg-secondary pl-2 my-2 font-weight-bold"> Padre o cuidador secundario</div>
-        <dl class="row mb-0">
-          <dd class="col-sm-3 mb-2">Nombre</dd>
-          <dt class="col-sm-9 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_2_id %}"
-              title="Ver legajo">{{object.fk_legajo_2}}</a> </dt>
-          <dd class="col-sm-3 mb-2">Vínculo</dd>
-          <dt class="col-sm-9 mb-2">{{object.vinculo2}}</dt>
-          <dd class="col-sm-3 mb-2">Documento</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_2.tipo_doc|default_if_none:"-"}}
-            {{object.fk_legajo_2.documento|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_2.fecha_nacimiento|date:'d/m/Y'}}</dt>
-          <dd class="col-sm-3 mb-2">Sexo</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_2.sexo|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">Máximo nivel alcanzado</dd>
-          <dt class="col-sm-9 mb-2">{{object.educ_maximo_2|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">Estado</dd>
-          <dt class="col-sm-9 mb-2">{{object.educ_estado_2|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">¿Sabe leer?</dd>
-          <dt class="col-sm-9 mb-2">
-            {% if object.leer_2 == True %}
-            SI
-            {% else %}
-            NO
-            {% endif %}
-          </dt>
-          <dd class="col-sm-3 mb-2">¿Sabe escribir?</dd>
-          <dt class="col-sm-9 mb-2">
-            {% if object.escribir_2 == True %}
-            SI
-            {% else %}
-            NO
-            {% endif %}
-          </dt>
-          <dd class="col-sm-3 mb-2">¿Quiere retomar estudios?</dd>
-          <dt class="col-sm-9 mb-2">
-            {% if object.retomar_estudios_2 == True %}
-            SI
-            {% else %}
-            NO
-            {% endif %}
-          </dt>
-          <dd class="col-sm-3 mb-2">¿Quiere aprender un oficio?</dd>
-          <dt class="col-sm-9 mb-2">
-            {% if object.aprender_oficio_2 == True %}
-            SI
-            {% else %}
-            NO
-            {% endif %}
-          </dt>
-          <dd class="col-sm-3 mb-2">Quiere participar del Programa Pilares</dd>
-          <dt class="col-sm-9 mb-2">{{object.programa_Pilares_2|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-3 mb-2">Planes sociales que recibe</dd>
-          <dt class="col-sm-9 mb-2">{{object.planes_sociales_2|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">¿Tiene trabajo actualmente?</dd>
-          <dt class="col-sm-9 mb-2">{{object.trabajo_actual_2|yesno:"Sí,No"}}</dt>
-          <dd class="col-sm-3 mb-2">Ocupación</dd>
-          <dt class="col-sm-9 mb-2">{{object.ocupacion_2|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">Modo de contratación</dd>
-          <dt class="col-sm-9 mb-2">{{object.modo_contrat_2|default_if_none:"-"}}</dt>
-        </dl>
-        {% endif %}
+            <!-- # Paso 3 : Embarazo -->
+            <dd class="col-sm-5 mb-2">Primer embarazo</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_primer_emba|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Fecha última mestruación</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_fec_ultima_mentru|date:'d/m/Y'}}</dt>
+            <dd class="col-sm-5 mb-2">Semanas de embarazo</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_sems_emba|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">FPP</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_fpp|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Centro de salud que se controla</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_centro_salud_controla|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Obstétrica</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_obstetrica|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Te hiciste test de embarazo?</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_hizo_test_emba|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Semana del primer control?</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_sem_primer_ctrl|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Tiene libreta sanitaria?</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_tiene_lib_sanitaria|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Recibió en</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_recibio_en|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Conoces los métodos anticonceptivos?</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_conoce_metod_anticoncep|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Cuáles conoces?</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_list_conoce_metod_anticoncep}}</dt>
+            <dd class="col-sm-5 mb-2">¿Utilizabas alguno cuando quedaste embarazada?</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_uso_en_estado_emba|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Cuál usabas?</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_list_uso_en_estado_emba|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Tuviste sífilis en embarazos anteriores?</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_sifilis_en_anterior_emba|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Realizaste el tratamiento?</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_sifilis_realizo_tratam|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Lo completaste?</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_sifilis_tratam_completado|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Tenés sífilis actualmente?</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_sifilis_actual|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Realizaste el tratamiento?</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_sifilis_actual_tratamiento|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Lo completaste?</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_sifilis_actual_tratamiento_completado|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Tu pareja hizo el tratamiento?</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_sifilis_pareja_tratamiento|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Lo completó?</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_sifilis_pareja_tratamiento_completado|default_if_none:"-"}}</dt>
+            <!-- # Sección 3.1 : Antecedentes de embarazo y parto -->
+            <dd class="col-sm-5 mb-2">Cantidad de embarazos</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_cantidad_emba|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Cantidad de hijos</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_cantidad_hijos|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Menores</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_cantidad_menores|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Mayores</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_cantidad_mayores|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Cantidad de abortos</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_cantidad_abortos|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Espontáneos</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_cantidad_abortos_expon|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Provocados</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_cantidad_abortos_provoc|default_if_none:"-"}}</dt>
+            <!-- # ¿Tiene alguno de estos antecedentes? -->
+            <dd class="col-sm-5 mb-2">Embarazo no controlado</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_check_emba_no_ctrl|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Embarazo adolescente</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_check_emba_adol|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Embarazo de riesgo</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_check_emba_riesgo|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Cesáreas múltiples</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_check_cesareas_multi|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Partos múltiples</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_check_partos_multi|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Partos prematuros</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_check_partos_prema|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Partos con menos de 18 meses de intervalo</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_check_partos_menos_meses_interval|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Perdidas de embarazo recurrentes</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_check_emba_perdidas_recurrentes|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Feto muerto</dd>
+            <dt class="col-sm-7 mb-2">{{object.EMBA_check_feto_muerto|yesno:"Si,No"}}</dt>
 
-        <!-- Otros convivientes -->
-        {% if object.fk_legajo_3 == None and object.fk_legajo_4 == None and object.fk_legajo_5 == None %}
-        {% else %}
-        <div class="row bg-secondary pl-2 my-2 font-weight-bold"> Otros convivientes</div>
-        {% if object.fk_legajo_3 %}
-        <dl class="row mb-0">
-          <dd class="col-sm-3 mb-2">Nombre</dd>
-          <dt class="col-sm-9 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_3_id %}"
-              title="Ver legajo">{{object.fk_legajo_3}}</a> </dt>
-          <dd class="col-sm-3 mb-2">Vínculo</dd>
-          <dt class="col-sm-9 mb-2">{{object.vinculo3}}</dt>
-          <dd class="col-sm-3 mb-2">Documento</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_3.tipo_doc|default_if_none:"-"}}
-            {{object.fk_legajo_3.documento|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_3.fecha_nacimiento|date:'d/m/Y'}}</dt>
-          <dd class="col-sm-3 mb-2">Sexo</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_3.sexo|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">Máximo nivel alcanzado</dd>
-          <dt class="col-sm-9 mb-2">{{object.educ_maximo_3|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">Estado</dd>
-          <dt class="col-sm-9 mb-2">{{object.educ_estado_3|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">Sabe leer</dd>
-          <dt class="col-sm-9 mb-2">
-            {% if object.leer_3 == True %}
-            SI
-            {% else %}
-            NO
-            {% endif %}
-          </dt>
-          <dd class="col-sm-3 mb-2">Sabe escribir</dd>
-          <dt class="col-sm-9 mb-2">
-            {% if object.escribir_3 == True %}
-            SI
-            {% else %}
-            NO
-            {% endif %}
-          </dt>
-          <dd class="col-sm-3 mb-2">Quiere retomar estudios</dd>
-          <dt class="col-sm-9 mb-2">
-            {% if object.retomar_estudios_3 == True %}
-            SI
-            {% else %}
-            NO
-            {% endif %}
-          </dt>
-          <dd class="col-sm-3 mb-2">Quiere aprender un oficio</dd>
-          <dt class="col-sm-9 mb-2">
-            {% if object.aprender_oficio_3 == True %}
-            SI
-            {% else %}
-            NO
-            {% endif %}
-          </dt>
-          <dd class="col-sm-3 mb-2">Quiere participar del Programa Pilares</dd>
-          <dt class="col-sm-9 mb-2">
-            {% if object.programa_Pilares_3 == True %}
-            SI
-            {% else %}
-            NO
-            {% endif %}
-          </dt>
         </dl>
-        {% endif %}
-        {% if object.fk_legajo_4 %}
-        <dl class="row mb-0">
-          <dd class="col-sm-3 mb-2">Nombre</dd>
-          <dt class="col-sm-9 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_4_id %}"
-              title="Ver legajo">{{object.fk_legajo_4}}</a> </dt>
-          <dd class="col-sm-3 mb-2">Vínculo</dd>
-          <dt class="col-sm-9 mb-2">{{object.vinculo4}}</dt>
-          <dd class="col-sm-3 mb-2">Documento</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_4.tipo_doc|default_if_none:"-"}}
-            {{object.fk_legajo_4.documento|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_4.fecha_nacimiento|date:'d/m/Y'}}</dt>
-          <dd class="col-sm-3 mb-2">Sexo</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_4.sexo|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">Sabe leer</dd>
-          <dt class="col-sm-9 mb-2">
-            {% if object.leer_4 == True %}
-            SI
-            {% else %}
-            NO
-            {% endif %}
-          </dt>
-          <dd class="col-sm-3 mb-2">Sabe escribir</dd>
-          <dt class="col-sm-9 mb-2">
-            {% if object.escribir_4 == True %}
-            SI
-            {% else %}
-            NO
-            {% endif %}
-          </dt>
-          <dd class="col-sm-3 mb-2">Quiere retomar estudios</dd>
-          <dt class="col-sm-9 mb-2">
-            {% if object.retomar_estudios_4 == True %}
-            SI
-            {% else %}
-            NO
-            {% endif %}
-          </dt>
-          <dd class="col-sm-3 mb-2">Quiere aprender un oficio</dd>
-          <dt class="col-sm-9 mb-2">
-            {% if object.aprender_oficio_4 == True %}
-            SI
-            {% else %}
-            NO
-            {% endif %}
-          </dt>
-          <dd class="col-sm-3 mb-2">Quiere participar del Programa Pilares</dd>
-          <dt class="col-sm-9 mb-2">
-            {% if object.programa_Pilares_4 == True %}
-            SI
-            {% else %}
-            NO
-            {% endif %}
-          </dt>
-        </dl>
-        {% endif %}
-        {% if object.fk_legajo_5 %}
-        <dl class="row mb-0">
-          <dd class="col-sm-3 mb-2">Nombre</dd>
-          <dt class="col-sm-9 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_5_id %}"
-              title="Ver legajo">{{object.fk_legajo_5}}</a> </dt>
-          <dd class="col-sm-3 mb-2">Vínculo</dd>
-          <dt class="col-sm-9 mb-2">{{object.vinculo5}}</dt>
-          <dd class="col-sm-3 mb-2">Documento</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_5.tipo_doc|default_if_none:"-"}}
-            {{object.fk_legajo_5.documento|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_5.fecha_nacimiento|date:'d/m/Y'}}</dt>
-          <dd class="col-sm-3 mb-2">Sexo</dd>
-          <dt class="col-sm-9 mb-2">{{object.fk_legajo_5.sexo|default_if_none:"-"}}</dt>
-          <dd class="col-sm-3 mb-2">Sabe leer</dd>
-          <dt class="col-sm-9 mb-2">
-            {% if object.leer_5 == True %}
-            SI
-            {% else %}
-            NO
-            {% endif %}
-          </dt>
-          <dd class="col-sm-3 mb-2">Sabe escribir</dd>
-          <dt class="col-sm-9 mb-2">
-            {% if object.escribir_5 == True %}
-            SI
-            {% else %}
-            NO
-            {% endif %}
-          </dt>
-          <dd class="col-sm-3 mb-2">Quiere retomar estudios</dd>
-          <dt class="col-sm-9 mb-2">
-            {% if object.retomar_estudios_5 == True %}
-            SI
-            {% else %}
-            NO
-            {% endif %}
-          </dt>
-          <dd class="col-sm-3 mb-2">Quiere aprender un oficio</dd>
-          <dt class="col-sm-9 mb-2">
-            {% if object.aprender_oficio_5 == True %}
-            SI
-            {% else %}
-            NO
-            {% endif %}
-          </dt>
-          <dd class="col-sm-3 mb-2">Quiere participar del Programa Pilares</dd>
-          <dt class="col-sm-9 mb-2">
-            {% if object.programa_Pilares_5 == True %}
-            SI
-            {% else %}
-            NO
-            {% endif %}
-          </dt>
-        </dl>
-        {% endif %}
-        {% endif %}
-
       </div>
     </div>
   </div>
-  <!-- ./ -->
+  <!-- /  -->
+
+  <!-- Salud de la embarazada -->
+  <div class="col-8 pb-3">
+    <div class="card card-outline card-primary h-100 mb-0">
+      <div class="card-header">
+        <h3 class="card-title">Salud de la embarazada</h3>
+      </div>
+      <div class="card-body pb-1">
+        <dl class="row mb-0">
+            <!-- # Paso 4 : Salud de la embarazada -->
+            <dd class="col-sm-5 mb-2">Obra Social</dd>
+            <dt class="col-sm-7 mb-2">{{object.SALUDEMBA_obra_social|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Cuál?</dd>
+            <dt class="col-sm-7 mb-2">{{object.SALUDEMBA_obra_social_desc|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Padece alguna enfermedad física?</dd>
+            <dt class="col-sm-7 mb-2">{{object.SALUDEMBA_padece_enf_fisica|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Cuál?</dd>
+            <dt class="col-sm-7 mb-2">{{object.SALUDEMBA_padece_enf_fisica_desc|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Padece alguna enfermedad psíquica?</dd>
+            <dt class="col-sm-7 mb-2">{{object.SALUDEMBA_padece_enf_psiquica|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Cuál?</dd>
+            <dt class="col-sm-7 mb-2">{{object.SALUDEMBA_padece_enf_psiquica_desc|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Se encuentra en tratamiento por alguna enfermedad?</dd>
+            <dt class="col-sm-7 mb-2">{{object.SALUDEMBA_tratam_x_enf|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Donde?</dd>
+            <dt class="col-sm-7 mb-2">{{object.SALUDEMBA_tratam_x_enf_desc|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Capacidad reducida o afectada o CUD</dd>
+            <dt class="col-sm-7 mb-2">{{object.SALUDEMBA_cap_reducida_o_afec|default_if_none:"-"}}</dt>
+            <!-- # Sección 4.1 : Salud de la embarazada - Consumo -->
+            <dd class="col-sm-5 mb-2">¿Alguna vez consumió drogas?</dd>
+            <dt class="col-sm-7 mb-2">{{object.SALUDEMBA_consumio_drogas|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Consume actualmente?</dd>
+            <dt class="col-sm-7 mb-2">{{object.SALUDEMBA_consumio_drogas_actual|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Cuál?</dd>
+            <dt class="col-sm-7 mb-2">{{object.SALUDEMBA_consumio_drogas_desc|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Consume alcohol actualmente?</dd>
+            <dt class="col-sm-7 mb-2">{{object.SALUDEMBA_consume_alcohol_actual|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Sospecha de consumo?</dd>
+            <dt class="col-sm-7 mb-2">{{object.SALUDEMBA_sospecha_consumo|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Fuma cigarrillo actualmente?</dd>
+            <dt class="col-sm-7 mb-2">{{object.SALUDEMBA_fuma_cigarro_actual|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿DAO+?</dd>
+            <dt class="col-sm-7 mb-2">{{object.SALUDEMBA_dao|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Identifica en qué momento empezó a consumir</dd>
+            <dt class="col-sm-7 mb-2">{{object.SALUDEMBA_momento_consumo|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Identifica la causa del consumo</dd>
+            <dt class="col-sm-7 mb-2">{{object.SALUDEMBA_causa_consumo|default_if_none:"-"}}</dt>
+
+        </dl>
+      </div>
+    </div>
+  </div>
+  <!-- /  -->
+
+  <!-- Controles -->
+  <div class="col-8 pb-3">
+    <div class="card card-outline card-primary h-100 mb-0">
+      <div class="card-header">
+        <h3 class="card-title">Controles</h3>
+      </div>
+      <div class="card-body pb-1">
+        <dl class="row mb-0">
+            <!-- # Sección 5 : Controles- -->
+            <dd class="col-sm-5 mb-2">Fecha aprox. 1° control</dd>
+            <dt class="col-sm-7 mb-2">{{object.CTRL_fec_aprox_primer_ctrl|date:'d/m/Y'}}</dt>
+            <dd class="col-sm-5 mb-2">¿En que centro de salud?</dd>
+            <dt class="col-sm-7 mb-2">{{object.CTRL_centro_salud|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿A cuantas semanas de embarazo?</dd>
+            <dt class="col-sm-7 mb-2">{{object.CTRL_en_cantidad_sem_emba|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Fecha último control</dd>
+            <dt class="col-sm-7 mb-2">{{object.CTRL_fec_ultimo_ctrl|date:'d/m/Y'}}</dt>
+            <dd class="col-sm-5 mb-2">Fecha próximo control</dd>
+            <dt class="col-sm-7 mb-2">{{object.CTRL_fec_proximo_ctrl|date:'d/m/Y'}}</dt>
+            <dd class="col-sm-5 mb-2">Embarazo controlado</dd>
+            <dt class="col-sm-7 mb-2">{{object.CTRL_emb_controlado|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Comienza control en operativo?</dd>
+            <dt class="col-sm-7 mb-2">{{object.CTRL_check_comienza_control_op|yesno:"Si,No"}}</dt>
+        </dl>
+            <!-- # "Primer Trimestre (0-14 semanas)" -->
+            <div class="form-row bg-light p-3 my-3">Primer Trimestre (0-14 semanas)</div>
+            <dl class="row mb-0">
+            <dd class="col-sm-5 mb-2">Al menos 1 control con la obstetra</dd>
+            <dt class="col-sm-7 mb-2">{{object.CTRL_check_pt_obstetra|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Laboratorio- Rutina 1er trimestre</dd>
+            <dt class="col-sm-7 mb-2">{{object.CTRL_check_pt_laboratorio|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Ecografía</dd>
+            <dt class="col-sm-7 mb-2">{{object.CTRL_check_pt_ecografia|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">PAP</dd>
+            <dt class="col-sm-7 mb-2">{{object.CTRL_check_pt_pap|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Grupo y Factor</dd>
+            <dt class="col-sm-7 mb-2">{{object.CTRL_check_pt_grupofactor|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Control odontologico</dd>
+            <dt class="col-sm-7 mb-2">{{object.CTRL_check_pt_odontologico|yesno:"Si,No"}}</dt>
+            </dl>
+            <!-- # "Segundo Trimestre (15 a 28 semanas),  -->
+            <div class="form-row bg-light p-3 my-3">Segundo Trimestre (15 a 28 semanas)</div>
+            <dl class="row mb-0">
+            <dd class="col-sm-5 mb-2">Al menos 2 controles con la obstetra</dd>
+            <dt class="col-sm-7 mb-2">{{object.CTRL_check_st_obstetra|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Scan fetal</dd>
+            <dt class="col-sm-7 mb-2">{{object.CTRL_check_st_scanfetal|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">P75</dd>
+            <dt class="col-sm-7 mb-2">{{object.CTRL_check_st_p75|yesno:"Si,No"}}</dt>
+            </dl>
+            <!-- # "Tercer Trimestre (29 a 41 semanas)". -->
+            <div class="form-row bg-light p-3 my-3">Tercer Trimestre (29 a 41 semanas)</div>
+            <dl class="row mb-0">
+            <dd class="col-sm-5 mb-2">Al menos 5 controles con la obstetra</dd>
+            <dt class="col-sm-7 mb-2">{{object.CTRL_check_tt_obstetra|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Ecografía, hisopado vaginal y laboratorio</dd>
+            <dt class="col-sm-7 mb-2">{{object.CTRL_check_tt_eco_hiso_labo|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Monitoreo fetal</dd>
+            <dt class="col-sm-7 mb-2">{{object.CTRL_check_tt_monitoreo_fetal|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Electro cardiograma</dd>
+            <dt class="col-sm-7 mb-2">{{object.CTRL_check_tt_electrocardio|yesno:"Si,No"}}</dt>
+            </dl>
+      </div>
+    </div>
+  </div>
+  <!-- /  -->
+
+  <!-- Pareja o apoyo en la crianza -->
+  <div class="col-8 pb-3">
+    <div class="card card-outline card-primary h-100 mb-0">
+      <div class="card-header">
+        <h3 class="card-title">Pareja o apoyo en la crianza</h3>
+      </div>
+      <div class="card-body pb-1">
+        <dl class="row mb-0">
+            <!-- # Paso 6 : "Pareja o apoyo en la crianza" (Igual a "Padre o apoyo en la crianza, cambiar el nombre del Paso) -->
+            <!-- # 6.1 DATOS PERSONALES -->
+            <dd class="col-sm-5 mb-2">Pareja o apoyo en la crianza</dd>
+            <dt class="col-sm-7 mb-2">{{object.POACRI_pareja_apoyo_crianza|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Vínculo</dd>
+            <dt class="col-sm-7 mb-2">{{object.POACRI_vinculo|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Tipo de documento</dd>
+            <dt class="col-sm-7 mb-2">{{object.POACRI_tipo_doc|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Numero documento</dd>
+            <dt class="col-sm-7 mb-2">{{object.POACRI_num_doc|default_if_none:"-"}}</dt>
+            <!-- # 6.2 EDUCACION -->
+            <dd class="col-sm-5 mb-2">Máximo nivel alcanzado</dd>
+            <dt class="col-sm-7 mb-2">{{object.POACRI_edu_max_nivel|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Estado</dd>
+            <dt class="col-sm-7 mb-2">{{object.POACRI_edu_estado|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Sabe leer</dd>
+            <dt class="col-sm-7 mb-2">{{object.POACRI_check_edu_sabe_leer|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Sabe escribir</dd>
+            <dt class="col-sm-7 mb-2">{{object.POACRI_check_edu_sabe_escribir|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Quiere retomar estudios</dd>
+            <dt class="col-sm-7 mb-2">{{object.POACRI_check_edu_quiere_retomar_estudios|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Quiere aprender un oficio</dd>
+            <dt class="col-sm-7 mb-2">{{object.POACRI_check_edu_quiere_aprender_oficio|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Quiere participar del Programa Pilares</dd>
+            <dt class="col-sm-7 mb-2">{{object.POACRI_check_edu_quiere_parti_prog_pilates|yesno:"Si,No"}}</dt>
+            <!-- # 6.3 ECONOMIA -->
+            <dd class="col-sm-5 mb-2">Planes sociales que recibe</dd>
+            <dt class="col-sm-7 mb-2">{{object.POACRI_eco_planes_sociales_recibe|default_if_none:"-"}}</dt>
+            
+            <!-- # 6.4 TRABAJO -->
+            <dd class="col-sm-5 mb-2">¿Tiene trabajo actualmente?</dd>
+            <dt class="col-sm-7 mb-2">{{object.POACRI_trab_tiene_trabajo_actual|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Ocupación</dd>
+            <dt class="col-sm-7 mb-2">{{object.POACRI_trab_ocupacion|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">Modo de contratación</dd>
+            <dt class="col-sm-7 mb-2">{{object.POACRI_trab_modo_contratacion|default_if_none:"-"}}</dt>
+
+        </dl>
+      </div>
+    </div>
+  </div>
+  <!-- /  -->
+
+  <!-- Información Familiar -->
+  <div class="col-8 pb-3">
+    <div class="card card-outline card-primary h-100 mb-0">
+      <div class="card-header">
+        <h3 class="card-title">Información Familiar</h3>
+      </div>
+      <div class="card-body pb-1">
+        <dl class="row mb-0">
+            <!-- # Paso 7. "Información Familiar" -->
+            <dd class="col-sm-5 mb-2">¿Todos los convivientes tienen DNI?</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_check_convivientes_tienen_dni|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Datos</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_convivientes_tienen_dni_desc|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Todos los menores de 18 años están escolarizados?</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_check_menores_escolarizados|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Datos</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_menores_escolarizados_desc|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Hay algún menor de edad con bajo peso o sobrepeso?</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_check_menor_con_bajopes_sobrepes|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Datos</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_menor_con_bajopes_sobrepes_desc|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Hay algún menor de edad con antecedentes de accidentes domésticos graves o a repetición?</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_check_menor_con_ante_acci_dom|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Datos</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_menor_con_ante_acci_dom_desc|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿En seguimiento?</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_check_menor_con_ante_acci_dom_seguimiento|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Todos los menores de 18 tienen controles de salud y vacunas correspondientes?</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_check_menores_con_ctrl_vacunas|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Datos</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_menores_con_ctrl_vacunas_desc|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Algún menor de 18 años padece una patología?</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_check_menor_con_patologia|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">¿En seguimiento?</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_check_menor_con_patologia_seguimiento|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Datos</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_menor_con_patologia_desc|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Hay algún menor de edad con capacidades reducidas o afectadas (CUD)?</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_check_menor_capas_reduc_afec|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Datos</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_menor_capas_reduc_afec_desc|date:'d/m/Y'}}</dt>
+            <dd class="col-sm-5 mb-2">¿Hay algún conviviente con enfermedad infecto-contagiosa? (tuberculosis, sarampión, sífilis, HIV)</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_conviviente_enf_infec_contagiosa|date:'d/m/Y'}}</dt>
+            <dd class="col-sm-5 mb-2">Datos</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_conviviente_enf_infec_contagiosa_desc|date:'d/m/Y'}}</dt>
+            <dd class="col-sm-5 mb-2">¿Hay algún conviviente con consumo problemático de sustancias o sospecha de consumo?</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_check_conviviente_consum_drogas|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Datos</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_conviviente_consum_drogas_desc|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿La embarazada atraviesa o atravesó alguna situación conflictiva, de violencia o problema legal?</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_check_emba_con_situacion_conflicto|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Denunció?</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_check_emba_con_situacion_conflicto_denuncio|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Protegida por medida judicial/perimetral?</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_check_emba_con_situacion_conflicto_protegida|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Datos</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_emba_con_situacion_conflicto_desc|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Algún integrante de la familia tiene un problema legal?</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_check_familiar_con_problema_legal|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Detallar</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_familiar_con_problema_legal_desc|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Denunciaron esta situación?</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_check_familiar_con_problema_legal_denuncio|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Presentan antecedentes de duelo o situación traumática reciente?</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_check_antecedente_duelo_trauma_reciente|yesno:"Si,No"}}</dt>
+            <!-- # Seccion 7.1. "Ingresos familiares" (dentro del paso 6) -->
+            <dd class="col-sm-5 mb-2">Ingresos aprox. mensuales del grupo familiar</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_ingreso_aprox|default_if_none:"-"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Sus ingresos son exclusivamente de planes sociales?</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_check_ingresos_plan_social|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">¿El dinero les alcanza para comer?</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_check_ingreso_alcanza_alimentos|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">¿Cuántas veces al día comen una comida completa?</dd>
+            <dt class="col-sm-7 mb-2">{{object.INFOFAMI_veces_comen_aldia|default_if_none:"-"}}</dt>
+
+        </dl>
+      </div>
+    </div>
+  </div>
+  <!-- /  -->
+
+  <!-- Acompañante y conclusiones -->
+  <div class="col-8 pb-3">
+    <div class="card card-outline card-primary h-100 mb-0">
+      <div class="card-header">
+        <h3 class="card-title">Acompañante y conclusiones</h3>
+      </div>
+      <div class="card-body pb-1">
+        <dl class="row mb-0">
+            <!-- # Paso 8: "Acompañante y conclusiones" -->
+            <!-- # Sección 8.1"Conclusiones (No preguntar)" -->
+            <dd class="col-sm-5 mb-2">Madre o cuidador principal tiene red de contención</dd>
+            <dt class="col-sm-7 mb-2">{{object.CONCLUS_check_cuidador_tiene_red_proteccion|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Mujer con falta de autovaloración</dd>
+            <dt class="col-sm-7 mb-2">{{object.CONCLUS_check_mujer_falta_valoracion|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Tiene dificultad en el vínculo y la crianza</dd>
+            <dt class="col-sm-7 mb-2">{{object.CONCLUS_check_dificultad_vinculo_crianza|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Tiene dificultad para la comprensión y la comunicación</dd>
+            <dt class="col-sm-7 mb-2">{{object.CONCLUS_check_dificultad_compr_com|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Tiene adherencia al sistema de salud y lleva a los niños a los controles</dd>
+            <dt class="col-sm-7 mb-2">{{object.CONCLUS_check_adh_sis_salud|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Familia con acceso limitado a la información</dd>
+            <dt class="col-sm-7 mb-2">{{object.CONCLUS_check_fam_acceso_limitado_info|yesno:"Si,No"}}</dt>
+
+            <!-- # Sección 8.2 : Candidata a: -->
+            <dd class="col-sm-5 mb-2">Recibir catre</dd>
+            <dt class="col-sm-7 mb-2">{{object.CONCLUS_check_recibir_catre|yesno:"Si,No"}}</dt>
+            <dd class="col-sm-5 mb-2">Participar de</dd>
+            <dt class="col-sm-7 mb-2">{{object.CONCLUS_participar_de|default_if_none:"-"}}</dt>
+            <!-- #SubTexto ; aclaración "Derivar el legajo en caso de ser candidata" -->
+            <dd class="col-sm-5 mb-2">Acompañante</dd>
+            <dt class="col-sm-7 mb-2">{{object.CONCLUS_acompaniante|default_if_none:"-"}}</dt>
+
+        </dl>
+      </div>
+    </div>
+  </div>
+  <!-- /  -->
+
+
 </div>
 
 <div class="row mt-4 d-print-none">
