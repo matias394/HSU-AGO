@@ -120,11 +120,11 @@ CDLE Pre-admisiones
             <dd class="col-sm-5 mb-2">¿Conoces los métodos anticonceptivos?</dd>
             <dt class="col-sm-7 mb-2">{{object.EMBA_conoce_metod_anticoncep|yesno:"Si,No"}}</dt>
             <dd class="col-sm-5 mb-2">¿Cuáles conoces?</dd>
-            <dt class="col-sm-7 mb-2">{{object.EMBA_list_conoce_metod_anticoncep}}</dt>
+            <dt class="col-sm-3 mb-2">{% for plan in object.EMBA_list_conoce_metod_anticoncep.all %}{{ plan.nombre }}<br/>{% empty %}-{% endfor %}</dt>
             <dd class="col-sm-5 mb-2">¿Utilizabas alguno cuando quedaste embarazada?</dd>
             <dt class="col-sm-7 mb-2">{{object.EMBA_uso_en_estado_emba|yesno:"Si,No"}}</dt>
             <dd class="col-sm-5 mb-2">¿Cuál usabas?</dd>
-            <dt class="col-sm-7 mb-2">{{object.EMBA_list_uso_en_estado_emba|default_if_none:"-"}}</dt>
+            <dt class="col-sm-3 mb-2">{% for plan in object.EMBA_list_uso_en_estado_emba.all %}{{ plan.nombre }}<br/>{% empty %}-{% endfor %}</dt>
             <dd class="col-sm-5 mb-2">¿Tuviste sífilis en embarazos anteriores?</dd>
             <dt class="col-sm-7 mb-2">{{object.EMBA_sifilis_en_anterior_emba|yesno:"Si,No"}}</dt>
             <dd class="col-sm-5 mb-2">¿Realizaste el tratamiento?</dd>
@@ -335,10 +335,6 @@ CDLE Pre-admisiones
             <dt class="col-sm-7 mb-2">{{object.POACRI_check_edu_quiere_aprender_oficio|yesno:"Si,No"}}</dt>
             <dd class="col-sm-5 mb-2">Quiere participar del Programa Pilares</dd>
             <dt class="col-sm-7 mb-2">{{object.POACRI_check_edu_quiere_parti_prog_pilates|yesno:"Si,No"}}</dt>
-            <!-- # 6.3 ECONOMIA -->
-            <dd class="col-sm-5 mb-2">Planes sociales que recibe</dd>
-            <dt class="col-sm-7 mb-2">{{object.POACRI_eco_planes_sociales_recibe|default_if_none:"-"}}</dt>
-            
             <!-- # 6.4 TRABAJO -->
             <dd class="col-sm-5 mb-2">¿Tiene trabajo actualmente?</dd>
             <dt class="col-sm-7 mb-2">{{object.POACRI_trab_tiene_trabajo_actual|default_if_none:"-"}}</dt>
@@ -346,6 +342,9 @@ CDLE Pre-admisiones
             <dt class="col-sm-7 mb-2">{{object.POACRI_trab_ocupacion|default_if_none:"-"}}</dt>
             <dd class="col-sm-5 mb-2">Modo de contratación</dd>
             <dt class="col-sm-7 mb-2">{{object.POACRI_trab_modo_contratacion|default_if_none:"-"}}</dt>
+            <!-- # 6.3 ECONOMIA -->
+            <dd class="col-sm-3 mb-2">Planes sociales que recibe</dd>
+            <dt class="col-sm-3 mb-2">{% for plan in object.POACRI_eco_planes_sociales_recibe.all %}{{ plan.nombre }}<br/>{% endfor %}</dt>
 
         </dl>
       </div>
