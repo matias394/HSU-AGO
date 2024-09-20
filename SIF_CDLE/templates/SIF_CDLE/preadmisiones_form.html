@@ -444,7 +444,7 @@
                     </div>
                     <div class="card-body">
                       <h3>1. DATOS PERSONALES</h3>
-                      {{form.POACRI_pareja_apoyo_crianza|as_crispy_field}}
+                      {{form.POACRI_fk_pareja_apoyo_crianza|as_crispy_field}}
                       {{form.POACRI_vinculo|as_crispy_field}}
                       {{form.POACRI_tipo_doc|as_crispy_field}}
                       {{form.POACRI_num_doc|as_crispy_field}}
@@ -618,12 +618,12 @@
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     // Asocia un evento change al SELECT
-    $('#id_fk_legajo_1').change(function () {
+    $('#id_POACRI_fk_pareja_apoyo_crianza').change(function () {
       // Obtiene el valor seleccionado
       var seleccion = $(this).val();
-      var tipo_doc = document.getElementById("tipo_doc");
-      var documento = document.getElementById("documento");
-      var vinculo = document.getElementById("vinculo1");
+      var tipo_doc = document.getElementById("id_POACRI_tipo_doc");
+      var documento = document.getElementById("id_POACRI_num_doc");
+      var vinculo = document.getElementById("id_POACRI_vinculo");
 
       // Lógica para determinar el contenido del div basado en la selección
       {% for f in familia %}

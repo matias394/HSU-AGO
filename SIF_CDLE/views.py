@@ -156,15 +156,24 @@ class CDLEPreAdmisionesCreateView(PermisosMixin,CreateView, SuccessMessageMixin)
     form_nuevo_grupo_familiar_class = NuevoLegajoFamiliarForm()
     success_message = "Preadmisión creada correctamente"
 
+    def get_form_kwargs(self):
+
+        kwargs = super().get_form_kwargs()
+        pk = self.kwargs["pk"]
+        legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
+        kwargs['legajo'] = legajo.fk_legajo
+        return kwargs
+
     def get_context_data(self, **kwargs):
         if 'conviven' in self.request.POST:
             self.crear_grupo_hogar(self.request.POST)
-            messages.success(self.request, "Familair agregado correctamente.")
+            messages.success(self.request, "Familiar agregado correctamente.")
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
         familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
+        # self.form_class.fields['POACRI_fk_pareja_apoyo_crianza'].queryset = Legajos.objects.filter(m2m_familiares__fk_legajo_1=legajo.fk_legajo_id)
         context["pk_preadmision"] = pk
         context["pk"] = pk
         context["legajo"] = legajo

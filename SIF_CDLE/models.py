@@ -183,7 +183,7 @@ class CDLE_PreAdmision (models.Model):
 
     # Paso 6 : "Pareja o apoyo en la crianza" (Igual a "Padre o apoyo en la crianza, cambiar el nombre del Paso)
     # 6.1 DATOS PERSONALES
-    POACRI_pareja_apoyo_crianza = models.CharField(max_length=150,verbose_name="Pareja o apoyo en la crianza", null=True, blank=True)
+    POACRI_fk_pareja_apoyo_crianza = models.ForeignKey(Legajos,verbose_name="Pareja o apoyo en la crianza", on_delete=models.PROTECT, null=True, blank=True)
     POACRI_vinculo = models.CharField(max_length=150,verbose_name="Vínculo", null=True, blank=True)
     POACRI_tipo_doc = models.CharField(max_length=150,verbose_name="Tipo de documento", null=True, blank=True)
     POACRI_num_doc = models.CharField(max_length=150,verbose_name="Numero documento", null=True, blank=True)
