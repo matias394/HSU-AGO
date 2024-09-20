@@ -98,6 +98,11 @@
                 <th>Fecha de ingreso a sala</th>
                 <th>Nombre</th>
                 <th>Documento</th>
+                <th>Domicilio</th>
+                <th>Fecha de nacimiento</th>
+                <th>Nombre de Madre/Cuidador Principal</th>
+                <th>Num.Telefono de Madre/Cuidador Principal</th>
+                <th>Centro</th>
                 <th>Sala</th>
                 <th>Estado</th>
                 <th>IVI ingreso</th>
@@ -110,7 +115,14 @@
               <tr>
                 <td class="mailbox-date">{{a.fk_admision.creado|date:'d/m/Y'}}</td>
                 <td class=""><a href="" title="Ver detalle de admisión">{{a.fk_admision.fk_preadmi.fk_legajo}}</a></td>
-                <td class="">{{a.fk_admision.fk_preadmi.fk_legajo.tipo_doc}} {{a.fk_admision.fk_preadmi.fk_legajo.documento}}</td>
+                <td class="">{{a.fk_admision.fk_preadmi.fk_legajo.tipo_doc|default_if_none:"-"}} {{a.fk_admision.fk_preadmi.fk_legajo.documento|default_if_none:"-"}}</td>
+
+                <td>{{ a.fk_admision.fk_preadmi.fk_legajo.calle|default_if_none:"" }} {{ a.fk_preadmi.fk_legajo.altura|default_if_none:"" }} {{ a.fk_preadmi.fk_legajo.circuito|default_if_none:"" }} {{ a.fk_preadmi.fk_legajo.piso|default_if_none:"" }}</td>
+                <td>{{ a.fk_admision.fk_preadmi.fk_legajo.fecha_nacimiento|date:'d/m/Y' }}</td>
+                <td>{{ a.fk_admision.fk_preadmi.fk_legajo_1|default_if_none:"-" }}</td>
+                <td>{{ a.fk_admision.fk_preadmi.fk_legajo_1.telefono|default_if_none:"-" }}</td>
+                <td>{{ a.fk_admision.fk_preadmi.centro_postula|default_if_none:"-" }}</td>
+
                 <td>{{ a.sala }}</td>
                 <td><span class="badge badge-{% if a.estado_vacante == "Asignada" %}success{% endif %}{% if a.estado_vacante == "Lista de espera" %}warning{% endif %}">{{a.estado_vacante}}</span></td>
                 <td>
@@ -138,6 +150,13 @@
                 <td class="mailbox-date">{{a.creado|date:'d/m/Y'}}</td>
                 <td class=""><a href="" title="Ver detalle de admisión">{{a.fk_preadmi.fk_legajo}}</a></td>
                 <td class="">{{a.fk_preadmi.fk_legajo.tipo_doc}} {{a.fk_preadmi.fk_legajo.documento}}</td>
+
+                <td>{{ a.fk_preadmi.fk_legajo.calle|default_if_none:"" }} {{ a.fk_preadmi.fk_legajo.altura|default_if_none:"" }} {{ a.fk_preadmi.fk_legajo.circuito|default_if_none:"" }} {{ a.fk_preadmi.fk_legajo.piso|default_if_none:"" }}</td>
+                <td>{{ a.fk_preadmi.fk_legajo.fecha_nacimiento|date:'d/m/Y' }}</td>
+                <td>{{ a.fk_preadmi.fk_legajo_1|default_if_none:"-" }}</td>
+                <td>{{ a.fk_preadmi.fk_legajo_1.telefono|default_if_none:"-" }}</td>
+                <td>{{ a.fk_admision.fk_preadmi.centro_postula|default_if_none:"-" }}</td>
+
                 <td>{{ a.sala }}</td>
                 <td><span class="badge badge-{% if a.estado_vacante == "Asignada" %}success{% endif %}{% if a.estado_vacante == "Lista de espera" %}warning{% endif %}">{{a.estado_vacante}}</span></td>
                 <td>
