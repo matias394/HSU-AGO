@@ -432,6 +432,7 @@ CHOICE_CENTROS_SALUD = [
     ('Hospital Santa María', 'Hospital Santa María'),
     ('Hospital San Miguel Arcángel', 'Hospital San Miguel Arcángel'),
     ('Clínica Privada', 'Clínica Privada'),
+    ('Otro', 'Otro'),
 ]
 
 CHOISE_CDLE_PARTICIPARDE = [
