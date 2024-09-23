@@ -66,7 +66,7 @@
                             <th>Sexo</th>
                             <th>Fecha de nacimiento</th>
                             <th>Edad</th>
-                            <th>Estado</th>
+                            <!-- <th>Estado</th> -->
                             <th style="width: 15%" class="notexport"> </th>
                         </tr>
                     </thead>
@@ -79,13 +79,13 @@
                             <td>{{o.sexo}}</td>
                             <td>{{o.fecha_nacimiento|date:'d/m/Y'}}</td>
                             <td>{{o.edad}} </td>
-                            <td > 
+                            <!-- <td > 
                                 {% if o.estado  %}
                                 <span class="text-success font-weight-bold">Activo</span>
                                 {% else %}
                                 <span class="text-danger font-weight-bold">Inactivo</span>
                                 {% endif %}
-                              </td>
+                              </td> -->
                             <td class="project-actions text-right"> 
                                 {%if perms.Usuarios.rol_admin%} 
                                 <div class="btn-group" role="group"> 
