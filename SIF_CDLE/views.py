@@ -201,6 +201,9 @@ class CDLEDerivacionesRechazo(PermisosMixin, CreateView):
     form_class = DerivacionesRechazoForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -247,6 +250,9 @@ class CDLEDerivacionesUpdateView(PermisosMixin, UpdateView):
     success_message = "Derivación editada con éxito"
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_directivo",
@@ -289,8 +295,10 @@ class CDLEPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
     form_nuevo_grupo_familiar_class = NuevoLegajoFamiliarForm()
     success_message = "Preadmisión creada correctamente"
 
-
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -301,13 +309,13 @@ class CDLEPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
         if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
             raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
-      
+
     def get_form_kwargs(self):
 
         kwargs = super().get_form_kwargs()
         pk = self.kwargs["pk"]
         legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
-        kwargs['legajo'] = legajo.fk_legajo
+        kwargs["legajo"] = legajo.fk_legajo
         return kwargs
 
     def get_context_data(self, **kwargs):
@@ -318,7 +326,9 @@ class CDLEPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
-        familia_inversa = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=legajo.fk_legajo_id)
+        familia_inversa = LegajoGrupoFamiliar.objects.filter(
+            fk_legajo_1_id=legajo.fk_legajo_id
+        )
         # self.form_class.fields['POACRI_fk_pareja_apoyo_crianza'].queryset = Legajos.objects.filter(m2m_familiares__fk_legajo_1=legajo.fk_legajo_id)
         context["pk_preadmision"] = pk
         context["pk"] = pk
@@ -451,6 +461,9 @@ class CDLEPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
     success_message = "Preadmisión creada correctamente"
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -753,6 +766,9 @@ class CDLEPreAdmisionesListView(PermisosMixin, ListView):
     model = CDLE_PreAdmision
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -811,6 +827,9 @@ class CDLEPreAdmisionesDeleteView(PermisosMixin, DeleteView):
     success_url = reverse_lazy("CDLE_preadmisiones_listar")
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_directivo",
@@ -867,6 +886,9 @@ class CDLEIndiceIngresoCreateView(PermisosMixin, CreateView):
     form_class = CDLE_IndiceIngresoForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_admin",
@@ -966,6 +988,9 @@ class CDLEIndiceIngresoUpdateView(PermisosMixin, UpdateView):
     form_class = CDLE_IndiceIngresoForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_admin",
@@ -1122,6 +1147,9 @@ class CDLEIndiceIviCreateView(PermisosMixin, CreateView):
     form_class = CDLE_IndiceIviForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_admin",
@@ -1220,6 +1248,9 @@ class CDLEIndiceIviUpdateView(PermisosMixin, UpdateView):
     form_class = CDLE_IndiceIviForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_admin",
@@ -1491,6 +1522,9 @@ class CDLEAdmisionesListView(PermisosMixin, ListView):
     model = CDLE_Admision
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -1715,6 +1749,9 @@ class CDLEIntervencionesCreateView(PermisosMixin, CreateView):
     form_class = CDLE_IntervencionesForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_admin",
@@ -1765,6 +1802,9 @@ class CDLEIntervencionesUpdateView(PermisosMixin, UpdateView):
     form_class = CDLE_IntervencionesForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_admin",
@@ -1817,6 +1857,9 @@ class CDLEIntervencionesLegajosListView(PermisosMixin, DetailView):
     model = CDLE_Admision
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -1867,6 +1910,9 @@ class CDLEIntervencionesListView(PermisosMixin, ListView):
     model = CDLE_Intervenciones
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -1908,6 +1954,9 @@ class CDLEIntervencionesDeleteView(PermisosMixin, DeleteView):
     success_url = reverse_lazy("CDLE_intervenciones_listar")
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_admin",
@@ -1944,6 +1993,9 @@ class CDLEAdmisionesBuscarListView(PermisosMixin, TemplateView):
     template_name = "SIF_CDLE/admisiones_buscar.html"
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",

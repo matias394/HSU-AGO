@@ -173,6 +173,9 @@ class PDVDerivacionesRechazo(PermisosMixin, CreateView):
     form_class = DerivacionesRechazoForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_directivo",
@@ -222,6 +225,9 @@ class PDVPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin)
     form_nuevo_grupo_familiar_class = NuevoLegajoFamiliarForm()
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_directivo",
@@ -367,6 +373,9 @@ class PDVPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin)
     form_nuevo_grupo_familiar_class = NuevoLegajoFamiliarForm()
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_directivo",
@@ -679,6 +688,9 @@ class PDVPreAdmisionesListView(PermisosMixin, ListView):
     model = PDV_PreAdmision
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -701,6 +713,9 @@ class PDVPreAdmisionesBuscarListView(PermisosMixin, TemplateView):
     template_name = "SIF_PDV/preadmisiones_buscar.html"
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -747,6 +762,9 @@ class PDVPreAdmisionesDeleteView(PermisosMixin, DeleteView):
     success_url = reverse_lazy("PDV_preadmisiones_listar")
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_directivo",
@@ -803,6 +821,9 @@ class PDVIndiceIngresoCreateView(PermisosMixin, CreateView):
     form_class = PDV_IndiceIngresoForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_directivo",
@@ -902,6 +923,9 @@ class PDVIndiceIngresoUpdateView(PermisosMixin, UpdateView):
     form_class = PDV_IndiceIngresoForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_directivo",
@@ -1057,6 +1081,9 @@ class PDVIndiceIviCreateView(PermisosMixin, CreateView):
     form_class = PDV_IndiceIviForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_directivo",
@@ -1158,6 +1185,9 @@ class PDVIndiceIviUpdateView(PermisosMixin, UpdateView):
     form_class = PDV_IndiceIviForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_directivo",
@@ -1374,6 +1404,9 @@ class PDVAdmisionesListView(PermisosMixin, ListView):
     model = PDV_Admision
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -1432,6 +1465,9 @@ class PDVVacantesAdmision(PermisosMixin, CreateView):
     form_class = PDV_VacantesOtorgadasForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_directivo",
@@ -1509,6 +1545,9 @@ class PDVVacantesAdmisionCambio(PermisosMixin, CreateView):
     form_class = PDV_VacantesOtorgadasForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_directivo",
@@ -1664,6 +1703,9 @@ class PDVInactivaAdmisionDetail(PermisosMixin, DetailView):
     model = PDV_Admision
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_directivo",
@@ -1719,6 +1761,9 @@ class PDVVacantesListView(PermisosMixin, ListView):
     context_object_name = "organizaciones"
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -1794,6 +1839,9 @@ class PDVIntervencionesCreateView(PermisosMixin, CreateView):
     form_class = PDV_IntervencionesForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_directivo",
@@ -1844,6 +1892,9 @@ class PDVIntervencionesUpdateView(PermisosMixin, UpdateView):
     form_class = PDV_IntervencionesForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_directivo",
@@ -1896,6 +1947,9 @@ class PDVIntervencionesLegajosListView(PermisosMixin, DetailView):
     model = PDV_Admision
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -1946,6 +2000,9 @@ class PDVIntervencionesListView(PermisosMixin, ListView):
     model = PDV_Intervenciones
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -1987,6 +2044,9 @@ class PDVIntervencionesDeleteView(PermisosMixin, DeleteView):
     success_url = reverse_lazy("PDV_intervenciones_listar")
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_directivo",
@@ -2023,6 +2083,9 @@ class PDVAdmisionesBuscarListView(PermisosMixin, TemplateView):
     template_name = "SIF_PDV/admisiones_buscar.html"
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
