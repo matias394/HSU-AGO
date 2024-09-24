@@ -32,6 +32,9 @@ CHOICE_ACOMPANANTES = [
     ('Soledad Mercado', 'Soledad Mercado'),
     ('Andrea Neselis', 'Andrea Neselis'),
     ('Luz Durand', 'Luz Durand'),
+    ('Ariadna Comerci', 'Ariadna Comerci'),
+    ('Aldana Di Gioia', 'Aldana Di Gioia'),
+    ('Jonatan Fittipald', 'Jonatan Fittipald'),
 ]
 
 CHOICE_EQUIPO_TECNICO = [
@@ -49,6 +52,9 @@ CHOICE_EQUIPO_TECNICO = [
     ('Soledad Mercado', 'Soledad Mercado'),
     ('Andrea Neselis', 'Andrea Neselis'),
     ('Luz Durand', 'Luz Durand'),
+    ('Ariadna Comerci', 'Ariadna Comerci'),
+    ('Aldana Di Gioia', 'Aldana Di Gioia'),
+    ('Jonatan Fittipald', 'Jonatan Fittipald'),
 ]
 CHOICE_CIRCUITOS = [
     (None, ''),
@@ -423,19 +429,22 @@ CHOICE_DONDE_ATIENDE = [
 
 CHOICE_RESPONSABLES = [
         (None, ''),
-        ('Clara Felgueras', 'Clara Felgueras'),
-        ('Francisco Durand', 'Francisco Durand'),
-        ('Victoria Bareiro', 'Victoria Bareiro'),
-        ('Trinidad Gristelli', 'Trinidad Gristelli'),
-        ('Verónica Zalazar', 'Verónica Zalazar'),
-        ('Liz Díaz', 'Liz Díaz'),
-        ('Doris Díaz', 'Doris Díaz'),
-        ('Karen Romero', 'Karen Romero'),
-        ('Erika Álvarez', 'Erika Álvarez'),
-        ('Viviana Ojeda', 'Viviana Ojeda'),
-        ('Soledad Mercado', 'Soledad Mercado'),
-        ('Andrea Neselis', 'Andrea Neselis'),
-        ('Luz Durand', 'Luz Durand'),
+    ('Clara Felgueras', 'Clara Felgueras'),
+    ('Francisco Durand', 'Francisco Durand'),
+    ('Victoria Bareiro', 'Victoria Bareiro'),
+    ('Trinidad Gristelli', 'Trinidad Gristelli'),
+    ('Verónica Zalazar', 'Verónica Zalazar'),
+    ('Liz Díaz', 'Liz Díaz'),
+    ('Doris Díaz', 'Doris Díaz'),
+    ('Karen Romero', 'Karen Romero'),
+    ('Erika Álvarez', 'Erika Álvarez'),
+    ('Viviana Ojeda', 'Viviana Ojeda'),
+    ('Soledad Mercado', 'Soledad Mercado'),
+    ('Andrea Neselis', 'Andrea Neselis'),
+    ('Luz Durand', 'Luz Durand'),
+    ('Ariadna Comerci', 'Ariadna Comerci'),
+    ('Aldana Di Gioia', 'Aldana Di Gioia'),
+    ('Jonatan Fittipald', 'Jonatan Fittipald'),
 ]
 
 CHOICE_TIPO_INGRESO_MILD = [
