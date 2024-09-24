@@ -27,16 +27,12 @@ Derivaciones
   <!-- botones -->
   <div class="col-12 my-3 mx-2 d-print-none">
     {% if object.estado == "Pendiente" %}
-    <a href="{% url 'CDIF_preadmisiones_crear' object.pk %}" class="btn btn-primary mr-1 ">Aceptar</a>
-    <a href="{% url 'CDIF_derivaciones_rechazo'  object.pk %}" class="btn btn-secondary mr-1 ">Rechazar</a>
+    {% if btn_aceptar %}<a href="{% url 'CDIF_preadmisiones_crear' object.pk %}" class="btn btn-primary mr-1 ">Aceptar</a>{% endif %}
+    {% if btn_rechazar %}<a href="{% url 'CDIF_derivaciones_rechazo'  object.pk %}" class="btn btn-secondary mr-1 ">Rechazar</a>{% endif %}
+    {% if btn_eliminar_editar %}<a href="{% url 'CDIF_derivaciones_editar' object.id %}" class="btn btn-primary mr-1">Editar</a>{% endif %}
+    {% if btn_eliminar_editar %}<a href="{% url 'legajosderivaciones_eliminar' object.id %}" class="btn btn-danger mr-1">Eliminar</a>{% endif %}
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
-    {% if request.user.id == object.fk_usuario.id and object.estado == 'Pendiente' %}
-    <a href="{% url 'CDIF_derivaciones_editar' object.id %}" class="btn btn-primary mr-1">Editar</a>
-    {%endif%}
-    {% if request.user.id == object.fk_usuario.id and object.estado == 'Pendiente' %}
-    <a href="{% url 'legajosderivaciones_eliminar' object.id %}" class="btn btn-danger mr-1">Eliminar</a>
-    {%endif%}
   </div>
   <!-- ./botones -->
 

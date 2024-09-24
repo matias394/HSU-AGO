@@ -27,7 +27,7 @@
   <!-- botones -->
   <div class="col-12 my-3 d-print-none">
     <div class="btn-toolbar" role="toolbar">
-      {% if object.estado == 'Pendiente' and object.indice_ingreso == None %}
+      {% if object.estado == 'Pendiente' and object.indice_ingreso == None and btn_admitir  %}
       <a class="btn btn-primary mr-1" data-toggle="modal" data-target="#confirmarFinalizar">
         Finalizar entrevista
       </a>
