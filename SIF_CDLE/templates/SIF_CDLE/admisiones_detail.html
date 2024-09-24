@@ -80,10 +80,8 @@ Admisiones
           <dt class="col-sm-7 mb-2"><span class="text-{% if object.estado == "Inactiva" %}danger{% else %}success{% endif %} font-weight-bold">{{object.estado}}</span></dt>
           <dd class="col-sm-5 mb-2">Fecha de admisión</dd>
           <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
-          <dd class="col-sm-5 mb-2">Acompaniante </dd>
+          <dd class="col-sm-5 mb-2">Acompañante </dd>
           <dt class="col-sm-7 mb-2">{{object.fk_preadmi.acompaniante}}</dt>
-          <dd class="col-sm-5 mb-2">Madrina</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.madrina}}</dt>
         </dl>
       </div>
     </div>
@@ -94,7 +92,7 @@ Admisiones
   <div class="col-sm-4 pb-3">
     <div class="card card-outline card-primary h-100 mb-0">
       <div class="card-header">
-        <h3 class="card-title">Detalle IV de ingreso</h3>
+        <h3 class="card-title">Detalle IVI de ingreso</h3>
         <div class="card-tools d-inline">
           <a href="{% url 'CDLE_indiceivi_ver' object.fk_preadmi.id %}" class="ml-3 mr-2">Ver detalles</a>
           <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">

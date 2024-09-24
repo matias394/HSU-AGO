@@ -6,9 +6,18 @@ from SIF_CDIF.models import Criterios_IVI
 from .models import *
 
 class CDLE_PreadmisionesForm (forms.ModelForm):
-
+    
+    
     def __init__(self, *args, **kwargs):
+        legajo: Legajos = kwargs.pop('legajo', None)
         super().__init__(*args, **kwargs)
+
+        if legajo:
+            busqueda = Legajos.objects.filter(
+                models.Q(fk_legajo1__fk_legajo_2=legajo.id)|
+                models.Q(fk_legajo2__fk_legajo_1=legajo.id)
+            ).distinct()
+            self.fields['POACRI_fk_pareja_apoyo_crianza'].queryset = busqueda
 
     class Meta:
         model = CDLE_PreAdmision
@@ -119,7 +128,7 @@ class CDLE_PreadmisionesForm (forms.ModelForm):
 
             # # Paso 6 : "Pareja o apoyo en la crianza" (Igual a "Padre o apoyo en la crianza, cambiar el nombre del Paso)
             # # 6.1 DATOS PERSONALES
-            # 'POACRI_pareja_apoyo_crianza',
+            'POACRI_fk_pareja_apoyo_crianza': forms.Select(),
             # 'POACRI_vinculo',
             # 'POACRI_tipo_doc',
             # 'POACRI_num_doc',

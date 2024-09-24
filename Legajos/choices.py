@@ -432,6 +432,7 @@ CHOICE_CENTROS_SALUD = [
     ('Hospital Santa María', 'Hospital Santa María'),
     ('Hospital San Miguel Arcángel', 'Hospital San Miguel Arcángel'),
     ('Clínica Privada', 'Clínica Privada'),
+    ('Otro', 'Otro'),
 ]
 
 CHOISE_CDLE_PARTICIPARDE = [
@@ -520,6 +521,8 @@ CHOICE_VINCULO_FAMILIAR = [
     ('Tío/a', 'Tío/a'),
     ('Sobrino/a', 'Sobrino/a'),
     ('Pareja', 'Pareja'),
+    ('Pareja Padre', 'Pareja Padre'),
+    ('Pareja Madre', 'Pareja Madre'),
     ('Referente', 'Referente'),
     ('Otro', 'Otro'),
 ]
@@ -631,6 +634,8 @@ VINCULO_MAP = {
     "Tío/a": {"vinculo": "Tío/a", "vinculo_inverso": "Sobrino/a"},
     "Sobrino/a": {"vinculo": "Sobrino/a", "vinculo_inverso": "Tío/a"},
     "Referente": {"vinculo": "Referente", "vinculo_inverso": "Referente"},
+    "Pareja Padre": {"vinculo": "Pareja Padre", "vinculo_inverso": "Hijo/a"},
+    "Pareja Madre": {"vinculo": "Pareja Madre", "vinculo_inverso": "Hijo/a"},
     "Otro": {"vinculo": "Otro", "vinculo_inverso": "Otro"},
 }
 DIMENSIONES_RIESGO_MAP = {
