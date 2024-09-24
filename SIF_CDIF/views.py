@@ -192,6 +192,9 @@ class CDIFDerivacionesRechazo(PermisosMixin, CreateView):
     form_class = DerivacionesRechazoForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -238,6 +241,9 @@ class CDIFDerivacionesUpdateView(PermisosMixin, UpdateView):
     success_message = "Derivación editada con éxito"
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_directivo",
@@ -294,6 +300,9 @@ class CDIFPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
     success_message = "Preadmisión creada correctamente"
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -447,6 +456,9 @@ class CDIFPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
     success_message = "Preadmisión creada correctamente"
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -755,6 +767,9 @@ class CDIFPreAdmisionesListView(PermisosMixin, ListView):
     model = CDIF_PreAdmision
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -813,6 +828,9 @@ class CDIFPreAdmisionesDeleteView(PermisosMixin, DeleteView):
     success_url = reverse_lazy("CDIF_preadmisiones_listar")
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_directivo",
@@ -858,6 +876,9 @@ class CDIFPreAdmisionesRechazarView(PermisosMixin, DeleteView):
     success_url = reverse_lazy("CDIF_preadmisiones_listar")
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_operativo",
@@ -902,6 +923,9 @@ class CDIFIndiceIviCreateView(PermisosMixin, CreateView):
     form_class = CDIF_IndiceIviForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -995,6 +1019,9 @@ class CDIFIndiceIviUpdateView(PermisosMixin, UpdateView):
     form_class = CDIF_IndiceIviForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -1176,6 +1203,9 @@ class CDIFAdmisionesListView(PermisosMixin, ListView):
     model = CDIF_Admision
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -1234,6 +1264,9 @@ class CDIFVacantesAdmision(PermisosMixin, CreateView):
     form_class = CDIF_VacantesOtorgadasForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -1310,6 +1343,9 @@ class CDIFVacantesAdmisionCambio(PermisosMixin, CreateView):
     form_class = CDIF_VacantesOtorgadasForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -1510,6 +1546,9 @@ class CDIFVacantesListView(PermisosMixin, ListView):
     context_object_name = "organizaciones"
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -1589,6 +1628,9 @@ class CDIFIntervencionesCreateView(PermisosMixin, CreateView):
     form_class = CDIF_IntervencionesForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -1637,6 +1679,9 @@ class CDIFIntervencionesUpdateView(PermisosMixin, UpdateView):
     form_class = CDIF_IntervencionesForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -1728,6 +1773,9 @@ class CDIFIntervencionesListView(PermisosMixin, ListView):
     model = CDIF_Intervenciones
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",

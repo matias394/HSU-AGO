@@ -184,6 +184,9 @@ class MILDDerivacionesRechazo(PermisosMixin, CreateView):
     form_class = DerivacionesRechazoForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_directivo",
@@ -232,6 +235,9 @@ class MILDDerivacionesUpdateView(PermisosMixin, UpdateView):
     success_message = "Derivación editada con éxito"
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_directivo",
@@ -288,6 +294,9 @@ class MILDPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
     success_message = "Preadmisión creada correctamente"
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_directivo",
@@ -436,6 +445,9 @@ class MILDPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
     success_message = "Preadmisión creada correctamente"
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_directivo",
@@ -698,6 +710,9 @@ class MILDPreAdmisionesListView(PermisosMixin, ListView):
     model = MILD_PreAdmision
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -720,6 +735,9 @@ class MILDPreAdmisionesBuscarListView(PermisosMixin, TemplateView):
     template_name = "SIF_MILD/preadmisiones_buscar.html"
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -767,6 +785,9 @@ class MILDPreAdmisionesDeleteView(PermisosMixin, DeleteView):
     success_url = reverse_lazy("MILD_preadmisiones_listar")
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_directivo",
@@ -821,6 +842,9 @@ class MILDIndiceIngresoCreateView(PermisosMixin, CreateView):
     form_class = MILD_IndiceIngresoForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_directivo",
@@ -938,6 +962,9 @@ class MILDIndiceIngresoUpdateView(PermisosMixin, UpdateView):
     form_class = MILD_IndiceIngresoForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_directivo",
@@ -1091,6 +1118,9 @@ class MILDIndiceIviCreateView(PermisosMixin, CreateView):
     form_class = MILD_IndiceIviForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_directivo",
@@ -1188,6 +1218,9 @@ class MILDIndiceIviUpdateView(PermisosMixin, UpdateView):
     form_class = MILD_IndiceIviForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_directivo",
@@ -1467,6 +1500,9 @@ class MILDAdmisionesListView(PermisosMixin, ListView):
     model = MILD_Admision
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -1656,6 +1692,9 @@ class MILDIntervencionesCreateView(PermisosMixin, CreateView):
     form_class = MILD_IntervencionesForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_directivo",
@@ -1706,6 +1745,9 @@ class MILDIntervencionesUpdateView(PermisosMixin, UpdateView):
     form_class = MILD_IntervencionesForm
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_directivo",
@@ -1758,6 +1800,9 @@ class MILDIntervencionesLegajosListView(PermisosMixin, DetailView):
     model = MILD_Admision
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -1809,6 +1854,9 @@ class MILDIntervencionesListView(PermisosMixin, ListView):
     model = MILD_Intervenciones
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
@@ -1850,6 +1898,9 @@ class MILDIntervencionesDeleteView(PermisosMixin, DeleteView):
     success_url = reverse_lazy("MILD_intervenciones_listar")
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_directivo",
@@ -1897,6 +1948,9 @@ class MILDAdmisionesBuscarListView(PermisosMixin, TemplateView):
     template_name = "SIF_MILD/admisiones_buscar.html"
 
     def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_observador",
