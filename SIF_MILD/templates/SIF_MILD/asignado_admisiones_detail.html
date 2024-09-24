@@ -93,6 +93,19 @@ Admisiones
           <dd class="col-sm-5 mb-2">Acompañante de entrevista</dd>
           <dt class="col-sm-7 mb-2">{{object.fk_preadmi.acompaniante_entrevista}}</dt>
         </dl>
+          <div class="info-box-content">
+            Area de acompañamiento
+            <div class="card-body" style="width: 180%;padding-left: 0px;">
+      
+              <ul class="products-list product-list-in-card col-3">
+                  <div class="callout">
+                      <h5>{{object.fk_preadmi.areaacompanamiento|default_if_none:"-"}}</h5>
+                  </div>
+              </ul>
+      
+            </div>
+        </div>
+        
       </div>
     </div>
   </div>
