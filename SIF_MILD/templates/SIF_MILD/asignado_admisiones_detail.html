@@ -32,7 +32,7 @@ Admisiones
     </button>
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
-    {% if object.estado != "Inactiva" %}
+    {% if object.estado != "Inactiva"  and btn_inactivar %}
     <a href="{% url 'MILD_indiceiviegreso_crear' object.id %}" class="btn btn-danger mr-1">Inactivar</a>
     {% endif %}
   </div>

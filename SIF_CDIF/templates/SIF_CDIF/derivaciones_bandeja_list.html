@@ -19,10 +19,9 @@
 </ol>
 {% endblock %};
 {% block content %}
-
 <div class="row">
   <div class="col-md-2">
-    <a href="{% url 'CDIF_derivaciones_buscar' %}" class="btn btn-primary btn-block mb-3">Derivar</a>
+    {% if btn_derivar %}<a href="{% url 'CDIF_derivaciones_buscar' %}" class="btn btn-primary btn-block mb-3">Derivar</a>{% endif %}
     <div class="card">
       <div class="card-header">
         <h3 class="card-title">Carpetas</h3>

@@ -33,7 +33,7 @@ Admisiones
     </button>
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
-    {% if object.estado != "Inactiva" %}
+    {% if object.estado != "Inactiva" and btn_inactivar %}
     <button type="button" class="btn btn-danger mr-1" data-toggle="modal" data-target="#inhabilitarAdmisionModal">
         Inactivar
     </button>
