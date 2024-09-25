@@ -132,12 +132,36 @@ class CDIF_PreAdmision (models.Model):
     estado = models.CharField(max_length=100, null=True, blank=True)
     tipo = models.CharField(max_length=100, null=True, blank=True)
     observaciones = models.CharField(max_length=300, null=True, blank=True)
+    # nuevo paso numero 2 Guarda o Medida Abrigo
+    Medidadeabrigo =  models.CharField(max_length=150, choices=CHOICE_GUARDA, null=True, blank=True)
+    observacionesMedidadeabrigo = models.CharField(max_length=350, null=True, blank=True)
+    fk_legajo_guarda = models.ForeignKey(Legajos, related_name='fk_legajo_guarda', on_delete=models.PROTECT, null=True, blank=True)
+    DNIcondomicilio = models.CharField(max_length=150, choices=CHOICE_NOSI, null=True, blank=True)
+    enfermedadpsiquica = models.BooleanField(verbose_name='¿Padece alguna enfermedad psiquica?', null=True)
+    cualEnfermedad = models.CharField(max_length=150, choices=CHOICE_GUARDA, null=True, blank=True)
+    Entratamiento = models.CharField(max_length=150, choices=CHOICE_GUARDA, null=True, blank=True)
+    CentroSalud = models.CharField(max_length=150, choices=CHOICE_CENTROS_SALUD, null=True, blank=True)
+    emb_actualmente_guarda =  models.CharField(max_length=50, choices=CHOICE_SINO, null=True, blank=True)
+    controles_guarda =  models.CharField(max_length=50, choices=CHOICE_SINO, null=True, blank=True)
+    emb_actual_guarda =  models.CharField(max_length=150, choices=CHOICE_EMB_RIESGO, null=True, blank=True)
+    educ_maximo_guarda =  models.CharField(max_length=150, choices=CHOICE_EDUCACION, null=True, blank=True)
+    educ_estado_guarda =  models.CharField(max_length=150, choices=CHOICE_ESTADO, null=True, blank=True)
+    leer_guarda = models.BooleanField(verbose_name='No sabe leer', null=True, blank=True)
+    escribir_guarda = models.BooleanField(verbose_name='No sabe escribir', null=True, blank=True)
+    retomar_estudios_guarda = models.BooleanField(verbose_name='Quiere retomar estudios', null=True, blank=True)
+    aprender_oficio_guarda = models.BooleanField(verbose_name='Quiere aprender un oficio', null=True, blank=True)
+    planes_sociales_guarda = models.ManyToManyField(PlanesSociales, related_name='planes_sociales_guarda',null=True, blank=True)
+    trabajo_actual_guarda =  models.CharField(max_length=50, choices=CHOICE_SINO, null=True, blank=True)
+    ocupacion_guarda = models.CharField(verbose_name='Ocupación', max_length=100, null=True, blank=True)
+   
+
+
 
 class Criterios_IVI(models.Model):
     criterio =  models.CharField(max_length=250, null=False, blank=False)
     tipo =  models.CharField(max_length=250, choices=CHOICE_TIPO_IVI, null=False, blank=False)
     puntaje =  models.SmallIntegerField(null=False, blank=False)
-    modificable =  models.CharField(max_length=50, choices=CHOICE_NOSI_MODIFICABLE, null=False, blank=False)
+    modificable =  models.CharField(max_length=50, choices=CHOICE_NOSI, null=False, blank=False)
     
     def __str__(self):
         return self.criterio

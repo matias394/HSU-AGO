@@ -140,6 +140,41 @@ CHOICE_EDUCACION=[
     ('Terciario', 'Terciario'),
     ('Universitario', 'Universitario'),
 ]
+
+CHOICE_CENTROS_SALUD = [
+    (None, ''),
+    ('Cura Brochero', 'Cura Brochero'),
+    ('20 de Julio', '20 de Julio'),
+    ('29 de Septiembre', '29 de Septiembre'),
+    ('Antoniazzi', 'Antoniazzi'),
+    ('Barthalot', 'Barthalot'),
+    ('CIC', 'CIC'),
+    ('Camila Rolón', 'Camila Rolón'),
+    ('Carrillo', 'Carrillo'),
+    ('Castello', 'Castello'),
+    ('Favaloro', 'Favaloro'),
+    ('Leloir', 'Leloir'),
+    ('Matera', 'Matera'),
+    ('Padre Mora', 'Padre Mora'),
+    ('Podestá', 'Podestá'),
+    ('Presidente Perón', 'Presidente Perón'),
+    ('Sabín', 'Sabín'),
+    ('San Miguel Oeste', 'San Miguel Oeste'),
+    ('Suarez Paris', 'Suarez Paris'),
+    ('UFO', 'UFO'),
+    ('Hospital Larcade', 'Hospital Larcade'),
+    ('Hospital Santa María', 'Hospital Santa María'),
+    ('Hospital San Miguel Arcángel', 'Hospital San Miguel Arcángel'),
+    ('Clínica Privada', 'Clínica Privada'),
+    ('Otro', 'Otro'),
+]
+
+
+CHOICE_GUARDA =[
+    (None, ''),
+    ('Medida de abrigo/guarda por primera vez', 'Medida de abrigo/guarda por primera vez'),
+    ('Medida de abrigo/guarda renovado', 'Medida de abrigo/guarda renovado'),
+]
 CHOICE_ESTADO=[
     (None, ''),
     ('Completo', 'Completo'),
