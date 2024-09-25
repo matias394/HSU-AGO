@@ -1668,6 +1668,7 @@ class CDIFIntervencionesCreateView(PermisosMixin, CreateView):
             pk=self.kwargs["pk"]
         )  # Obtén el objeto directamente
         context["form"] = self.get_form()  # Obtiene una instancia del formulario
+        context["criterios_ivi"] = Criterios_IVI.objects.all()
 
         return context
 

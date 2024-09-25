@@ -102,6 +102,28 @@
 {% endblock %}
 
 {% block customJS %}
+<script>
+    $(document).ready(function () {
+
+        let criterios = {
+            {% for item in criterios_ivi %} {{item.id}}: "{{item.modificable}}",
+            {% endfor %}
+        }
+
+        $('#id_criterio_modificable').change(function () {
+            let select_impacto = $('#id_impacto')
+            if (criterios[$(this).val()] === 'De base') {
+                select_impacto.empty()
+                select_impacto.append(new Option ("Trabajado", "Trabajado"))
+            } else {
+                select_impacto.empty()
+                select_impacto.append(new Option ("Trabajado", "Trabajado"))
+                select_impacto.append(new Option ("Revertido", "Revertido"))
+            }
+        });
+
+    });
+</script>
 <!--<script>
     $(document).ready(function () {
         $('#criterio_presente').change(function () {
