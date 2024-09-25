@@ -28,7 +28,7 @@ from django.conf import settings
 from SIF_CDIF.models import Criterios_IVI
 from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
-
+from Legajos.models import LegajoAlertas
 
 # # Create your views here.
 # derivaciones = LegajosDerivaciones.objects.filter(m2m_programas__nombr__iexact="MILD")
@@ -1431,6 +1431,19 @@ class MILDPreAdmisiones3DetailView(PermisosMixin, DetailView):
     def post(self, request, *args, **kwargs):
         if "admitir" in request.POST:
             preadmi = MILD_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
+            
+            legajoMadre = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=preadmi.fk_legajo_id,vinculo="Madre").first()
+            alertaId = Alertas.objects.filter(nombre="Hijo en programa mil dias").first()
+
+            validacionMadre = LegajoAlertas.objects.filter(fk_legajo_id=legajoMadre.fk_legajo_2.id, fk_alerta_id=alertaId.id).first()
+            
+            if validacionMadre is None:
+                legajosAlertasMadre = LegajoAlertas()
+                legajosAlertasMadre.fk_legajo_id = legajoMadre.fk_legajo_2.id
+                legajosAlertasMadre.creada_por_id = self.request.user.id
+                legajosAlertasMadre.fk_alerta_id = alertaId.id
+                legajosAlertasMadre.save()
+            
             preadmi.admitido = "SI"
             preadmi.estado = "Admitido"
             preadmi.save()
