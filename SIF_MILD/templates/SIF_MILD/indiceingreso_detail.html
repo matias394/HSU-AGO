@@ -87,7 +87,7 @@
   <!-- Detalle puntajes del indice -->
   <div class="col-sm-4">
     <div class="info-box mb-2 ">
-      {% if cant_sanitarios >= 1 or cant_sociales >= 5 %}<span class="info-box-icon bg-success"> SI {% else %} <span class="info-box-icon bg-danger"> NO {% endif %}</span>
+      {% if cant_sanitarios >= 1 and cant_sociales >= 5 %}<span class="info-box-icon bg-success"> SI {% else %} <span class="info-box-icon bg-danger"> NO {% endif %}</span>
       <div class="info-box-content h5 my-0">
         <span class="info-box-text">Aplica</span>
       </div>
