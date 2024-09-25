@@ -1434,7 +1434,8 @@ class MILDPreAdmisiones3DetailView(PermisosMixin, DetailView):
             
             legajoMadre = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=preadmi.fk_legajo_id,vinculo="Madre").first()
             alertaId = Alertas.objects.filter(nombre="Hijo en programa mil dias").first()
-            if legajoMadre is None:
+            print(legajoMadre)
+            if legajoMadre is not None:
                 validacionMadre = LegajoAlertas.objects.filter(fk_legajo_id=legajoMadre.fk_legajo_2.id, fk_alerta_id=alertaId.id).first()
                 if validacionMadre is None:
                     legajosAlertasMadre = LegajoAlertas()
