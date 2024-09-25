@@ -883,20 +883,20 @@ class MILDIndiceIngresoCreateView(PermisosMixin, CreateView):
         historico = HistorialLegajoIndices()
 
         # ----------------------------------
-        # valida que por lomenos un criterio este seleciconado
-        validacion = False
-        for f in nombres_campos:
-            if f.isdigit():
-                criterio_ingreso = Criterios_Ingreso.objects.filter(id=f).first()
-                if criterio_ingreso.tipo == "Criterios sanitarios para el ingreso":
-                    validacion = True
-                    break
+        # # valida que por lomenos un criterio este seleciconado
+        # validacion = False
+        # for f in nombres_campos:
+        #     if f.isdigit():
+        #         criterio_ingreso = Criterios_Ingreso.objects.filter(id=f).first()
+        #         if criterio_ingreso.tipo == "Criterios sanitarios para el ingreso":
+        #             validacion = True
+        #             break
 
-        if not validacion:
-            messages.error(
-                self.request, "Debe seleccionar al menos un criterio sanitario."
-            )
-            return redirect("MILD_indiceingreso_crear", pk)
+        # if not validacion:
+        #     messages.error(
+        #         self.request, "Debe seleccionar al menos un criterio sanitario."
+        #     )
+        #     return redirect("MILD_indiceingreso_crear", pk)
         # ----------------------------------
 
         for f in nombres_campos:
