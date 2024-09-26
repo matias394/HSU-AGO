@@ -21,7 +21,7 @@
 		{% endif %}
 	</div>
 </div>
-
+{% if perms.Usuarios.programa_Legajo %}
 <div class="form-inline mb-3">
 	<form action="{% url 'legajos_listar' %}" method="GET">
 		<div class="input-group ">
@@ -35,6 +35,7 @@
 		</div>
 	</form>
 </div>
+{% endif %}
 {%if perms.Usuarios.programa_Dashboard%}
 <li class="nav-item">
 	<a href="{% url 'dashboard' %}" class="nav-link {% if 'dashboard' in pagina_actual %}active{% endif %}">
