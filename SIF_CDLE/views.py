@@ -480,8 +480,11 @@ class CDLEPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "Usuarios.rol_directivo",
+            # "Usuarios.rol_operativo",
+            # "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
