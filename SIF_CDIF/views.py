@@ -63,6 +63,20 @@ class CDIFDerivacionesBuscarListView(TemplateView, PermisosMixin):
             if not object_list:
                 messages.warning(self.request, ("La búsqueda no arrojó resultados."))
 
+            rol = obtener_rol(self.request)
+            roles_permitidos = [
+                "Usuarios.rol_admin",
+                "Usuarios.rol_directivo",
+                "Usuarios.rol_operativo",
+                "Usuarios.rol_tecnico",
+                "Usuarios.rol_consultante",
+                # "Usuarios.rol_observador",
+            ]
+            if any(role in roles_permitidos for role in rol):
+                context["btn_agregar"] = True
+            else:
+                context["btn_agregar"] = False
+
             mostrar_btn_resetear = True
             mostrar_resultados = True
 
@@ -199,7 +213,7 @@ class CDIFDerivacionesRechazo(PermisosMixin, CreateView):
         permisos_a_verificar = [
             "Usuarios.rol_observador",
             "Usuarios.rol_consultante",
-            "Usuarios.rol_operativo",
+            # "Usuarios.rol_operativo",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
@@ -461,8 +475,11 @@ class CDIFPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
@@ -1024,8 +1041,11 @@ class CDIFIndiceIviUpdateView(PermisosMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "Usuarios.rol_directivo",
+            # "Usuarios.rol_operativo",
+            # "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
@@ -1348,8 +1368,11 @@ class CDIFVacantesAdmisionCambio(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "Usuarios.rol_directivo",
+            # "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
@@ -1685,9 +1708,11 @@ class CDIFIntervencionesUpdateView(PermisosMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_operativo",
+            "Usuarios.rol_directivo",
+            # "Usuarios.rol_operativo",
+            # "Usuarios.rol_tecnico",
+            # "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
@@ -1816,6 +1841,24 @@ class CDIFIntervencionesDeleteView(PermisosMixin, DeleteView):
     model = CDIF_Intervenciones
     template_name = "SIF_CDIF/intervenciones_confirm_delete.html"
     success_url = reverse_lazy("CDIF_intervenciones_listar")
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
 

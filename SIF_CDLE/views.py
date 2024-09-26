@@ -72,6 +72,20 @@ class CDLEDerivacionesBuscarListView(TemplateView, PermisosMixin):
             if not object_list:
                 messages.warning(self.request, ("La búsqueda no arrojó resultados."))
 
+            rol = obtener_rol(self.request)
+            roles_permitidos = [
+                "Usuarios.rol_admin",
+                "Usuarios.rol_directivo",
+                "Usuarios.rol_operativo",
+                "Usuarios.rol_tecnico",
+                "Usuarios.rol_consultante",
+                # "Usuarios.rol_observador",
+            ]
+            if any(role in roles_permitidos for role in rol):
+                context["btn_agregar"] = True
+            else:
+                context["btn_agregar"] = False
+
             mostrar_btn_resetear = True
             mostrar_resultados = True
 
@@ -256,7 +270,7 @@ class CDLEDerivacionesUpdateView(PermisosMixin, UpdateView):
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
+            # "Usuarios.rol_operativo",
             "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
             "Usuarios.rol_observador",
@@ -628,6 +642,19 @@ class CDLEPreAdmisionesDetailView(PermisosMixin, DetailView):
             context["btn_admitir"] = True
         else:
             context["btn_admitir"] = False
+
+        roles_lista_espera = [
+            "Usuarios.rol_admin",
+            "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            # "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+        if any(role in roles_lista_espera for role in rol):
+            context["btn_espera"] = True
+        else:
+            context["btn_espera"] = False
 
         roles_rechazo = [
             "Usuarios.rol_admin",
@@ -1638,6 +1665,32 @@ class CDLEAsignadoAdmisionDetail(PermisosMixin, DetailView):
             context["btn_inactivar"] = True
         else:
             context["btn_inactivar"] = False
+
+        roles_cambiar_vacante = [
+            "Usuarios.rol_admin",
+            "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            # "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+        if any(role in roles_cambiar_vacante for role in rol):
+            context["btn_cambiar_vcte"] = True
+        else:
+            context["btn_cambiar_vcte"] = False
+
+        roles_ver_intervenciones = [
+            "Usuarios.rol_admin",
+            "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            # "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+        if any(role in roles_ver_intervenciones for role in rol):
+            context["btn_ver_intervenciones"] = True
+        else:
+            context["btn_ver_intervenciones"] = False
 
         context["inhabilitacion_form"] = CDLE_InhabilitarAdmisionEgresoForm()
         context["foto_ivi_fin"] = foto_ivi_fin
