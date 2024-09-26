@@ -60,7 +60,6 @@ def obtener_rol(request):
     return []
 
 
-
 class LegajosReportesListView(ListView):
     template_name = "Legajos/legajos_reportes.html"
     model = LegajosDerivaciones
@@ -411,17 +410,17 @@ class LegajosDeleteView(PermisosMixin, DeleteView):
 
         rol = obtener_rol(self.request)
         roles_eliminar = [
-            #"Usuarios.rol_admin",
-            #"Usuarios.rol_directivo",
-            #"Usuarios.rol_operativo",
-            #"Usuarios.rol_tecnico",
-            #"Usuarios.rol_consultante",
+            # "Usuarios.rol_admin",
+            # "Usuarios.rol_directivo",
+            # "Usuarios.rol_operativo",
+            # "Usuarios.rol_tecnico",
+            # "Usuarios.rol_consultante",
             # "Usuarios.rol_observador",
         ]
         if any(role in roles_eliminar for role in rol):
             context["btn_eliminar"] = True
         else:
-                context["btn_eliminar"] = False
+            context["btn_eliminar"] = False
 
         # Agregar la lista de nombres de relaciones al contexto
         context["relaciones_existentes"] = relaciones_existentes
@@ -937,7 +936,7 @@ class LegajosDerivacionesUpdateView(PermisosMixin, UpdateView):
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
+            "Usuarios.rol_operativo",
             # "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
             "Usuarios.rol_observador",
