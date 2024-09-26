@@ -53,6 +53,14 @@ dotenv.load_dotenv()
 # region ############################################################### LEGAJOS
 
 
+def obtener_rol(request):
+    if request.user.is_authenticated:
+        # Supongamos que este método retorna los roles del usuario
+        return list(request.user.get_all_permissions())
+    return []
+
+
+
 class LegajosReportesListView(ListView):
     template_name = "Legajos/legajos_reportes.html"
     model = LegajosDerivaciones
@@ -400,6 +408,20 @@ class LegajosDeleteView(PermisosMixin, DeleteView):
             or LegajoGrupoFamiliar.objects.filter(fk_legajo_2=legajo).exists()
         ):
             relaciones_existentes.append("Grupo Familiar")
+
+        rol = obtener_rol(self.request)
+        roles_eliminar = [
+            #"Usuarios.rol_admin",
+            #"Usuarios.rol_directivo",
+            #"Usuarios.rol_operativo",
+            #"Usuarios.rol_tecnico",
+            #"Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+        if any(role in roles_eliminar for role in rol):
+            context["btn_eliminar"] = True
+        else:
+                context["btn_eliminar"] = False
 
         # Agregar la lista de nombres de relaciones al contexto
         context["relaciones_existentes"] = relaciones_existentes
@@ -886,7 +908,8 @@ class LegajosDerivacionesCreateView(PermisosMixin, CreateView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        # Aquí podrías agregar manejo extra si es necesario, por ejemplo un mensaje de error
+        # Mostrar errores de validación en la consola
+        print(form.errors)
         return super().form_invalid(form)
 
     def get_context_data(self, **kwargs):
@@ -906,6 +929,24 @@ class LegajosDerivacionesUpdateView(PermisosMixin, UpdateView):
         initial = super().get_initial()
         initial["fk_usuario"] = self.request.user
         return initial
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            # "Usuarios.rol_operativo",
+            # "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -955,6 +996,24 @@ class LegajosDerivacionesDeleteView(PermisosMixin, DeleteView):
     model = LegajosDerivaciones
     # success_url = reverse_lazy("legajosderivaciones_listar")
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_admin",
+            "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         if self.object.estado != "Pendiente":
             messages.error(
@@ -964,13 +1023,13 @@ class LegajosDerivacionesDeleteView(PermisosMixin, DeleteView):
 
             return redirect("legajosderivaciones_ver", pk=int(self.object.id))
 
-        if self.request.user != self.object.fk_usuario:
-            messages.error(
-                self.request,
-                "Solo el usuario que generó esta derivación puede eliminarla.",
-            )
-
-            return redirect("legajosderivaciones_ver", pk=int(self.object.id))
+        # if self.request.user != self.object.fk_usuario:
+        #    messages.error(
+        #        self.request,
+        #        "Solo el usuario que generó esta derivación puede eliminarla.",
+        #    )
+        #
+        #    return redirect("legajosderivaciones_ver", pk=int(self.object.id))
 
         else:
             legajo = LegajosDerivaciones.objects.filter(pk=self.object.id).first()

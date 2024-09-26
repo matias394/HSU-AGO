@@ -29,14 +29,10 @@ Derivaciones
     {% if object.estado == "Pendiente" %}
     {% if btn_aceptar %}<a href="{% url 'MILD_preadmisiones_crear' object.pk %}" class="btn btn-primary mr-1 ">Aceptar</a>{% endif %}
     {% if btn_rechazar %}<a href="{% url 'MILD_derivaciones_rechazo'  object.pk %}" class="btn btn-secondary mr-1 ">Rechazar</a>{% endif %}
+    {% if btn_eliminar_editar %}<a href="{% url 'MILD_derivaciones_editar' object.id %}" class="btn btn-primary mr-1">Editar</a>{% endif %}
+    {% if btn_eliminar_editar %}<a href="{% url 'legajosderivaciones_eliminar' object.id %}" class="btn btn-danger mr-1">Eliminar</a>{% endif %}
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
-    {% if request.user.id == object.fk_usuario.id and object.estado == 'Pendiente' %}
-    {% if btn_eliminar_editar %}<a href="{% url 'MILD_derivaciones_editar' object.id %}" class="btn btn-primary mr-1">Editar</a>{% endif %}
-    {%endif%}
-    {% if request.user.id == object.fk_usuario.id and object.estado == 'Pendiente' %}
-    {% if btn_eliminar_editar %}<a href="{% url 'legajosderivaciones_eliminar' object.id %}" class="btn btn-danger mr-1">Eliminar</a>{% endif %}
-    {%endif%}
   </div>
   <!-- ./botones -->
 

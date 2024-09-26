@@ -30,6 +30,7 @@ from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
 from Legajos.models import LegajoAlertas
 
+
 # # Create your views here.
 # derivaciones = LegajosDerivaciones.objects.filter(m2m_programas__nombr__iexact="MILD")
 # print(derivaciones)
@@ -63,6 +64,20 @@ class MILDDerivacionesBuscarListView(TemplateView, PermisosMixin):
 
             if not object_list:
                 messages.warning(self.request, ("La búsqueda no arrojó resultados."))
+
+            rol = obtener_rol(self.request)
+            roles_permitidos = [
+                "Usuarios.rol_admin",
+                "Usuarios.rol_directivo",
+                "Usuarios.rol_operativo",
+                "Usuarios.rol_tecnico",
+                "Usuarios.rol_consultante",
+                # "Usuarios.rol_observador",
+            ]
+            if any(role in roles_permitidos for role in rol):
+                context["btn_agregar"] = True
+            else:
+                context["btn_agregar"] = False
 
             mostrar_btn_resetear = True
             mostrar_resultados = True
@@ -1431,19 +1446,25 @@ class MILDPreAdmisiones3DetailView(PermisosMixin, DetailView):
     def post(self, request, *args, **kwargs):
         if "admitir" in request.POST:
             preadmi = MILD_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
-            
-            legajoMadre = LegajoGrupoFamiliar.objects.filter(fk_legajo_1_id=preadmi.fk_legajo_id,vinculo="Madre").first()
-            alertaId = Alertas.objects.filter(nombre="Hijo en programa mil dias").first()
+
+            legajoMadre = LegajoGrupoFamiliar.objects.filter(
+                fk_legajo_1_id=preadmi.fk_legajo_id, vinculo="Madre"
+            ).first()
+            alertaId = Alertas.objects.filter(
+                nombre="Hijo en programa mil dias"
+            ).first()
             print(legajoMadre)
             if legajoMadre is not None:
-                validacionMadre = LegajoAlertas.objects.filter(fk_legajo_id=legajoMadre.fk_legajo_2.id, fk_alerta_id=alertaId.id).first()
+                validacionMadre = LegajoAlertas.objects.filter(
+                    fk_legajo_id=legajoMadre.fk_legajo_2.id, fk_alerta_id=alertaId.id
+                ).first()
                 if validacionMadre is None:
                     legajosAlertasMadre = LegajoAlertas()
                     legajosAlertasMadre.fk_legajo_id = legajoMadre.fk_legajo_2.id
                     legajosAlertasMadre.creada_por_id = self.request.user.id
                     legajosAlertasMadre.fk_alerta_id = alertaId.id
                     legajosAlertasMadre.save()
-            
+
             preadmi.admitido = "SI"
             preadmi.estado = "Admitido"
             preadmi.save()
@@ -1927,19 +1948,6 @@ class MILDIntervencionesDeleteView(PermisosMixin, DeleteView):
         if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
             raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
-        rol = obtener_rol(self.request)
-        roles_inactivar = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
-        ]
-        if any(role in roles_inactivar for role in rol):
-            context["btn_inactivar"] = True
-        else:
-            context["btn_inactivar"] = False
 
     def form_valid(self, form):
 
