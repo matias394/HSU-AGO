@@ -411,7 +411,7 @@ class LegajosDetailView(DetailView):
 
 
 class LegajosDeleteView(PermisosMixin, DeleteView):
-    permission_required = "Usuarios.programa_Legajos"
+    permission_required = "Usuarios.programa_Legajo"
     model = Legajos
     success_url = reverse_lazy("legajos_listar")
 
@@ -485,7 +485,7 @@ class LegajosDeleteView(PermisosMixin, DeleteView):
 
 
 class LegajosCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.programa_Legajos"
+    permission_required = "Usuarios.programa_Legajo"
     model = Legajos
     form_class = LegajosForm
 
@@ -554,7 +554,7 @@ class LegajosCreateView(PermisosMixin, CreateView):
 
 
 class LegajosUpdateView(PermisosMixin, UpdateView):
-    permission_required = "Usuarios.programa_Legajos"
+    permission_required = "Usuarios.programa_Legajo"
     model = Legajos
     form_class = LegajosUpdateForm
 
@@ -612,7 +612,7 @@ class LegajosUpdateView(PermisosMixin, UpdateView):
 
 
 class LegajosGrupoFamiliarCreateView(CreateView):
-    permission_required = "Usuarios.programa_Legajos"
+    permission_required = "Usuarios.programa_Legajo"
     model = LegajoGrupoFamiliar
     form_class = NuevoLegajoFamiliarForm
 
@@ -882,7 +882,7 @@ class DeleteGrupoFamiliar(View):
 
 
 class LegajosDerivacionesBuscar(PermisosMixin, TemplateView):
-    permission_required = "Usuarios.programa_Legajos"
+    permission_required = "Usuarios.programa_Legajo"
     template_name = "Legajos/legajosderivaciones_buscar.html"
 
     def get(self, request, *args, **kwargs):
@@ -936,7 +936,7 @@ class LegajosDerivacionesBuscar(PermisosMixin, TemplateView):
 
 
 class LegajosDerivacionesListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.programa_Legajos"
+    permission_required = "Usuarios.programa_Legajo"
     model = LegajosDerivaciones
     paginate_by = 25
 
@@ -971,7 +971,7 @@ class LegajosDerivacionesListView(PermisosMixin, ListView):
 
 
 class LegajosDerivacionesCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.programa_Legajos"
+    permission_required = "Usuarios.programa_Legajo"
     model = LegajosDerivaciones
     form_class = LegajosDerivacionesForm
     success_message = "Derivación registrada con éxito"
@@ -1028,7 +1028,7 @@ class LegajosDerivacionesCreateView(PermisosMixin, CreateView):
 
 
 class LegajosDerivacionesUpdateView(PermisosMixin, UpdateView):
-    permission_required = "Usuarios.programa_Legajos"
+    permission_required = "Usuarios.programa_Legajo"
     model = LegajosDerivaciones
     form_class = LegajosDerivacionesForm
     success_message = "Derivación editada con éxito"
@@ -1080,7 +1080,7 @@ class LegajosDerivacionesUpdateView(PermisosMixin, UpdateView):
 
 
 class LegajosDerivacionesHistorial(PermisosMixin, ListView):
-    permission_required = "Usuarios.programa_Legajos"
+    permission_required = "Usuarios.programa_Legajo"
     model = LegajosDerivaciones
     template_name = "Legajos/legajosderivaciones_historial.html"
 
@@ -1100,7 +1100,7 @@ class LegajosDerivacionesHistorial(PermisosMixin, ListView):
 
 
 class LegajosDerivacionesDeleteView(PermisosMixin, DeleteView):
-    permission_required = "Usuarios.programa_Legajos"
+    permission_required = "Usuarios.programa_Legajo"
     model = LegajosDerivaciones
     # success_url = reverse_lazy("legajosderivaciones_listar")
 
@@ -1147,7 +1147,7 @@ class LegajosDerivacionesDeleteView(PermisosMixin, DeleteView):
 
 
 class LegajosDerivacionesDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.programa_Legajos"
+    permission_required = "Usuarios.programa_Legajo"
     model = LegajosDerivaciones
 
     def get_context_data(self, **kwargs):
@@ -1172,7 +1172,7 @@ class LegajosDerivacionesDetailView(PermisosMixin, DetailView):
 
 
 class LegajosAlertasListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.programa_Legajos"
+    permission_required = "Usuarios.programa_Legajo"
     model = HistorialLegajoAlertas
     template_name = "Legajos/legajoalertas_list.html"
 
@@ -1185,7 +1185,7 @@ class LegajosAlertasListView(PermisosMixin, ListView):
 
 
 class LegajosAlertasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.programa_Legajos"
+    permission_required = "Usuarios.programa_Legajo"
     model = LegajoAlertas
     form_class = LegajosAlertasForm
     success_message = "Alerta asignada correctamente."
@@ -1213,7 +1213,7 @@ class LegajosAlertasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
 
 
 class DeleteAlerta(PermisosMixin, View):
-    permission_required = "Usuarios.programa_Legajos"
+    permission_required = "Usuarios.programa_Legajo"
 
     def get(self, request):
         data = {
@@ -1288,7 +1288,7 @@ class AlertasSelectView(View):
 
 
 class DimensionesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.programa_Legajos"
+    permission_required = "Usuarios.programa_Legajo"
     template_name = "Legajos/legajosdimensiones_form.html"
     model = DimensionFamilia
     form_class = DimensionFamiliaForm
@@ -1507,7 +1507,7 @@ class DimensionesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class DimensionesDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.programa_Legajos"
+    permission_required = "Usuarios.programa_Legajo"
     model = Legajos
     template_name = "Legajos/legajosdimensiones_detail.html"
 
@@ -1517,7 +1517,7 @@ class DimensionesDetailView(PermisosMixin, DetailView):
 
 # region ################################################################ ARCHIVOS
 class LegajosArchivosListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.programa_Legajos"
+    permission_required = "Usuarios.programa_Legajo"
     model = LegajosArchivos
     template_name = "Legajos/legajosarchivos_list.html"
 
@@ -1530,7 +1530,7 @@ class LegajosArchivosListView(PermisosMixin, ListView):
 
 
 class LegajosArchivosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.programa_Legajos"
+    permission_required = "Usuarios.programa_Legajo"
     model = LegajosArchivos
     form_class = LegajosArchivosForm
     success_message = "Archivo actualizado correctamente."
@@ -1586,7 +1586,7 @@ class CreateArchivo(TemplateView):
 
 
 class DeleteArchivo(PermisosMixin, View):
-    permission_required = "Usuarios.programa_Legajos"
+    permission_required = "Usuarios.programa_Legajo"
 
     def get(self, request):
         try:
