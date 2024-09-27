@@ -1138,7 +1138,7 @@ class CategoriaAlertasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView)
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
+            "Usuarios.rol_directivo",
             "Usuarios.rol_operativo",
             "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
@@ -1163,7 +1163,7 @@ class CategoriaAlertasCreateView(PermisosMixin, SuccessMessageMixin, CreateView)
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
+            "Usuarios.rol_directivo",
             "Usuarios.rol_operativo",
             "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
@@ -1188,7 +1188,7 @@ class CategoriaAlertasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView)
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
+            "Usuarios.rol_directivo",
             "Usuarios.rol_operativo",
             "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
@@ -1277,7 +1277,7 @@ class AlertasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
+            "Usuarios.rol_directivo",
             "Usuarios.rol_operativo",
             "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
@@ -1327,7 +1327,7 @@ class AlertasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
+            "Usuarios.rol_directivo",
             "Usuarios.rol_operativo",
             "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
@@ -1446,7 +1446,7 @@ class EquiposCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
+            "Usuarios.rol_directivo",
             "Usuarios.rol_operativo",
             "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
@@ -1480,7 +1480,7 @@ class EquiposUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
+            "Usuarios.rol_directivo",
             "Usuarios.rol_operativo",
             "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
@@ -2303,7 +2303,7 @@ class SLEquiposDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
+            "Usuarios.rol_directivo",
             "Usuarios.rol_operativo",
             "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
@@ -2439,7 +2439,7 @@ class SLIndicesVulnerabilidadDeleteView(PermisosMixin, SuccessMessageMixin, Dele
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
+            "Usuarios.rol_directivo",
             "Usuarios.rol_operativo",
             "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
@@ -2464,7 +2464,7 @@ class SLIndicesVulnerabilidadCreateView(PermisosMixin, SuccessMessageMixin, Crea
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
+            "Usuarios.rol_directivo",
             "Usuarios.rol_operativo",
             "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
@@ -2489,7 +2489,7 @@ class SLIndicesVulnerabilidadUpdateView(PermisosMixin, SuccessMessageMixin, Upda
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
+            "Usuarios.rol_directivo",
             "Usuarios.rol_operativo",
             "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
