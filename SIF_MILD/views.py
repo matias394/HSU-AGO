@@ -151,7 +151,7 @@ class MILDDerivacionesDetailView(PermisosMixin, DetailView):
         roles_permitidos = [
             "Usuarios.rol_admin",
             "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
+            # "Usuarios.rol_operativo",
             "Usuarios.rol_tecnico",
             # "Usuarios.rol_consultante",
             # "Usuarios.rol_observador",
