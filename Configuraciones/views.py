@@ -23,7 +23,11 @@ from .utils import insertar_programas
 
 
 class SecretariasListView(PermisosMixin, ListView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = [
+        "Usuarios.rol_admin",
+        "Usuarios.rol_directivo",
+        "Usuarios.rol_observador",
+    ]
     model = Secretarias
 
     # Funcion de busqueda
@@ -43,26 +47,30 @@ class SecretariasListView(PermisosMixin, ListView):
 
 
 class SecretariasDetailView(PermisosMixin, DetailView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = [
+        "Usuarios.rol_admin",
+        "Usuarios.rol_directivo",
+        "Usuarios.rol_observador",
+    ]
     model = Secretarias
 
 
 class SecretariasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
     model = Secretarias
     success_url = reverse_lazy("secretarias_listar")
     success_message = "El registro fue eliminado correctamente"
 
 
 class SecretariasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
     model = Secretarias
     form_class = SecretariasForm
     success_message = "%(nombre)s fue registrado correctamente"
 
 
 class SecretariasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
     model = Secretarias
     form_class = SecretariasForm
     success_message = "%(nombre)s fue editado correctamente"
