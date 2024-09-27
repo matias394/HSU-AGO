@@ -822,7 +822,8 @@ class CreateGrupoFamiliar(View):
         cuidador_principal = request.GET.get("cuidador_principal", None)
         obj = None
         vinculo_data = VINCULO_MAP.get(vinculo)
-
+        nivel_educativo_enviado = request.GET.get("nivel_educativo", None)
+        edtado_nivel_educativo_enviado = request.GET.get("estado_nivel_educativo", None)
         if not vinculo_data:
             return messages.error(self.request, "Vinculo inválido.")
 
@@ -835,6 +836,11 @@ class CreateGrupoFamiliar(View):
             conviven=conviven,
             cuidador_principal=cuidador_principal,
         )
+        LegajoEnviado = DimensionEducacion.objects.get(fk_legajo=fk_legajo_2)
+        if(LegajoEnviado is not None):
+            LegajoEnviado.max_nivel = nivel_educativo_enviado
+            LegajoEnviado.estado_nivel = edtado_nivel_educativo_enviado
+            LegajoEnviado.save()
 
         familiar = {
             "id": obj.id,
@@ -850,7 +856,7 @@ class CreateGrupoFamiliar(View):
             "tipo_mensaje": "success",
             "mensaje": "Vínculo familiar agregado correctamente.",
         }
-
+        #Modificar nivel eductivo en dimesion educacion
         return JsonResponse({"familiar": familiar, "data": data})
 
 

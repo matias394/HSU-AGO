@@ -112,9 +112,9 @@ class LegajoGrupoFamiliar(models.Model):
     fk_legajo_2 = models.ForeignKey(Legajos, related_name='fk_legajo2', on_delete=models.PROTECT)
     vinculo = models.CharField(max_length=50, choices=CHOICE_VINCULO_FAMILIAR)
     vinculo_inverso = models.CharField(max_length=50, null=True, blank=True)
-    estado_relacion = models.CharField(max_length=50, choices=CHOICE_ESTADO_RELACION)
-    conviven = models.CharField(max_length=50, choices=CHOICE_SINO)
-    cuidador_principal = models.CharField(max_length=50, choices=CHOICE_SINO)
+    estado_relacion = models.CharField(max_length=50, choices=CHOICE_ESTADO_RELACION,null=True, blank=True)
+    conviven = models.CharField(max_length=50, choices=CHOICE_SINO,null=True, blank=True)
+    cuidador_principal = models.CharField(max_length=50, choices=CHOICE_SINO,null=True, blank=True)
     observaciones = models.CharField(max_length=300, null=True, blank=True)
 
     def __str__(self):
