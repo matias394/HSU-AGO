@@ -24,7 +24,7 @@ urlpatterns = [
     path('', include('SIF_SL.urls')),
     path('', include('SIF_MA.urls')),
     path('', include('SIF_UMI.urls')),
-
+    path('', include('SIF_DESCEN.urls')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

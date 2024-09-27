@@ -1,0 +1,684 @@
+{% extends "includes/base.html" %};
+{% load static %};
+
+{% block title %}
+MILD Pre-admisiones detalle
+{%endblock %};
+
+{% block titulo-pagina %}
+MILD Pre-admisiones
+{% endblock %};
+
+{% block breadcrumb %}
+<ol class="breadcrumb float-sm-right">
+  <li class="breadcrumb-item"><a href="{% url 'MILD_preadmisiones_listar'%}"
+      title="Ver historial de Pre-admisiones">MILD Pre-admisiones</a></li>
+  <li class="breadcrumb-item "><a href="{% url 'legajos_ver' object.fk_derivacion.fk_legajo_id %}"
+      title="Ver legajo">{{object.fk_derivacion}}</a></li>
+  <li class="breadcrumb-item active">Detalle</li>
+</ol>
+{% endblock %};
+
+{% block menu-adicional %}
+{% endblock %};
+
+{% block content %}
+<!-- card-info -->
+<div class="row">
+  <!-- botones -->
+  <div class="col-12 my-3 d-print-none">
+    <div class="btn-toolbar" role="toolbar">
+      <a href="{% url 'MILD_preadmisiones_ver' object.pk %}" class="btn btn-secondary mr-1">Volver</a>
+      <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
+    </div>
+  </div>
+  <!-- ./botones -->
+
+  <div class="row row p-12 m-12 col-12 my-3" id="seleccion">
+
+    <!-- Datos de Admisión -->
+    {% comment %} <div class="col-sm-6 pb-3">
+      <div class="card card-outline card-primary h-100 mb-0">
+        <div class="card-header">
+          <h3 class="card-title">Informacion de la postulacion</h3>
+        </div>
+        <div class="card-body pb-1">
+          <dl class="row mb-0">
+            <dd class="col-sm-5 mb-2">Centro solicitado</dd>
+            <dt class="col-sm-7 mb-2">{{object.centro_postula}}</dt>
+            <dd class="col-sm-5 mb-2">Sala solicitada</dd>
+            <dt class="col-sm-7 mb-2">{{object.sala_postula}}</dt>
+            {% if object.modificado_por %}
+            <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">
+              Modificado por {{object.modificado_por}} - {{object.modificado|date:'d/m/Y'}}
+            </dd>
+            {% endif %}
+          </dl>
+        </div>
+      </div>
+    </div> {% endcomment %}
+
+    <!-- /  -->
+
+    <!-- Datos grupo familiar -->
+    <div class="col-12">
+      <div class="card card-outline card-primary">
+        <div class="card-header">
+          <h3 class="card-title">Detalle grupo familiar conviviente</h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          {% if object.fk_legajo_1 %}
+          <div class="row bg-secondary pl-2 my-2 font-weight-bold"> Madre o cuidador principal</div>
+          <dl class="row mb-0">
+            <dd class="col-sm-3 mb-2">Nombre</dd>
+            <dt class="col-sm-9 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_1_id %}"
+                title="Ver legajo">{{object.fk_legajo_1}}</a> </dt>
+            <dd class="col-sm-3 mb-2">Vínculo</dd>
+            <dt class="col-sm-9 mb-2">{{object.vinculo1}}</dt>
+            <dd class="col-sm-3 mb-2">Documento</dd>
+            <dt class="col-sm-9 mb-2">{{object.fk_legajo_1.tipo_doc|default_if_none:"-"}}
+              {{object.fk_legajo_1.documento|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
+            <dt class="col-sm-9 mb-2">{{object.fk_legajo_1.fecha_nacimiento|date:'d/m/Y'}}</dt>
+            <dd class="col-sm-3 mb-2">Sexo</dd>
+            <dt class="col-sm-9 mb-2">{{object.fk_legajo_1.sexo|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Cantidad de menores a cargo</dd>
+            <dt class="col-sm-9 mb-2">{{object.menores_a_cargo_1|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">¿Realiza controles ginecológicos?</dd>
+            <dt class="col-sm-9 mb-2">{{object.control_gine_1|yesno:"Sí,No"}}</dt>
+            <dd class="col-sm-3 mb-2">Cantidad total de hijos</dd>
+            <dt class="col-sm-9 mb-2">{{object.hijos_1|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Cantidad total de embarazos</dd>
+            <dt class="col-sm-9 mb-2">{{object.embarazos_1|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Cantidad de abortos espontáneos</dd>
+            <dt class="col-sm-9 mb-2">{{object.abortos_esp_1|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Cantidad de abortos provocados</dd>
+            <dt class="col-sm-9 mb-2">{{object.abortos_prov_1|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">¿Embarazo NO controlado?</dd>
+            <dt class="col-sm-9 mb-2">{{object.emb_no_control_1|yesno:"Sí,No"}}</dt>
+            <dd class="col-sm-3 mb-2">¿Embarazo adolescente?</dd>
+            <dt class="col-sm-9 mb-2">{{object.emb_adolescente_1|yesno:"Sí,No"}}</dt>
+            <dd class="col-sm-3 mb-2">¿Embarazo de riesgo?</dd>
+            <dt class="col-sm-9 mb-2">{{object.emb_riesgo_1|yesno:"Sí,No"}}</dt>
+            <dd class="col-sm-3 mb-2">¿Cesáreas múltiples?</dd>
+            <dt class="col-sm-9 mb-2">{{object.cesareas_multip_1|yesno:"Sí,No"}}</dt>
+            <dd class="col-sm-3 mb-2">¿Partos múltiples?</dd>
+            <dt class="col-sm-9 mb-2">{{object.partos_multip_1|yesno:"Sí,No"}}</dt>
+            <dd class="col-sm-3 mb-2">¿Partos prematuros?</dd>
+            <dt class="col-sm-9 mb-2">{{object.partos_premat_1|yesno:"Sí,No"}}</dt>
+            <dd class="col-sm-3 mb-2">¿Partos con menos de 18 meses de intervalo?</dd>
+            <dt class="col-sm-9 mb-2">{{object.partos_menos18meses_1|yesno:"Sí,No"}}</dt>
+            <dd class="col-sm-3 mb-2">¿Está embarazada actualmente?</dd>
+            <dt class="col-sm-9 mb-2">{{object.emb_actualmente_1|yesno:"Sí,No"}}</dt>
+            <dd class="col-sm-3 mb-2">¿Tiene los controles?</dd>
+            <dt class="col-sm-9 mb-2">{{object.controles_1|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Máximo nivel alcanzado</dd>
+            <dt class="col-sm-9 mb-2">{{object.educ_maximo_1|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Estado</dd>
+            <dt class="col-sm-9 mb-2">{{object.educ_estado_1|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">¿Sabe leer?</dd>
+            <dt class="col-sm-9 mb-2">{{object.leer_1|yesno:"Sí,No"}}</dt>
+            <dd class="col-sm-3 mb-2">¿Sabe escribir?</dd>
+            <dt class="col-sm-9 mb-2">{{object.escribir_1|yesno:"Sí,No"}}</dt>
+            <dd class="col-sm-3 mb-2">¿Quiere retomar estudios?</dd>
+            <dt class="col-sm-9 mb-2">{{object.retomar_estudios_1|yesno:"Sí,No"}}</dt>
+            <dd class="col-sm-3 mb-2">¿Quiere aprender un oficio?</dd>
+            <dt class="col-sm-9 mb-2">{{object.aprender_oficio_1|yesno:"Sí,No"}}</dt>
+            <dd class="col-sm-3 mb-2">¿Tiene trabajo actualmente?</dd>
+            <dt class="col-sm-9 mb-2">{{object.trabajo_actual_1|yesno:"Sí,No"}}</dt>
+            <dd class="col-sm-3 mb-2">Ocupacion</dd>
+            <dt class="col-sm-9 mb-2">{{object.ocupacion_1|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Modo de contratación</dd>
+            <dt class="col-sm-9 mb-2">{{object.modo_contrat_1|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Planes sociales que recibe</dd>
+            <dt class="col-sm-3 mb-2">{% for plan in object.planes_sociales_1.all %}{{ plan.nombre }}<br/>{% endfor %}</dt>
+          </dl>
+          {% endif %}
+          {% if object.fk_legajo_2 %}
+          <!-- Padre o cuidador secundario -->
+          <div class="row bg-secondary pl-2 my-2 font-weight-bold"> Padre o cuidador secundario</div>
+          <dl class="row mb-0">
+            <dd class="col-sm-3 mb-2">Nombre</dd>
+            <dt class="col-sm-9 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_2_id %}"
+                title="Ver legajo">{{object.fk_legajo_2}}</a> </dt>
+            <dd class="col-sm-3 mb-2">Vínculo</dd>
+            <dt class="col-sm-9 mb-2">{{object.vinculo2}}</dt>
+            <dd class="col-sm-3 mb-2">Documento</dd>
+            <dt class="col-sm-9 mb-2">{{object.fk_legajo_2.tipo_doc|default_if_none:"-"}}
+              {{object.fk_legajo_2.documento|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
+            <dt class="col-sm-9 mb-2">{{object.fk_legajo_2.fecha_nacimiento|date:'d/m/Y'}}</dt>
+            <dd class="col-sm-3 mb-2">Sexo</dd>
+            <dt class="col-sm-9 mb-2">{{object.fk_legajo_2.sexo|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Máximo nivel alcanzado</dd>
+            <dt class="col-sm-9 mb-2">{{object.educ_maximo_2|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Estado</dd>
+            <dt class="col-sm-9 mb-2">{{object.educ_estado_2|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">¿Sabe leer?</dd>
+            <dt class="col-sm-9 mb-2">
+              {% if object.leer_2 == True %}
+              SI
+              {% else %}
+              NO
+              {% endif %}
+            </dt>
+            <dd class="col-sm-3 mb-2">¿Sabe escribir?</dd>
+            <dt class="col-sm-9 mb-2">
+              {% if object.escribir_2 == True %}
+              SI
+              {% else %}
+              NO
+              {% endif %}
+            </dt>
+            <dd class="col-sm-3 mb-2">¿Quiere retomar estudios?</dd>
+            <dt class="col-sm-9 mb-2">
+              {% if object.retomar_estudios_2 == True %}
+              SI
+              {% else %}
+              NO
+              {% endif %}
+            </dt>
+            <dd class="col-sm-3 mb-2">¿Quiere aprender un oficio?</dd>
+            <dt class="col-sm-9 mb-2">
+              {% if object.aprender_oficio_2 == True %}
+              SI
+              {% else %}
+              NO
+              {% endif %}
+            </dt>
+            <dd class="col-sm-3 mb-2">Quiere participar del Programa Pilares</dd>
+            <dt class="col-sm-9 mb-2">{{object.programa_Pilares_2|yesno:"Sí,No"}}</dt>
+            <dd class="col-sm-3 mb-2">¿Tiene trabajo actualmente?</dd>
+            <dt class="col-sm-9 mb-2">{{object.trabajo_actual_2|yesno:"Sí,No"}}</dt>
+            <dd class="col-sm-3 mb-2">Ocupación</dd>
+            <dt class="col-sm-9 mb-2">{{object.ocupacion_2|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Modo de contratación</dd>
+            <dt class="col-sm-9 mb-2">{{object.modo_contrat_2|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Planes sociales que recibe</dd>
+            <dt class="col-sm-3 mb-2">{% for plan in object.planes_sociales_2.all %}{{ plan.nombre }} <br/>{% endfor %}</dt>
+          </dl>
+          {% endif %}
+
+          <!-- Otros convivientes -->
+          {% if object.fk_legajo_3 == None and object.fk_legajo_4 == None and object.fk_legajo_5 == None %}
+          {% else %}
+          <div class="row bg-secondary pl-2 my-2 font-weight-bold"> Otros convivientes</div>
+          {% if object.fk_legajo_3 %}
+          <dl class="row mb-0">
+            <dd class="col-sm-3 mb-2">Nombre</dd>
+            <dt class="col-sm-9 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_3_id %}"
+                title="Ver legajo">{{object.fk_legajo_3}}</a> </dt>
+            <dd class="col-sm-3 mb-2">Vínculo</dd>
+            <dt class="col-sm-9 mb-2">{{object.vinculo3}}</dt>
+            <dd class="col-sm-3 mb-2">Documento</dd>
+            <dt class="col-sm-9 mb-2">{{object.fk_legajo_3.tipo_doc|default_if_none:"-"}}
+              {{object.fk_legajo_3.documento|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
+            <dt class="col-sm-9 mb-2">{{object.fk_legajo_3.fecha_nacimiento|date:'d/m/Y'}}</dt>
+            <dd class="col-sm-3 mb-2">Sexo</dd>
+            <dt class="col-sm-9 mb-2">{{object.fk_legajo_3.sexo|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Máximo nivel alcanzado</dd>
+            <dt class="col-sm-9 mb-2">{{object.educ_maximo_3|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Estado</dd>
+            <dt class="col-sm-9 mb-2">{{object.educ_estado_3|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Sabe leer</dd>
+            <dt class="col-sm-9 mb-2">
+              {% if object.leer_3 == True %}
+              SI
+              {% else %}
+              NO
+              {% endif %}
+            </dt>
+            <dd class="col-sm-3 mb-2">Sabe escribir</dd>
+            <dt class="col-sm-9 mb-2">
+              {% if object.escribir_3 == True %}
+              SI
+              {% else %}
+              NO
+              {% endif %}
+            </dt>
+            <dd class="col-sm-3 mb-2">Quiere retomar estudios</dd>
+            <dt class="col-sm-9 mb-2">
+              {% if object.retomar_estudios_3 == True %}
+              SI
+              {% else %}
+              NO
+              {% endif %}
+            </dt>
+            <dd class="col-sm-3 mb-2">Quiere aprender un oficio</dd>
+            <dt class="col-sm-9 mb-2">
+              {% if object.aprender_oficio_3 == True %}
+              SI
+              {% else %}
+              NO
+              {% endif %}
+            </dt>
+            <dd class="col-sm-3 mb-2">Quiere participar del Programa Pilares</dd>
+            <dt class="col-sm-9 mb-2">
+              {% if object.programa_Pilares_3 == True %}
+              SI
+              {% else %}
+              NO
+              {% endif %}
+            </dt>
+          </dl>
+          {% endif %}
+          {% if object.fk_legajo_4 %}
+          <dl class="row mb-0">
+            <dd class="col-sm-3 mb-2">Nombre</dd>
+            <dt class="col-sm-9 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_4_id %}"
+                title="Ver legajo">{{object.fk_legajo_4}}</a> </dt>
+            <dd class="col-sm-3 mb-2">Vínculo</dd>
+            <dt class="col-sm-9 mb-2">{{object.vinculo4}}</dt>
+            <dd class="col-sm-3 mb-2">Documento</dd>
+            <dt class="col-sm-9 mb-2">{{object.fk_legajo_4.tipo_doc|default_if_none:"-"}}
+              {{object.fk_legajo_4.documento|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
+            <dt class="col-sm-9 mb-2">{{object.fk_legajo_4.fecha_nacimiento|date:'d/m/Y'}}</dt>
+            <dd class="col-sm-3 mb-2">Sexo</dd>
+            <dt class="col-sm-9 mb-2">{{object.fk_legajo_4.sexo|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Sabe leer</dd>
+            <dt class="col-sm-9 mb-2">
+              {% if object.leer_4 == True %}
+              SI
+              {% else %}
+              NO
+              {% endif %}
+            </dt>
+            <dd class="col-sm-3 mb-2">Sabe escribir</dd>
+            <dt class="col-sm-9 mb-2">
+              {% if object.escribir_4 == True %}
+              SI
+              {% else %}
+              NO
+              {% endif %}
+            </dt>
+            <dd class="col-sm-3 mb-2">Quiere retomar estudios</dd>
+            <dt class="col-sm-9 mb-2">
+              {% if object.retomar_estudios_4 == True %}
+              SI
+              {% else %}
+              NO
+              {% endif %}
+            </dt>
+            <dd class="col-sm-3 mb-2">Quiere aprender un oficio</dd>
+            <dt class="col-sm-9 mb-2">
+              {% if object.aprender_oficio_4 == True %}
+              SI
+              {% else %}
+              NO
+              {% endif %}
+            </dt>
+            <dd class="col-sm-3 mb-2">Quiere participar del Programa Pilares</dd>
+            <dt class="col-sm-9 mb-2">
+              {% if object.programa_Pilares_4 == True %}
+              SI
+              {% else %}
+              NO
+              {% endif %}
+            </dt>
+          </dl>
+          {% endif %}
+          {% if object.fk_legajo_5 %}
+          <dl class="row mb-0">
+            <dd class="col-sm-3 mb-2">Nombre</dd>
+            <dt class="col-sm-9 mb-2"><a href="{% url 'legajos_ver' object.fk_legajo_5_id %}"
+                title="Ver legajo">{{object.fk_legajo_5}}</a> </dt>
+            <dd class="col-sm-3 mb-2">Vínculo</dd>
+            <dt class="col-sm-9 mb-2">{{object.vinculo5}}</dt>
+            <dd class="col-sm-3 mb-2">Documento</dd>
+            <dt class="col-sm-9 mb-2">{{object.fk_legajo_5.tipo_doc|default_if_none:"-"}}
+              {{object.fk_legajo_5.documento|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Fecha de nacimiento</dd>
+            <dt class="col-sm-9 mb-2">{{object.fk_legajo_5.fecha_nacimiento|date:'d/m/Y'}}</dt>
+            <dd class="col-sm-3 mb-2">Sexo</dd>
+            <dt class="col-sm-9 mb-2">{{object.fk_legajo_5.sexo|default_if_none:"-"}}</dt>
+            <dd class="col-sm-3 mb-2">Sabe leer</dd>
+            <dt class="col-sm-9 mb-2">
+              {% if object.leer_5 == True %}
+              SI
+              {% else %}
+              NO
+              {% endif %}
+            </dt>
+            <dd class="col-sm-3 mb-2">Sabe escribir</dd>
+            <dt class="col-sm-9 mb-2">
+              {% if object.escribir_5 == True %}
+              SI
+              {% else %}
+              NO
+              {% endif %}
+            </dt>
+            <dd class="col-sm-3 mb-2">Quiere retomar estudios</dd>
+            <dt class="col-sm-9 mb-2">
+              {% if object.retomar_estudios_5 == True %}
+              SI
+              {% else %}
+              NO
+              {% endif %}
+            </dt>
+            <dd class="col-sm-3 mb-2">Quiere aprender un oficio</dd>
+            <dt class="col-sm-9 mb-2">
+              {% if object.aprender_oficio_5 == True %}
+              SI
+              {% else %}
+              NO
+              {% endif %}
+            </dt>
+            <dd class="col-sm-3 mb-2">Quiere participar del Programa Pilares</dd>
+            <dt class="col-sm-9 mb-2">
+              {% if object.programa_Pilares_5 == True %}
+              SI
+              {% else %}
+              NO
+              {% endif %}
+            </dt>
+          </dl>
+          {% endif %}
+          {% endif %}
+
+
+          
+          
+          <!-- Concluciones -->
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Otros Salud del niño -->
+    <div class="col-12">
+      <div class="card card-outline card-primary">
+        <div class="card-header">
+          <h3 class="card-title">Salud del niño</h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <dl class="row">
+            <dt class="col-sm-9 mb-2">Tiene Obra Social</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.obra_social %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Tiene Libreta Sanitaria</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.libreta_sanitaria %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">¿Dónde se atiende?</dt>
+            <dd class="col-sm-3 mb-2">{{ object.sexo_ninio }}</dd>
+          
+            <dt class="col-sm-9 mb-2">¿Cuándo fue su último control pediátrico?</dt>
+            <dd class="col-sm-3 mb-2">{{ object.ultimo_control }}</dd>
+          
+            <dt class="col-sm-9 mb-2">Padece enfermedad recurrente EN tratamiento</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.enf_recu_con_trata %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Padece enfermedad recurrente SIN tratamiento</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.enf_recu_sin_trata %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Padece enfermedad infecto-contagiosa EN tratamiento</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.enf_conta_con_trata %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Padece enfermedad infecto-contagiosa SIN tratamiento</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.enf_conta_sin_trata %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Padece problemas de salud mental EN tratamiento</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.enf_mental_con_trata %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Padece problemas de salud mental SIN tratamiento</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.enf_mental_sin_trata %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Capacidades reducidas o afectadas</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.capa_reducidas %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Tiene certificado único de discapacidad</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.certif_discap %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Toma medicamento</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.medicamento %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Niño con bajo peso</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.bajo_peso %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Niño con sobrepeso</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.sobrepeso %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Prematuro que requiere seguimiento</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.prematuro %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Intervenciones quirúrgicas</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.interv_quirurgicas %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Accidentes domésticos (lastimadura, quemadura, corte, golpe fuerte)</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.accidentes_domesticos %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Colecho</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.colecho %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Si padece enfermedad ¿cuál? ¿Dónde se trata?</dt>
+            <dd class="col-sm-3 mb-2">{{ object.enfermedad }}</dd>
+          
+            <dt class="col-sm-9 mb-2">Dificultad auditiva</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.auditiva %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Dificultad respiratoria</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.respiratoria %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Dificultad visual</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.visual %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Dificultad traumatologica</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.traumatologica %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Dificultad emocional</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.emocional %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Dificultad psiquica o psicologica</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.psiquica %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Dificultad digestiva</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.digestiva %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Alergias</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.alergias %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          
+            <dt class="col-sm-9 mb-2">Observaciones/detalles de salud</dt>
+            <dd class="col-sm-3 mb-2">{{ object.observaciones_salud }}</dd>
+          
+            <dt class="col-sm-9 mb-2">¿Recibió todas las vacunas correspondientes a su edad?</dt>
+            <dd class="col-sm-3 mb-2">
+              {% if object.vacunas %}
+                SI
+              {% else %}
+                NO
+              {% endif %}
+            </dd>
+          </dl>
+        </div>
+      </div>
+    </div>  
+
+    <div class="col-12">
+      <div class="card card-outline card-primary">
+        <div class="card-header">
+          <h3 class="card-title">Conclusiones</h3>
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <dl class="row">
+            <dt class="col-sm-9 mb-2">Acompañante que realiza la entrevista</dt>
+            <dd class="col-sm-3 mb-2">{{ object.acompaniante_entrevista }}</dd>
+          
+            <dt class="col-sm-9 mb-2">Acompañante asignado</dt>
+            <dd class="col-sm-3 mb-2">{{ object.acompaniante_asignado }}</dd>
+          
+            <dt class="col-sm-9 mb-2">Aquí puede detallar información adicional de la familia, o temas que es importante resaltar acerca de la misma.</dt>
+            <dd class="col-sm-3 mb-2">{{ object.observaciones_gral }}</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+    <!-- ./ -->
+  </div>
+
+  {% endblock %};

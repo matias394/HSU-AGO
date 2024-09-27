@@ -83,12 +83,10 @@
                                 {% endif %}
                               </td>
                             <td class="project-actions text-right"> 
-                                {%if perms.Usuarios.rol_admin%} 
                                 <div class="btn-group" role="group"> 
                                     <a href="{% url 'legajosderivaciones_historial' o.id %}" class="btn btn-primary btn-sm ver">Ver derivaciones</a> 
                                     <a href="{% url 'legajos_ver' o.id %}" class="btn btn-secondary btn-sm ver">Ver legajo</a> 
                                     </div>
-                                {%endif%}
                             </td>
                         </tr>
                         {% endfor %}

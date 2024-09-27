@@ -52,7 +52,7 @@
                 {% for o in object %}
                 <tr>
                     <td class="mailbox-date">{{ o.creado|date:'d/m/Y' }}</td>
-                    <td> <span class="badge {% if o.estado == 'Finalizada' %}badge-success{% else %}badge-warning{% endif %}">{{ o.estado }}</span></td>
+                    <td> <span class="badge {% if o.estado == 'Admitido' %}badge-success{% endif %}{% if o.estado == 'Pendiente' %}badge-primary{% endif %}{% if o.estado == 'Lista de espera' %}badge-warning{% endif %}{% if o.estado == 'Rechazado' %}badge-danger{% endif %}">{{ o.estado }}</span></td>
                     <td class=""><a href="{% url 'legajos_ver' o.fk_derivacion.fk_legajo.id%}" title="Ver detalle de legajo">{{o.fk_derivacion.fk_legajo}}</a></td>
                     <td class=""> {{o.fk_derivacion.fk_legajo.tipo_doc}} {{o.fk_derivacion.fk_legajo.documento}}</td>
                     <td class="">{{o.creado_por}}</td>

@@ -52,11 +52,11 @@ Intervenciones
       <div class="card-body mb-0">
         <dl class="row mb-0">
           <dd class="col-sm-3 mb-2">Fecha</dd>
-          <dt class="col-sm-9 mb-2">{{object.creado}}</dt>
+          <dt class="col-sm-9 mb-2">{{object.fecha}}</dt>
           <dd class="col-sm-3 mb-2">Usuarios intervinientes</dd>
           <dt class="col-sm-9 mb-2">{{object.creado_por}}</dt>
           <dd class="col-sm-3 mb-2">Criterio</dd>
-          <dt class="col-sm-9 mb-2">{{object.criterio_modificable}}</dt>
+          <dt class="col-sm-9 mb-2"><ul class="ml-2 pl-0">{% for r in object.criterio_modificable.all %} <li>{{r}}</li> {% endfor%}</ul></dt>
           <dd class="col-sm-3 mb-2">Gestión sobre el criterio</dd>
           <dt class="col-sm-9 mb-2">{{object.impacto}}</dt>
           <dd class="col-sm-3 mb-2">Responsables</dd>

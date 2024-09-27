@@ -286,11 +286,17 @@ CHOICE_ESTADO_CIVIL = [
     ('Otro', 'Otro'),
 ]
 
+CHOICE_RESPONSABLE = [
+    ('Si', 'Si'),
+    ('No', 'No'),
+    ('No corresponde', 'No corresponde'),
+]
+
 CHOICE_SEXO = [
     (None, ''),
     ('Femenino', 'Femenino'),
     ('Masculino', 'Masculino'),
-    ('X', 'X'),
+    #('X', 'X'),
 ]
 
 CHOICE_GENERO = [
@@ -403,28 +409,56 @@ CHOICE_TIPO_ESTADO_VIVIENDA = [
 
 CHOICE_CENTROS_SALUD = [
     (None, ''),
+    ('Cura Brochero', 'Cura Brochero'),
     ('20 de Julio', '20 de Julio'),
     ('29 de Septiembre', '29 de Septiembre'),
-    ('Ana Teresa Barthalot', 'Ana Teresa Barthalot'),
-    ('C.I.C Maria Lobato', 'C.I.C Maria Lobato'),
+    ('Antoniazzi', 'Antoniazzi'),
+    ('Barthalot', 'Barthalot'),
+    ('CIC', 'CIC'),
     ('Camila Rolón', 'Camila Rolón'),
-    ('Cándido Castello', 'Cándido Castello'),
-    ('Rodolfo Podestá', 'Rodolfo Podestá'),
-    ('Cura Brochero', 'Cura Brochero'),
-    ('Alberto Sabin', 'Alberto Sabin'),
-    ('Federico Leloir', 'Federico Leloir'),
-    ('Suárez París', 'Suárez París'),
-    ('Raúl Matera', 'Raúl Matera'),
-    ('René Favaloro', 'René Favaloro'),
-    ('Marta Antoniazzi', 'Marta Antoniazzi'),
+    ('Carrillo', 'Carrillo'),
+    ('Castello', 'Castello'),
+    ('Favaloro', 'Favaloro'),
+    ('Leloir', 'Leloir'),
+    ('Matera', 'Matera'),
     ('Padre Mora', 'Padre Mora'),
-    ('Pte. Perón', 'Pte. Perón'),
-    ('Ramón Castillo', 'Ramón Castillo'),
+    ('Podestá', 'Podestá'),
+    ('Presidente Perón', 'Presidente Perón'),
+    ('Sabín', 'Sabín'),
     ('San Miguel Oeste', 'San Miguel Oeste'),
-    ('U.F.O /Manuelita', 'U.F.O /Manuelita'),
-    ('Hospital Público', 'Hospital Público'),
-    ('Clínica Privada o Sanatorio', 'Clínica Privada o Sanatorio'),
-    ('No asiste a instituciones de salud ', 'No asiste a instituciones de salud'),
+    ('Suarez Paris', 'Suarez Paris'),
+    ('UFO', 'UFO'),
+    ('Hospital Larcade', 'Hospital Larcade'),
+    ('Hospital Santa María', 'Hospital Santa María'),
+    ('Hospital San Miguel Arcángel', 'Hospital San Miguel Arcángel'),
+    ('Clínica Privada', 'Clínica Privada'),
+    ('Otro', 'Otro'),
+]
+
+CHOISE_CDLE_PARTICIPARDE = [
+    (None, ''),
+    ("Proyecto 360", "Proyecto 360"),
+    ("Proyecto de Vida", "Proyecto de Vida")
+]
+
+CHOISE_CDLE_ACOMPANIANTES = [
+    (None, ''),
+    ("Rafaela Cabanillas", "Rafaela Cabanillas"),
+    ("Noelia Ponce", "Noelia Ponce"),
+    ("Josefina Dubini", "Josefina Dubini"),
+    ("Melanie Mur", "Melanie Mur"),
+    ("Dolores Capelletti", "Dolores Capelletti")
+]
+
+CHOISE_ANTICONCEPTIVOS = [
+    (None, ''),
+    ("Preservativo", "Preservativo"),
+    ("Inyectable", "Inyectable"),
+    ("Implante anticonceptivo", "Implante anticonceptivo"),
+    ("DIU", "DIU"),
+    ("Parche anticonceptivo", "Parche anticonceptivo"),
+    ("Anticonceptivo oral", "Anticonceptivo oral"),
+    ("Ligadura tubaria", "Ligadura tubaria"),
 ]
 
 CHOICE_FRECUENCIA = [
@@ -487,6 +521,9 @@ CHOICE_VINCULO_FAMILIAR = [
     ('Tío/a', 'Tío/a'),
     ('Sobrino/a', 'Sobrino/a'),
     ('Pareja', 'Pareja'),
+    ('Pareja Padre', 'Pareja Padre'),
+    ('Pareja Madre', 'Pareja Madre'),
+    ('Referente', 'Referente'),
     ('Otro', 'Otro'),
 ]
 
@@ -512,32 +549,72 @@ CHOICE_LOCALIDAD = [
 
 CHOICE_BARRIOS = [
     (None, ''),
-    ('Altos de San José', 'Altos de San José'),
+    ('Barrufaldi', 'Barrufaldi'),
+    ('Belgrano', 'Belgrano'),
+    ('Bella Vista', 'Bella Vista'),
     ('Bello Horizonte', 'Bello Horizonte'),
+    ('Campo de Mayo', 'Campo de Mayo'),
     ('Colegio Máximo', 'Colegio Máximo'),
     ('Colibrí', 'Colibrí'),
     ('Constantini', 'Constantini'),
-    ('Cuartel Segundo Cc.', 'Cuartel Segundo Cc.'),
+    ('Cuartel Segundo', 'Cuartel Segundo'),
     ('Don Alfonso', 'Don Alfonso'),
-    ('La Gloria', 'La Gloria'),
+    ('El Faro', 'El Faro'),
+    ('El Polo', 'El Polo'),
+    ('El Tato', 'El Tato'),
+    ('Ferroviario', 'Ferroviario'),
     ('La Estrella', 'La Estrella'),
     ('La Guarida', 'La Guarida'),
     ('La Manuelita', 'La Manuelita'),
-    ('Lomas de Mariló', 'Lomas de Mariló'),
     ('Los Paraísos', 'Los Paraísos'),
     ('Los Plátanos', 'Los Plátanos'),
     ('Macabi', 'Macabi'),
-    ('María Rosa Mística', 'María Rosa Mística'),
+    ('Madre Esperanza', 'Madre Esperanza'),
+    ('Mariló', 'Mariló'),
     ('Mitre', 'Mitre'),
-    ('Parque San Miguel', 'Parque San Miguel'),
+    ('Muñiz', 'Muñiz'),
+    ('Obligado', 'Obligado'),
+    ('Parque La Gloria', 'Parque La Gloria'),
+    ('Parque La Luz', 'Parque La Luz'),
+    ('Parque Mattaldi', 'Parque Mattaldi'),
     ('Parque San Ignacio', 'Parque San Ignacio'),
-    ('Santa Brígida', 'Santa Brígida'),
-    ('Sarmiento', 'Sarmiento'),
-    ('Trujui', 'Trujui'),
-    ('Santa María', 'Santa María'),
+    ('Parque San Miguel', 'Parque San Miguel'),
+    ('Parque Viela', 'Parque Viela'),
+    ('Plazoleta', 'Plazoleta'),
+    ('Rosa Mistica', 'Rosa Mistica'),
+    ('San Ambrosio', 'San Ambrosio'),
     ('San Antonio', 'San Antonio'),
     ('San Ignacio', 'San Ignacio'),
+    ('San Jorge', 'San Jorge'),
+    ('San Miguel Centro', 'San Miguel Centro'),
+    ('Santa Anita', 'Santa Anita'),
+    ('Santa Brígida', 'Santa Brígida'),
+    ('Santa Clara', 'Santa Clara'),
+    ('Santa María', 'Santa María'),
+    ('Sarmiento', 'Sarmiento'),
+    ('Trujui', 'Trujui'),
 ]
+
+CHOICE_INGRESOPOR = [
+    (None, ''),
+    ('Operativo','Operativo'),
+    ('Red Madre','Red Madre'),
+    ('Postulación por formulario','Postulación por formulario'),
+    ('Otro','Otro'),
+]
+
+CHOICE_DERIVACIONDE = [
+    (None, ''),
+    ('Rastrillaje','Rastrillaje'),
+    ('Red Madre','Red Madre'),
+    ('Servicio Social HL','Servicio Social HL'),
+    ('Consejeria','Consejeria'),
+    ('EMB en programa','EMB en programa'),
+    ('Subsecretaria de Primera Infancia','Subsecretaria de Primera Infancia'),
+    ('CAPS','CAPS'),
+    ('Otro','Otro'),
+]
+
 
 CHOICE_IMPORTANCIA = [
     (None, ''),
@@ -556,6 +633,9 @@ VINCULO_MAP = {
     "Hermano/a": {"vinculo": "Hermano/a", "vinculo_inverso": "Hermano/a"},
     "Tío/a": {"vinculo": "Tío/a", "vinculo_inverso": "Sobrino/a"},
     "Sobrino/a": {"vinculo": "Sobrino/a", "vinculo_inverso": "Tío/a"},
+    "Referente": {"vinculo": "Referente", "vinculo_inverso": "Referente"},
+    "Pareja Padre": {"vinculo": "Pareja Padre", "vinculo_inverso": "Hijo/a"},
+    "Pareja Madre": {"vinculo": "Pareja Madre", "vinculo_inverso": "Hijo/a"},
     "Otro": {"vinculo": "Otro", "vinculo_inverso": "Otro"},
 }
 DIMENSIONES_RIESGO_MAP = {

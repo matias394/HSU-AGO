@@ -85,6 +85,7 @@
               <tr>
                 <td>Fecha</td>
                 <td>Programa</td>
+                <td>Derivado de</td>
                 <td>Estado</td>
                 <td>Prioridad</td>
                 <td>Usuario</td>
@@ -99,13 +100,14 @@
               <tr>
                 <td class="mailbox-date">{{o.fecha_creado|date:'d/m/Y'}}</td>
                 <td>{{o.fk_programa }}</td>
+                <td>{{o.fk_programa_solicitante |default_if_none:"-"}}</td>
                 <td> <span class="badge badge-{% if o.estado == "Aceptada" %}success{% endif %}{% if o.estado == "Pendiente" %}warning{% endif %}{% if o.estado == "Rechazada" %}danger{% endif %}">{{o.estado}}</span>
                 <td class="text-center"><span class="badge {% if o.importancia == "Muy urgente" %}badge-Muyurgente{% else %}badge-{{o.importancia}} {% endif %}">{{o.importancia}}</span></td>
                 <td> <span class="font-weight-bold">{{o.fk_usuario}}</span>
-                <td class=""><a href="{% url 'SL_derivaciones_ver' o.id %}" title="Ver detalle">{{o.fk_legajo}}</a></td>
+                <td class=""><a href="{% url 'legajos_ver' o.fk_legajo_id %}" title="Ver detalle">{{o.fk_legajo}}</a></td>
                 <td class="">{{o.m2m_alertas.all.count}} alerta{% if o.m2m_alertas.all.count > 1 %}s{% endif %}</td>
-                <td class="text-center ">{% if o.archivos %}<a href="{{ o.archivos.url}}" target="_blank"><i
-                      class="fas fa-paperclip text-white"></i></a>{% else %}-{% endif %}</td>
+                <td class="text-center ">{% if o.archivos %}<i
+                      class="fas fa-paperclip text-white"></i>{% else %}-{% endif %}</td>
                 <td class="text-right">
                         <a href="{% url 'SL_derivaciones_ver' o.id %}" class="btn btn-primary btn-sm ver"
                           title="Ver detalle">Ver</a>

@@ -36,10 +36,12 @@ class Legajos(models.Model):
     m2m_familiares = models.ManyToManyField('self', through='LegajoGrupoFamiliar', symmetrical=True, blank=True)
     observaciones = models.CharField(max_length=300, blank=True, null=True)
     estado = models.BooleanField(default=True)
-    creado_por = models.ForeignKey(Usuarios, related_name='creado_por', on_delete=models.CASCADE, blank=True, null=True)
-    modificado_por = models.ForeignKey(Usuarios, related_name='modificado_por', on_delete=models.CASCADE, blank=True, null=True)
+    creado_por = models.ForeignKey(Usuarios, related_name='creado_por', on_delete=models.PROTECT, blank=True, null=True)
+    modificado_por = models.ForeignKey(Usuarios, related_name='modificado_por', on_delete=models.PROTECT, blank=True, null=True)
     creado = models.DateField(auto_now_add=True)
     modificado = models.DateField(auto_now=True)
+    latitud = models.FloatField(null=True, blank=True)
+    longitud = models.FloatField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.apellido}, {self.nombre}"
@@ -106,8 +108,8 @@ class LegajoGrupoFamiliar(models.Model):
     del vínculo desde la consideración de cada parte involucrada.
     '''
 
-    fk_legajo_1 = models.ForeignKey(Legajos, related_name='fk_legajo1', on_delete=models.CASCADE)
-    fk_legajo_2 = models.ForeignKey(Legajos, related_name='fk_legajo2', on_delete=models.CASCADE)
+    fk_legajo_1 = models.ForeignKey(Legajos, related_name='fk_legajo1', on_delete=models.PROTECT)
+    fk_legajo_2 = models.ForeignKey(Legajos, related_name='fk_legajo2', on_delete=models.PROTECT)
     vinculo = models.CharField(max_length=50, choices=CHOICE_VINCULO_FAMILIAR)
     vinculo_inverso = models.CharField(max_length=50, null=True, blank=True)
     estado_relacion = models.CharField(max_length=50, choices=CHOICE_ESTADO_RELACION)
@@ -137,11 +139,11 @@ class DimensionFamilia(models.Model):
     Guardado de la informacion de salud asociada a un Legajo.
     '''
 
-    fk_legajo = models.OneToOneField(Legajos, on_delete=models.CASCADE)
+    fk_legajo = models.OneToOneField(Legajos, on_delete=models.PROTECT)
     estado_civil = models.CharField(max_length=50, choices=CHOICE_ESTADO_CIVIL, null=True, blank=True)
     cant_hijos = models.SmallIntegerField(verbose_name='Cantidad de hijos', null=True, blank=True)
-    otro_responsable = models.BooleanField(verbose_name='¿Hay otro adulto responsable? (Padre o apoyo en la crianza)', null=True, blank=True)
-    hay_embarazadas = models.BooleanField(verbose_name='Personas en el hogar embarazadas', null=True, blank=True)
+    otro_responsable = models.CharField(max_length=50, choices=CHOICE_RESPONSABLE, verbose_name='En caso de tener personas a cargo, ¿hay otro adulto responsable? (Padre o apoyo en la crianza)', null=True, blank=True)
+    hay_embarazadas = models.BooleanField(verbose_name='Otra persona en el hogar embarazada', null=True, blank=True)
     hay_prbl_smental = models.BooleanField(verbose_name='Personas en el hogar con problemas de salud mental', null=True, blank=True)
     hay_fam_discapacidad = models.BooleanField(verbose_name='Personas en el hogar con discapacidad', null=True, blank=True)
     hay_enf_cronica = models.BooleanField(verbose_name='Personas en el hogar con enfermedades crónicas', null=True, blank=True)
@@ -168,7 +170,7 @@ class DimensionVivienda(models.Model):
     Guardado de los datos de vivienda asociados a un Legajo.
     '''
 
-    fk_legajo = models.OneToOneField(Legajos, on_delete=models.CASCADE)
+    fk_legajo = models.OneToOneField(Legajos, on_delete=models.PROTECT)
     tipo = models.CharField(verbose_name='Tipo de vivienda', max_length=50, choices=CHOICE_TIPO_VIVIENDA, null=True, blank=True)
     material = models.CharField(verbose_name='Material principal de la vivienda', max_length=50, choices=CHOICE_TIPO_CONSTRUCCION_VIVIENDA, null=True, blank=True)
     pisos = models.CharField(verbose_name='Material principal de los pisos', max_length=50, choices=CHOICE_TIPO_PISOS_VIVIENDA, null=True, blank=True)
@@ -177,7 +179,7 @@ class DimensionVivienda(models.Model):
     cant_convivientes = models.SmallIntegerField(verbose_name='¿Cuántas personas viven en la vivienda?', null=True, blank=True)
     cant_menores = models.SmallIntegerField(verbose_name='¿Cuántos de ellos son menores de 18 años?', null=True, blank=True)
     cant_camas = models.SmallIntegerField(verbose_name='¿Cuántas camas/ colchones posee?', null=True, blank=True)
-    cant_hogares = models.SmallIntegerField(verbose_name='¿Cuantos hogares hay en la vivienda?', null=True, blank=True)
+    cant_hogares = models.SmallIntegerField(verbose_name='¿Cuántas viviendas hay en el terreno?', null=True, blank=True)
     hay_agua_caliente = models.BooleanField(verbose_name='¿Posee Agua caliente?', null=True, blank=True)
     hay_banio = models.BooleanField(verbose_name='¿Posee baño dentro de la vivienda con descarga?', null=True, blank=True)
     hay_desmoronamiento = models.BooleanField(verbose_name='Existe riesgo de desmoronamiento?', null=True, blank=True)
@@ -203,7 +205,7 @@ class DimensionSalud(models.Model):
     Guardado de la informacion de salud asociada a un Legajo.
     '''
 
-    fk_legajo = models.OneToOneField(Legajos, on_delete=models.CASCADE)
+    fk_legajo = models.OneToOneField(Legajos, on_delete=models.PROTECT)
     lugares_atencion = models.CharField(verbose_name='Centro de Salud en donde se atiende', max_length=50, choices=CHOICE_CENTROS_SALUD, null=True, blank=True)
     frec_controles = models.CharField(verbose_name='¿Con qué frecuencia realiza controles médicos?', max_length=50, choices=CHOICE_FRECUENCIA, null=True, blank=True)
     hay_obra_social = models.BooleanField(verbose_name='¿Posee cobertura de salud?', null=True, blank=True)
@@ -232,7 +234,7 @@ class DimensionEducacion(models.Model):
     Guardado de los datos de índole educativa asociada a un Legajo.
     '''
 
-    fk_legajo = models.OneToOneField(Legajos, on_delete=models.CASCADE)
+    fk_legajo = models.OneToOneField(Legajos, on_delete=models.PROTECT)
     max_nivel = models.CharField(verbose_name='Máximo nivel educativo alcanzado', max_length=50, choices=CHOICE_NIVEL_EDUCATIVO, null=True, blank=True)
     estado_nivel = models.CharField(verbose_name='Estado del nivel', max_length=50, choices=CHOICE_ESTADO_NIVEL_EDUCATIVO, null=True, blank=True)
     asiste_escuela = models.BooleanField(verbose_name='¿Asiste a la Escuela?', null=True, blank=True)
@@ -263,7 +265,7 @@ class DimensionEconomia(models.Model):
     Guardado de los datos económicos asociados a un Legajo.
     '''
 
-    fk_legajo = models.OneToOneField(Legajos, on_delete=models.CASCADE)
+    fk_legajo = models.OneToOneField(Legajos, on_delete=models.PROTECT)
     ingresos = models.PositiveIntegerField(null=True, blank=True)
     recibe_plan = models.BooleanField(verbose_name='¿Recibe planes sociales?', null=True, blank=True)
     m2m_planes = models.ManyToManyField(PlanesSociales, blank=True)
@@ -285,7 +287,7 @@ class DimensionEconomia(models.Model):
 
 
 class DimensionTrabajo(models.Model):
-    fk_legajo = models.OneToOneField(Legajos, on_delete=models.CASCADE)
+    fk_legajo = models.OneToOneField(Legajos, on_delete=models.PROTECT)
     tiene_trabajo = models.BooleanField(verbose_name='¿El jefe o jefa de hogar trabaja?', null=True, blank=True)
     modo_contratacion = models.CharField(max_length=50, choices=CHOICE_MODO_CONTRATACION, null=True, blank=True)
     ocupacion = models.CharField(max_length=50, null=True, blank=True)
@@ -321,10 +323,10 @@ class LegajoAlertas(models.Model):
     Registro de Alertas de vulnerabilidad asociadas a un Legajo determinado Tanto el alta como la baja se guardan en un historial del alertas.
     '''
 
-    fk_alerta = models.ForeignKey(Alertas, related_name='alerta', on_delete=models.CASCADE)
-    fk_legajo = models.ForeignKey(Legajos, related_name='legajo_alerta', on_delete=models.CASCADE)
+    fk_alerta = models.ForeignKey(Alertas, related_name='alerta', on_delete=models.PROTECT)
+    fk_legajo = models.ForeignKey(Legajos, related_name='legajo_alerta', on_delete=models.PROTECT)
     fecha_inicio = models.DateField(auto_now=True)
-    creada_por = models.ForeignKey(Usuarios, related_name='creada_por', on_delete=models.CASCADE, blank=True, null=True)
+    creada_por = models.ForeignKey(Usuarios, related_name='creada_por', on_delete=models.PROTECT, blank=True, null=True)
     observaciones = models.CharField(max_length=140, null=True, blank=True)
 
     def __str__(self):
@@ -345,11 +347,11 @@ class HistorialLegajoAlertas(models.Model):
     Guardado de historial de los distintos movimientos (CREACION/ELIMINACION)  de alertas de vulnerabilidad asociadas a un Legajo.
     Se graban a traves funciones detalladas en el archivo signals.py de esta app.
     '''
-    fk_alerta = models.ForeignKey(Alertas, related_name='hist_alerta', on_delete=models.CASCADE)
-    fk_legajo = models.ForeignKey(Legajos, related_name='hist_legajo_alerta', on_delete=models.CASCADE)
+    fk_alerta = models.ForeignKey(Alertas, related_name='hist_alerta', on_delete=models.PROTECT)
+    fk_legajo = models.ForeignKey(Legajos, related_name='hist_legajo_alerta', on_delete=models.PROTECT)
     observaciones = models.CharField(max_length=140, null=True, blank=True)
-    creada_por = models.ForeignKey(Usuarios, related_name='hist_creada_por', on_delete=models.CASCADE, blank=True, null=True)
-    eliminada_por = models.ForeignKey(Usuarios, related_name='hist_eliminada_por', on_delete=models.CASCADE, blank=True, null=True)
+    creada_por = models.ForeignKey(Usuarios, related_name='hist_creada_por', on_delete=models.PROTECT, blank=True, null=True)
+    eliminada_por = models.ForeignKey(Usuarios, related_name='hist_eliminada_por', on_delete=models.PROTECT, blank=True, null=True)
     fecha_inicio = models.DateField(auto_now=True)
     fecha_fin = models.DateField(null=True, blank=True)
     meses_activa = models.JSONField(default=list, blank=True)  # Campo para almacenar los meses en los que estuvo activa
@@ -419,8 +421,8 @@ class HistorialLegajoIndices(models.Model):
     '''
 
     fecha = models.DateField(auto_now_add=True)
-    # fk_indice = models.ForeignKey(Indices, on_delete=models.CASCADE)
-    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE, blank=True, null=True)
+    # fk_indice = models.ForeignKey(Indices, on_delete=models.PROTECT)
+    fk_legajo = models.ForeignKey(Legajos, on_delete=models.PROTECT, blank=True, null=True)
     criterios_presentes = models.ManyToManyField(IndiceCriterios, through='LegajoIndiceCriterio')
     puntaje_total = models.PositiveSmallIntegerField(null=True, blank=True)
     riesgo = models.CharField(max_length=10, choices=CHOICE_NIVEL, null=True)
@@ -458,8 +460,8 @@ class LegajoIndiceCriterio(models.Model):
     Guardado de los valores cargados en cada instancia de ejecución de un índice para un legajo determinado.
     '''
 
-    fk_HistLegIndice = models.ForeignKey(HistorialLegajoIndices, related_name='+', on_delete=models.CASCADE)
-    fk_IndiceCriterio = models.ForeignKey(IndiceCriterios, related_name='+', on_delete=models.CASCADE)
+    fk_HistLegIndice = models.ForeignKey(HistorialLegajoIndices, related_name='+', on_delete=models.PROTECT)
+    fk_IndiceCriterio = models.ForeignKey(IndiceCriterios, related_name='+', on_delete=models.PROTECT)
     puntos_mejora = models.PositiveSmallIntegerField(null=True, blank=True)
 
     def __str__(self):
@@ -486,12 +488,12 @@ class LegajosDerivaciones(models.Model):
     Registro de todas las derivaciones a programas que funcionen dentro del sistema.
     '''
 
-    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE)
-    fk_programa_solicitante = models.ForeignKey(Programas, related_name='programa_solicitante', on_delete=models.CASCADE)
-    fk_programa = models.ForeignKey(Programas, related_name='programa_derivado', on_delete=models.CASCADE)
-    fk_organismo = models.ForeignKey(Organismos, on_delete=models.CASCADE, null=True, blank=True)
+    fk_legajo = models.ForeignKey(Legajos, on_delete=models.PROTECT)
+    fk_programa_solicitante = models.ForeignKey(Programas, related_name='programa_solicitante', on_delete=models.PROTECT)
+    fk_programa = models.ForeignKey(Programas, related_name='programa_derivado', on_delete=models.PROTECT)
+    fk_organismo = models.ForeignKey(Organismos, on_delete=models.PROTECT, null=True, blank=True)
     detalles = models.CharField(max_length=500, null=True, blank=True)
-    fk_usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    fk_usuario = models.ForeignKey(User, on_delete=models.PROTECT)
     importancia = models.CharField(max_length=15, choices=CHOICE_IMPORTANCIA, default="Alta")
     estado = models.CharField(max_length=15, choices=CHOICE_ESTADO_DERIVACION, default="Pendiente")
     m2m_alertas = models.ManyToManyField(CategoriaAlertas, blank=True)
@@ -529,7 +531,7 @@ class LegajosArchivos(models.Model):
 
     """
 
-    fk_legajo = models.ForeignKey(Legajos, on_delete=models.CASCADE)
+    fk_legajo = models.ForeignKey(Legajos, on_delete=models.PROTECT)
     archivo = models.FileField(upload_to='legajos/archivos/')
     fecha = models.DateTimeField(auto_now_add=True)
     tipo = models.CharField(max_length=12)

@@ -1,0 +1,133 @@
+{% extends "includes/base.html" %};
+{% load static %};
+
+{% block head %}
+
+{% endblock %}
+
+{% block title %}Vacantes bandeja{% endblock %};
+
+{% block titulo-pagina %}Vacantes{% endblock %};
+
+{% block menu-adicional %}
+{% endblock %};
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+<div class="row">
+  <!-- botones -->
+  <!-- <div class="col-12 my-3 mx-2 d-print-none">
+    <a href="{% url 'vacantes_form' %}" class="btn btn-primary mr-1">Otorgar vacante</a>
+  </div> -->
+  <!-- ./botones -->
+
+  <!-- Datos de vacantes centros -->
+
+  <div class="col-12">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="card card-outline card-primary h-100">
+          <div class="card-header">
+            <h3 class="card-title">Detalle Organismo</h3>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool d-md-none" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+            </div>
+          </div>
+          <div class="card-body pb-0 pt-2">
+            <dl class="row mb-0">
+              <dt class="col-sm-2 font-weight-normal">Nombre: </dt>
+              <dd class="col-sm-10 font-weight-bold">{{object.nombre}}</dd>
+              <dt class="col-sm-2 font-weight-normal">Programa: </dt>
+              <dd class="col-sm-10 font-weight-bold">{{object.fk_programa}}</dd>
+              <dt class="col-sm-2 font-weight-normal">Calle:</dt>
+              <dd class="col-sm-10 font-weight-bold"> {{object.fk_organismo.calle|default_if_none:"-" }} </dd>
+              <dt class="col-sm-2 font-weight-normal">Número: </dt>
+              <dd class="col-sm-10 font-weight-bold">{{object.fk_organismo.altura|default_if_none:"-" }}</dd>
+              <dt class="col-sm-2 font-weight-normal">Barrio: </dt>
+              <dd class="col-sm-10 font-weight-bold">{{object.fk_organismo.barrio|default_if_none:"-" }}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <div class="col-12 mt-3">
+    <div class="card card-primary card-outline">
+      <div class="card-body ">
+        <div class="table-responsive mailbox-messages">
+          <table class="table table-bordered table-striped projects tabladt">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Tipo</th>
+                <th>Cantidad</th>
+                <th>Observacion</th>
+                <th>
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalcupo">
+                    Agregar Stock
+                  </button>
+                  <div class="modal fade" id="modalcupo" tabindex="-1" aria-labelledby="modalCupo" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalCupo">Agregar Stock</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="modal-body">
+                                    {{ stockform.fk_producto| as_crispy_field }}
+                                    {{ stockform.cantidad| as_crispy_field }}
+                                    {{ stockform.observaciones| as_crispy_field }}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-dismiss="modal">Cancelar</button>
+                                    <button type="submit" name="crear_stock" class="btn btn-primary">Agregar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                </th>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for a in stock %}
+              <tr>
+                <td class="mailbox-date">{{a.fecha|date:'d/m/Y'}}</td>
+                <td class="">{{a.fk_producto.nombre}}</td>
+                <td class="">{{a.cantidad}}</td>
+                <td>{{a.observaciones }}</td>
+                <td class="project-actions text-right">
+                  <div class="btn-group" role="group">
+                    <a href="{% url 'DESCEN_vacantes_stock_edit' a.id object.id %}" class="btn btn-primary btn-sm ver">Editar</a>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row mt-4 d-print-none">
+  <div class="col-12 mx-2">
+    <a href="{% url 'DESCEN_vacantes_ver' object.id%}" class="btn btn-secondary"
+      title="Ver listado de vacantes por centro">Volver</a>
+  </div>
+</div>
+{% endblock content %}
+
+{% block customJS %}
+{% endblock %}

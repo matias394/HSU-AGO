@@ -27,16 +27,12 @@ Derivaciones
   <!-- botones -->
   <div class="col-12 my-3 mx-2 d-print-none">
     {% if object.estado == "Pendiente" %}
-    <a href="{% url 'MILD_preadmisiones_crear' object.pk %}" class="btn btn-primary mr-1 ">Aceptar</a>
-    <a href="{% url 'MILD_derivaciones_rechazo'  object.pk %}" class="btn btn-secondary mr-1 ">Rechazar</a>
+    {% if btn_aceptar %}<a href="{% url 'MILD_preadmisiones_crear' object.pk %}" class="btn btn-primary mr-1 ">Aceptar</a>{% endif %}
+    {% if btn_rechazar %}<a href="{% url 'MILD_derivaciones_rechazo'  object.pk %}" class="btn btn-secondary mr-1 ">Rechazar</a>{% endif %}
+    {% if btn_eliminar_editar %}<a href="{% url 'MILD_derivaciones_editar' object.id %}" class="btn btn-primary mr-1">Editar</a>{% endif %}
+    {% if btn_eliminar_editar %}<a href="{% url 'legajosderivaciones_eliminar' object.id %}" class="btn btn-danger mr-1">Eliminar</a>{% endif %}
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
-    {% if request.user.id == object.fk_usuario.id and object.estado == 'Pendiente' %}
-    <a href="{% url 'MILD_derivaciones_editar' object.id %}" class="btn btn-primary mr-1">Editar</a>
-    {%endif%}
-    {% if request.user.id == object.fk_usuario.id and object.estado == 'Pendiente' %}
-    <a href="{% url 'legajosderivaciones_eliminar' object.id %}" class="btn btn-danger mr-1">Eliminar</a>
-    {%endif%}
   </div>
   <!-- ./botones -->
 
@@ -76,20 +72,22 @@ Derivaciones
             </dt>
             <dd class="col-sm-3 mb-2">Observaciones</dt>
             <dt class="col-sm-9 mb-2">{{object.detalles|default_if_none:"-"}}</dt>
-            <dd class="col-sm-3 mb-2 mt-2">Archivos adjuntos</dd>
-            <dt class="col-sm-9 mb-2 mt-2">
-              <ul class="list-unstyled mb-1">
-                {% if object.archivos %}
-                <li><a href="{{object.archivos.url}}" target="_blank">{{object.archivos|cut:'legajos/archivos/'}}</a></li>
-                {% else %}
-                <li>-</li>
-                {% endif %}
-              </ul>
-            </dt>
+            {% if object.archivos %}
+            <dt class="col-sm-3 font-weight-normal">Archivos adjuntos</dt>
+            <dd class="col-sm-9 font-weight-bold"><ul>{% for a in archivos %}<li><a href="{{ a.archivo.url}}" target="_blank">{{a.archivo|cut:'legajos/archivos/'}}</a></li>{% endfor %}</ul></dd>
+            {% endif %}
             <dd class="col-sm-3 mb-2">Programa solicitante</dd>
             <dt class="col-sm-9 mb-2"> {{object.fk_programa_solicitante}}</dt>
+            {% if acompaniante_asignado %}
+            <dd class="col-sm-3 mb-2">Acompañante asignado</dd>
+            <dt class="col-sm-9 mb-2">{{acompaniante_asignado|default_if_none:"-"}}</dt>
+            {% endif %}
+            {% if acompaniante_entrevista %}
+            <dd class="col-sm-3 mb-2">Acompañante de entrevista</dd>
+            <dt class="col-sm-9 mb-2">{{acompaniante_entrevista|default_if_none:"-"}}</dt>
+            {% endif %}
             <dd class="col-sm-3 mb-2">Usuario solicitante</dd>
-            <dt class="col-sm-9 mb-2"> {{object.fk_usuario}}</dt>
+            <dt class="col-sm-9 mb-2"> {{object.fk_usuario.last_name}} {{object.fk_usuario.first_name}}</dt>
           </dl>
         </div>
       </div>

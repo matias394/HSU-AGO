@@ -31,7 +31,7 @@ Derivaciones
     {%endif%}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     {% if request.user.id == object.fk_usuario.id and object.estado == 'Pendiente' %}
-    <a href="{% url 'legajosderivaciones_eliminar' object.id %}" class="btn btn-danger mr-1">Eliminar</a>
+    {% comment %}<a href="{% url 'legajosderivaciones_eliminar' object.id %}" class="btn btn-danger mr-1">Eliminar</a>{% endcomment %}
     {%endif%}
   </div>
   <!-- ./botones -->
@@ -69,6 +69,14 @@ Derivaciones
             <dd class="col-sm-9 font-weight-bold">{{object.fk_usuario.email|default_if_none:'-'}}</dd>
             <dt class="col-sm-3 font-weight-normal">Organismo relacionado</dt>
             <dd class="col-sm-9 font-weight-bold">{{object.fk_organismo|default_if_none:'-'}}</dd>
+            {% if acompaniante_asignado %}
+            <dd class="col-sm-3 font-weight-normal">Acompañante asignado</dd>
+            <dt class="col-sm-9 font-weight-bold">{{acompaniante_asignado|default_if_none:"-"}}</dt>
+            {% endif %}
+            {% if acompaniante_entrevista %}
+            <dd class="col-sm-3 font-weight-normal">Acompañante de entrevista</dd>
+            <dt class="col-sm-9 font-weight-bold">{{acompaniante_entrevista|default_if_none:"-"}}</dt>
+            {% endif %}
             <dt class="col-sm-3 font-weight-normal">Observaciones</dt>
             <dd class="col-sm-9 font-weight-bold">{{object.detalles|default_if_none:'-'}}</dd>
             {% if object.archivos %}

@@ -29,7 +29,9 @@
   <div class="col-12 my-3 mx-2 d-print-none">
     <!-- <a href="{% url 'admisiones_historial'%}" class="btn btn-primary mr-1">Ver admisiones</a> -->
     <a href="{% url 'CDLE_preadmisiones_ver' object.id %}" class="btn btn-primary mr-1">Volver pre-admisión</a>
+    {% if object.creado >= fechaActual %}
     <a href="{% url 'CDLE_indiceingreso_editar' object.id %}" class="btn btn-secondary mr-1">Editar</a>
+    {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
   </div>
 </div>
@@ -105,7 +107,7 @@
     <div class="info-box mb-2 ">
       <span class="info-box-icon bg-secondary">{{cant_sociales}}</span>
       <div class="info-box-content h5 my-0">
-        <span class="info-box-text">Criterios sociales</span>
+        <span class="info-box-text">Criterios de monitoreo</span>
       </div>
     </div>
   </div>
@@ -137,17 +139,17 @@
 
           {% endif %}
           {% endfor %}
-          <tr>
+          <!--tr>
             <td colspan="3" class="text-center bg-secondary py-1">Motivo de falta de control o control insuficiente</td>
           </tr>
           {% for c in criterio %}
           {% if c.fk_criterios_ingreso.tipo == 'Motivo de falta de control o control insuficiente' %}
           <tr>
               <td>{{c.fk_criterios_ingreso.criterio}}</td>
-          </tr>
+          </tr-->
 
-          {% endif %}
-          {% endfor %}
+          <!-- {% endif %}
+          {% endfor %} -->
           <tr>
             <td colspan="3" class="text-center bg-secondary py-1">Criterios combinables para el ingreso
             </td>
@@ -160,11 +162,24 @@
 
           {% endif %}
           {% endfor %}
-          <tr>
+          <!--tr>
             <td colspan="3" class="text-center bg-secondary py-1">Criterios sociales para el ingreso</td>
           </tr>
           {% for c in criterio %}
           {% if c.fk_criterios_ingreso.tipo == 'Criterios sociales para el ingreso' %}
+          <tr>
+              <td>{{c.fk_criterios_ingreso.criterio}}</td>
+          </tr-->
+
+          <!-- {% endif %}
+          {% endfor %} -->
+
+          <tr>
+            <td colspan="3" class="text-center bg-secondary py-1">Criterios de monitoreo
+            </td>
+          </tr>
+          {% for c in criterio %}
+          {% if c.fk_criterios_ingreso.tipo == 'Criterios de monitoreo' %}
           <tr>
               <td>{{c.fk_criterios_ingreso.criterio}}</td>
           </tr>

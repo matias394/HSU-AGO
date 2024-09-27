@@ -27,9 +27,12 @@ Admisiones
   <div class="col-12 my-3 mx-2 d-print-none">
     {% if object.estado != "Inactiva" %}
     <a href="{% url 'MILD_intervenciones_legajos_listar' object.id %}" class="btn btn-primary mr-1">Ver intervenciones</a>
+    <button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#cambiarAcompananteModal">
+        Cambiar acompañante
+    </button>
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
-    {% if object.estado != "Inactiva" %}
+    {% if object.estado != "Inactiva"  and btn_inactivar %}
     <a href="{% url 'MILD_indiceiviegreso_crear' object.id %}" class="btn btn-danger mr-1">Inactivar</a>
     {% endif %}
   </div>
@@ -73,7 +76,7 @@ Admisiones
         <h3 class="card-title">Detalle Admisión</h3>
         <div class="card-tools d-inline">
 
-          <a href="{% url 'MILD_admisiones_ver' object.id %}" class="ml-3 mr-2">Ver admisión</a>
+          <a href="{% url 'MILD_preadmisiones_ver3' preadmi.id %}" class="ml-3 mr-2">Ver Admisión</a>
           <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
             <i class="fas fa-minus"></i>
           </button>
@@ -85,11 +88,24 @@ Admisiones
           <dt class="col-sm-7 mb-2"><span class="text-success font-weight-bold">{{object.estado}}</span></dt>
           <dd class="col-sm-5 mb-2">Fecha de admisión</dd>
           <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
-          <dd class="col-sm-5 mb-2">Acompañante</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.acompaniante}}</dt>
-          <dd class="col-sm-5 mb-2">Madrina</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.madrina}}</dt>
+          <dd class="col-sm-5 mb-2">Acompañante asignado</dd>
+          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.acompaniante_asignado}}</dt>
+          <dd class="col-sm-5 mb-2">Acompañante de entrevista</dd>
+          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.acompaniante_entrevista}}</dt>
         </dl>
+          <div class="info-box-content">
+            Area de acompañamiento
+            <div class="card-body" style="width: 180%;padding-left: 0px;">
+      
+              <ul class="products-list product-list-in-card col-3">
+                  <div class="callout">
+                      <h5>{{object.fk_preadmi.areaacompanamiento|default_if_none:"-"}}</h5>
+                  </div>
+              </ul>
+      
+            </div>
+        </div>
+        
       </div>
     </div>
   </div>
@@ -155,7 +171,7 @@ Admisiones
         <table class="table table-head-fixed table-bordered">
           <thead>
             <tr>
-              <th>Criterios modificables</th>
+              <th>Criterios potenciales</th>
               <th class="text-center px-1" width="6%">Puntaje</th>
               <th class="text-center px-1" width="10%">Intervenciones</th>
               <th class="text-center px-1" width="10%">Impacto</th>
@@ -262,6 +278,38 @@ Admisiones
     </div>
   </div>
 </div>
+
+    <!-- Modal cambio acompañante -->
+    <div class="modal fade" id="cambiarAcompananteModal" tabindex="-1" role="dialog" aria-labelledby="cambiarAcompananteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cambiarAcompananteModalLabel">Cambiar Acompañante</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form  method="POST" action="#">
+                    {% csrf_token %}
+                        <div class="form-group">
+                          <label for="acompaniante_asignado">Acompañante asignado</label>
+                           <select id="acompaniante_asignado" name="acompaniante_asignado" class="form-control">
+                                    <option value="{{object.fk_preadmi.acompaniante_asignado}}" selected>{{object.fk_preadmi.acompaniante_asignado}}</option>
+                               {% for value, label in acompaniantes_asignado %}
+                                   <option value="{{ value }}">{{ value }}</option>
+                               {% endfor %}
+                           </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" id="cambio_acompaniante" class="btn btn-primary">Confirmar</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %};
 
 {% block customJS %}

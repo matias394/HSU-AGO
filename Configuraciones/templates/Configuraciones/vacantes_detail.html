@@ -16,13 +16,9 @@
 <div class="row">
     <!-- botones -->
     <div class="col-12 my-3 mx-2 d-print-none">
-        {%if perms.Usuarios.rol_admin%}
         <a href="{% url 'vacantes_editar' object.id %}" class="btn btn-primary mr-1">Editar</a>
-        {%endif%}
         <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
-        {%if perms.Usuarios.rol_admin%}
         <a href="{% url 'vacantes_eliminar' object.id %}" class="btn btn-danger mr-1">Eliminar</a>
-        {%endif%}
     </div>
     <!-- ./botones -->
     
@@ -32,27 +28,12 @@
                 <h3 class="card-title">Detalle de vacante</h3>
             </div>
             <div class="card-body">
+                <div class="col-12">
                 <dl class="row mb-0">
                     <dt class="col-sm-3 font-weight-normal">Nombre</dt>
                     <dd class="col-sm-9 font-weight-bold">{{ object.nombre}} </dd>
                     <dt class="col-sm-3 font-weight-normal">Programa</dt>
                     <dd class="col-sm-9 font-weight-bold">{{object.fk_programa|default_if_none:"-"}} cupos</dd>
-                    <dt class="col-sm-3 font-weight-normal">Bebe turno mañana</dt>
-                    <dd class="col-sm-9 font-weight-bold">{{ object.manianabb|default_if_none:"-" }} cupos</dd>
-                    <dt class="col-sm-3 font-weight-normal">Bebe turno tarde</dt>
-                    <dd class="col-sm-9 font-weight-bold">{{ object.tardebb|default_if_none:"-" }} cupos</dd>
-                    <dt class="col-sm-3 font-weight-normal">2 años turno mañana</dt>
-                    <dd class="col-sm-9 font-weight-bold">{{ object.maniana2|default_if_none:"-" }} cupos</dd>
-                    <dt class="col-sm-3 font-weight-normal">2 años turno tarde</dt>
-                    <dd class="col-sm-9 font-weight-bold">{{ object.tarde2|default_if_none:"-" }} cupos</dd>
-                    <dt class="col-sm-3 font-weight-normal">3 años turno mañana</dt>
-                    <dd class="col-sm-9 font-weight-bold">{{ object.maniana3|default_if_none:"-" }} cupos</dd>
-                    <dt class="col-sm-3 font-weight-normal">3 años turno tarde</dt>
-                    <dd class="col-sm-9 font-weight-bold">{{ object.tarde3|default_if_none:"-" }} cupos</dd>
-                    <dt class="col-sm-3 font-weight-normal">General turno mañana</dt>
-                    <dd class="col-sm-9 font-weight-bold">{{ object.maniana4|default_if_none:"-" }} cupos</dd>
-                    <dt class="col-sm-3 font-weight-normal">General turno tarde</dt>
-                    <dd class="col-sm-9 font-weight-bold">{{ object.tarde4|default_if_none:"-" }} cupos</dd>
                     <dt class="col-sm-3 font-weight-normal">Estado</dt>
                     <dd class="col-sm-9 font-weight-bold">  
                         {% if object.estado %}
@@ -60,9 +41,39 @@
                         {% else %}
                         <span class="text-danger font-weight-bold">Inactivo</span>
                         {% endif %} </dd>
+                        <dt class="col-sm-3 font-weight-normal">Tipo de vacante</dt>
+                        <dd class="col-sm-9 font-weight-bold">{{ object.tipo_vacante|default_if_none:"-" }}</dd>
                         <dt class="col-sm-3 font-weight-normal">Observaciones</dt>
                         <dd class="col-sm-9 font-weight-bold">{{ object.observaciones|default_if_none:"-" }} cupos</dd>
                 </dl>
+            </div>
+                    <div class="col-12 mt-4">
+       
+                        <table
+                            class="table table-bordered table-striped projects {%if perms.Usuarios.rol_admin or perms.Usuarios.rol_consultante %} tabladt {%endif%}">
+        
+                            <thead>
+                                <tr>
+                                    <th>Creado</th>
+                                    <th>Nombre</th>
+                                    <th>Cupo</th>
+                                    {% comment %} <th>Descripción</th> {% endcomment %}
+                                 
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for o in lista_cupos %}
+                                <tr>
+                                    <th>{{o.fecha_creacion|date:'d/m/Y'}}</th>
+                                    <td>{{o.nombre}}</td>
+                                    <td> {{o.cupo |default_if_none:"-" }}</td>
+                                    {% comment %} <td> {{o.observaciones |default_if_none:"-"|truncatechars:100 }}</td> {% endcomment %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

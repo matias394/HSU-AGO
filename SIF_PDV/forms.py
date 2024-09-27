@@ -16,10 +16,30 @@ class PDV_PreadmisionesForm (forms.ModelForm):
             'partos_multip_1': forms.CheckboxInput(),
             'partos_premat_1': forms.CheckboxInput(),
             'partos_menos18meses_1': forms.CheckboxInput(),
+
+            'patologia_fisica_1': forms.CheckboxInput(),
+            'patologia_fisica_descripcion_1': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
+            'patologia_fisica_tratamiento_1': forms.CheckboxInput(),
+            'patologia_mental_1': forms.CheckboxInput(),
+            'patologia_mental_descripcion_1': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
+            'patologia_mental_tratamiento_1': forms.CheckboxInput(),
+
+            'observaciones_salud_general': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
+
             'leer_1': forms.CheckboxInput(),
             'escribir_1': forms.CheckboxInput(),
             'retomar_estudios_1': forms.CheckboxInput(),
             'aprender_oficio_1': forms.CheckboxInput(),
+            'participacion_espacio_edu_no_formal': forms.CheckboxInput(),
+            'observaciones_educacion_general': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
+            'espacios_edu_no_formal_1': forms.SelectMultiple(),
+            'persona_oficio_conocimientos_1': forms.SelectMultiple(),
+            'planes_sociales_1': forms.SelectMultiple(),
+            'planes_sociales_2': forms.SelectMultiple(),
+            
+
+            'microemprendimiento_rubro': forms.SelectMultiple(),
+
             'leer_2': forms.CheckboxInput(),
             'escribir_2': forms.CheckboxInput(),
             'retomar_estudios_2': forms.CheckboxInput(),
@@ -74,9 +94,17 @@ class PDV_PreadmisionesForm (forms.ModelForm):
             'fk_legajo_3':'',
             'fk_legajo_4':'',
             'fk_legajo_5':'',
-            'centro_postula':'',
-            'sala_postula':'',
-            'taller_postula':'',
+            'sala':'',
+            'posee_microemprendimiento': 'Posee o participa en un microemprendimiento',
+            'microemprendimiento_rubro': 'Rubro',
+            'espacios_edu_no_formal_1':'Conocimientos',
+            'persona_oficio_conocimientos_1':'Educación no formal',
+            'observaciones_salud_general': '',
+            'observaciones_educacion_general': '',
+            'programa_postula': '',
+            'patologia_fisica_descripcion_1': 'En caso afirmativo, ¿cuál?',
+            'patologia_mental_descripcion_1': 'En caso afirmativo, ¿cuál?',
+            #'turno_postula':'Turno al que postula',
         }
 
 class criterios_Ingreso (forms.ModelForm):
@@ -127,7 +155,7 @@ class PDV_VacantesOtorgadasForm (forms.ModelForm):
     class Meta:
         model = PDV_VacantesOtorgadas
         fields = '__all__'
-        exclude = ['sala','turno']
+        exclude = ['turno']
         widgets = {
             'fecha_ingreso': forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
             'fecha_egreso': forms.DateInput(attrs={'type': 'date','required':'required'}, format="%Y-%m-%d"),
@@ -156,19 +184,20 @@ class PDV_IntervencionesForm (forms.ModelForm):
         widgets = {
             'detalle': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
             'responsable' : forms.SelectMultiple(attrs={'class': 'select2 w-100', 'multiple': True}),
+            'fecha': forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
         }
         labels = {
             'criterio_modificable': 'Criterio modificable trabajado',
             'impacto': 'Impacto en el criterio',
             'accion': 'Acción desarrollada',
-            'detalle':'Detalles',
+            'detalle':'Observaciones',
         }
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
         # Filtra las opciones del campo criterio_modificable aquí
-        self.fields['criterio_modificable'].queryset = Criterios_IVI.objects.filter(modificable = "SI")
+        self.fields['criterio_modificable'].queryset = Criterios_IVI.objects.filter(modificable__icontains = "De base")
 
 class PDV_OpcionesResponsablesForm (forms.ModelForm):
     class Meta:

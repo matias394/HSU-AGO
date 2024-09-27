@@ -118,7 +118,30 @@
                                         <span class="input-group-text"><i class="fas fa-paperclip"></i></span>
                                     </div>
                                 </div>
+                                {% if form.archivos.errors %}
+                                <div class="error">
+                                    {% for error in form.archivos.errors %}
+                                        <p style="color: red;">{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                             </div>
+                            {% if archivos_existentes %}
+                            <div>
+                                <strong>Archivos cargados:</strong>
+                                <ul>
+                                    {% for a in archivos_existentes %}
+                                        <li>
+                                            <a href="{{ a.archivo.url }}" target="_blank">{{a.archivo|cut:'legajos/archivos/'}}</a>
+                                            <label>
+                                                <input type="checkbox" name="delete_files" value="{{ a.id }}">
+                                                Eliminar
+                                            </label>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
                         </div>
                         <div class="col-12">
                             <div class="form-group">

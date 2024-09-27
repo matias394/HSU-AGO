@@ -5,10 +5,14 @@ from datetime import datetime
 from pathlib import Path
 from django.contrib.messages import constants as messages
 from .validators import UppercaseValidator, LowercaseValidator
+#import dotenv
 
+# Cargar variables de entorno desde el archivo .env
+#dotenv.load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+CSRF_TRUSTED_ORIGINS = ['https://*.msm.gov.ar','https://127.0.0.1', 'https://172.20.*.*']
 
 
 # LOGS DEL SISTEMA:
@@ -21,28 +25,28 @@ current_month = datetime.now().strftime('%Y-%m')
 log_file = os.path.join(log_dir, f'app_{current_month}.log')
 
 # Configuración de logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    handlers=[TimedRotatingFileHandler(log_file, when='MIDNIGHT', backupCount=12, encoding='utf-8'), logging.StreamHandler()],
-)
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'Usuarios.middleware': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
-}
+#logging.basicConfig(
+#    level=logging.INFO,
+#    format='%(asctime)s [%(levelname)s] %(message)s',
+#    handlers=[TimedRotatingFileHandler(log_file, when='MIDNIGHT', backupCount=12, encoding='utf-8'), logging.StreamHandler()],
+#)
+#LOGGING = {
+#    'version': 1,
+#    'disable_existing_loggers': False,
+#    'handlers': {
+#        'console': {
+#            'level': 'DEBUG',
+#            'class': 'logging.StreamHandler',
+#        },
+#    },
+#    'loggers': {
+#        'Usuarios.middleware': {
+#            'handlers': ['console'],
+#            'level': 'DEBUG',
+#            'propagate': True,
+#        },
+#    },
+#}
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -85,6 +89,7 @@ INSTALLED_APPS = [
     'SIF_SL',
     'SIF_MA',
     'SIF_UMI',
+    'SIF_DESCEN',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -94,7 +99,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'Usuarios.middleware.CustomLoginMiddleware', 
+    'Usuarios.middleware.CustomLoginMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -132,27 +137,64 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+   'default': {
+       'ENGINE': 'django.db.backends.sqlite3',
+       'NAME': BASE_DIR / 'db.sqlite3',
+   }
 }
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.mysql',
-#        'NAME': 'hsu-dev',
-#        'USER': 'hsudev',
-#        'PASSWORD': 'hsudevtest',
-#        'HOST': '172.20.30.189',
-#        'PORT': '3306',
-#        'OPTIONS': {
-#            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-#            'charset': 'utf8mb4',
-#        },
-#        'CONN_MAX_AGE': 300,
-#    }
-#}
 
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': BASE_DIR / 'db.sqlite3',
+#     } if os.getenv('DJANGO_ENV') != 'produccion' 
+#     else {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': os.getenv('DATABASE_NAME'),
+#         'USER': os.getenv('DATABASE_USER'),
+#         'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+#         'HOST': os.getenv('DATABASE_HOST'),
+#         'PORT': os.getenv('DATABASE_PORT'),
+#         'OPTIONS': {
+#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#             'charset': 'utf8mb4',
+#         },
+#         'CONN_MAX_AGE': 300,
+#     }
+# }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'db_name',
+#         'USER': 'db_username',
+#         'PASSWORD': 'db_password',
+#         'HOST': 'db_password',
+#         'PORT': '3306',
+#         'OPTIONS': {
+#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#             'charset': 'utf8mb4',
+#         },
+#         'CONN_MAX_AGE': 300,
+#     }
+# }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'hsu-dev',
+#         'USER': 'hsudev',
+#         'PASSWORD': 'hsudevtest',
+#         'HOST': '172.20.30.189',
+#         'PORT': '3306',
+#         'OPTIONS': {
+#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#             'charset': 'utf8mb4',
+#         },
+#         'CONN_MAX_AGE': 300,
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -167,11 +209,9 @@ AUTH_PASSWORD_VALIDATORS = [
              'min_length': 8,
         }
     },
-    
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
-    
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
 
@@ -182,14 +222,13 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'config.validators.LowercaseValidator',
     },
-    
 ]
 
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'es-ar'
+LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'America/Argentina/Buenos_Aires'
 
@@ -274,4 +313,5 @@ PROG_CDLE = 25
 PROG_PDV = 26
 PROG_MA = 30
 PROG_SL = 21
-PROG_UMI = 27
+PROG_UMI = 36
+PROG_DESCEN = 37

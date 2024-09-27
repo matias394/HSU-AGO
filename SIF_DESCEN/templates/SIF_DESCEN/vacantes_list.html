@@ -1,0 +1,87 @@
+{% extends "includes/base.html" %};
+{% load static %};
+
+{% block head %}
+
+{% endblock %}
+
+{% block title %}Vacantes bandeja{% endblock %};
+
+{% block titulo-pagina %}Vacantes{% endblock %};
+
+{% block menu-adicional %}
+{% endblock %};
+
+{% block content %}
+
+<!-- card-info -->
+<div class="row">
+  <!-- botones -->
+  <div class="col-12 my-3 mx-2 d-print-none">
+    <!-- <a href="{% url 'vacantes_form' %}" class="btn btn-primary mr-1">Otorgar vacante</a> -->
+    <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
+  </div>
+  <!-- ./botones -->
+
+</div>
+<div class="row p-0 m-0 " id="seleccion">
+
+  <!-- Datos de los centros -->
+  <div class="col-12">
+    <div class="card card-primary card-outline">
+      <div class="card-header">
+        <h3 class="card-title">Vacantes por centro</h3>
+      </div>
+      <div class="card-body p-0 m-0">
+        <div class="row p-2">
+            {% for c in centros %}
+          <div class="col-sm-4  mb-3">
+            <a href="{% url 'DESCEN_vacantes_ver' c.id %}">
+              <div class="card pb-0 h-100">
+                <div class="card-header py-2">
+                  <span class="card-title">{{ c.nombre }}</span>
+                  <div class="card-tools d-flex">
+                    <button type="button" class="float-right btn btn-tool d-sm-none ml-2" data-card-widget="collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="card-footer p-0">
+                  <table class="table table-borderless table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th>Sala</th>
+                            <th class="text-center">Cupos</th>
+                            <th class="text-center">Asignadas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      {% for r in resultados %}
+                      {% if r.cupo.fk_vacante_id == c.id %}
+                      <tr>
+                          <td>{{ r.cupo.nombre }}</td>
+                          <td class="text-center">{{ r.cupo.cupo }}</td>
+                          <td class="text-center">{{ r.aciertos }}</td>
+                      </tr>
+                      {% endif %}
+                      {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+              </div>
+            </a>
+        </div>
+        {% endfor %}
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ./Datos de los centros -->
+
+</div>
+{% endblock content %}
+
+{% block customJS %}
+{% endblock %}

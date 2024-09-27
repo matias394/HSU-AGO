@@ -54,33 +54,6 @@
                                 {{form.criterio_modificable| as_crispy_field}}
                             </div>
                         </div>
-                        <!--
-                        <div class="col-sm-6 d-none" id="nuevo_criterio">
-                            <div class="form-group">
-                                <label for="criterio">Nuevo criterio modificable*</label>
-                                <select id="criterio" class="form-control custom-select">
-                                    <option selected="" disabled=""></option>
-                                    <option>Embarazada (actualmente) sin controles durante el período de gestación
-                                    </option>
-                                    <option>Madre o Cuidador principal con sospecha de sufrir violencia familiar
-                                    </option>
-                                    <option>Madre o Cuidador principal sin estudios secundarios</option>
-                                    <option>Madre o Cuidador principal con dificultad para la autogestión</option>
-                                    <option>Madre o Cuidador principal con dificultad para la autovaloración</option>
-                                    <option>Madre o Cuidador principal no sabe leer o escribir</option>
-                                    <option>Madre o Cuidador principal sin ocupación</option>
-                                    <option>Bebé, niño o niña padeciendo patología sin seguimiento</option>
-                                    <option>Bebé, niño o niña con bajo peso o sobrepeso</option>
-                                    <option>Bebé (menor a 18 meses) duerme en colecho</option>
-                                    <option>Niño o niña sin controles pediátricos o calendario de vacunación incompleto
-                                    </option>
-                                    <option>Niño o niña sin DNI</option>
-                                    <option>Niña o Adolescente embarazada</option>
-                                    <option>Familia con acceso limitado a la información</option>
-                                    <option>Familia atravesando situación habitacional crítica</option>
-                                </select>
-                            </div>
-                        </div>-->
                         <div class="col-sm-6">
                             <div class="form-group">
                                 {{form.accion| as_crispy_field}}
@@ -101,6 +74,11 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 {{form.impacto| as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                {{form.fecha| as_crispy_field}}
                             </div>
                         </div>
                         <div class="col-12">
@@ -124,6 +102,28 @@
 {% endblock %}
 
 {% block customJS %}
+<script>
+    $(document).ready(function () {
+
+        let criterios = {
+            {% for item in criterios_ivi %} {{item.id}}: "{{item.modificable}}",
+            {% endfor %}
+        }
+
+        $('#id_criterio_modificable').change(function () {
+            let select_impacto = $('#id_impacto')
+            if (criterios[$(this).val()] === 'De base') {
+                select_impacto.empty()
+                select_impacto.append(new Option ("Trabajado", "Trabajado"))
+            } else {
+                select_impacto.empty()
+                select_impacto.append(new Option ("Trabajado", "Trabajado"))
+                select_impacto.append(new Option ("Revertido", "Revertido"))
+            }
+        });
+
+    });
+</script>
 <!--<script>
     $(document).ready(function () {
         $('#criterio_presente').change(function () {

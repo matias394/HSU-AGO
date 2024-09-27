@@ -45,13 +45,26 @@ Servicio Local Equipo
         </div>
         <div class="card-body">
           <div class="row">
-            <div class="col-4"></div>
+            <div class="col-2"></div>
+            <div class="col-4">
+              <div class="form-group">
+                <div id="id_zona" class="form-group">
+                  <label for="id_zona">Seleccione la zona</label>
+              <select id="id_fk_zona" class="form-control custom-select" onchange="updateEquipos()">
+                <option value="">Seleccione una Zona</option>
+                <option value="zona1">Zona 1</option>
+                <option value="zona2">Zona 2</option>
+                <option value="zona3">Zona 3</option>
+            </select>
+          </div>
+          </div>
+            </div>
             <div class="col-4">
               <div class="form-group">
                 {{form.fk_equipo | as_crispy_field}}
               </div>
             </div>
-            <div class="col-4"></div>
+            <div class="col-2"></div>
           </div>
           <div class="row text-center"><div class="col"><button type="button" class="btn btn-sm btn-secondary" onclick="selectRandomOption()">Random</button></div></div>
         </div>
@@ -70,11 +83,37 @@ Servicio Local Equipo
 
 {% block customJS %}
 <script>
+  const equiposPorZona = {
+      zona1: ["Equipo 1", "Equipo 2", "Equipo 5"],
+      zona2: ["Equipo 3", "Equipo 4"],
+      zona3: ["Equipo 6"]
+  };
+
+  function updateEquipos() {
+      const zonaSelect = document.getElementById("id_fk_zona");
+      const equipoSelect = document.getElementById("id_fk_equipo");
+      const selectedZona = zonaSelect.value;
+
+      // Limpiar el select de equipos
+      equipoSelect.innerHTML = '<option value="">Seleccione un Equipo</option>';
+
+      if (selectedZona && equiposPorZona[selectedZona]) {
+          equiposPorZona[selectedZona].forEach(equipo => {
+              const option = document.createElement("option");
+              option.text = equipo;
+              option.value = equipo.slice(-1); // Valor único basado en el último carácter del nombre del equipo
+              equipoSelect.add(option);
+          });
+      }
+  }
+
   function selectRandomOption() {
-      var select = document.getElementById("id_fk_equipo");
-      var optionsCount = select.options.length;
-      var randomIndex = Math.floor(Math.random() * (optionsCount - 1)) + 1; // Evita seleccionar la opción vacía
-      select.selectedIndex = randomIndex;
+      const select = document.getElementById("id_fk_equipo");
+      const optionsCount = select.options.length;
+      if (optionsCount > 1) { // Evita seleccionar si no hay opciones disponibles
+          const randomIndex = Math.floor(Math.random() * (optionsCount - 1)) + 1; // Evita seleccionar la opción vacía
+          select.selectedIndex = randomIndex;
+      }
   }
 </script>
 {% endblock customJS%}

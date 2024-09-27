@@ -35,10 +35,11 @@ Intervenciones
             <tr>
               <th>Fecha</th>
               <th>Usuario</th>
-              <th>Legajo</th>
+              <th>Expediente</th>
               <th>Criterio</th>
               <th>Gestión</th>
               <th>Acción realizada</th>
+              <th>Detalles</th>
               <th width="5%" class="notexport"></th>
             </tr>
           </thead>
@@ -46,11 +47,12 @@ Intervenciones
             {% for i in intervenciones %}
             <tr>
               <td> {{ i.creado|date:'d/m/Y' }} </td>
-              <td> {{i.creado_por}} </td>
-              <td>{{i.fk_admision.fk_preadmi.fk_derivacion.fk_legajo}}</td>
+              <td> {{i.creado_por|default_if_none:""}}{{i.modificado_por|default_if_none:""}} </td>
+              <td>{{i.fk_expediente.expediente}}</td>
               <td> {{i.criterio_modificable}}</td>
               <td> {{i.impacto}}</td>
               <td> {{i.accion}}</td>
+              <td> {{i.detalle}}</td>
               <td class="text-right">
                 <a href="{% url 'SL_intervencion_ver' i.id %}" class="btn btn-secondary btn-sm ver"
                   title="Ver detalle">Ver</a>

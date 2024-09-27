@@ -39,10 +39,13 @@
                 <th>Admisión</th>
                 <th>Nombre</th>
                 <th>Documento</th>
+                <th>Area de acompañamiento</th>
+                <th>Acompañante asignado</th>
                 <th>Criterios ingreso</th>
                 <th>IVI de ingreso</th>
                 <th>IVI de egreso</th>
                 <th>Estado</th>
+                
                 <th style="width: 5%" class="notexport">
                 </th>
               </tr>
@@ -53,6 +56,10 @@
                 <td class="mailbox-date">{{a.creado|date:'d/m/Y'}}</td>
                 <td class=""> <a href="{% url 'MILD_admisiones_ver' a.id %}" title="Ver detalle de admisión">{{a.fk_preadmi.fk_legajo}}</a></td>
                 <td class="">{{a.fk_preadmi.fk_legajo.documento}}</td>
+                <td class="">{{a.fk_preadmi.areaacompanamiento}}</td>
+                <td class="">
+                  {{a.fk_preadmi.acompaniante_asignado}}
+                </td>
                 <td class="text-center">
                   {% for item in conteo %}
                   {% if item.fk_preadmi_id == a.fk_preadmi.id %}
@@ -74,6 +81,7 @@
                   {% endif %}
                   {% endfor %}
                 </td>
+                
                 <td><span class="{% if a.estado == "Activa" %}text-success{% endif %}{% if a.estado == "Inactiva" %}text-danger{% endif %}">{{a.estado}}</span></td>
                 <td class="project-actions text-right">
                   <div class="btn-group" role="group">

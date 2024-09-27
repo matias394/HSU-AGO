@@ -7,11 +7,11 @@
 
 {% block title %}Legajos{% endblock %};
 
-{% block titulo-pagina %} Legajos{% endblock %};
+{% block titulo-pagina %} Legajo del Beneficiario{% endblock %};
 
 {% block breadcrumb %}
 <ol class="breadcrumb float-sm-right px-3">
-    <li class="breadcrumb-item"><a href="{% url 'legajos_listar' %}">Legajos</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'legajos_listar' %}">Legajo del Beneficiario</a></li>
     {%if request.resolver_match.url_name == "legajos_editar" %}
     <li class="breadcrumb-item"><a href="{% url 'legajos_ver' object.id %}">{{object}}</a></li>
     <li class="breadcrumb-item active">Editar</li>
@@ -37,7 +37,7 @@
                         <div class="step active">
                             <a type="button" class="step-trigger  text-primary" role="tab" href="">
                                 <span class="bs-stepper-circle">1</span>
-                                <span class="bs-stepper-label">Datos Personales</span>
+                                <span class="bs-stepper-label">Datos Personales del Beneficiario</span>
                             </a>
                         </div>
                         <div class="line"></div>
@@ -76,7 +76,7 @@
                         <div class="step active">
                             <button type="button" class="step-trigger" role="tab">
                                 <span class="bs-stepper-circle">1</span>
-                                <span class="bs-stepper-label text-primary">Datos Personales</span>
+                                <span class="bs-stepper-label text-primary">Datos Personales del Beneficiario</span>
                             </button>
                         </div>
                         <div class="line"></div>
@@ -213,6 +213,8 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <input type="hidden" name="latitud" id="latitud_id" value="{{object.id}}">
+                                        <input type="hidden" name="longitud" id="longitud_id" value="{{object.id}}">
                                         <input type="file" name="foto" id="id_foto" class="input-file" id="id_foto"
                                             accept="image/*" hidden>
                                     </div>
@@ -251,6 +253,64 @@
 
 {% block customJS %}
 <script>
+    //Activa la busqueda ajax cuando se ingresa texto de la calle
+    
+    const peticion = async (evento) => {
+        var altura = document.getElementById('altura_field').value
+        var calle =  document.getElementById('calle_field').value
+        if (altura != "" && calle != ""){
+            const response = await fetch(`https://geocoder.msm.gov.ar/code/${calle} ${altura}`)
+            try {
+                if (!response.ok) {
+                    document.getElementById('latitud_id').value = 0
+                    document.getElementById('longitud_id').value = 0
+                    throw new Error('Error en la petición')
+                }else{
+                    const data = await response.json()
+                    let newResponse = {}
+                    for (item of data){
+                        newResponse[item.data] = item.value
+                    }
+                    document.getElementById('latitud_id').value = newResponse.lat
+                    document.getElementById('longitud_id').value = newResponse.lng
+                    calle.value = newResponse.query
+                }
+            } catch (error) {
+                document.getElementById('latitud_id').value = 0
+                document.getElementById('longitud_id').value = 0
+                console.log(error)
+            }
+        }
+        
+    }
+
+    let timeout = null;
+    altura_field.addEventListener('keyup', evento => {
+        clearTimeout(timeout)
+        timeout = setTimeout( ()=> {
+            try {
+                peticion(evento)
+            }
+            catch(err) {
+                document.getElementById('latitud_id').value = 0
+                document.getElementById('longitud_id').value = 0
+            }
+        } , 1000);
+    })
+
+    calle_field.addEventListener('keyup', evento => {
+        clearTimeout(timeout)
+        timeout = setTimeout( ()=> {
+            try {
+                peticion(evento)
+            }
+            catch(err) {
+                document.getElementById('latitud_id').value = 0
+                document.getElementById('longitud_id').value = 0
+            }
+        } , 1000);
+    })
+
     id_foto.onchange = (evt) => {
         const [file] = id_foto.files;
         if (file) {

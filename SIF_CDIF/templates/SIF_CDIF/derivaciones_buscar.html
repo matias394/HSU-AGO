@@ -42,7 +42,7 @@
 {% if mostrar_resultados%}
 <div class="row mt-3">
     <div class="col-12 text-center">
-        <a href="{% url 'legajos_crear' %}" class="btn btn-primary btn-lg d-block d-sm-inline mt-2 mr-2 ">Agregar</a>
+        {% if btn_agregar %}<a href="{% url 'legajos_crear' %}" class="btn btn-primary btn-lg d-block d-sm-inline mt-2 mr-2 ">Agregar</a>{% endif %}
         <a href="{% url 'CDIF_derivaciones_buscar' %}" class="btn btn-secondary btn-lg d-block d-sm-inline mt-2 ">Resetear</a>
     </div>
 </div>
@@ -83,12 +83,10 @@
                                 {% endif %}
                               </td>
                             <td class="project-actions text-right"> 
-                                {%if perms.Usuarios.rol_admin%} 
                                 <div class="btn-group" role="group"> 
                                     <a href="{% url 'legajosderivaciones_historial' o.id %}" class="btn btn-primary btn-sm ver">Ver derivaciones</a> 
                                     <a href="{% url 'legajos_ver' o.id %}" class="btn btn-secondary btn-sm ver">Ver legajo</a> 
                                     </div>
-                                {%endif%}
                             </td>
                         </tr>
                         {% endfor %}

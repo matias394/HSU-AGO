@@ -79,6 +79,7 @@ class MILD_PreadmisionesForm (forms.ModelForm):
 
         }
         labels = {
+            'areaacompanamiento': 'Área de Acompañamiento',
             'fk_legajo_1':'',
             'menores_a_cargo_1':'',
             'control_gine_1':'',
@@ -164,19 +165,21 @@ class MILD_IntervencionesForm (forms.ModelForm):
         widgets = {
             'detalle': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
             'responsable' : forms.SelectMultiple(attrs={'class': 'select2 w-100', 'multiple': True}),
+            'criterio_modificable' : forms.SelectMultiple(attrs={'class': 'select2 w-100', 'multiple': True}),
+            'fecha': forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
         }
         labels = {
-            'criterio_modificable': 'Criterio modificable trabajado',
+            'criterio_modificable': 'Criterio potencial trabajado',
             'impacto': 'Impacto en el criterio',
             'accion': 'Acción desarrollada',
-            'detalle':'Detalles',
+            'detalle':'Observaciones',
         }
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
         # Filtra las opciones del campo criterio_modificable aquí
-        self.fields['criterio_modificable'].queryset = Criterios_IVI.objects.filter(modificable = "SI")
+        self.fields['criterio_modificable'].queryset = Criterios_IVI.objects.filter(modificable__icontains = "De base")
 
 class MILD_OpcionesResponsablesForm (forms.ModelForm):
     class Meta:

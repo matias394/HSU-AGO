@@ -30,7 +30,7 @@ Admisiones
     <a href="{% url 'CDIF_vacantes_form_cambio' object.id %}" class="btn btn-secondary mr-1">Cambiar vacante</a>
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
-    {% if object.estado != "Inactiva" %}
+    {% if object.estado != "Inactiva" and btn_inactivar %}
     <a href="{% url 'CDIF_indiceiviegreso_crear' object.id %}" class="btn btn-danger mr-1">Inactivar</a>
     {% endif %}
   </div>
@@ -93,8 +93,6 @@ Admisiones
           <dt class="col-sm-7 mb-2">{{lastvo.fk_organismo}}</dt>
           <dd class="col-sm-5 mb-2">Sala actual</dd>
           <dt class="col-sm-7 mb-2">{{lastvo.sala}}</dt>
-          <dd class="col-sm-5 mb-2">Turno actual</dd>
-          <dt class="col-sm-7 mb-2">{{lastvo.turno}}</dt>
           <dd class="col-sm-5 mb-2">Educador/a actual</dd>
           <dt class="col-sm-7 mb-2">{{lastvo.educador| default:""}}</dt>
         </dl>
@@ -267,7 +265,6 @@ Admisiones
               <th>Ingreso</th>
               <th>Centro</th>
               <th>Sala</th>
-              <th>Turno</th>
               <th>Educadora</th>
               <th>Egreso</th>
               <th>Motivo</th>
@@ -279,7 +276,6 @@ Admisiones
               <td>{{e.fecha_ingreso|date:'d/m/Y'}}</td>
               <td>{{e.fk_organismo}}</td>
               <td>{{e.sala}}</td>
-              <td>{{e.turno}}</td>
               <td>{{e.educador}}</td>
               <td>{{e.fecha_egreso|date:'d/m/Y'|default:"-"}}</td>
               <td>{{e.motivo|default:"-"}}</td>

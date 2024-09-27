@@ -96,7 +96,7 @@ Intervenciones
       <div class="row h-100">
         <div class="col-12">
           <div class="info-box mb-2">
-            <span class="info-box-icon bg-warning">{{puntaje.total}}</span>
+            <span class="info-box-icon bg-warning">{{puntaje.total|default:'-'}}</span>
             <div class="info-box-content">
               <span class="info-box-text">IVI de ingreso</span>
               <span class="info-box-number h6">{{observaciones.creado|date:'d/m/Y'}}</span>
@@ -114,7 +114,7 @@ Intervenciones
         </div>
         <div class="col-12">
           <div class="info-box">
-            <span class="info-box-icon bg-success">{{puntaje2.total}}</span>
+            <span class="info-box-icon bg-success">{{puntaje2.total|default:'-'}}</span>
             <div class="info-box-content">
               <span class="info-box-text">IVI actual</span>
               <span class="info-box-number h6">{{observaciones2.creado|date:'d/m/Y'}}</span>
@@ -145,9 +145,9 @@ Intervenciones
             <tbody>
                 {% for i in intervenciones %}
               <tr>
-                <td> {{i.creado|date:'d/m/Y' }} </td>
+                <td> {{i.fecha|date:'d/m/Y' }} </td>
                 <td> {{i.creado_por}} </td>
-                <td> {{i.criterio_modificable}}</td>
+                <td> <ul class="ml-2 pl-0">{% for r in i.criterio_modificable.all %} <li>{{r}}</li> {% endfor%}</ul></td>
                 <td> {{i.impacto}}</td>
                 <td> {{i.accion}}</td>
                 <td class="text-right">

@@ -72,9 +72,9 @@ Admisiones
   <div class="col-sm-4 pb-3">
     <div class="card card-outline card-primary h-100 mb-0">
       <div class="card-header">
-        <h3 class="card-title">Detalle Admisión</h3>
+        <h3 class="card-title">Detalle Pre-admisión</h3>
         <div class="card-tools d-inline">
-          <a href="{% url 'CDIF_preadmisiones_ver2' object.fk_preadmi.id %}" class="ml-3 mr-2">Ver pre-admisión</a>
+          <a href="{% url 'CDIF_preadmisiones_ver2' object.fk_preadmi.id %}" class="ml-3 mr-2">Ver Pre-admisión</a>
           <button type="button" class="btn btn-tool  d-md-none" data-card-widget="collapse">
             <i class="fas fa-minus"></i>
           </button>
@@ -94,8 +94,6 @@ Admisiones
           <dt class="col-sm-7 mb-2">{{object.fk_preadmi.centro_postula}}</dt>
           <dd class="col-sm-5 mb-2">Sala</dd>
           <dt class="col-sm-7 mb-2">{{object.fk_preadmi.sala_postula}}</dt>
-          <dd class="col-sm-5 mb-2">Turno</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.turno_postula}}</dt>
         </dl>
       </div>
     </div>

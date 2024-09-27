@@ -35,7 +35,7 @@ Admisiones
 <div class="row p-0 m-0 " id="seleccion">
 
   <!-- Datos de legajo -->
-  <div class="col-sm-4 pb-3">
+  <div class="col-sm-3 pb-3">
     <div class="card card-outline card-primary h-100 mb-0">
       <div class="card-header">
         <h3 class="card-title">Detalle Legajo</h3>
@@ -63,7 +63,7 @@ Admisiones
   <!-- /  -->
 
   <!-- Datos de pre-admisión -->
-  <div class="col-sm-4 pb-3">
+  <div class="col-sm-3 pb-3">
     <div class="card card-outline card-primary h-100 mb-0">
       <div class="card-header">
         <h3 class="card-title">Detalle Admisión</h3>
@@ -81,9 +81,9 @@ Admisiones
           <dd class="col-sm-5 mb-2">Fecha de admisión</dd>
           <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
           <dd class="col-sm-5 mb-2">Acompañante de entrevista</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.acompaniante}}</dt>
+          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.acompaniante_entrevista}}</dt>
           <dd class="col-sm-5 mb-2">Acompañante asignado</dd>
-          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.madrina}}</dt>
+          <dt class="col-sm-7 mb-2">{{object.fk_preadmi.acompaniante_asignado}}</dt>
         </dl>
       </div>
     </div>
@@ -91,7 +91,7 @@ Admisiones
   <!-- /  -->
 
   <!-- Datos de Indice -->
-  <div class="col-sm-4 pb-3">
+  <div class="col-sm-3 pb-3">
     <div class="card card-outline card-primary h-100 mb-0">
       <div class="card-header">
         <h3 class="card-title">Detalle IVI de ingreso</h3>
@@ -112,9 +112,9 @@ Admisiones
           <dt class="col-sm-5 mb-2">{{maximo}}</dt>
           <dd class="col-sm-7 mb-2">Criterios presentes</dd>
           <dt class="col-sm-5 mb-2">{{cantidad}}</dt>
-          <dd class="col-sm-7 mb-2">Criterios modificables</dd>
+          <dd class="col-sm-7 mb-2">Criterios potenciales</dd>
           <dt class="col-sm-5 mb-2">{{modificables}}</dt>
-          <dd class="col-sm-7 mb-2">Puntaje modificable</dd>
+          <dd class="col-sm-7 mb-2">Puntaje potencial</dd>
           <dt class="col-sm-5 mb-2">{{mod_puntaje.total}}</dt>
           <dd class="col-sm-12 mb-0 mt-4 pb-0 text-muted text-sm font-italic text-right">Generado por {{foto_ivi.creado_por}}</dd>
         </dl>

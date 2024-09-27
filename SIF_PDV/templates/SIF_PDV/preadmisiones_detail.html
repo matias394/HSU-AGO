@@ -67,15 +67,15 @@ PDV Pre-admisiones
         <div class="card-body pb-1">
           <dl class="row mb-0">
             <dd class="col-sm-5 mb-2">Estado</dd>
-            <dt class="col-sm-7 mb-2"><span class="badge {% if object.estado == 'Finalizada' %}badge-success{% else %}badge-warning{% endif %}">{{ object.estado }}</span></dt>
+            <dt class="col-sm-7 mb-2"><span class="badge {% if object.estado == 'Admitido' %}badge-success{% endif %}{% if object.estado == 'Pendiente' %}badge-primary{% endif %}{% if object.estado == 'Lista de espera' %}badge-warning{% endif %}{% if object.estado == 'Rechazado' %}badge-danger{% endif %}">{{ object.estado }}</span></dt>
             <dd class="col-sm-5 mb-2">Fecha de solicitud</dd>
             <dt class="col-sm-7 mb-2">{{object.creado|date:'d/m/Y'}}</dt>
             <dd class="col-sm-5 mb-2">Solicitud creada por</dd>
             <dt class="col-sm-7 mb-2">{{object.creado_por}}</dt>
             <dd class="col-sm-5 mb-2">Taller solicitado</dd>
             <dt class="col-sm-7 mb-2">{{object.centro_postula}}</dt>
-            <dd class="col-sm-5 mb-2">Centro solicitado</dd>
-            <dt class="col-sm-7 mb-2">{{object.taller_postula}}</dt>
+            <dd class="col-sm-5 mb-2">Turno solicitado</dd>
+            <dt class="col-sm-7 mb-2">{{object.sala_postula}}</dt>
             {% comment %} <dd class="col-sm-5 mb-2">Madrina</dd>
             <dt class="col-sm-7 mb-2">{{object.madrina}}</dt> {% endcomment %}
             {% if object.modificado_por %}

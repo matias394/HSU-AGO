@@ -6,7 +6,7 @@
 <ol class="breadcrumb float-sm-right ">
     <li class="breadcrumb-item">Índices</li>
     <li class="breadcrumb-item"><a href="{% url 'legajos_ver' object.fk_legajo.id %}" title="Ver legajo">{{object.fk_legajo}}</a></li>
-        {%if request.resolver_match.url_name == "MA_indiceingreso_editar" %}
+        {%if request.resolver_match.url_name == "DESCEN_indiceivi_editar" %}
         <li class="breadcrumb-item active">Editar</li>
         {% else %}
         <li class="breadcrumb-item active">Agregar</li>
@@ -49,7 +49,7 @@
             <div class="card card-primary card-outline">
                 <div class="card-header">
                     <h3 class="card-title">
-                        Indice Ingreso
+                        Índice de Vulnerabilidad Infantil
                     </h3>
                 </div>
 
@@ -58,18 +58,23 @@
                         <thead>
                             <tr>
                                 <th>Criterio</th>
+                                <th class="text-center px-1" width="7%">Puntaje</th>
+                                <th class="text-center px-1" width="7%">Modificable</th>
                                 <th class="text-center px-1" width="7%">Presencia</th>
                             </tr>
                         </thead>
                         <tbody>
 
                             <tr>
-                                <td colspan="4" class="text-center bg-secondary py-1">Criteros autónomos de ingreso</td>
+                                <td colspan="4" class="text-center bg-secondary py-1">Madre o Cuidador principal
+                                </td>
                             </tr>
                             {% for c in criterio %}
-                            {% if c.tipo == 'Criteros autónomos de ingreso' %}
+                            {% if c.tipo == 'Madre o Cuidador principal' %}
                             <tr>
                                 <td>{{c.criterio}}</td>
+                                <td class="text-center">{{c.puntaje}}</td>
+                                <td class="text-center"><span class=" badge badge-primary px-2">{{c.modificable}}</span></td>
                                 <td class="text-center px-0">
                                     <div class="icheck-primary d-inline">
                                         <input type="checkbox" id="{{c.id}}" name="{{c.id}}">
@@ -80,12 +85,14 @@
                             {% endif %}
                             {% endfor %}
                             <tr>
-                                <td colspan="4" class="text-center bg-secondary py-1">Motivo de falta de control o control insuficiente</td>
+                                <td colspan="4" class="text-center bg-secondary py-1">Bebé, niño o niña</td>
                             </tr>
                             {% for c in criterio %}
-                            {% if c.tipo == 'Motivo de falta de control o control insuficiente' %}
+                            {% if c.tipo == 'Bebé, niño o niña' %}
                             <tr>
                                 <td>{{c.criterio}}</td>
+                                <td class="text-center">{{c.puntaje}}</td>
+                                <td class="text-center"><span class=" badge badge-primary px-2">{{c.modificable}}</span></td>
                                 <td class="text-center px-0">
                                     <div class="icheck-primary d-inline">
                                         <input type="checkbox" id="{{c.id}}" name="{{c.id}}">
@@ -96,12 +103,14 @@
                             {% endif %}
                             {% endfor %}
                             <tr>
-                                <td colspan="4" class="text-center bg-secondary py-1">Criterios combinables de ingreso</td>
+                                <td colspan="4" class="text-center bg-secondary py-1">Familia</td>
                             </tr>
                             {% for c in criterio %}
-                            {% if c.tipo == 'Criterios combinables de ingreso' %}
+                            {% if c.tipo == 'Familia' %}
                             <tr>
                                 <td>{{c.criterio}}</td>
+                                <td class="text-center">{{c.puntaje}}</td>
+                                <td class="text-center"><span class=" badge badge-primary px-2">{{c.modificable}}</span></td>
                                 <td class="text-center px-0">
                                     <div class="icheck-primary d-inline">
                                         <input type="checkbox" id="{{c.id}}" name="{{c.id}}">
@@ -112,12 +121,14 @@
                             {% endif %}
                             {% endfor %}
                             <tr>
-                                <td colspan="4" class="text-center bg-secondary py-1">Criterios sociales para el ingreso</td>
+                                <td colspan="4" class="text-center bg-secondary py-1">Ajustes</td>
                             </tr>
                             {% for c in criterio %}
-                            {% if c.tipo == 'Criterios sociales para el ingreso' %}
+                            {% if c.tipo == 'Ajustes' %}
                             <tr>
                                 <td>{{c.criterio}}</td>
+                                <td class="text-center">{{c.puntaje}}</td>
+                                <td class="text-center"><span class=" badge badge-primary px-2">{{c.modificable}}</span></td>
                                 <td class="text-center px-0">
                                     <div class="icheck-primary d-inline">
                                         <input type="checkbox" id="{{c.id}}" name="{{c.id}}">
@@ -141,7 +152,7 @@
 
             <div class="mt-4 mx-2">
                 <button class="btn btn-primary mr-1" type="submit">Confirmar</button>
-                <a href="{% url 'MA_preadmisiones_ver' object.id%}" class="btn btn-secondary">Cancelar</a>
+                <a href="{% url 'DESCEN_preadmisiones_ver' object.id%}" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>
     </div>

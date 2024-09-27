@@ -29,7 +29,9 @@
   <div class="col-12 my-3 mx-2 d-print-none">
     <!-- <a href="{% url 'admisiones_historial'%}" class="btn btn-primary mr-1">Ver admisiones</a> -->
     <a href="{% url 'CDLE_preadmisiones_ver3' object.id %}" class="btn btn-primary mr-1">Volver pre-admisión</a>
+    {% if object.creado >= fechaActual %}
     <a href="{% url 'CDLE_indiceivi_editar' object.id %}" class="btn btn-secondary mr-1">Editar</a>
+    {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
   </div>
 </div>
@@ -46,7 +48,7 @@
       <div class="card-body">
         <dl class="row mb-0">
           <dd class="col-sm-3 mb-2">Índice</dd>
-          <dt class="col-sm-9 mb-2">Índice de vulnerabilidad infantil (IVI)</dt>
+          <dt class="col-sm-9 mb-2">Índice de Vulnerabilidad Infantil</dt>
           <dd class="col-sm-3 mb-2">Tipo</dd>
           <dt class="col-sm-9 mb-2">{{foto_ivi.tipo}}</dt>
           <dd class="col-sm-3 mb-2">Fecha</dd>
