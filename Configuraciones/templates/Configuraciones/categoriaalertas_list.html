@@ -13,9 +13,7 @@
 {% block content %}
 <div class="row d-flex justify-content-between my-3 mx-sm-2">
   <div class="col-12 col-sm-3 ">
-    {%if perms.Usuarios.rol_admin%}
     <a class="btn btn-primary mb-2 mb-sm-0 d-block d-sm-inline" href="{% url 'categoriaalertas_crear'%}">Agregar</a>
-    {%endif%}
   </div>
   {% comment %} <div class="col-12 col-sm-3 ">
     <form action="" method="GET">
@@ -60,14 +58,12 @@
               </td>
 
               <td class="project-actions text-right">
-                {%if perms.Usuarios.rol_admin%} 
                 <div class="btn-group" role="group">
                   <a href="{% url 'categoriaalertas_ver' o.id %}" class="btn btn-primary btn-sm ver">Ver</a>
                   <a href="{% url 'categoriaalertas_editar' o.id %}" class="btn btn-primary btn-sm editar">Editar</a>
                   {% comment %}<a href="{% url 'categoriaalertas_eliminar' o.id %}"
                     class="btn btn-danger btn-sm eliminar">Eliminar</a>{% endcomment %}
                 </div>
-                {%endif%}
               </td>
             </tr>
             {% endfor %}

@@ -70,14 +70,12 @@
                             </div>
                             <div class="row text-center mt-5">
                                 <div class="col-sm-12">
-                                    {%if perms.Usuarios.rol_admin%}
                                     {% comment %}<a href="{% url 'criterios_eliminar' object.id %}">
                                         <button type="" class="btn btn-secondary">Eliminar</button></a>{% endcomment %}
                                     
                                     <a href="{% url 'criterios_editar' object.id %}" >
                                         <button type="submit" class="btn btn-primary">Editar</button>
                                     </a>
-                                    {%endif%}
                                 </div>
                             </div>
                         </div>
