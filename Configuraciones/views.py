@@ -33,7 +33,7 @@ def obtener_rol(request):
 
 
 class SecretariasListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Secretarias
 
     def dispatch(self, request, *args, **kwargs):
@@ -71,7 +71,7 @@ class SecretariasListView(PermisosMixin, ListView):
 
 
 class SecretariasDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Secretarias
 
     def dispatch(self, request, *args, **kwargs):
@@ -94,7 +94,7 @@ class SecretariasDetailView(PermisosMixin, DetailView):
 
 
 class SecretariasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Secretarias
     success_url = reverse_lazy("secretarias_listar")
     success_message = "El registro fue eliminado correctamente"
@@ -119,7 +119,7 @@ class SecretariasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
 
 
 class SecretariasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Secretarias
     form_class = SecretariasForm
     success_message = "%(nombre)s fue registrado correctamente"
@@ -144,7 +144,7 @@ class SecretariasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
 
 
 class SecretariasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Secretarias
     form_class = SecretariasForm
     success_message = "%(nombre)s fue editado correctamente"
@@ -175,7 +175,7 @@ class SecretariasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class SubsecretariasListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Subsecretarias
 
     def dispatch(self, request, *args, **kwargs):
@@ -215,7 +215,7 @@ class SubsecretariasListView(PermisosMixin, ListView):
 
 
 class SubsecretariasDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Subsecretarias
 
     def dispatch(self, request, *args, **kwargs):
@@ -238,7 +238,7 @@ class SubsecretariasDetailView(PermisosMixin, DetailView):
 
 
 class SubsecretariasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Subsecretarias
     success_url = reverse_lazy("secretarias_listar")
     success_message = "El registro fue eliminado correctamente"
@@ -263,7 +263,7 @@ class SubsecretariasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
 
 
 class SubsecretariasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Subsecretarias
     form_class = SubsecretariasForm
     success_message = "%(nombre)s fue registrado correctamente"
@@ -288,7 +288,7 @@ class SubsecretariasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
 
 
 class SubsecretariasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Subsecretarias
     form_class = SubsecretariasForm
     success_message = "%(nombre)s fue editado correctamente"
@@ -319,7 +319,7 @@ class SubsecretariasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class OrganismosListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Organismos
 
     def dispatch(self, request, *args, **kwargs):
@@ -357,7 +357,7 @@ class OrganismosListView(PermisosMixin, ListView):
 
 
 class OrganismosDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Organismos
 
     def dispatch(self, request, *args, **kwargs):
@@ -389,7 +389,7 @@ class OrganismosDetailView(PermisosMixin, DetailView):
 
 
 class OrganismosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Organismos
     success_url = reverse_lazy("organismos_listar")
     success_message = "El registro fue eliminado correctamente"
@@ -414,7 +414,7 @@ class OrganismosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
 
 
 class OrganismosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Organismos
     form_class = OrganismosForm
     success_message = "%(nombre)s fue registrado correctamente"
@@ -439,7 +439,7 @@ class OrganismosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
 
 
 class OrganismosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Organismos
     form_class = OrganismosForm
     success_message = "%(nombre)s fue editado correctamente"
@@ -470,7 +470,7 @@ class OrganismosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class ProgramasListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Programas
     template_name = "programas_list.html"
 
@@ -516,7 +516,7 @@ class ProgramasListView(PermisosMixin, ListView):
 
 
 class ProgramasDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Programas
 
     def dispatch(self, request, *args, **kwargs):
@@ -539,7 +539,7 @@ class ProgramasDetailView(PermisosMixin, DetailView):
 
 
 class ProgramasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Programas
     success_url = reverse_lazy("programas_listar")
     success_message = "El registro fue eliminado correctamente"
@@ -564,7 +564,7 @@ class ProgramasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
 
 
 class ProgramasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Programas
     form_class = ProgramasForm
     success_message = "%(nombre)s fue registrado correctamente"
@@ -589,7 +589,7 @@ class ProgramasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
 
 
 class ProgramasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Programas
     form_class = ProgramasForm
     success_message = "%(nombre)s fue editado correctamente"
@@ -620,7 +620,7 @@ class ProgramasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class PlanesSocialesListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = PlanesSociales
 
     def dispatch(self, request, *args, **kwargs):
@@ -660,7 +660,7 @@ class PlanesSocialesListView(PermisosMixin, ListView):
 
 
 class PlanesSocialesDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = PlanesSociales
 
     def dispatch(self, request, *args, **kwargs):
@@ -683,7 +683,7 @@ class PlanesSocialesDetailView(PermisosMixin, DetailView):
 
 
 class PlanesSocialesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = PlanesSociales
     success_url = reverse_lazy("planes_sociales_listar")
     success_message = "El registro fue eliminado correctamente"
@@ -708,7 +708,7 @@ class PlanesSocialesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
 
 
 class PlanesSocialesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = PlanesSociales
     form_class = PlanesSocialesForm
     success_message = "%(nombre)s fue registrado correctamente"
@@ -733,7 +733,7 @@ class PlanesSocialesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
 
 
 class PlanesSocialesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = PlanesSociales
     form_class = PlanesSocialesForm
     success_message = "%(nombre)s fue editado correctamente"
@@ -764,7 +764,7 @@ class PlanesSocialesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class AgentesExternosListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = AgentesExternos
 
     def dispatch(self, request, *args, **kwargs):
@@ -805,7 +805,7 @@ class AgentesExternosListView(PermisosMixin, ListView):
 
 
 class AgentesExternosDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = AgentesExternos
 
     def dispatch(self, request, *args, **kwargs):
@@ -828,7 +828,7 @@ class AgentesExternosDetailView(PermisosMixin, DetailView):
 
 
 class AgentesExternosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = AgentesExternos
     success_url = reverse_lazy("agentesexternos_listar")
     success_message = "El registro fue eliminado correctamente"
@@ -853,7 +853,7 @@ class AgentesExternosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
 
 
 class AgentesExternosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = AgentesExternos
     form_class = AgentesExternosForm
     success_message = "%(nombre)s fue registrado correctamente"
@@ -891,7 +891,7 @@ class AgentesExternosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
 
 
 class AgentesExternosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = AgentesExternos
     form_class = AgentesExternosForm
     success_message = "%(nombre)s fue editado correctamente"
@@ -922,7 +922,7 @@ class AgentesExternosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class GruposDestinatariosListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = GruposDestinatarios
 
     def dispatch(self, request, *args, **kwargs):
@@ -964,7 +964,7 @@ class GruposDestinatariosListView(PermisosMixin, ListView):
 
 
 class GruposDestinatariosDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = GruposDestinatarios
 
     def dispatch(self, request, *args, **kwargs):
@@ -987,7 +987,7 @@ class GruposDestinatariosDetailView(PermisosMixin, DetailView):
 
 
 class GruposDestinatariosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = GruposDestinatarios
     success_url = reverse_lazy("gruposdestinatarios_listar")
     success_message = "El registro fue eliminado correctamente"
@@ -1012,7 +1012,7 @@ class GruposDestinatariosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteVi
 
 
 class GruposDestinatariosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = GruposDestinatarios
     form_class = GruposDestinatariosForm
     success_message = "%(nombre)s fue registrado correctamente"
@@ -1037,7 +1037,7 @@ class GruposDestinatariosCreateView(PermisosMixin, SuccessMessageMixin, CreateVi
 
 
 class GruposDestinatariosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = GruposDestinatarios
     form_class = GruposDestinatariosForm
     success_message = "%(nombre)s fue editado correctamente"
@@ -1068,7 +1068,7 @@ class GruposDestinatariosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateVi
 
 
 class CategoriaAlertasListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = CategoriaAlertas
 
     def dispatch(self, request, *args, **kwargs):
@@ -1104,7 +1104,7 @@ class CategoriaAlertasListView(PermisosMixin, ListView):
 
 
 class CategoriaAlertasDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = CategoriaAlertas
 
     def dispatch(self, request, *args, **kwargs):
@@ -1127,7 +1127,7 @@ class CategoriaAlertasDetailView(PermisosMixin, DetailView):
 
 
 class CategoriaAlertasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = CategoriaAlertas
     success_url = reverse_lazy("categoriaalertas_listar")
     success_message = "El registro fue eliminado correctamente"
@@ -1152,7 +1152,7 @@ class CategoriaAlertasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView)
 
 
 class CategoriaAlertasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = CategoriaAlertas
     form_class = CategoriaAlertasForm
     success_message = "%(nombre)s fue registrado correctamente"
@@ -1177,7 +1177,7 @@ class CategoriaAlertasCreateView(PermisosMixin, SuccessMessageMixin, CreateView)
 
 
 class CategoriaAlertasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = CategoriaAlertas
     form_class = CategoriaAlertasForm
     success_message = "%(nombre)s fue editado correctamente"
@@ -1207,7 +1207,7 @@ class CategoriaAlertasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView)
 
 
 class AlertasListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Alertas
 
     def dispatch(self, request, *args, **kwargs):
@@ -1243,7 +1243,7 @@ class AlertasListView(PermisosMixin, ListView):
 
 
 class AlertasDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Alertas
 
     def dispatch(self, request, *args, **kwargs):
@@ -1266,7 +1266,7 @@ class AlertasDetailView(PermisosMixin, DetailView):
 
 
 class AlertasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Alertas
     success_url = reverse_lazy("alertas_listar")
     success_message = "El registro fue eliminado correctamente"
@@ -1291,7 +1291,7 @@ class AlertasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
 
 
 class AlertasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Alertas
     form_class = AlertasForm
     success_message = "%(nombre)s fue registrado correctamente"
@@ -1316,7 +1316,7 @@ class AlertasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
 
 
 class AlertasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Alertas
     form_class = AlertasForm
     success_message = "%(nombre)s fue editado correctamente"
@@ -1347,7 +1347,7 @@ class AlertasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class EquiposListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Equipos
 
     def dispatch(self, request, *args, **kwargs):
@@ -1387,7 +1387,7 @@ class EquiposListView(PermisosMixin, ListView):
 
 
 class EquiposDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Equipos
 
     def dispatch(self, request, *args, **kwargs):
@@ -1410,7 +1410,7 @@ class EquiposDetailView(PermisosMixin, DetailView):
 
 
 class EquiposDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Equipos
     success_url = reverse_lazy("equipos_listar")
     success_message = "El registro fue eliminado correctamente"
@@ -1435,7 +1435,7 @@ class EquiposDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
 
 
 class EquiposCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Equipos
     form_class = EquiposForm
     success_message = "%(nombre)s fue registrado correctamente"
@@ -1469,7 +1469,7 @@ class EquiposCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
 
 
 class EquiposUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Equipos
     form_class = EquiposForm
     success_message = "%(nombre)s fue editado correctamente"
@@ -1509,7 +1509,7 @@ class EquiposUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class AccionesListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Acciones
 
     def dispatch(self, request, *args, **kwargs):
@@ -1547,7 +1547,7 @@ class AccionesListView(PermisosMixin, ListView):
 
 
 class AccionesDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Acciones
 
     def dispatch(self, request, *args, **kwargs):
@@ -1570,7 +1570,7 @@ class AccionesDetailView(PermisosMixin, DetailView):
 
 
 class AccionesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Acciones
     success_url = reverse_lazy("acciones_listar")
     success_message = "El registro fue eliminado correctamente"
@@ -1595,7 +1595,7 @@ class AccionesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
 
 
 class AccionesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Acciones
     form_class = AccionesForm
     success_message = "%(nombre)s fue registrado correctamente"
@@ -1620,7 +1620,7 @@ class AccionesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
 
 
 class AccionesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Acciones
     form_class = AccionesForm
     success_message = "%(nombre)s fue editado correctamente"
@@ -1651,7 +1651,7 @@ class AccionesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class CriteriosListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Criterios
 
     def dispatch(self, request, *args, **kwargs):
@@ -1692,7 +1692,7 @@ class CriteriosListView(PermisosMixin, ListView):
 
 
 class CriteriosDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Criterios
 
     def dispatch(self, request, *args, **kwargs):
@@ -1715,7 +1715,7 @@ class CriteriosDetailView(PermisosMixin, DetailView):
 
 
 class CriteriosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Criterios
     success_url = reverse_lazy("criterios_listar")
     success_message = "El registro fue eliminado correctamente"
@@ -1740,7 +1740,7 @@ class CriteriosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
 
 
 class CriteriosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Criterios
     form_class = CriteriosForm
     success_message = "%(nombre)s fue registrado correctamente"
@@ -1765,7 +1765,7 @@ class CriteriosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
 
 
 class CriteriosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Criterios
     form_class = CriteriosForm
     success_message = "%(nombre)s fue editado correctamente"
@@ -1796,7 +1796,7 @@ class CriteriosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class IndicesListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Indices
 
     def dispatch(self, request, *args, **kwargs):
@@ -1837,7 +1837,7 @@ class IndicesListView(PermisosMixin, ListView):
 
 
 class IndicesDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Indices
 
     def dispatch(self, request, *args, **kwargs):
@@ -1860,7 +1860,7 @@ class IndicesDetailView(PermisosMixin, DetailView):
 
 
 class IndicesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Indices
     success_url = reverse_lazy("indices_listar")
     success_message = "El registro fue eliminado correctamente"
@@ -1961,7 +1961,7 @@ def delete_variant(request, pk):
 
 
 class IndicesCreateView(PermisosMixin, IndiceInline, CreateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
 
     def dispatch(self, request, *args, **kwargs):
         # Permitir que los superusuarios siempre tengan acceso
@@ -2005,7 +2005,7 @@ class IndicesCreateView(PermisosMixin, IndiceInline, CreateView):
 
 
 class IndicesUpdateView(PermisosMixin, IndiceInline, UpdateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
 
     def dispatch(self, request, *args, **kwargs):
         # Permitir que los superusuarios siempre tengan acceso
@@ -2051,7 +2051,7 @@ class IndicesUpdateView(PermisosMixin, IndiceInline, UpdateView):
 
 class VacantesListView(PermisosMixin, ListView):
     permission_required = [
-        "Usuarios.programa_Configuraciones",
+        "Usuarios.programa_Configuracion",
     ]
     model = Vacantes
 
@@ -2089,7 +2089,7 @@ class VacantesListView(PermisosMixin, ListView):
 
 
 class VacantesDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Vacantes
 
     def dispatch(self, request, *args, **kwargs):
@@ -2119,7 +2119,7 @@ class VacantesDetailView(PermisosMixin, DetailView):
 
 
 class VacantesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Vacantes
     success_url = reverse_lazy("vacantes_listar")
     success_message = "El registro fue eliminado correctamente"
@@ -2144,7 +2144,7 @@ class VacantesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
 
 
 class VacantesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Vacantes
     form_class = VacantesForm
     success_message = "%(nombre)s fue registrado correctamente"
@@ -2174,7 +2174,7 @@ class VacantesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
 
 
 class VacantesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = Vacantes
     form_class = VacantesForm
     success_message = "%(nombre)s fue editado correctamente"
@@ -2231,7 +2231,7 @@ class VacantesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class SLEquiposListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = SL_Equipos
 
     def dispatch(self, request, *args, **kwargs):
@@ -2269,7 +2269,7 @@ class SLEquiposListView(PermisosMixin, ListView):
 
 
 class SLEquiposDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = SL_Equipos
 
     def dispatch(self, request, *args, **kwargs):
@@ -2292,7 +2292,7 @@ class SLEquiposDetailView(PermisosMixin, DetailView):
 
 
 class SLEquiposDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = SL_Equipos
     success_url = reverse_lazy("slequipos_listar")
     success_message = "El registro fue eliminado correctamente"
@@ -2317,7 +2317,7 @@ class SLEquiposDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
 
 
 class SLEquiposCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = SL_Equipos
     form_class = SL_Equipos_Form
     success_message = "%(nombre)s fue registrado correctamente"
@@ -2342,7 +2342,7 @@ class SLEquiposCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
 
 
 class SLEquiposUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = SL_Equipos
     form_class = SL_Equipos_Form
     success_message = "%(nombre)s fue editado correctamente"
@@ -2367,7 +2367,7 @@ class SLEquiposUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class SLIndicesVulnerabilidadListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = SL_IndicesVulnerabilidad
 
     def dispatch(self, request, *args, **kwargs):
@@ -2405,7 +2405,7 @@ class SLIndicesVulnerabilidadListView(PermisosMixin, ListView):
 
 
 class SLIndicesVulnerabilidadDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = SL_IndicesVulnerabilidad
 
     def dispatch(self, request, *args, **kwargs):
@@ -2428,7 +2428,7 @@ class SLIndicesVulnerabilidadDetailView(PermisosMixin, DetailView):
 
 
 class SLIndicesVulnerabilidadDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = SL_IndicesVulnerabilidad
     success_url = reverse_lazy("slindicesvulnerabilidad_list")
     success_message = "El registro fue eliminado correctamente"
@@ -2453,7 +2453,7 @@ class SLIndicesVulnerabilidadDeleteView(PermisosMixin, SuccessMessageMixin, Dele
 
 
 class SLIndicesVulnerabilidadCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = SL_IndicesVulnerabilidad
     form_class = SL_IndicesVulnerabilidadForm
     success_message = "%(nombre)s fue registrado correctamente"
@@ -2478,7 +2478,7 @@ class SLIndicesVulnerabilidadCreateView(PermisosMixin, SuccessMessageMixin, Crea
 
 
 class SLIndicesVulnerabilidadUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.programa_Configuraciones"
+    permission_required = "Usuarios.programa_Configuracion"
     model = SL_IndicesVulnerabilidad
     form_class = SL_IndicesVulnerabilidadForm
     success_message = "%(nombre)s fue editado correctamente"
