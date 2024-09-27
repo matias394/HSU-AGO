@@ -439,7 +439,7 @@ class GruposListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
+            # "Usuarios.rol_directivo",
             "Usuarios.rol_operativo",
             "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
@@ -474,7 +474,7 @@ class GruposDetailView(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
+            # "Usuarios.rol_directivo",
             "Usuarios.rol_operativo",
             "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
