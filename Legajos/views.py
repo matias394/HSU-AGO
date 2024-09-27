@@ -148,6 +148,24 @@ class LegajosListView(TemplateView):
 class LegajosDetailView(DetailView):
     model = Legajos
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_admin",
+            "Usuarios.rol_directivo",
+            # "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
         resto_alertas = 0
@@ -374,13 +392,46 @@ class LegajosDetailView(DetailView):
         context["count_intervenciones"] = count_intervenciones
         context["familiar_intervenciones"] = intervenciones
         context["derivaciones"] = derivaciones
+
+        rol = obtener_rol(self.request)
+        roles_eliminar = [
+            "Usuarios.rol_admin",
+            # "Usuarios.rol_directivo",
+            # "Usuarios.rol_operativo",
+            # "Usuarios.rol_tecnico",
+            # "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+        if any(role in roles_eliminar for role in rol):
+            context["btn_eliminar"] = True
+        else:
+            context["btn_eliminar"] = False
+
         return context
 
 
 class LegajosDeleteView(PermisosMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Legajos"
     model = Legajos
     success_url = reverse_lazy("legajos_listar")
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_admin",
+            "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -408,20 +459,6 @@ class LegajosDeleteView(PermisosMixin, DeleteView):
         ):
             relaciones_existentes.append("Grupo Familiar")
 
-        rol = obtener_rol(self.request)
-        roles_eliminar = [
-            # "Usuarios.rol_admin",
-            # "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
-        ]
-        if any(role in roles_eliminar for role in rol):
-            context["btn_eliminar"] = True
-        else:
-            context["btn_eliminar"] = False
-
         # Agregar la lista de nombres de relaciones al contexto
         context["relaciones_existentes"] = relaciones_existentes
         return context
@@ -448,9 +485,27 @@ class LegajosDeleteView(PermisosMixin, DeleteView):
 
 
 class LegajosCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Legajos"
     model = Legajos
     form_class = LegajosForm
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_admin",
+            "Usuarios.rol_directivo",
+            # "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         print(form)
@@ -499,9 +554,27 @@ class LegajosCreateView(PermisosMixin, CreateView):
 
 
 class LegajosUpdateView(PermisosMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Legajos"
     model = Legajos
     form_class = LegajosUpdateForm
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_admin",
+            "Usuarios.rol_directivo",
+            # "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         legajo = form.save(commit=False)  # Guardamos sin persistir en la base de datos
@@ -539,9 +612,27 @@ class LegajosUpdateView(PermisosMixin, UpdateView):
 
 
 class LegajosGrupoFamiliarCreateView(CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Legajos"
     model = LegajoGrupoFamiliar
     form_class = NuevoLegajoFamiliarForm
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_admin",
+            "Usuarios.rol_directivo",
+            # "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -685,6 +776,24 @@ def busqueda_familiares(request):
 class LegajoGrupoFamiliarList(ListView):
     model = LegajoGrupoFamiliar
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_admin",
+            "Usuarios.rol_directivo",
+            # "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
         context = super().get_context_data(**kwargs)
@@ -773,7 +882,7 @@ class DeleteGrupoFamiliar(View):
 
 
 class LegajosDerivacionesBuscar(PermisosMixin, TemplateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Legajos"
     template_name = "Legajos/legajosderivaciones_buscar.html"
 
     def get(self, request, *args, **kwargs):
@@ -827,7 +936,7 @@ class LegajosDerivacionesBuscar(PermisosMixin, TemplateView):
 
 
 class LegajosDerivacionesListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Legajos"
     model = LegajosDerivaciones
     paginate_by = 25
 
@@ -862,7 +971,7 @@ class LegajosDerivacionesListView(PermisosMixin, ListView):
 
 
 class LegajosDerivacionesCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Legajos"
     model = LegajosDerivaciones
     form_class = LegajosDerivacionesForm
     success_message = "Derivación registrada con éxito"
@@ -919,7 +1028,7 @@ class LegajosDerivacionesCreateView(PermisosMixin, CreateView):
 
 
 class LegajosDerivacionesUpdateView(PermisosMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Legajos"
     model = LegajosDerivaciones
     form_class = LegajosDerivacionesForm
     success_message = "Derivación editada con éxito"
@@ -971,7 +1080,7 @@ class LegajosDerivacionesUpdateView(PermisosMixin, UpdateView):
 
 
 class LegajosDerivacionesHistorial(PermisosMixin, ListView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Legajos"
     model = LegajosDerivaciones
     template_name = "Legajos/legajosderivaciones_historial.html"
 
@@ -991,7 +1100,7 @@ class LegajosDerivacionesHistorial(PermisosMixin, ListView):
 
 
 class LegajosDerivacionesDeleteView(PermisosMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Legajos"
     model = LegajosDerivaciones
     # success_url = reverse_lazy("legajosderivaciones_listar")
 
@@ -1038,7 +1147,7 @@ class LegajosDerivacionesDeleteView(PermisosMixin, DeleteView):
 
 
 class LegajosDerivacionesDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Legajos"
     model = LegajosDerivaciones
 
     def get_context_data(self, **kwargs):
@@ -1063,7 +1172,7 @@ class LegajosDerivacionesDetailView(PermisosMixin, DetailView):
 
 
 class LegajosAlertasListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Legajos"
     model = HistorialLegajoAlertas
     template_name = "Legajos/legajoalertas_list.html"
 
@@ -1076,7 +1185,7 @@ class LegajosAlertasListView(PermisosMixin, ListView):
 
 
 class LegajosAlertasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Legajos"
     model = LegajoAlertas
     form_class = LegajosAlertasForm
     success_message = "Alerta asignada correctamente."
@@ -1104,7 +1213,7 @@ class LegajosAlertasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
 
 
 class DeleteAlerta(PermisosMixin, View):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Legajos"
 
     def get(self, request):
         data = {
@@ -1179,7 +1288,7 @@ class AlertasSelectView(View):
 
 
 class DimensionesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Legajos"
     template_name = "Legajos/legajosdimensiones_form.html"
     model = DimensionFamilia
     form_class = DimensionFamiliaForm
@@ -1398,7 +1507,7 @@ class DimensionesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class DimensionesDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Legajos"
     model = Legajos
     template_name = "Legajos/legajosdimensiones_detail.html"
 
@@ -1408,7 +1517,7 @@ class DimensionesDetailView(PermisosMixin, DetailView):
 
 # region ################################################################ ARCHIVOS
 class LegajosArchivosListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Legajos"
     model = LegajosArchivos
     template_name = "Legajos/legajosarchivos_list.html"
 
@@ -1421,7 +1530,7 @@ class LegajosArchivosListView(PermisosMixin, ListView):
 
 
 class LegajosArchivosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Legajos"
     model = LegajosArchivos
     form_class = LegajosArchivosForm
     success_message = "Archivo actualizado correctamente."
@@ -1477,7 +1586,7 @@ class CreateArchivo(TemplateView):
 
 
 class DeleteArchivo(PermisosMixin, View):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Legajos"
 
     def get(self, request):
         try:
