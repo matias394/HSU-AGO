@@ -18,17 +18,41 @@ from .forms import *
 from django.db.models import Q
 from django.urls import reverse_lazy
 from .utils import insertar_programas
+from django.contrib.auth.models import Group
+from django.core.exceptions import PermissionDenied
+
+
+def obtener_rol(request):
+    if request.user.is_authenticated:
+        # Supongamos que este método retorna los roles del usuario
+        return list(request.user.get_all_permissions())
+    return []
+
 
 # region ############################################################### Secretarías
 
 
 class SecretariasListView(PermisosMixin, ListView):
-    permission_required = [
-        "Usuarios.rol_admin",
-        "Usuarios.rol_directivo",
-        "Usuarios.rol_observador",
-    ]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Secretarias
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
 
@@ -47,33 +71,101 @@ class SecretariasListView(PermisosMixin, ListView):
 
 
 class SecretariasDetailView(PermisosMixin, DetailView):
-    permission_required = [
-        "Usuarios.rol_admin",
-        "Usuarios.rol_directivo",
-        "Usuarios.rol_observador",
-    ]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Secretarias
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class SecretariasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Secretarias
     success_url = reverse_lazy("secretarias_listar")
     success_message = "El registro fue eliminado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class SecretariasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Secretarias
     form_class = SecretariasForm
     success_message = "%(nombre)s fue registrado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class SecretariasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Secretarias
     form_class = SecretariasForm
     success_message = "%(nombre)s fue editado correctamente"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 # endregion
@@ -83,8 +175,26 @@ class SecretariasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class SubsecretariasListView(PermisosMixin, ListView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Subsecretarias
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
 
@@ -105,29 +215,101 @@ class SubsecretariasListView(PermisosMixin, ListView):
 
 
 class SubsecretariasDetailView(PermisosMixin, DetailView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Subsecretarias
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class SubsecretariasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Subsecretarias
     success_url = reverse_lazy("secretarias_listar")
     success_message = "El registro fue eliminado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class SubsecretariasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Subsecretarias
     form_class = SubsecretariasForm
     success_message = "%(nombre)s fue registrado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class SubsecretariasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Subsecretarias
     form_class = SubsecretariasForm
     success_message = "%(nombre)s fue editado correctamente"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 # endregion
@@ -137,8 +319,26 @@ class SubsecretariasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class OrganismosListView(PermisosMixin, ListView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Organismos
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
 
@@ -157,8 +357,26 @@ class OrganismosListView(PermisosMixin, ListView):
 
 
 class OrganismosDetailView(PermisosMixin, DetailView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Organismos
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, *args, **kwargs):
         # El pk que pasas a la URL
@@ -171,24 +389,78 @@ class OrganismosDetailView(PermisosMixin, DetailView):
 
 
 class OrganismosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Organismos
     success_url = reverse_lazy("organismos_listar")
     success_message = "El registro fue eliminado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class OrganismosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Organismos
     form_class = OrganismosForm
     success_message = "%(nombre)s fue registrado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class OrganismosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Organismos
     form_class = OrganismosForm
     success_message = "%(nombre)s fue editado correctamente"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 # endregion
@@ -198,9 +470,27 @@ class OrganismosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class ProgramasListView(PermisosMixin, ListView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Programas
     template_name = "programas_list.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
 
@@ -226,29 +516,101 @@ class ProgramasListView(PermisosMixin, ListView):
 
 
 class ProgramasDetailView(PermisosMixin, DetailView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Programas
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class ProgramasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Programas
     success_url = reverse_lazy("programas_listar")
     success_message = "El registro fue eliminado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class ProgramasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Programas
     form_class = ProgramasForm
     success_message = "%(nombre)s fue registrado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class ProgramasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Programas
     form_class = ProgramasForm
     success_message = "%(nombre)s fue editado correctamente"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 # endregion
@@ -258,8 +620,26 @@ class ProgramasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class PlanesSocialesListView(PermisosMixin, ListView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = PlanesSociales
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
 
@@ -280,29 +660,101 @@ class PlanesSocialesListView(PermisosMixin, ListView):
 
 
 class PlanesSocialesDetailView(PermisosMixin, DetailView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = PlanesSociales
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class PlanesSocialesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = PlanesSociales
     success_url = reverse_lazy("planes_sociales_listar")
     success_message = "El registro fue eliminado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class PlanesSocialesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = PlanesSociales
     form_class = PlanesSocialesForm
     success_message = "%(nombre)s fue registrado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class PlanesSocialesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = PlanesSociales
     form_class = PlanesSocialesForm
     success_message = "%(nombre)s fue editado correctamente"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 # endregion
@@ -312,8 +764,26 @@ class PlanesSocialesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class AgentesExternosListView(PermisosMixin, ListView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = AgentesExternos
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
 
@@ -335,22 +805,76 @@ class AgentesExternosListView(PermisosMixin, ListView):
 
 
 class AgentesExternosDetailView(PermisosMixin, DetailView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = AgentesExternos
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class AgentesExternosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = AgentesExternos
     success_url = reverse_lazy("agentesexternos_listar")
     success_message = "El registro fue eliminado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class AgentesExternosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = AgentesExternos
     form_class = AgentesExternosForm
     success_message = "%(nombre)s fue registrado correctamente"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     def get_initial(self):
         """
@@ -367,10 +891,28 @@ class AgentesExternosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
 
 
 class AgentesExternosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = AgentesExternos
     form_class = AgentesExternosForm
     success_message = "%(nombre)s fue editado correctamente"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 # endregion
@@ -380,12 +922,26 @@ class AgentesExternosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class GruposDestinatariosListView(PermisosMixin, ListView):
-    permission_required = [
-        "Configuraciones.view_gruposdestinatarios",
-        "Usuarios.rol_admin",
-        "Usuarios.rol_directivo",
-    ]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = GruposDestinatarios
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
 
@@ -408,29 +964,101 @@ class GruposDestinatariosListView(PermisosMixin, ListView):
 
 
 class GruposDestinatariosDetailView(PermisosMixin, DetailView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = GruposDestinatarios
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class GruposDestinatariosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = GruposDestinatarios
     success_url = reverse_lazy("gruposdestinatarios_listar")
     success_message = "El registro fue eliminado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class GruposDestinatariosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = GruposDestinatarios
     form_class = GruposDestinatariosForm
     success_message = "%(nombre)s fue registrado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class GruposDestinatariosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = GruposDestinatarios
     form_class = GruposDestinatariosForm
     success_message = "%(nombre)s fue editado correctamente"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 # endregion
@@ -440,8 +1068,26 @@ class GruposDestinatariosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateVi
 
 
 class CategoriaAlertasListView(PermisosMixin, ListView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = CategoriaAlertas
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
 
@@ -458,31 +1104,101 @@ class CategoriaAlertasListView(PermisosMixin, ListView):
 
 
 class CategoriaAlertasDetailView(PermisosMixin, DetailView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = CategoriaAlertas
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class CategoriaAlertasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = CategoriaAlertas
     success_url = reverse_lazy("categoriaalertas_listar")
     success_message = "El registro fue eliminado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class CategoriaAlertasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = CategoriaAlertas
     form_class = CategoriaAlertasForm
-
     success_message = "%(nombre)s fue registrado correctamente"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class CategoriaAlertasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = CategoriaAlertas
     form_class = CategoriaAlertasForm
-
     success_message = "%(nombre)s fue editado correctamente"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 # endregion
@@ -491,8 +1207,26 @@ class CategoriaAlertasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView)
 
 
 class AlertasListView(PermisosMixin, ListView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Alertas
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
 
@@ -509,31 +1243,101 @@ class AlertasListView(PermisosMixin, ListView):
 
 
 class AlertasDetailView(PermisosMixin, DetailView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Alertas
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class AlertasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Alertas
     success_url = reverse_lazy("alertas_listar")
     success_message = "El registro fue eliminado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class AlertasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Alertas
     form_class = AlertasForm
-
     success_message = "%(nombre)s fue registrado correctamente"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class AlertasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Alertas
     form_class = AlertasForm
-
     success_message = "%(nombre)s fue editado correctamente"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 # endregion
@@ -543,8 +1347,26 @@ class AlertasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class EquiposListView(PermisosMixin, ListView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Equipos
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
 
@@ -565,22 +1387,76 @@ class EquiposListView(PermisosMixin, ListView):
 
 
 class EquiposDetailView(PermisosMixin, DetailView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Equipos
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class EquiposDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Equipos
     success_url = reverse_lazy("equipos_listar")
     success_message = "El registro fue eliminado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class EquiposCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Equipos
     form_class = EquiposForm
     success_message = "%(nombre)s fue registrado correctamente"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
@@ -593,10 +1469,28 @@ class EquiposCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
 
 
 class EquiposUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Equipos
     form_class = EquiposForm
     success_message = "%(nombre)s fue editado correctamente"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
@@ -615,8 +1509,26 @@ class EquiposUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class AccionesListView(PermisosMixin, ListView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Acciones
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
 
@@ -635,29 +1547,101 @@ class AccionesListView(PermisosMixin, ListView):
 
 
 class AccionesDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Acciones
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class AccionesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Acciones
     success_url = reverse_lazy("acciones_listar")
     success_message = "El registro fue eliminado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class AccionesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Acciones
     form_class = AccionesForm
     success_message = "%(nombre)s fue registrado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class AccionesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Acciones
     form_class = AccionesForm
     success_message = "%(nombre)s fue editado correctamente"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 # endregion
@@ -667,8 +1651,26 @@ class AccionesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class CriteriosListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Criterios
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
 
@@ -690,29 +1692,101 @@ class CriteriosListView(PermisosMixin, ListView):
 
 
 class CriteriosDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Criterios
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class CriteriosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Criterios
     success_url = reverse_lazy("criterios_listar")
     success_message = "El registro fue eliminado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class CriteriosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Criterios
     form_class = CriteriosForm
     success_message = "%(nombre)s fue registrado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class CriteriosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Criterios
     form_class = CriteriosForm
     success_message = "%(nombre)s fue editado correctamente"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 # endregion
@@ -722,8 +1796,26 @@ class CriteriosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class IndicesListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Indices
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
 
@@ -745,15 +1837,51 @@ class IndicesListView(PermisosMixin, ListView):
 
 
 class IndicesDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Indices
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class IndicesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Indices
     success_url = reverse_lazy("indices_listar")
     success_message = "El registro fue eliminado correctamente"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class IndiceInline:
@@ -833,7 +1961,25 @@ def delete_variant(request, pk):
 
 
 class IndicesCreateView(PermisosMixin, IndiceInline, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super(IndicesCreateView, self).get_context_data(**kwargs)
@@ -859,7 +2005,25 @@ class IndicesCreateView(PermisosMixin, IndiceInline, CreateView):
 
 
 class IndicesUpdateView(PermisosMixin, IndiceInline, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super(IndicesUpdateView, self).get_context_data(**kwargs)
@@ -887,12 +2051,27 @@ class IndicesUpdateView(PermisosMixin, IndiceInline, UpdateView):
 
 class VacantesListView(PermisosMixin, ListView):
     permission_required = [
-        "Usuarios.rol_admin",
-        "Usuarios.rol_directivo",
-        "Usuarios.rol_observador",
-        "Usuarios.rol_consultante",
+        "Usuarios.programa_Configuraciones",
     ]
     model = Vacantes
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
         query = self.request.GET.get("busqueda")
@@ -910,13 +2089,26 @@ class VacantesListView(PermisosMixin, ListView):
 
 
 class VacantesDetailView(PermisosMixin, DetailView):
-    permission_required = [
-        "Usuarios.rol_admin",
-        "Usuarios.rol_directivo",
-        "Usuarios.rol_observador",
-        "Usuarios.rol_consultante",
-    ]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Vacantes
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -927,17 +2119,53 @@ class VacantesDetailView(PermisosMixin, DetailView):
 
 
 class VacantesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Vacantes
     success_url = reverse_lazy("vacantes_listar")
     success_message = "El registro fue eliminado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class VacantesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Vacantes
     form_class = VacantesForm
     success_message = "%(nombre)s fue registrado correctamente"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -946,10 +2174,28 @@ class VacantesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
 
 
 class VacantesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = Vacantes
     form_class = VacantesForm
     success_message = "%(nombre)s fue editado correctamente"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -985,8 +2231,26 @@ class VacantesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
 
 
 class SLEquiposListView(PermisosMixin, ListView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = SL_Equipos
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
 
@@ -1005,34 +2269,124 @@ class SLEquiposListView(PermisosMixin, ListView):
 
 
 class SLEquiposDetailView(PermisosMixin, DetailView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = SL_Equipos
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class SLEquiposDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = SL_Equipos
     success_url = reverse_lazy("slequipos_listar")
     success_message = "El registro fue eliminado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class SLEquiposCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = SL_Equipos
     form_class = SL_Equipos_Form
     success_message = "%(nombre)s fue registrado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class SLEquiposUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = SL_Equipos
     form_class = SL_Equipos_Form
     success_message = "%(nombre)s fue editado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class SLIndicesVulnerabilidadListView(PermisosMixin, ListView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = SL_IndicesVulnerabilidad
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
 
@@ -1051,29 +2405,101 @@ class SLIndicesVulnerabilidadListView(PermisosMixin, ListView):
 
 
 class SLIndicesVulnerabilidadDetailView(PermisosMixin, DetailView):
-    permission_required = ["Usuarios.rol_admin", "Usuarios.rol_directivo"]
+    permission_required = "Usuarios.programa_Configuraciones"
     model = SL_IndicesVulnerabilidad
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            # "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class SLIndicesVulnerabilidadDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = SL_IndicesVulnerabilidad
     success_url = reverse_lazy("slindicesvulnerabilidad_list")
     success_message = "El registro fue eliminado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class SLIndicesVulnerabilidadCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = SL_IndicesVulnerabilidad
     form_class = SL_IndicesVulnerabilidadForm
     success_message = "%(nombre)s fue registrado correctamente"
 
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class SLIndicesVulnerabilidadUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_Configuraciones"
     model = SL_IndicesVulnerabilidad
     form_class = SL_IndicesVulnerabilidadForm
     success_message = "%(nombre)s fue editado correctamente"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Permitir que los superusuarios siempre tengan acceso
+        if request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        # Lista de permisos que no pueden entrar a la pagina
+        permisos_a_verificar = [
+            # "Usuarios.rol_directivo",
+            "Usuarios.rol_operativo",
+            "Usuarios.rol_tecnico",
+            "Usuarios.rol_consultante",
+            "Usuarios.rol_observador",
+        ]
+
+        # Verifica si el usuario tiene alguno de estos permisos
+        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
 
 # endregion
