@@ -143,15 +143,16 @@ class LegajoGrupoFamiliarForm(forms.ModelForm):
 
 class NuevoLegajoFamiliarForm(forms.ModelForm):
     vinculo = forms.ChoiceField(choices=CHOICE_VINCULO_FAMILIAR, required=True)
-    estado_relacion = forms.ChoiceField(choices=CHOICE_ESTADO_RELACION, required=True)
-    conviven = forms.ChoiceField(choices=CHOICE_SINO, required=True)
-    cuidador_principal = forms.ChoiceField(choices=CHOICE_SINO, required=True)
+    estado_relacion = forms.ChoiceField(choices=CHOICE_ESTADO_RELACION, required=False)
+    conviven = forms.ChoiceField(choices=CHOICE_SINO, required=False)
+    cuidador_principal = forms.ChoiceField(choices=CHOICE_SINO, required=False)
     documento = forms.IntegerField(
         required=False,
         validators=[MinValueValidator(3000000), MaxValueValidator(100000000)],
         widget=forms.NumberInput(),
     )
-
+    max_nivel = forms.ChoiceField(choices=CHOICE_NIVEL_EDUCATIVO, required=False, label="Nivel educativo")
+    estado_nivel = forms.ChoiceField(choices=CHOICE_ESTADO_NIVEL_EDUCATIVO, required=False, label="Estado nivel educativo",)
     class Meta:
         model = Legajos
         fields = [
