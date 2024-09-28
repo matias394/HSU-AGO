@@ -362,6 +362,8 @@ class CDIFPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
         conviven = copy_form.get("conviven")
         estado_relacion = copy_form.get("estado_relacion")
         cuidador_principal = copy_form.get("cuidador_principal")
+        max_nivel_send=copy_form.get("max_nivel")
+        estado_nivel_send=copy_form.get("estado_nivel")
 
         # Crea el objeto Legajos
         try:
@@ -379,7 +381,7 @@ class CDIFPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
             DimensionVivienda.objects.create(fk_legajo=nuevo_legajo)
             DimensionSalud.objects.create(fk_legajo=nuevo_legajo)
             DimensionEconomia.objects.create(fk_legajo=nuevo_legajo)
-            DimensionEducacion.objects.create(fk_legajo=nuevo_legajo)
+            DimensionEducacion.objects.create(fk_legajo=nuevo_legajo, max_nivel=max_nivel_send,estado_nivel=estado_nivel_send)
             DimensionTrabajo.objects.create(fk_legajo=nuevo_legajo)
         except Exception as e:
             print(e)
