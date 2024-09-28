@@ -46,5 +46,8 @@ urlpatterns = [
     path('CDIF/intervenciones/editar/<pk>', login_required(CDIFIntervencionesUpdateView.as_view()), name='CDIF_intervencion_editar'),
     path('CDIF/intervenciones/borrar/<pk>', login_required(CDIFIntervencionesDeleteView.as_view()), name='CDIF_intervencion_borrar'),
 
+    # Guarda
+    path('CDIF/busquedaGuarda/buscar/', login_required(busqueda_Guarda), name='busqueda_guarda'),
+
     ]
 

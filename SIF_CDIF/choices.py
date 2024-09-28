@@ -200,6 +200,63 @@ CHOICE_NOSI_MODIFICABLE=[
     ('Potencial', 'Potencial'),
     ('De base', 'De base'),
 ]
+CHOICE_CENTROS_SALUD = [
+    (None, ''),
+    ('Cura Brochero', 'Cura Brochero'),
+    ('20 de Julio', '20 de Julio'),
+    ('29 de Septiembre', '29 de Septiembre'),
+    ('Antoniazzi', 'Antoniazzi'),
+    ('Barthalot', 'Barthalot'),
+    ('CIC', 'CIC'),
+    ('Camila Rolón', 'Camila Rolón'),
+    ('Carrillo', 'Carrillo'),
+    ('Castello', 'Castello'),
+    ('Favaloro', 'Favaloro'),
+    ('Leloir', 'Leloir'),
+    ('Matera', 'Matera'),
+    ('Padre Mora', 'Padre Mora'),
+    ('Podestá', 'Podestá'),
+    ('Presidente Perón', 'Presidente Perón'),
+    ('Sabín', 'Sabín'),
+    ('San Miguel Oeste', 'San Miguel Oeste'),
+    ('Suarez Paris', 'Suarez Paris'),
+    ('UFO', 'UFO'),
+    ('Hospital Larcade', 'Hospital Larcade'),
+    ('Hospital Santa María', 'Hospital Santa María'),
+    ('Hospital San Miguel Arcángel', 'Hospital San Miguel Arcángel'),
+    ('Clínica Privada', 'Clínica Privada'),
+    ('Otro', 'Otro'),
+]
+
+CHOICE_ENFERMEDADES_MENTALES = [
+    (None, ''),
+    ('Depresión', 'Depresión'),
+    ('Ansiedad Generalizada', 'Ansiedad Generalizada'),
+    ('Trastorno Bipolar', 'Trastorno Bipolar'),
+    ('Esquizofrenia', 'Esquizofrenia'),
+    ('Trastorno Obsesivo-Compulsivo', 'Trastorno Obsesivo-Compulsivo'),
+    ('Trastorno de Estrés Postraumático', 'Trastorno de Estrés Postraumático'),
+    ('Trastorno de Pánico', 'Trastorno de Pánico'),
+    ('Trastorno de Personalidad Límite', 'Trastorno de Personalidad Límite'),
+    ('Trastorno por Déficit de Atención e Hiperactividad', 'Trastorno por Déficit de Atención e Hiperactividad'),
+    ('Fobias Específicas', 'Fobias Específicas'),
+    ('Otras', 'Otras'),
+]
+CHOICE_CAPACIDADES_REDUCIDAS = [
+    (None, ''),
+    ('Motora', 'Motora'),
+    ('Auditiva', 'Auditiva'),
+    ('Visual', 'Visual'),
+    ('Intelectual', 'Intelectual'),
+    ('Psicosocial', 'Psicosocial'),
+    ('Del lenguaje', 'Del lenguaje'),
+    ('Neurológica', 'Neurológica'),
+    ('Cognitiva', 'Cognitiva'),
+    ('Respiratoria', 'Respiratoria'),
+    ('Cardíaca', 'Cardíaca'),
+    ('Otras', 'Otras'),
+]
+
 
 CHOICE_RESPONSABLES=[
     ('Garcia Maria Begoña','Garcia Maria Begoña'),

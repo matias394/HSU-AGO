@@ -40,10 +40,18 @@
                         </button>
                     </div>
                     <div class="line"></div>
+                    <div class="step" data-target="#cuidador-Guarda">
+                        <button type="button" class="step-trigger" role="tab" aria-controls="cuidador-Guarda"
+                            id="cuidador-Guarda-trigger">
+                            <span class="bs-stepper-circle">2</span>
+                            <span class="bs-stepper-label">Guarda o cuidador principal</span>
+                        </button>
+                    </div>
+                    <div class="line"></div>
                     <div class="step" data-target="#cuidador-principal">
                         <button type="button" class="step-trigger" role="tab" aria-controls="cuidador-principal"
                             id="cuidador-principal-trigger">
-                            <span class="bs-stepper-circle">2</span>
+                            <span class="bs-stepper-circle">3</span>
                             <span class="bs-stepper-label">Madre o cuidador principal</span>
                         </button>
                     </div>
@@ -51,7 +59,7 @@
                     <div class="step" data-target="#cuidador-secundario">
                         <button type="button" class="step-trigger" role="tab" aria-controls="cuidador-secundario"
                             id="cuidador-secundario-trigger">
-                            <span class="bs-stepper-circle">3</span>
+                            <span class="bs-stepper-circle">4</span>
                             <span class="bs-stepper-label">Padre o apoyo en la crianza</span>
                         </button>
                     </div>
@@ -59,7 +67,7 @@
                     <div class="step" data-target="#convivientes">
                         <button type="button" class="step-trigger" role="tab" aria-controls="convivientes"
                             id="convivientes-trigger">
-                            <span class="bs-stepper-circle">4</span>
+                            <span class="bs-stepper-circle">5</span>
                             <span class="bs-stepper-label">Otros convivientes</span>
                         </button>
                     </div>
@@ -67,7 +75,7 @@
                     <div class="step" data-target="#info-centro">
                         <button type="button" class="step-trigger" role="tab" aria-controls="info-centro"
                             id="info-centro-trigger">
-                            <span class="bs-stepper-circle">5</span>
+                            <span class="bs-stepper-circle">6</span>
                             <span class="bs-stepper-label">Información de la postulación</span>
                         </button>
                     </div>
@@ -246,6 +254,266 @@
                             <a class="btn btn-secondary float-left mb-3 mt-5 " onclick="stepper.previous()">Volver</a>
                             <a class="btn btn-primary float-right mb-3 mt-5 " onclick="stepper.next()">Continuar</a>
                         </div>
+                        <!-- INICIO  GUARDA-->
+                        <div id="cuidador-Guarda" class="content" role="tabpanel"
+                        aria-labelledby="cuidador-Guarda-trigger">
+                        <div class="col-12 mt-3">
+                            <div class="card ">
+                                <div class="card-header">
+                                    <div class="card-title font-weight-bold">
+                                        Datos de la Guarda o cuidador principal
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12 ">
+                                            <div class="row my-3 pl-2">
+                                                1. DATOS PERSONALES
+                                            </div>
+                                            <div class="row pl-3">
+                                                <div class="col-sm-3 form-group">
+                                                    <label>Guarda o cuidador principal</label>
+                                                    <select name="fk_legajo_guarda" class="form-control custom-select" id="id_fk_legajo_GUARDA">
+                                                        <option value=""></option>
+                                                        {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                        <option value="{{object.fk_legajo_1.id}}" selected>{{object.fk_legajo_1}}</option>
+                                                        {% endif %}
+                                                        {% for f in familia %}
+                                                        <option value="{{f.fk_legajo_1.id}}">{{f.fk_legajo_1}}</option>
+                                                        {% endfor %}
+                                                        {% for f in familia_inversa %}
+                                                        <option value="{{f.fk_legajo_2.id}}">{{f.fk_legajo_2}}</option>
+                                                        {% endfor %}
+                                                      </select>
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label>Vínculo</label>
+                                                    <input type="text" class="form-control" id="vinculoGUARDA" name="vinculoGUARDA" 
+                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                    value="{{object.vinculoGUARDA}}"
+                                                    {% endif %}
+                                                    readonly>
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label>Tipo de documento</label>
+                                                    <input type="text" class="form-control" id="tipo_docGUARDA"
+                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                    value="{{object.fk_legajo_1.tipo_docGUARDA}}"
+                                                    {% endif %}
+                                                    readonly>
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label>Numero documento</label>
+                                                    <input type="text" class="form-control" id="documentoGUARDA" 
+                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                    value="{{object.fk_legajo_1.documento}}"
+                                                    {% endif %}
+                                                    readonly>
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label>Fecha Nacimiento</label>
+                                                    <input type="text" class="form-control" id="fecha_nacimientoGUARDA" 
+                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                    value="{{object.fk_legajo_1.fecha_nacimientoGUARDA}}"
+                                                    {% endif %}
+                                                    readonly>
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label>Estado civil</label>
+                                                    <input type="text" class="form-control" id="estado_civilG" 
+                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                    value="{{object.fk_legajo_1.estado_civil}}"
+                                                    {% endif %}
+                                                    readonly>
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label>Nacionalidad</label>
+                                                    <input type="text" class="form-control" id="nacionalidadG" 
+                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                    <!-- value="{{object.fk_legajo_1.nacionalidad}}" -->
+                                                    {% endif %}
+                                                    readonly>
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label>Telefono</label>
+                                                    <input type="text" class="form-control" id="telefonoG" 
+                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                    value="{{object.fk_legajo_1.fecha_nacimiento}}"
+                                                    {% endif %}
+                                                    readonly>
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label>Calle</label>
+                                                    <input type="text" class="form-control" id="calleG" 
+                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                    value="{{object.fk_legajo_1.fecha_nacimiento}}"
+                                                    {% endif %}
+                                                    readonly>
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label>Altura</label>
+                                                    <input type="text" class="form-control" id="alturaG" 
+                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                    value="{{object.fk_legajo_1.fecha_nacimiento}}"
+                                                    {% endif %}
+                                                    readonly>
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label>Piso</label>
+                                                    <input type="text" class="form-control" id="pisoG" 
+                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                    value="{{object.fk_legajo_1.fecha_nacimiento}}"
+                                                    {% endif %}
+                                                    readonly>
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label>Circuito</label>
+                                                    <input type="text" class="form-control" id="circuitoG" 
+                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                    value="{{object.fk_legajo_1.fecha_nacimiento}}"
+                                                    {% endif %}
+                                                    readonly>
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label>Barrio</label>
+                                                    <input type="text" class="form-control" id="barrioG" 
+                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                    value="{{object.fk_legajo_1.fecha_nacimiento}}"
+                                                    {% endif %}
+                                                    readonly>
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label>Localidad</label>
+                                                    <input type="text" class="form-control" id="localidadG" 
+                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                    value="{{object.fk_legajo_1.fecha_nacimiento}}"
+                                                    {% endif %}
+                                                    readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="row my-3 pl-2">
+                                                2. SALUD
+                                            </div>
+                                            <div class="row pl-3">
+                                                <div class="col-sm-3 form-group">
+                                                    {{form.padece_enfermedad_psiquica|as_crispy_field}}
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    {{form.cual_enfermedad|as_crispy_field}}
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    {{form.en_tratamiento|as_crispy_field}}
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    {{form.donde_tratamiento|as_crispy_field}}
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    {{form.capacidades_reducidas|as_crispy_field}}
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="col-sm-12"> 
+                                            <div class="row pl-3">                                               
+                                                <div class="col-sm-3 form-group">
+                                                    <label>¿Está embarazada actualmente?</label>
+                                                    {{form.emb_actualmente_1| as_crispy_field}}
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label>¿Tiene los controles?</label>
+                                                    {{form.controles_1| as_crispy_field}}
+                                                </div>
+                                                <div class="col-sm-4 form-group">
+                                                    <label>Embarazo actual</label>
+                                                    {{form.emb_actual_1| as_crispy_field}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="row my-3 pl-2">
+                                                4. EDUCACIÓN
+                                            </div>
+                                            <div class="row pl-3">
+                                                <div class="col-sm-3 form-group">
+                                                    <label>Máximo nivel alcanzado</label>
+                                                    <input type="text" class="form-control" id="nivelG" 
+                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                    value="{{object.fk_legajo_1.fecha_nacimiento}}"
+                                                    {% endif %}
+                                                    readonly>
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    <label>Estado</label>
+                                                    <input type="text" class="form-control" id="estadoG" 
+                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                    value="{{object.fk_legajo_1.fecha_nacimiento}}"
+                                                    {% endif %}
+                                                    readonly>
+                                                </div>
+                                            </div>
+                                            <div class="row-pl-6">
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        {{form.leer_1| as_crispy_field}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        {{form.escribir_1| as_crispy_field}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        {{form.retomar_estudios_1| as_crispy_field}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        {{form.aprender_oficio_1| as_crispy_field}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 mt-2">
+                                            <div class="row my-3 pl-2">
+                                                5. ECONOMÍA
+                                            </div>
+                                            <div class="row pl-3">
+                                                <div class="col-12 form-group">
+                                                    <label>Planes sociales que recibe</label>
+                                                    {{form.planes_sociales_1| as_crispy_field}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 mt-2">
+                                            <div class="row my-3 pl-2">
+                                                6. TRABAJO
+                                            </div>
+                                            <div class="row pl-3">
+                                                <div class="col-sm-4 form-group">
+                                                    <label>¿Tiene trabajo actualmente?</label>
+                                                    {{form.trabajo_actual_1| as_crispy_field}}
+                                                </div>
+                                                <div class="col-sm-4 form-group">
+                                                    <label>Ocupación</label>
+                                                    {{form.ocupacion_1| as_crispy_field}}
+                                                </div>
+                                                <div class="col-sm-4 form-group">
+                                                    <label>Modo de contratación</label>
+                                                    {{form.modo_contrat_1| as_crispy_field}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="btn btn-secondary float-left mb-3 mt-5 " onclick="stepper.previous()">Volver</a>
+                            <a class="btn btn-primary float-right mb-3 mt-5 " onclick="stepper.next()">Continuar</a>
+                    </div>
+                        <!--  Fin Guarda-->
 
                         <div id="cuidador-principal" class="content" role="tabpanel"
                             aria-labelledby="cuidador-principal-trigger">
@@ -1116,6 +1384,55 @@
             vinculo.value = '{{f.vinculo}}';
         }
         {% endfor %}
+    });
+
+
+
+
+    $('#id_fk_legajo_GUARDA').change(function() {
+
+        //var nivelG = document.getElementById("nivelG");
+        // Obtiene el valor seleccionado
+        var seleccion = $(this).val();
+        // Lógica para determinar el contenido del div basado en la selección
+        {% for f in familia %}
+        if (seleccion === '{{f.fk_legajo_1.id}}') {
+            tipo_docGUARDA.value = '{{f.fk_legajo_1.tipo_doc}}';
+            documentoGUARDA.value = '{{f.fk_legajo_1.documento}}';
+            vinculoGUARDA.value = '{{f.vinculo}}';
+            fecha_nacimientoGUARDA.value = '{{f.fk_legajo_1.fecha_nacimiento}}';
+            estado_civilG.value = '{{f.fk_legajo_1.estado_civil}}';
+            telefonoG.value = '{{f.fk_legajo_1.telefono}}';
+            calleG.value = '{{f.fk_legajo_1.calle}}';
+            alturaG.value = '{{f.fk_legajo_1.altura}}';
+            pisoG.value = '{{f.fk_legajo_1.piso}}';
+            circuitoG.value = '{{f.fk_legajo_1.circuito}}';
+            barrioG.value = '{{f.fk_legajo_1.barrio}}';
+            localidadG.value = '{{f.fk_legajo_1.localidad}}';
+            nacionalidadG.value = '{{f.fk_legajo_1.nacionalidad}}';
+        }
+        {% endfor %}
+        {% for f in familia_inversa %}
+        if (seleccion === '{{f.fk_legajo_2.id}}') {
+            tipo_docGUARDA.value = '{{f.fk_legajo_2.tipo_doc}}';
+            documentoGUARDA.value = '{{f.fk_legajo_2.documento}}';
+            vinculoGUARDA.value = '{{f.vinculo}}';
+            fecha_nacimientoGUARDA.value = '{{f.fk_legajo_2.fecha_nacimiento}}';
+            estado_civilG.value = '{{f.fk_legajo_2.estado_civil}}';
+            telefonoG.value = '{{f.fk_legajo_2.telefono}}';
+            calleG.value = '{{f.fk_legajo_2.calle}}';
+            alturaG.value = '{{f.fk_legajo_2.altura}}';
+            pisoG.value = '{{f.fk_legajo_2.piso}}';
+            circuitoG.value = '{{f.fk_legajo_2.circuito}}';
+            barrioG.value = '{{f.fk_legajo_2.barrio}}';
+            localidadG.value = '{{f.fk_legajo_2.localidad}}';
+            nacionalidadG.value = '{{f.fk_legajo_2.nacionalidad}}';
+        }
+        {% endfor %}
+        
+         nivelG.value = '{{educacion.max_nivel}}';
+         console.log( nivelG.value )
+
     });
 });
 </script>
