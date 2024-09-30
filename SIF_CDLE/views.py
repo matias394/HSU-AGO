@@ -44,7 +44,7 @@ from django.core.exceptions import PermissionDenied
 def obtener_rol(request):
     if request.user.is_authenticated:
         # Supongamos que este método retorna los roles del usuario
-        return list(request.user.get_all_permissions())
+        return list(request.user.groups.values_list("name", flat=True))
     return []
 
 
@@ -74,12 +74,12 @@ class CDLEDerivacionesBuscarListView(TemplateView, PermisosMixin):
 
             rol = obtener_rol(self.request)
             roles_permitidos = [
-                "Usuarios.rol_admin",
-                "Usuarios.rol_directivo",
-                "Usuarios.rol_operativo",
-                "Usuarios.rol_tecnico",
-                "Usuarios.rol_consultante",
-                # "Usuarios.rol_observador",
+                "CDLE  Administrador",
+                "CDLE  Directivo",
+                "CDLE  Equipo operativo",
+                "CDLE  Equipo técnico",
+                "CDLE  Consultante",
+                # "CDLE  Observador",
             ]
             if any(role in roles_permitidos for role in rol):
                 context["btn_agregar"] = True
@@ -91,12 +91,12 @@ class CDLEDerivacionesBuscarListView(TemplateView, PermisosMixin):
 
         rol = obtener_rol(self.request)
         roles_permitidos = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
         if any(role in roles_permitidos for role in rol):
             context["btn_derivar"] = True
@@ -110,7 +110,7 @@ class CDLEDerivacionesBuscarListView(TemplateView, PermisosMixin):
 
 
 class CDLEDerivacionesListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/derivaciones_bandeja_list.html"
     queryset = LegajosDerivaciones.objects.filter(fk_programa=settings.PROG_CDLE)
 
@@ -134,6 +134,8 @@ class CDLEDerivacionesListView(PermisosMixin, ListView):
             if not object_list:
                 messages.warning(self.request, ("La búsqueda no arrojó resultados."))
 
+        rol = obtener_rol(self.request)
+        print(rol)
         context["todas"] = model
         context["pendientes"] = model.filter(estado="Pendiente")
         context["aceptadas"] = model.filter(estado="Aceptada")
@@ -143,7 +145,7 @@ class CDLEDerivacionesListView(PermisosMixin, ListView):
 
 
 class CDLEDerivacionesDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/derivaciones_detail.html"
     model = LegajosDerivaciones
 
@@ -162,12 +164,12 @@ class CDLEDerivacionesDetailView(PermisosMixin, DetailView):
 
         rol = obtener_rol(self.request)
         roles_permitidos = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
         if any(role in roles_permitidos for role in rol):
             context["btn_aceptar"] = True
@@ -175,12 +177,12 @@ class CDLEDerivacionesDetailView(PermisosMixin, DetailView):
             context["btn_aceptar"] = False
 
         roles_permitidos_rechazar = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "CDLE  Administrador",
+            "CDLE  Directivo",
+            # "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
         if any(role in roles_permitidos_rechazar for role in rol):
             context["btn_rechazar"] = True
@@ -188,12 +190,12 @@ class CDLEDerivacionesDetailView(PermisosMixin, DetailView):
             context["btn_rechazar"] = False
 
         roles_permitidos_eliminar_editar = [
-            "Usuarios.rol_admin",
-            # "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "CDLE  Administrador",
+            # "CDLE  Directivo",
+            # "CDLE  Equipo operativo",
+            # "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
         if any(role in roles_permitidos_eliminar_editar for role in rol):
             context["btn_eliminar_editar"] = True
@@ -210,7 +212,7 @@ class CDLEDerivacionesDetailView(PermisosMixin, DetailView):
 
 
 class CDLEDerivacionesRechazo(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/derivaciones_rechazo.html"
     form_class = DerivacionesRechazoForm
 
@@ -220,14 +222,18 @@ class CDLEDerivacionesRechazo(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_operativo",
+            "CDLE  Observador",
+            "CDLE  Consultante",
+            "CDLE  Equipo operativo",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_CDLE"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -257,7 +263,7 @@ class CDLEDerivacionesRechazo(PermisosMixin, CreateView):
 
 
 class CDLEDerivacionesUpdateView(PermisosMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     model = LegajosDerivaciones
     template_name = "SIF_CDLE/derivaciones_form.html"
     form_class = LegajosDerivacionesForm
@@ -269,16 +275,20 @@ class CDLEDerivacionesUpdateView(PermisosMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "CDLE  Directivo",
+            # "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            "CDLE  Consultante",
+            "CDLE  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_CDLE"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_initial(self):
@@ -302,7 +312,7 @@ class CDLEDerivacionesUpdateView(PermisosMixin, UpdateView):
 
 
 class CDLEPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/preadmisiones_form.html"
     model = CDLE_PreAdmision
     form_class = CDLE_PreadmisionesForm
@@ -315,13 +325,17 @@ class CDLEPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
-            "Usuarios.rol_consultante",
+            "CDLE  Observador",
+            "CDLE  Consultante",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_CDLE"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
@@ -467,7 +481,7 @@ class CDLEPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
 
 
 class CDLEPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/preadmisiones_form.html"
     model = CDLE_PreAdmision
     form_class = CDLE_PreadmisionesForm
@@ -480,16 +494,20 @@ class CDLEPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "CDLE  Directivo",
+            # "CDLE  Equipo operativo",
+            # "CDLE  Equipo técnico",
+            "CDLE  Consultante",
+            "CDLE  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_CDLE"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -608,7 +626,7 @@ class CDLEPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
 
 
 class CDLEPreAdmisionesDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/preadmisiones_detail.html"
     model = CDLE_PreAdmision
 
@@ -634,12 +652,12 @@ class CDLEPreAdmisionesDetailView(PermisosMixin, DetailView):
 
         rol = obtener_rol(self.request)
         roles_permitidos = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
         if any(role in roles_permitidos for role in rol):
             context["btn_admitir"] = True
@@ -647,12 +665,12 @@ class CDLEPreAdmisionesDetailView(PermisosMixin, DetailView):
             context["btn_admitir"] = False
 
         roles_lista_espera = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
         if any(role in roles_lista_espera for role in rol):
             context["btn_espera"] = True
@@ -660,12 +678,12 @@ class CDLEPreAdmisionesDetailView(PermisosMixin, DetailView):
             context["btn_espera"] = False
 
         roles_rechazo = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "CDLE  Administrador",
+            "CDLE  Directivo",
+            # "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
         if any(role in roles_rechazo for role in rol):
             context["btn_rechazar"] = True
@@ -791,7 +809,7 @@ class CDLEPreAdmisionesDetailView(PermisosMixin, DetailView):
 
 
 class CDLEPreAdmisionesListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/preadmisiones_list.html"
     model = CDLE_PreAdmision
 
@@ -801,12 +819,16 @@ class CDLEPreAdmisionesListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "CDLE  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_CDLE"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -817,7 +839,7 @@ class CDLEPreAdmisionesListView(PermisosMixin, ListView):
 
 
 class CDLEPreAdmisionesBuscarListView(PermisosMixin, TemplateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/preadmisiones_buscar.html"
 
     def get(self, request, *args, **kwargs):
@@ -851,7 +873,7 @@ class CDLEPreAdmisionesBuscarListView(PermisosMixin, TemplateView):
 
 
 class CDLEPreAdmisionesDeleteView(PermisosMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     model = CDLE_PreAdmision
     template_name = "SIF_CDLE/preadmisiones_confirm_delete.html"
     success_url = reverse_lazy("CDLE_preadmisiones_listar")
@@ -862,16 +884,20 @@ class CDLEPreAdmisionesDeleteView(PermisosMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            "CDLE  Consultante",
+            "CDLE  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_CDLE"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -899,7 +925,7 @@ class CDLEPreAdmisionesDeleteView(PermisosMixin, DeleteView):
 
 
 class CDLECriteriosIngresoCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/criterios_ingreso_form.html"
     model = Criterios_Ingreso
     form_class = criterios_Ingreso
@@ -910,7 +936,7 @@ class CDLECriteriosIngresoCreateView(PermisosMixin, CreateView):
 
 
 class CDLEIndiceIngresoCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     model = Criterios_Ingreso
     template_name = "SIF_CDLE/indiceingreso_form.html"
     form_class = CDLE_IndiceIngresoForm
@@ -921,16 +947,20 @@ class CDLEIndiceIngresoCreateView(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_admin",
-            # "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "CDLE  Administrador",
+            # "CDLE  Directivo",
+            # "CDLE  Equipo operativo",
+            # "CDLE  Equipo técnico",
+            "CDLE  Consultante",
+            "CDLE  Observador",
         ]
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_CDLE"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1012,7 +1042,7 @@ class CDLEIndiceIngresoCreateView(PermisosMixin, CreateView):
 
 
 class CDLEIndiceIngresoUpdateView(PermisosMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/indiceingreso_edit.html"
     model = CDLE_PreAdmision
     form_class = CDLE_IndiceIngresoForm
@@ -1023,16 +1053,20 @@ class CDLEIndiceIngresoUpdateView(PermisosMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            # "CDLE  Equipo técnico",
+            "CDLE  Consultante",
+            "CDLE  Observador",
         ]
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_CDLE"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1118,7 +1152,7 @@ class CDLEIndiceIngresoUpdateView(PermisosMixin, UpdateView):
 
 
 class CDLEIndiceIngresoDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/indiceingreso_detail.html"
     model = CDLE_PreAdmision
 
@@ -1160,7 +1194,7 @@ class CDLEIndiceIngresoDetailView(PermisosMixin, DetailView):
 
 
 class CDLECriteriosIVICreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/criterios_ivi_form.html"
     model = Criterios_IVI
     form_class = criterios_IVI
@@ -1171,7 +1205,7 @@ class CDLECriteriosIVICreateView(PermisosMixin, CreateView):
 
 
 class CDLEIndiceIviCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     model = Criterios_IVI
     template_name = "SIF_CDLE/indiceivi_form.html"
     form_class = CDLE_IndiceIviForm
@@ -1182,16 +1216,20 @@ class CDLEIndiceIviCreateView(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_admin",
-            # "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "CDLE  Administrador",
+            # "CDLE  Directivo",
+            # "CDLE  Equipo operativo",
+            # "CDLE  Equipo técnico",
+            "CDLE  Consultante",
+            "CDLE  Observador",
         ]
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_CDLE"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1272,7 +1310,7 @@ class CDLEIndiceIviCreateView(PermisosMixin, CreateView):
 
 
 class CDLEIndiceIviUpdateView(PermisosMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/indiceivi_edit.html"
     model = CDLE_PreAdmision
     form_class = CDLE_IndiceIviForm
@@ -1283,16 +1321,20 @@ class CDLEIndiceIviUpdateView(PermisosMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            # "CDLE  Equipo técnico",
+            "CDLE  Consultante",
+            "CDLE  Observador",
         ]
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_CDLE"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1376,7 +1418,7 @@ class CDLEIndiceIviUpdateView(PermisosMixin, UpdateView):
 
 
 class CDLEIndiceIviDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/indiceivi_detail.html"
     model = CDLE_PreAdmision
 
@@ -1407,13 +1449,13 @@ class CDLEIndiceIviDetailView(PermisosMixin, DetailView):
 
 
 class CDLEPreAdmisiones2DetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/preadmisiones_detail2.html"
     model = CDLE_PreAdmision
 
 
 class CDLEPreAdmisiones3DetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/preadmisiones_detail3.html"
     model = CDLE_PreAdmision
 
@@ -1547,7 +1589,7 @@ class CDLEPreAdmisiones3DetailView(PermisosMixin, DetailView):
 
 
 class CDLEAdmisionesListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/adminsiones_list.html"
     model = CDLE_Admision
 
@@ -1557,12 +1599,16 @@ class CDLEAdmisionesListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "CDLE  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_CDLE"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1590,7 +1636,7 @@ class CDLEAdmisionesListView(PermisosMixin, ListView):
 
 
 class CDLEAdmisionesDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     model = CDLE_Admision
     template_name = "SIF_CDLE/admisiones_detail.html"
 
@@ -1619,7 +1665,7 @@ class CDLEAdmisionesDetailView(PermisosMixin, DetailView):
 
 
 class CDLEAsignadoAdmisionDetail(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/asignado_admisiones_detail.html"
     model = CDLE_Admision
 
@@ -1657,12 +1703,12 @@ class CDLEAsignadoAdmisionDetail(PermisosMixin, DetailView):
 
         rol = obtener_rol(self.request)
         roles_inactivar = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
         if any(role in roles_inactivar for role in rol):
             context["btn_inactivar"] = True
@@ -1670,12 +1716,12 @@ class CDLEAsignadoAdmisionDetail(PermisosMixin, DetailView):
             context["btn_inactivar"] = False
 
         roles_cambiar_vacante = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
         if any(role in roles_cambiar_vacante for role in rol):
             context["btn_cambiar_vcte"] = True
@@ -1683,12 +1729,12 @@ class CDLEAsignadoAdmisionDetail(PermisosMixin, DetailView):
             context["btn_cambiar_vcte"] = False
 
         roles_ver_intervenciones = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
         if any(role in roles_ver_intervenciones for role in rol):
             context["btn_ver_intervenciones"] = True
@@ -1764,7 +1810,7 @@ class CDLEAsignadoAdmisionDetail(PermisosMixin, DetailView):
 
 
 class CDLEInactivaAdmisionDetail(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/inactiva_admisiones_detail.html"
     model = CDLE_Admision
 
@@ -1799,7 +1845,7 @@ class CDLEInactivaAdmisionDetail(PermisosMixin, DetailView):
 
 
 class CDLEIntervencionesCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     model = CDLE_Intervenciones  # Debería ser el modelo CDLE_Intervenciones
     template_name = "SIF_CDLE/intervenciones_form.html"
     form_class = CDLE_IntervencionesForm
@@ -1810,16 +1856,20 @@ class CDLEIntervencionesCreateView(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_admin",
-            # "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "CDLE  Administrador",
+            # "CDLE  Directivo",
+            # "CDLE  Equipo operativo",
+            # "CDLE  Equipo técnico",
+            "CDLE  Consultante",
+            "CDLE  Observador",
         ]
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_CDLE"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -1853,7 +1903,7 @@ class CDLEIntervencionesCreateView(PermisosMixin, CreateView):
 
 
 class CDLEIntervencionesUpdateView(PermisosMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     model = CDLE_Intervenciones
     template_name = "SIF_CDLE/intervenciones_form.html"
     form_class = CDLE_IntervencionesForm
@@ -1864,16 +1914,20 @@ class CDLEIntervencionesUpdateView(PermisosMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            "CDLE  Consultante",
+            "CDLE  Observador",
         ]
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_CDLE"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -1909,7 +1963,7 @@ class CDLEIntervencionesUpdateView(PermisosMixin, UpdateView):
 
 
 class CDLEIntervencionesLegajosListView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/intervenciones_legajo_list.html"
     model = CDLE_Admision
 
@@ -1919,12 +1973,16 @@ class CDLEIntervencionesLegajosListView(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "CDLE  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_CDLE"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1962,7 +2020,7 @@ class CDLEIntervencionesLegajosListView(PermisosMixin, DetailView):
 
 
 class CDLEIntervencionesListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/intervenciones_list.html"
     model = CDLE_Intervenciones
 
@@ -1972,12 +2030,16 @@ class CDLEIntervencionesListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "CDLE  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_CDLE"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1988,13 +2050,13 @@ class CDLEIntervencionesListView(PermisosMixin, ListView):
 
 
 class CDLEIntervencionesDetail(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/intervencion_detail.html"
     model = CDLE_Intervenciones
 
 
 class CDLEOpcionesResponsablesCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/intervenciones_resposables.html"
     model = OpcionesResponsables
     form_class = CDLE_OpcionesResponsablesForm
@@ -2005,7 +2067,7 @@ class CDLEOpcionesResponsablesCreateView(PermisosMixin, CreateView):
 
 
 class CDLEIntervencionesDeleteView(PermisosMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     model = CDLE_Intervenciones
     template_name = "SIF_CDLE/intervenciones_confirm_delete.html"
     success_url = reverse_lazy("CDLE_intervenciones_listar")
@@ -2016,16 +2078,20 @@ class CDLEIntervencionesDeleteView(PermisosMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            "CDLE  Consultante",
+            "CDLE  Observador",
         ]
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_CDLE"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -2046,7 +2112,7 @@ class CDLEIntervencionesDeleteView(PermisosMixin, DeleteView):
 
 
 class CDLEAdmisionesBuscarListView(PermisosMixin, TemplateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     template_name = "SIF_CDLE/admisiones_buscar.html"
 
     def dispatch(self, request, *args, **kwargs):
@@ -2055,12 +2121,16 @@ class CDLEAdmisionesBuscarListView(PermisosMixin, TemplateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "CDLE  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_CDLE"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
@@ -2093,7 +2163,7 @@ class CDLEAdmisionesBuscarListView(PermisosMixin, TemplateView):
 
 
 class CDLEIndiceIviEgresoCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_CDLE"
     model = Legajos
     template_name = "SIF_CDLE/indiceivi_form_egreso.html"
     form_class = CDLE_IndiceIviForm

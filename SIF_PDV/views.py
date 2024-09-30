@@ -33,7 +33,7 @@ from django.core.exceptions import PermissionDenied
 def obtener_rol(request):
     if request.user.is_authenticated:
         # Supongamos que este método retorna los roles del usuario
-        return list(request.user.get_all_permissions())
+        return list(request.user.groups.values_list("name", flat=True))
     return []
 
 
@@ -71,7 +71,7 @@ class PDVDerivacionesBuscarListView(TemplateView, PermisosMixin):
 
 
 class PDVDerivacionesListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/derivaciones_bandeja_list.html"
     queryset = LegajosDerivaciones.objects.filter(fk_programa=settings.PROG_PDV)
 
@@ -104,7 +104,7 @@ class PDVDerivacionesListView(PermisosMixin, ListView):
 
 
 class PDVDerivacionesDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/derivaciones_detail.html"
     model = LegajosDerivaciones
 
@@ -123,12 +123,12 @@ class PDVDerivacionesDetailView(PermisosMixin, DetailView):
 
         rol = obtener_rol(self.request)
         roles_permitidos = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "PDV  Administrador",
+            "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            # "PDV  Consultante",
+            # "PDV  Observador",
         ]
         if any(role in roles_permitidos for role in rol):
             context["btn_aceptar"] = True
@@ -136,12 +136,12 @@ class PDVDerivacionesDetailView(PermisosMixin, DetailView):
             context["btn_aceptar"] = False
 
         roles_permitidos_rechazar = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "PDV  Administrador",
+            "PDV  Directivo",
+            # "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            # "PDV  Consultante",
+            # "PDV  Observador",
         ]
         if any(role in roles_permitidos_rechazar for role in rol):
             context["btn_rechazar"] = True
@@ -149,12 +149,12 @@ class PDVDerivacionesDetailView(PermisosMixin, DetailView):
             context["btn_rechazar"] = False
 
         roles_permitidos_eliminar_editar = [
-            "Usuarios.rol_admin",
-            # "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "PDV  Administrador",
+            # "PDV  Directivo",
+            # "PDV  Equipo operativo",
+            # "PDV  Equipo técnico",
+            # "PDV  Consultante",
+            # "PDV  Observador",
         ]
         if any(role in roles_permitidos_eliminar_editar for role in rol):
             context["btn_eliminar_editar"] = True
@@ -168,7 +168,7 @@ class PDVDerivacionesDetailView(PermisosMixin, DetailView):
 
 
 class PDVDerivacionesRechazo(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/derivaciones_rechazo.html"
     form_class = DerivacionesRechazoForm
 
@@ -178,16 +178,20 @@ class PDVDerivacionesRechazo(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            "PDV  Consultante",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -217,7 +221,7 @@ class PDVDerivacionesRechazo(PermisosMixin, CreateView):
 
 
 class PDVPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/preadmisiones_form.html"
     model = PDV_PreAdmision
     form_class = PDV_PreadmisionesForm
@@ -230,16 +234,20 @@ class PDVPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin)
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            "PDV  Consultante",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -365,7 +373,7 @@ class PDVPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin)
 
 
 class PDVPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/preadmisiones_form.html"
     model = PDV_PreAdmision
     form_class = PDV_PreadmisionesForm
@@ -378,16 +386,20 @@ class PDVPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin)
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            "PDV  Consultante",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -502,7 +514,7 @@ class PDVPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin)
 
 
 class PDVPreAdmisionesDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/preadmisiones_detail.html"
     model = PDV_PreAdmision
 
@@ -631,7 +643,7 @@ class PDVPreAdmisionesDetailView(PermisosMixin, DetailView):
 
 
 class PDVPreAdmisionesDetailView2(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/preadmisiones_detail2.html"
     model = PDV_PreAdmision
 
@@ -683,7 +695,7 @@ class PDVPreAdmisionesDetailView2(PermisosMixin, DetailView):
 
 
 class PDVPreAdmisionesListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/preadmisiones_list.html"
     model = PDV_PreAdmision
 
@@ -693,12 +705,16 @@ class PDVPreAdmisionesListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -709,7 +725,7 @@ class PDVPreAdmisionesListView(PermisosMixin, ListView):
 
 
 class PDVPreAdmisionesBuscarListView(PermisosMixin, TemplateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/preadmisiones_buscar.html"
 
     def dispatch(self, request, *args, **kwargs):
@@ -718,12 +734,16 @@ class PDVPreAdmisionesBuscarListView(PermisosMixin, TemplateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
@@ -756,7 +776,7 @@ class PDVPreAdmisionesBuscarListView(PermisosMixin, TemplateView):
 
 
 class PDVPreAdmisionesDeleteView(PermisosMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     model = PDV_PreAdmision
     template_name = "SIF_PDV/preadmisiones_confirm_delete.html"
     success_url = reverse_lazy("PDV_preadmisiones_listar")
@@ -767,16 +787,20 @@ class PDVPreAdmisionesDeleteView(PermisosMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            "PDV  Consultante",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -804,7 +828,7 @@ class PDVPreAdmisionesDeleteView(PermisosMixin, DeleteView):
 
 
 class PDVCriteriosIngresoCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/criterios_ingreso_form.html"
     model = Criterios_Ingreso
     form_class = criterios_Ingreso
@@ -815,7 +839,7 @@ class PDVCriteriosIngresoCreateView(PermisosMixin, CreateView):
 
 
 class PDVIndiceIngresoCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     model = Criterios_Ingreso
     template_name = "SIF_PDV/indiceingreso_form.html"
     form_class = PDV_IndiceIngresoForm
@@ -826,16 +850,20 @@ class PDVIndiceIngresoCreateView(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            "PDV  Consultante",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -917,7 +945,7 @@ class PDVIndiceIngresoCreateView(PermisosMixin, CreateView):
 
 
 class PDVIndiceIngresoUpdateView(PermisosMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/indiceingreso_edit.html"
     model = PDV_PreAdmision
     form_class = PDV_IndiceIngresoForm
@@ -928,16 +956,20 @@ class PDVIndiceIngresoUpdateView(PermisosMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            "PDV  Consultante",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1023,7 +1055,7 @@ class PDVIndiceIngresoUpdateView(PermisosMixin, UpdateView):
 
 
 class PDVIndiceIngresoDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/indiceingreso_detail.html"
     model = PDV_PreAdmision
 
@@ -1064,7 +1096,7 @@ class PDVIndiceIngresoDetailView(PermisosMixin, DetailView):
 
 
 class PDVCriteriosIVICreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/criterios_ivi_form.html"
     model = Criterios_IVI
     form_class = criterios_IVI
@@ -1075,7 +1107,7 @@ class PDVCriteriosIVICreateView(PermisosMixin, CreateView):
 
 
 class PDVIndiceIviCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     model = Criterios_IVI
     template_name = "SIF_PDV/indiceivi_form.html"
     form_class = PDV_IndiceIviForm
@@ -1086,16 +1118,20 @@ class PDVIndiceIviCreateView(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            "PDV  Consultante",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1179,7 +1215,7 @@ class PDVIndiceIviCreateView(PermisosMixin, CreateView):
 
 
 class PDVIndiceIviUpdateView(PermisosMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/indiceivi_edit.html"
     model = PDV_PreAdmision
     form_class = PDV_IndiceIviForm
@@ -1190,16 +1226,20 @@ class PDVIndiceIviUpdateView(PermisosMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            "PDV  Consultante",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1287,7 +1327,7 @@ class PDVIndiceIviUpdateView(PermisosMixin, UpdateView):
 
 
 class PDVIndiceIviDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/indiceivi_detail.html"
     model = PDV_PreAdmision
 
@@ -1315,13 +1355,13 @@ class PDVIndiceIviDetailView(PermisosMixin, DetailView):
 
 
 class PDVPreAdmisiones2DetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/preadmisiones_detail2.html"
     model = PDV_PreAdmision
 
 
 class PDVPreAdmisiones3DetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/preadmisiones_detail3.html"
     model = PDV_PreAdmision
 
@@ -1399,7 +1439,7 @@ class PDVPreAdmisiones3DetailView(PermisosMixin, DetailView):
 
 
 class PDVAdmisionesListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/adminsiones_list.html"
     model = PDV_Admision
 
@@ -1409,12 +1449,16 @@ class PDVAdmisionesListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1430,7 +1474,7 @@ class PDVAdmisionesListView(PermisosMixin, ListView):
 
 
 class PDVAdmisionesDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     model = PDV_Admision
     template_name = "SIF_PDV/admisiones_detail.html"
 
@@ -1459,7 +1503,7 @@ class PDVAdmisionesDetailView(PermisosMixin, DetailView):
 
 
 class PDVVacantesAdmision(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     model = PDV_Admision
     template_name = "SIF_PDV/vacantes_form.html"
     form_class = PDV_VacantesOtorgadasForm
@@ -1470,16 +1514,20 @@ class PDVVacantesAdmision(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            "PDV  Consultante",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -1539,7 +1587,7 @@ class PDVVacantesAdmision(PermisosMixin, CreateView):
 
 
 class PDVVacantesAdmisionCambio(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     model = PDV_Admision
     template_name = "SIF_PDV/vacantes_form_cambio.html"
     form_class = PDV_VacantesOtorgadasForm
@@ -1550,16 +1598,20 @@ class PDVVacantesAdmisionCambio(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            "PDV  Consultante",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -1628,7 +1680,7 @@ class PDVVacantesAdmisionCambio(PermisosMixin, CreateView):
 
 
 class PDVAsignadoAdmisionDetail(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/asignado_admisiones_detail.html"
     model = PDV_Admision
 
@@ -1665,12 +1717,12 @@ class PDVAsignadoAdmisionDetail(PermisosMixin, DetailView):
 
         rol = obtener_rol(self.request)
         roles_inactivar = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "PDV  Administrador",
+            "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            # "PDV  Consultante",
+            # "PDV  Observador",
         ]
         if any(role in roles_inactivar for role in rol):
             context["btn_inactivar"] = True
@@ -1698,7 +1750,7 @@ class PDVAsignadoAdmisionDetail(PermisosMixin, DetailView):
 
 
 class PDVInactivaAdmisionDetail(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/inactiva_admisiones_detail.html"
     model = PDV_Admision
 
@@ -1708,16 +1760,20 @@ class PDVInactivaAdmisionDetail(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            "PDV  Consultante",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1755,7 +1811,7 @@ class PDVInactivaAdmisionDetail(PermisosMixin, DetailView):
 
 
 class PDVVacantesListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     model = Vacantes
     template_name = "SIF_PDV/vacantes_list.html"
     context_object_name = "organizaciones"
@@ -1766,12 +1822,16 @@ class PDVVacantesListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1795,7 +1855,7 @@ class PDVVacantesListView(PermisosMixin, ListView):
 
 
 class PDVVacantesDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/vacantes_detail.html"
     model = Vacantes
 
@@ -1833,7 +1893,7 @@ class PDVVacantesDetailView(PermisosMixin, DetailView):
 
 
 class PDVIntervencionesCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     model = PDV_Intervenciones  # Debería ser el modelo PDV_Intervenciones
     template_name = "SIF_PDV/intervenciones_form.html"
     form_class = PDV_IntervencionesForm
@@ -1844,16 +1904,20 @@ class PDVIntervencionesCreateView(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "PDV  Directivo",
+            "PDV  Equipo operativo",
+            # "PDV  Equipo técnico",
+            "PDV  Consultante",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -1886,7 +1950,7 @@ class PDVIntervencionesCreateView(PermisosMixin, CreateView):
 
 
 class PDVIntervencionesUpdateView(PermisosMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     model = PDV_Intervenciones
     template_name = "SIF_PDV/intervenciones_form.html"
     form_class = PDV_IntervencionesForm
@@ -1897,16 +1961,20 @@ class PDVIntervencionesUpdateView(PermisosMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            "PDV  Consultante",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -1942,7 +2010,7 @@ class PDVIntervencionesUpdateView(PermisosMixin, UpdateView):
 
 
 class PDVIntervencionesLegajosListView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/intervenciones_legajo_list.html"
     model = PDV_Admision
 
@@ -1952,12 +2020,16 @@ class PDVIntervencionesLegajosListView(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1995,7 +2067,7 @@ class PDVIntervencionesLegajosListView(PermisosMixin, DetailView):
 
 
 class PDVIntervencionesListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/intervenciones_list.html"
     model = PDV_Intervenciones
 
@@ -2005,12 +2077,16 @@ class PDVIntervencionesListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -2021,13 +2097,13 @@ class PDVIntervencionesListView(PermisosMixin, ListView):
 
 
 class PDVIntervencionesDetail(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/intervencion_detail.html"
     model = PDV_Intervenciones
 
 
 class PDVOpcionesResponsablesCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/intervenciones_resposables.html"
     model = OpcionesResponsables
     form_class = PDV_OpcionesResponsablesForm
@@ -2038,7 +2114,7 @@ class PDVOpcionesResponsablesCreateView(PermisosMixin, CreateView):
 
 
 class PDVIntervencionesDeleteView(PermisosMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     model = PDV_Intervenciones
     template_name = "SIF_PDV/intervenciones_confirm_delete.html"
     success_url = reverse_lazy("PDV_intervenciones_listar")
@@ -2049,16 +2125,20 @@ class PDVIntervencionesDeleteView(PermisosMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            "PDV  Consultante",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -2079,7 +2159,7 @@ class PDVIntervencionesDeleteView(PermisosMixin, DeleteView):
 
 
 class PDVAdmisionesBuscarListView(PermisosMixin, TemplateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     template_name = "SIF_PDV/admisiones_buscar.html"
 
     def dispatch(self, request, *args, **kwargs):
@@ -2088,12 +2168,16 @@ class PDVAdmisionesBuscarListView(PermisosMixin, TemplateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "PDV  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
@@ -2126,7 +2210,7 @@ class PDVAdmisionesBuscarListView(PermisosMixin, TemplateView):
 
 
 class PDVIndiceIviEgresoCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_PDV"
     model = Legajos
     template_name = "SIF_PDV/indiceivi_form_egreso.html"
     form_class = PDV_IndiceIviForm

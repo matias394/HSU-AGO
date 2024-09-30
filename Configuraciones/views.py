@@ -25,7 +25,7 @@ from django.core.exceptions import PermissionDenied
 def obtener_rol(request):
     if request.user.is_authenticated:
         # Supongamos que este método retorna los roles del usuario
-        return list(request.user.get_all_permissions())
+        return list(request.user.groups.values_list("name", flat=True))
     return []
 
 
@@ -42,16 +42,20 @@ class SecretariasListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -80,16 +84,20 @@ class SecretariasDetailView(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -105,16 +113,20 @@ class SecretariasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -130,16 +142,20 @@ class SecretariasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -155,16 +171,20 @@ class SecretariasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -184,16 +204,20 @@ class SubsecretariasListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -224,16 +248,20 @@ class SubsecretariasDetailView(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -249,16 +277,20 @@ class SubsecretariasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -274,16 +306,20 @@ class SubsecretariasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -299,16 +335,20 @@ class SubsecretariasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -328,16 +368,20 @@ class OrganismosListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -366,16 +410,20 @@ class OrganismosDetailView(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, *args, **kwargs):
@@ -400,16 +448,20 @@ class OrganismosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -425,16 +477,20 @@ class OrganismosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -450,16 +506,20 @@ class OrganismosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -480,16 +540,20 @@ class ProgramasListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -525,16 +589,20 @@ class ProgramasDetailView(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -550,16 +618,20 @@ class ProgramasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -575,16 +647,20 @@ class ProgramasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -600,16 +676,20 @@ class ProgramasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -629,16 +709,20 @@ class PlanesSocialesListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -669,16 +753,20 @@ class PlanesSocialesDetailView(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -694,16 +782,20 @@ class PlanesSocialesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -719,16 +811,20 @@ class PlanesSocialesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -744,16 +840,20 @@ class PlanesSocialesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -773,16 +873,20 @@ class AgentesExternosListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -814,16 +918,20 @@ class AgentesExternosDetailView(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -839,16 +947,20 @@ class AgentesExternosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -864,16 +976,20 @@ class AgentesExternosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_initial(self):
@@ -902,16 +1018,20 @@ class AgentesExternosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -931,16 +1051,20 @@ class GruposDestinatariosListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -973,16 +1097,20 @@ class GruposDestinatariosDetailView(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -998,16 +1126,20 @@ class GruposDestinatariosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteVi
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1023,16 +1155,20 @@ class GruposDestinatariosCreateView(PermisosMixin, SuccessMessageMixin, CreateVi
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1048,16 +1184,20 @@ class GruposDestinatariosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateVi
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1077,16 +1217,20 @@ class CategoriaAlertasListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -1113,16 +1257,20 @@ class CategoriaAlertasDetailView(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1138,16 +1286,20 @@ class CategoriaAlertasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView)
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1163,16 +1315,20 @@ class CategoriaAlertasCreateView(PermisosMixin, SuccessMessageMixin, CreateView)
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1188,16 +1344,20 @@ class CategoriaAlertasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView)
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1216,16 +1376,20 @@ class AlertasListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -1252,16 +1416,20 @@ class AlertasDetailView(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1277,16 +1445,20 @@ class AlertasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1302,16 +1474,20 @@ class AlertasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1327,16 +1503,20 @@ class AlertasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1356,16 +1536,20 @@ class EquiposListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -1396,16 +1580,20 @@ class EquiposDetailView(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1421,16 +1609,20 @@ class EquiposDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1446,16 +1638,20 @@ class EquiposCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -1480,16 +1676,20 @@ class EquiposUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -1518,16 +1718,20 @@ class AccionesListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -1556,16 +1760,20 @@ class AccionesDetailView(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1581,16 +1789,20 @@ class AccionesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1606,16 +1818,20 @@ class AccionesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1631,16 +1847,20 @@ class AccionesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1660,16 +1880,20 @@ class CriteriosListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -1701,16 +1925,20 @@ class CriteriosDetailView(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1726,16 +1954,20 @@ class CriteriosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1751,16 +1983,20 @@ class CriteriosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1776,16 +2012,20 @@ class CriteriosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1805,16 +2045,20 @@ class IndicesListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -1846,16 +2090,20 @@ class IndicesDetailView(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1871,16 +2119,20 @@ class IndicesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1969,16 +2221,20 @@ class IndicesCreateView(PermisosMixin, IndiceInline, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -2013,16 +2269,20 @@ class IndicesUpdateView(PermisosMixin, IndiceInline, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -2050,9 +2310,7 @@ class IndicesUpdateView(PermisosMixin, IndiceInline, UpdateView):
 
 
 class VacantesListView(PermisosMixin, ListView):
-    permission_required = [
-        "Usuarios.programa_Configuracion",
-    ]
+    permission_required = "Usuarios.programa_Configuracion"
     model = Vacantes
 
     def dispatch(self, request, *args, **kwargs):
@@ -2061,16 +2319,20 @@ class VacantesListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
@@ -2098,16 +2360,20 @@ class VacantesDetailView(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -2130,16 +2396,20 @@ class VacantesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -2155,16 +2425,20 @@ class VacantesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -2185,16 +2459,20 @@ class VacantesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -2240,16 +2518,20 @@ class SLEquiposListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -2278,16 +2560,20 @@ class SLEquiposDetailView(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -2303,16 +2589,20 @@ class SLEquiposDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -2328,16 +2618,20 @@ class SLEquiposCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -2353,16 +2647,20 @@ class SLEquiposUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -2376,16 +2674,20 @@ class SLIndicesVulnerabilidadListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -2414,16 +2716,20 @@ class SLIndicesVulnerabilidadDetailView(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            # "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -2439,16 +2745,20 @@ class SLIndicesVulnerabilidadDeleteView(PermisosMixin, SuccessMessageMixin, Dele
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -2464,16 +2774,20 @@ class SLIndicesVulnerabilidadCreateView(PermisosMixin, SuccessMessageMixin, Crea
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -2489,16 +2803,20 @@ class SLIndicesVulnerabilidadUpdateView(PermisosMixin, SuccessMessageMixin, Upda
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "Configuración  Directivo",
+            "Configuración  Equipo operativo",
+            "Configuración  Equipo técnico",
+            "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
