@@ -34,15 +34,17 @@ from Legajos.models import LegajoAlertas
 # # Create your views here.
 # derivaciones = LegajosDerivaciones.objects.filter(m2m_programas__nombr__iexact="MILD")
 # print(derivaciones)
+
+
 def obtener_rol(request):
     if request.user.is_authenticated:
         # Supongamos que este método retorna los roles del usuario
-        return list(request.user.get_all_permissions())
+        return list(request.user.groups.values_list("name", flat=True))
     return []
 
 
 class MILDDerivacionesBuscarListView(TemplateView, PermisosMixin):
-    permission_required = "Usuarios.programa_MILD"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/derivaciones_buscar.html"
 
     def get(self, request, *args, **kwargs):
@@ -67,12 +69,12 @@ class MILDDerivacionesBuscarListView(TemplateView, PermisosMixin):
 
             rol = obtener_rol(self.request)
             roles_permitidos = [
-                "Usuarios.rol_admin",
-                "Usuarios.rol_directivo",
-                "Usuarios.rol_operativo",
-                "Usuarios.rol_tecnico",
-                "Usuarios.rol_consultante",
-                # "Usuarios.rol_observador",
+                "1000D  Administrador",
+                "1000D  Directivo",
+                "1000D  Equipo operativo",
+                "1000D  Equipo técnico",
+                "1000D  Consultante",
+                # "1000D  Observador",
             ]
             if any(role in roles_permitidos for role in rol):
                 context["btn_agregar"] = True
@@ -89,7 +91,7 @@ class MILDDerivacionesBuscarListView(TemplateView, PermisosMixin):
 
 
 class MILDDerivacionesListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/derivaciones_bandeja_list.html"
     queryset = LegajosDerivaciones.objects.filter(fk_programa=settings.PROG_MILD)
 
@@ -121,7 +123,7 @@ class MILDDerivacionesListView(PermisosMixin, ListView):
 
 
 class MILDDerivacionesDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/derivaciones_detail.html"
     model = LegajosDerivaciones
 
@@ -149,12 +151,12 @@ class MILDDerivacionesDetailView(PermisosMixin, DetailView):
 
         rol = obtener_rol(self.request)
         roles_permitidos = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "1000D  Administrador",
+            "1000D  Directivo",
+            # "1000D  Equipo operativo",
+            "1000D  Equipo operativo",
+            # "1000D  Consultante",
+            # "1000D  Observador",
         ]
         if any(role in roles_permitidos for role in rol):
             context["btn_aceptar"] = True
@@ -162,12 +164,12 @@ class MILDDerivacionesDetailView(PermisosMixin, DetailView):
             context["btn_aceptar"] = False
 
         roles_permitidos_rechazar = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "1000D  Administrador",
+            "1000D  Directivo",
+            # "1000D  Equipo operativo",
+            "1000D  Equipo operativo",
+            # "1000D  Consultante",
+            # "1000D  Observador",
         ]
         if any(role in roles_permitidos_rechazar for role in rol):
             context["btn_rechazar"] = True
@@ -175,12 +177,12 @@ class MILDDerivacionesDetailView(PermisosMixin, DetailView):
             context["btn_rechazar"] = False
 
         roles_permitidos_eliminar_editar = [
-            "Usuarios.rol_admin",
-            # "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "1000D  Administrador",
+            # "1000D  Directivo",
+            # "1000D  Equipo operativo",
+            # "1000D  Equipo operativo",
+            # "1000D  Consultante",
+            # "1000D  Observador",
         ]
         if any(role in roles_permitidos_eliminar_editar for role in rol):
             context["btn_eliminar_editar"] = True
@@ -194,7 +196,7 @@ class MILDDerivacionesDetailView(PermisosMixin, DetailView):
 
 
 class MILDDerivacionesRechazo(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/derivaciones_rechazo.html"
     form_class = DerivacionesRechazoForm
 
@@ -204,16 +206,20 @@ class MILDDerivacionesRechazo(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "1000D  Directivo",
+            # "1000D  Equipo operativo",
+            "1000D  Equipo operativo",
+            "1000D  Consultante",
+            "1000D  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -243,7 +249,7 @@ class MILDDerivacionesRechazo(PermisosMixin, CreateView):
 
 
 class MILDDerivacionesUpdateView(PermisosMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     model = LegajosDerivaciones
     template_name = "SIF_MILD/derivaciones_form.html"
     form_class = LegajosDerivacionesForm
@@ -255,16 +261,20 @@ class MILDDerivacionesUpdateView(PermisosMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            "1000D  Equipo operativo",
+            "1000D  Consultante",
+            "1000D  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_initial(self):
@@ -301,7 +311,7 @@ class MILDDerivacionesUpdateView(PermisosMixin, UpdateView):
 
 
 class MILDPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/preadmisiones_form.html"
     model = MILD_PreAdmision
     form_class = MILD_PreadmisionesForm
@@ -314,16 +324,20 @@ class MILDPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "1000D  Directivo",
+            # "1000D  Equipo operativo",
+            # "1000D  Equipo operativo",
+            "1000D  Consultante",
+            "1000D  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -354,8 +368,8 @@ class MILDPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
         conviven = copy_form.get("conviven")
         estado_relacion = copy_form.get("estado_relacion")
         cuidador_principal = copy_form.get("cuidador_principal")
-        max_nivel_send=copy_form.get("max_nivel")
-        estado_nivel_send=copy_form.get("estado_nivel")
+        max_nivel_send = copy_form.get("max_nivel")
+        estado_nivel_send = copy_form.get("estado_nivel")
         # Crea el objeto Legajos
         try:
 
@@ -372,7 +386,11 @@ class MILDPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
             DimensionVivienda.objects.create(fk_legajo=nuevo_legajo)
             DimensionSalud.objects.create(fk_legajo=nuevo_legajo)
             DimensionEconomia.objects.create(fk_legajo=nuevo_legajo)
-            DimensionEducacion.objects.create(fk_legajo=nuevo_legajo, max_nivel=max_nivel_send,estado_nivel=estado_nivel_send)
+            DimensionEducacion.objects.create(
+                fk_legajo=nuevo_legajo,
+                max_nivel=max_nivel_send,
+                estado_nivel=estado_nivel_send,
+            )
             DimensionTrabajo.objects.create(fk_legajo=nuevo_legajo)
         except Exception as e:
             print(e)
@@ -419,7 +437,7 @@ class MILDPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
             )
 
         # Redireccionar a la misma página después de realizar la acción con éxito
-        # return HttpResponseRedirect(reverse('CDLE_preadmisiones_editar', args=[self.object.pk]))
+        # return HttpResponseRedirect(reverse('MILD_preadmisiones_editar', args=[self.object.pk]))
 
     def form_valid(self, form):
         pk = self.kwargs["pk"]
@@ -453,7 +471,7 @@ class MILDPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
 
 
 class MILDPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/preadmisiones_form.html"
     model = MILD_PreAdmision
     form_class = MILD_PreadmisionesForm
@@ -466,16 +484,20 @@ class MILDPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "1000D  Directivo",
+            # "1000D  Equipo operativo",
+            # "1000D  Equipo operativo",
+            "1000D  Consultante",
+            "1000D  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -571,7 +593,7 @@ class MILDPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
             )
 
         # Redireccionar a la misma página después de realizar la acción con éxito
-        # return HttpResponseRedirect(reverse('CDLE_preadmisiones_editar', args=[self.object.pk]))
+        # return HttpResponseRedirect(reverse('MILD_preadmisiones_editar', args=[self.object.pk]))
 
     def form_valid(self, form):
         pk = MILD_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
@@ -591,7 +613,7 @@ class MILDPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
 
 
 class MILDPreAdmisionesDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/preadmisiones_detail.html"
     model = MILD_PreAdmision
 
@@ -615,12 +637,12 @@ class MILDPreAdmisionesDetailView(PermisosMixin, DetailView):
 
         rol = obtener_rol(self.request)
         roles_permitidos = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "1000D  Administrador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            "1000D  Equipo operativo",
+            # "1000D  Consultante",
+            # "1000D  Observador",
         ]
         if any(role in roles_permitidos for role in rol):
             context["btn_admitir"] = True
@@ -628,12 +650,12 @@ class MILDPreAdmisionesDetailView(PermisosMixin, DetailView):
             context["btn_admitir"] = False
 
         roles_rechazo = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "1000D  Administrador",
+            "1000D  Directivo",
+            # "1000D  Equipo operativo",
+            "1000D  Equipo operativo",
+            # "1000D  Consultante",
+            # "1000D  Observador",
         ]
         if any(role in roles_rechazo for role in rol):
             context["btn_rechazar"] = True
@@ -721,7 +743,7 @@ class MILDPreAdmisionesDetailView(PermisosMixin, DetailView):
 
 
 class MILDPreAdmisionesListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/preadmisiones_list.html"
     model = MILD_PreAdmision
 
@@ -731,12 +753,16 @@ class MILDPreAdmisionesListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "1000D  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -747,7 +773,7 @@ class MILDPreAdmisionesListView(PermisosMixin, ListView):
 
 
 class MILDPreAdmisionesBuscarListView(PermisosMixin, TemplateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/preadmisiones_buscar.html"
 
     def dispatch(self, request, *args, **kwargs):
@@ -756,12 +782,16 @@ class MILDPreAdmisionesBuscarListView(PermisosMixin, TemplateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "1000D  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
@@ -795,7 +825,7 @@ class MILDPreAdmisionesBuscarListView(PermisosMixin, TemplateView):
 
 
 class MILDPreAdmisionesDeleteView(PermisosMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     model = MILD_PreAdmision
     template_name = "SIF_MILD/preadmisiones_confirm_delete.html"
     success_url = reverse_lazy("MILD_preadmisiones_listar")
@@ -806,16 +836,20 @@ class MILDPreAdmisionesDeleteView(PermisosMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            "1000D  Equipo operativo",
+            "1000D  Consultante",
+            "1000D  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -841,7 +875,7 @@ class MILDPreAdmisionesDeleteView(PermisosMixin, DeleteView):
 
 
 class MILDCriteriosIngresoCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/criterios_ingreso_form.html"
     model = Criterios_Ingreso
     form_class = criterios_Ingreso
@@ -852,7 +886,7 @@ class MILDCriteriosIngresoCreateView(PermisosMixin, CreateView):
 
 
 class MILDIndiceIngresoCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     model = Criterios_Ingreso
     template_name = "SIF_MILD/indiceingreso_form.html"
     form_class = MILD_IndiceIngresoForm
@@ -863,16 +897,20 @@ class MILDIndiceIngresoCreateView(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "1000D  Directivo",
+            # "1000D  Equipo operativo",
+            # "1000D  Equipo operativo",
+            "1000D  Consultante",
+            "1000D  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -972,7 +1010,7 @@ class MILDIndiceIngresoCreateView(PermisosMixin, CreateView):
 
 
 class MILDIndiceIngresoUpdateView(PermisosMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/indiceingreso_edit.html"
     model = MILD_PreAdmision
     form_class = MILD_IndiceIngresoForm
@@ -983,16 +1021,20 @@ class MILDIndiceIngresoUpdateView(PermisosMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            # "1000D  Equipo operativo",
+            "1000D  Consultante",
+            "1000D  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1077,7 +1119,7 @@ class MILDIndiceIngresoUpdateView(PermisosMixin, UpdateView):
 
 
 class MILDIndiceIngresoDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/indiceingreso_detail.html"
     model = MILD_PreAdmision
 
@@ -1117,7 +1159,7 @@ class MILDIndiceIngresoDetailView(PermisosMixin, DetailView):
 
 
 class MILDCriteriosIVICreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/criterios_ivi_form.html"
     model = Criterios_IVI
     form_class = criterios_IVI
@@ -1128,7 +1170,7 @@ class MILDCriteriosIVICreateView(PermisosMixin, CreateView):
 
 
 class MILDIndiceIviCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     model = Criterios_IVI
     template_name = "SIF_MILD/indiceivi_form.html"
     form_class = MILD_IndiceIviForm
@@ -1139,16 +1181,20 @@ class MILDIndiceIviCreateView(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "1000D  Directivo",
+            # "1000D  Equipo operativo",
+            # "1000D  Equipo operativo",
+            "1000D  Consultante",
+            "1000D  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1228,7 +1274,7 @@ class MILDIndiceIviCreateView(PermisosMixin, CreateView):
 
 
 class MILDIndiceIviUpdateView(PermisosMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/indiceivi_edit.html"
     model = MILD_PreAdmision
     form_class = MILD_IndiceIviForm
@@ -1239,16 +1285,20 @@ class MILDIndiceIviUpdateView(PermisosMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            # "1000D  Equipo operativo",
+            "1000D  Consultante",
+            "1000D  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1332,7 +1382,7 @@ class MILDIndiceIviUpdateView(PermisosMixin, UpdateView):
 
 
 class MILDIndiceIviDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/indiceivi_detail.html"
     model = MILD_PreAdmision
 
@@ -1362,13 +1412,13 @@ class MILDIndiceIviDetailView(PermisosMixin, DetailView):
 
 
 class MILDPreAdmisiones2DetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/preadmisiones_detail2.html"
     model = MILD_PreAdmision
 
 
 class MILDPreAdmisiones3DetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/preadmisiones_detail3.html"
     model = MILD_PreAdmision
 
@@ -1530,7 +1580,7 @@ class MILDPreAdmisiones3DetailView(PermisosMixin, DetailView):
 
 
 class MILDAdmisionesListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/adminsiones_list.html"
     model = MILD_Admision
 
@@ -1540,12 +1590,16 @@ class MILDAdmisionesListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "1000D  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1573,7 +1627,7 @@ class MILDAdmisionesListView(PermisosMixin, ListView):
 
 
 class MILDAdmisionesDetailView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     model = MILD_Admision
     template_name = "SIF_MILD/admisiones_detail.html"
 
@@ -1602,7 +1656,7 @@ class MILDAdmisionesDetailView(PermisosMixin, DetailView):
 
 
 class MILDAsignadoAdmisionDetail(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/asignado_admisiones_detail.html"
     model = MILD_Admision
 
@@ -1640,12 +1694,12 @@ class MILDAsignadoAdmisionDetail(PermisosMixin, DetailView):
 
         rol = obtener_rol(self.request)
         roles_inactivar = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "1000D  Administrador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            # "1000D  Equipo operativo",
+            # "1000D  Consultante",
+            # "1000D  Observador",
         ]
         if any(role in roles_inactivar for role in rol):
             context["btn_inactivar"] = True
@@ -1686,7 +1740,7 @@ class MILDAsignadoAdmisionDetail(PermisosMixin, DetailView):
 
 
 class MILDInactivaAdmisionDetail(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/inactiva_admisiones_detail.html"
     model = MILD_Admision
 
@@ -1721,7 +1775,7 @@ class MILDInactivaAdmisionDetail(PermisosMixin, DetailView):
 
 
 class MILDIntervencionesCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     model = MILD_Intervenciones  # Debería ser el modelo MILD_Intervenciones
     template_name = "SIF_MILD/intervenciones_form.html"
     form_class = MILD_IntervencionesForm
@@ -1732,16 +1786,20 @@ class MILDIntervencionesCreateView(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "1000D  Directivo",
+            # "1000D  Equipo operativo",
+            # "1000D  Equipo operativo",
+            "1000D  Consultante",
+            "1000D  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -1774,7 +1832,7 @@ class MILDIntervencionesCreateView(PermisosMixin, CreateView):
 
 
 class MILDIntervencionesUpdateView(PermisosMixin, UpdateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     model = MILD_Intervenciones
     template_name = "SIF_MILD/intervenciones_form.html"
     form_class = MILD_IntervencionesForm
@@ -1785,16 +1843,20 @@ class MILDIntervencionesUpdateView(PermisosMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            "1000D  Equipo operativo",
+            "1000D  Consultante",
+            "1000D  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -1830,7 +1892,7 @@ class MILDIntervencionesUpdateView(PermisosMixin, UpdateView):
 
 
 class MILDIntervencionesLegajosListView(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/intervenciones_legajo_list.html"
     model = MILD_Admision
 
@@ -1840,12 +1902,16 @@ class MILDIntervencionesLegajosListView(PermisosMixin, DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "1000D  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1884,7 +1950,7 @@ class MILDIntervencionesLegajosListView(PermisosMixin, DetailView):
 
 
 class MILDIntervencionesListView(PermisosMixin, ListView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/intervenciones_list.html"
     model = MILD_Intervenciones
 
@@ -1894,12 +1960,16 @@ class MILDIntervencionesListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "1000D  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1910,13 +1980,13 @@ class MILDIntervencionesListView(PermisosMixin, ListView):
 
 
 class MILDIntervencionesDetail(PermisosMixin, DetailView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/intervencion_detail.html"
     model = MILD_Intervenciones
 
 
 class MILDOpcionesResponsablesCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/intervenciones_resposables.html"
     model = OpcionesResponsables
     form_class = MILD_OpcionesResponsablesForm
@@ -1927,7 +1997,7 @@ class MILDOpcionesResponsablesCreateView(PermisosMixin, CreateView):
 
 
 class MILDIntervencionesDeleteView(PermisosMixin, DeleteView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     model = MILD_Intervenciones
     template_name = "SIF_MILD/intervenciones_confirm_delete.html"
     success_url = reverse_lazy("MILD_intervenciones_listar")
@@ -1938,16 +2008,20 @@ class MILDIntervencionesDeleteView(PermisosMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            "1000D  Equipo operativo",
+            "1000D  Consultante",
+            "1000D  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -1966,7 +2040,7 @@ class MILDIntervencionesDeleteView(PermisosMixin, DeleteView):
 
 
 class MILDAdmisionesBuscarListView(PermisosMixin, TemplateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     template_name = "SIF_MILD/admisiones_buscar.html"
 
     def dispatch(self, request, *args, **kwargs):
@@ -1975,12 +2049,16 @@ class MILDAdmisionesBuscarListView(PermisosMixin, TemplateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "1000D  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
+        if self.request.user.has_perm("Usuarios.programa_1000D"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
@@ -2013,7 +2091,7 @@ class MILDAdmisionesBuscarListView(PermisosMixin, TemplateView):
 
 
 class MILDIndiceIviEgresoCreateView(PermisosMixin, CreateView):
-    permission_required = "Usuarios.rol_admin"
+    permission_required = "Usuarios.programa_1000D"
     model = Legajos
     template_name = "SIF_MILD/indiceivi_form_egreso.html"
     form_class = MILD_IndiceIviForm
