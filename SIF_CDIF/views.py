@@ -35,7 +35,7 @@ from django.core.exceptions import PermissionDenied
 def obtener_rol(request):
     if request.user.is_authenticated:
         # Supongamos que este método retorna los roles del usuario
-        return list(request.user.get_all_permissions())
+        return list(request.user.groups.values_list("name", flat=True))
     return []
 
 
@@ -65,17 +65,18 @@ class CDIFDerivacionesBuscarListView(TemplateView, PermisosMixin):
 
             rol = obtener_rol(self.request)
             roles_permitidos = [
-                "Usuarios.rol_admin",
-                "Usuarios.rol_directivo",
-                "Usuarios.rol_operativo",
-                "Usuarios.rol_tecnico",
-                "Usuarios.rol_consultante",
-                # "Usuarios.rol_observador",
+                "CDIF  Administrador",
+                "CDIF  Directivo",
+                "CDIF  Equipo operativo",
+                "CDIF  Equipo técnico",
+                "CDIF  Consultante",
+                # "CDIF  Observador",
             ]
-            if any(role in roles_permitidos for role in rol):
-                context["btn_agregar"] = True
-            else:
-                context["btn_agregar"] = False
+            if self.request.user.has_perm("Usuarios.programa_CDIF"):
+                if any(role in roles_permitidos for role in rol):
+                    context["btn_agregar"] = True
+                else:
+                    context["btn_agregar"] = False
 
             mostrar_btn_resetear = True
             mostrar_resultados = True
@@ -113,17 +114,18 @@ class CDIFDerivacionesListView(PermisosMixin, ListView):
 
         rol = obtener_rol(self.request)
         roles_permitidos = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "CDIF  Administrador",
+            "CDIF  Directivo",
+            "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
-        if any(role in roles_permitidos for role in rol):
-            context["btn_derivar"] = True
-        else:
-            context["btn_derivar"] = False
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(role in roles_permitidos for role in rol):
+                context["btn_derivar"] = True
+            else:
+                context["btn_derivar"] = False
 
         context["todas"] = model
         context["pendientes"] = model.filter(estado="Pendiente")
@@ -153,43 +155,46 @@ class CDIFDerivacionesDetailView(PermisosMixin, DetailView):
 
         rol = obtener_rol(self.request)
         roles_permitidos = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "CDIF  Administrador",
+            "CDIF  Directivo",
+            "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
-        if any(role in roles_permitidos for role in rol):
-            context["btn_aceptar"] = True
-        else:
-            context["btn_aceptar"] = False
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(role in roles_permitidos for role in rol):
+                context["btn_aceptar"] = True
+            else:
+                context["btn_aceptar"] = False
 
         roles_permitidos_rechazar = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "CDIF  Administrador",
+            "CDIF  Directivo",
+            # "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
-        if any(role in roles_permitidos_rechazar for role in rol):
-            context["btn_rechazar"] = True
-        else:
-            context["btn_rechazar"] = False
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(role in roles_permitidos_rechazar for role in rol):
+                context["btn_rechazar"] = True
+            else:
+                context["btn_rechazar"] = False
 
         roles_permitidos_eliminar_editar = [
-            "Usuarios.rol_admin",
-            # "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "CDIF  Administrador",
+            # "CDIF  Directivo",
+            # "CDIF  Equipo operativo",
+            # "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
-        if any(role in roles_permitidos_eliminar_editar for role in rol):
-            context["btn_eliminar_editar"] = True
-        else:
-            context["btn_eliminar_editar"] = False
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(role in roles_permitidos_eliminar_editar for role in rol):
+                context["btn_eliminar_editar"] = True
+            else:
+                context["btn_eliminar_editar"] = False
 
         context["pk"] = pk
         context["ivi"] = ivi
@@ -211,15 +216,19 @@ class CDIFDerivacionesRechazo(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_operativo",
+            "CDIF  Observador",
+            "CDIF  Consultante",
+            # "CDIF  Equipo operativo",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -260,17 +269,21 @@ class CDIFDerivacionesUpdateView(PermisosMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "CDIF  Directivo",
+            "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            "CDIF  Consultante",
+            "CDIF  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def get_initial(self):
         initial = super().get_initial()
@@ -319,14 +332,18 @@ class CDIFPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
-            "Usuarios.rol_consultante",
+            "CDIF  Observador",
+            "CDIF  Consultante",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         if "conviven" in self.request.POST:
@@ -362,8 +379,8 @@ class CDIFPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
         conviven = copy_form.get("conviven")
         estado_relacion = copy_form.get("estado_relacion")
         cuidador_principal = copy_form.get("cuidador_principal")
-        max_nivel_send=copy_form.get("max_nivel")
-        estado_nivel_send=copy_form.get("estado_nivel")
+        max_nivel_send = copy_form.get("max_nivel")
+        estado_nivel_send = copy_form.get("estado_nivel")
 
         # Crea el objeto Legajos
         try:
@@ -381,7 +398,11 @@ class CDIFPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
             DimensionVivienda.objects.create(fk_legajo=nuevo_legajo)
             DimensionSalud.objects.create(fk_legajo=nuevo_legajo)
             DimensionEconomia.objects.create(fk_legajo=nuevo_legajo)
-            DimensionEducacion.objects.create(fk_legajo=nuevo_legajo, max_nivel=max_nivel_send,estado_nivel=estado_nivel_send)
+            DimensionEducacion.objects.create(
+                fk_legajo=nuevo_legajo,
+                max_nivel=max_nivel_send,
+                estado_nivel=estado_nivel_send,
+            )
             DimensionTrabajo.objects.create(fk_legajo=nuevo_legajo)
         except Exception as e:
             print(e)
@@ -477,17 +498,21 @@ class CDIFPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "CDIF  Directivo",
+            "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            "CDIF  Consultante",
+            "CDIF  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         if "conviven" in self.request.POST:
@@ -640,30 +665,32 @@ class CDIFPreAdmisionesDetailView(PermisosMixin, DetailView):
 
         rol = obtener_rol(self.request)
         roles_permitidos = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "CDIF  Administrador",
+            "CDIF  Directivo",
+            "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
-        if any(role in roles_permitidos for role in rol):
-            context["btn_admitir"] = True
-        else:
-            context["btn_admitir"] = False
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(role in roles_permitidos for role in rol):
+                context["btn_admitir"] = True
+            else:
+                context["btn_admitir"] = False
 
         roles_rechazo = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "CDIF  Administrador",
+            "CDIF  Directivo",
+            # "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
-        if any(role in roles_rechazo for role in rol):
-            context["btn_rechazar"] = True
-        else:
-            context["btn_rechazar"] = False
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(role in roles_rechazo for role in rol):
+                context["btn_rechazar"] = True
+            else:
+                context["btn_rechazar"] = False
 
         context["ivi"] = ivi
         context["resultado"] = resultado
@@ -791,13 +818,17 @@ class CDIFPreAdmisionesListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "CDIF  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -852,17 +883,21 @@ class CDIFPreAdmisionesDeleteView(PermisosMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "CDIF  Directivo",
+            "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            "CDIF  Consultante",
+            "CDIF  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         if self.object.estado != "Pendiente":
@@ -900,15 +935,19 @@ class CDIFPreAdmisionesRechazarView(PermisosMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "CDIF  Equipo operativo",
+            "CDIF  Consultante",
+            "CDIF  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         if self.object.estado == "Rechazado":
@@ -947,14 +986,18 @@ class CDIFIndiceIviCreateView(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
-            "Usuarios.rol_consultante",
+            "CDIF  Observador",
+            "CDIF  Consultante",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -1043,17 +1086,21 @@ class CDIFIndiceIviUpdateView(PermisosMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "CDIF  Directivo",
+            # "CDIF  Equipo operativo",
+            # "CDIF  Equipo técnico",
+            "CDIF  Consultante",
+            "CDIF  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -1230,13 +1277,17 @@ class CDIFAdmisionesListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "CDIF  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -1291,14 +1342,18 @@ class CDIFVacantesAdmision(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
-            "Usuarios.rol_consultante",
+            "CDIF  Observador",
+            "CDIF  Consultante",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         self.object = form.save()
@@ -1370,17 +1425,21 @@ class CDIFVacantesAdmisionCambio(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "CDIF  Directivo",
+            # "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            "CDIF  Consultante",
+            "CDIF  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         # if form.cleaned_data['fecha_egreso'] == None:
@@ -1492,17 +1551,18 @@ class CDIFAsignadoAdmisionDetail(PermisosMixin, DetailView):
 
         rol = obtener_rol(self.request)
         roles_inactivar = [
-            "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "CDIF  Administrador",
+            "CDIF  Directivo",
+            "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
-        if any(role in roles_inactivar for role in rol):
-            context["btn_inactivar"] = True
-        else:
-            context["btn_inactivar"] = False
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(role in roles_inactivar for role in rol):
+                context["btn_inactivar"] = True
+            else:
+                context["btn_inactivar"] = False
 
         context["foto_ivi_fin"] = foto_ivi_fin
         context["foto_ivi_inicio"] = foto_ivi_inicio
@@ -1576,13 +1636,17 @@ class CDIFVacantesListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "CDIF  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -1658,15 +1722,19 @@ class CDIFIntervencionesCreateView(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_operativo",
+            "CDIF  Observador",
+            "CDIF  Consultante",
+            "CDIF  Equipo operativo",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         form.instance.fk_admision_id = self.kwargs["pk"]
@@ -1710,17 +1778,21 @@ class CDIFIntervencionesUpdateView(PermisosMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "CDIF  Directivo",
+            "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            "CDIF  Consultante",
+            "CDIF  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         pk = CDIF_Intervenciones.objects.filter(pk=self.kwargs["pk"]).first()
@@ -1806,13 +1878,17 @@ class CDIFIntervencionesListView(PermisosMixin, ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_observador",
+            "CDIF  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -1850,17 +1926,21 @@ class CDIFIntervencionesDeleteView(PermisosMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "CDIF  Directivo",
+            "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            "CDIF  Consultante",
+            "CDIF  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if self.request.user.has_perm("Usuarios.programa_CDIF"):
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
 

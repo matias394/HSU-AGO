@@ -56,7 +56,7 @@ dotenv.load_dotenv()
 def obtener_rol(request):
     if request.user.is_authenticated:
         # Supongamos que este método retorna los roles del usuario
-        return list(request.user.get_all_permissions())
+        return list(request.user.groups.values_list("name", flat=True))
     return []
 
 
@@ -154,17 +154,21 @@ class LegajosDetailView(DetailView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Legajo  Administrador",
+            "Legajo  Equipo operativo",
+            # "Legajo  Directivo",
+            "Legajo  Equipo técnico",
+            "Legajo  Consultante",
+            "Legajo  Observador",
         ]
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if request.user.has_perm("Usuarios.programa_Legajo"):
+            # Verifica si el usuario tiene alguno de estos permisos
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -395,17 +399,18 @@ class LegajosDetailView(DetailView):
 
         rol = obtener_rol(self.request)
         roles_eliminar = [
-            "Usuarios.rol_admin",
-            # "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            # "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+            "Legajo  Administrador",
+            # "Legajo  Equipo operativo",
+            # "Legajo  Directivo",
+            # "Legajo  Equipo técnico",
+            # "Legajo  Consultante",
+            # "Legajo  Observador",
         ]
-        if any(role in roles_eliminar for role in rol):
-            context["btn_eliminar"] = True
-        else:
-            context["btn_eliminar"] = False
+        if self.request.user.has_perm("Usuarios.programa_Legajo"):
+            if any(role in roles_eliminar for role in rol):
+                context["btn_eliminar"] = True
+            else:
+                context["btn_eliminar"] = False
 
         return context
 
@@ -421,17 +426,21 @@ class LegajosDeleteView(PermisosMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Legajo  Administrador",
+            "Legajo  Equipo operativo",
+            "Legajo  Directivo",
+            "Legajo  Equipo técnico",
+            "Legajo  Consultante",
+            "Legajo  Observador",
         ]
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if request.user.has_perm("Usuarios.programa_Legajo"):
+            # Verifica si el usuario tiene alguno de estos permisos
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -495,17 +504,21 @@ class LegajosCreateView(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Legajo  Administrador",
+            "Legajo  Equipo operativo",
+            # "Legajo  Directivo",
+            "Legajo  Equipo técnico",
+            "Legajo  Consultante",
+            "Legajo  Observador",
         ]
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if request.user.has_perm("Usuarios.programa_Legajo"):
+            # Verifica si el usuario tiene alguno de estos permisos
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         print(form)
@@ -564,17 +577,21 @@ class LegajosUpdateView(PermisosMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Legajo  Administrador",
+            "Legajo  Equipo operativo",
+            # "Legajo  Directivo",
+            "Legajo  Equipo técnico",
+            "Legajo  Consultante",
+            "Legajo  Observador",
         ]
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if request.user.has_perm("Usuarios.programa_Legajo"):
+            # Verifica si el usuario tiene alguno de estos permisos
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         legajo = form.save(commit=False)  # Guardamos sin persistir en la base de datos
@@ -622,17 +639,21 @@ class LegajosGrupoFamiliarCreateView(CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Legajo  Administrador",
+            "Legajo  Equipo operativo",
+            # "Legajo  Directivo",
+            "Legajo  Equipo técnico",
+            "Legajo  Consultante",
+            "Legajo  Observador",
         ]
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if request.user.has_perm("Usuarios.programa_Legajo"):
+            # Verifica si el usuario tiene alguno de estos permisos
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -782,17 +803,21 @@ class LegajoGrupoFamiliarList(ListView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Legajo  Administrador",
+            "Legajo  Equipo operativo",
+            # "Legajo  Directivo",
+            "Legajo  Equipo técnico",
+            "Legajo  Consultante",
+            "Legajo  Observador",
         ]
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if request.user.has_perm("Usuarios.programa_Legajo"):
+            # Verifica si el usuario tiene alguno de estos permisos
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -837,7 +862,7 @@ class CreateGrupoFamiliar(View):
             cuidador_principal=cuidador_principal,
         )
         LegajoEnviado = DimensionEducacion.objects.get(fk_legajo=fk_legajo_2)
-        if(LegajoEnviado is not None):
+        if LegajoEnviado is not None:
             LegajoEnviado.max_nivel = nivel_educativo_enviado
             LegajoEnviado.estado_nivel = edtado_nivel_educativo_enviado
             LegajoEnviado.save()
@@ -856,7 +881,7 @@ class CreateGrupoFamiliar(View):
             "tipo_mensaje": "success",
             "mensaje": "Vínculo familiar agregado correctamente.",
         }
-        #Modificar nivel eductivo en dimesion educacion
+        # Modificar nivel eductivo en dimesion educacion
         return JsonResponse({"familiar": familiar, "data": data})
 
 
@@ -988,17 +1013,21 @@ class LegajosDerivacionesCreateView(PermisosMixin, CreateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            # "Usuarios.rol_operativo",
-            # "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Legajo  Equipo operativo",
+            # "Legajo  Directivo",
+            # "Legajo  Equipo técnico",
+            "Legajo  Consultante",
+            "Legajo  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if request.user.has_perm("Usuarios.programa_Legajo"):
+            # Verifica si el usuario tiene alguno de estos permisos
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
@@ -1050,17 +1079,21 @@ class LegajosDerivacionesUpdateView(PermisosMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            "Legajo  Equipo operativo",
+            "Legajo  Directivo",
+            "Legajo  Equipo técnico",
+            "Legajo  Consultante",
+            "Legajo  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if request.user.has_perm("Usuarios.programa_Legajo"):
+            # Verifica si el usuario tiene alguno de estos permisos
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -1116,17 +1149,21 @@ class LegajosDerivacionesDeleteView(PermisosMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Usuarios.rol_admin",
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Legajo  Administrador",
+            "Legajo  Equipo operativo",
+            "Legajo  Directivo",
+            "Legajo  Equipo técnico",
+            "Legajo  Consultante",
+            "Legajo  Observador",
         ]
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        if request.user.has_perm("Usuarios.programa_Legajo"):
+            # Verifica si el usuario tiene alguno de estos permisos
+            if any(
+                request.user.groups.filter(name=grupo).exists()
+                for grupo in permisos_a_verificar
+            ):
+                raise PermissionDenied()
+            return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         if self.object.estado != "Pendiente":
