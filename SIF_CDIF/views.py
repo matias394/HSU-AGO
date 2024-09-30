@@ -353,6 +353,7 @@ class CDIFPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(pk=pk).first()
         familia = LegajoGrupoFamiliar.objects.filter(fk_legajo_2_id=legajo.fk_legajo_id)
+        # educacion = DimensionEducacion.objects.filter(fk_legajo=legajo.fk_legajo_id).first()
         familia_inversa = LegajoGrupoFamiliar.objects.filter(
             fk_legajo_1_id=legajo.fk_legajo_id
         )
@@ -367,6 +368,7 @@ class CDIFPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
         context["centros"] = centros
         context["nuevo_grupo_familiar_form"] = self.form_nuevo_grupo_familiar_class
         context["cupos"] = cupos
+        # context["educacion"] = educacion
         return context
 
     def crear_grupo_hogar(self, form: QueryDict):
