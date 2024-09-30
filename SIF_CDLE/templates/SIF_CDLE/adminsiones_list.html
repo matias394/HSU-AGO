@@ -52,7 +52,7 @@
                 {% for a in admi %}
               <tr>
                 <td class="mailbox-date">{{a.creado|date:'d/m/Y'}}</td>
-                <td class=""> <a href="{% url 'CDLE_admisiones_ver' a.id %}" title="Ver detalle de admisión">{{a.fk_preadmi.fk_legajo}}</a></td>
+                <td class=""> <a href="{% url 'CDLE_asignado_admisiones_ver' a.id %}" title="Ver detalle de admisión">{{a.fk_preadmi.fk_legajo}}</a></td>
                 <td class="">{{a.fk_preadmi.fk_legajo.documento}}</td>
                 <td class="">{{a.vacante_asignada|default_if_none:'-'}}</td>
                 <td class="text-center">
