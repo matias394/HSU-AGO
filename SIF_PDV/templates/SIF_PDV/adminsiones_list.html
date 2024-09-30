@@ -52,7 +52,7 @@
                 {% for a in admi %}
               <tr>
                 <td class="mailbox-date">{{a.creado|date:'d/m/Y'}}</td>
-                <td class=""> <a href="{% url 'PDV_admisiones_ver' a.id %}" title="Ver detalle de admisión">{{a.fk_preadmi.fk_legajo}}</a></td>
+                <td class=""> <a href="{% url 'PDV_inactiva_admisiones_ver' a.id %}" title="Ver detalle de admisión">{{a.fk_preadmi.fk_legajo}}</a></td>
                 <td class="">{{a.fk_preadmi.fk_legajo.documento}}</td>
                 <td>{{a.fk_preadmi.centro_postula}}</td>
                 <td>{{a.fk_preadmi.sala_postula}}</td>
