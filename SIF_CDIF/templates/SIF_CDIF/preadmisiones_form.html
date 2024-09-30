@@ -111,7 +111,7 @@
                                                                     <img src="{% static 'custom/img/default.png'  %}" alt="User Image" width="60px">
                                                                     {%endif%}
                                                                     <span class="users-list-name">{{f.fk_legajo_1}}</span>
-                                                                    <span class="users-list-date">{{f.vinculo}}</span>
+                                                                    <span class="users-list-date">{{f.vinculo_inverso}}</span>
                                                                     <span class="users-list-date"><button class="btn btn-danger btn-sm"
                                                                             onclick='deleteFamiliar("{{f.id}}")'
                                                                             type="submit">Eliminar</button></span>
@@ -131,7 +131,7 @@
                                                                 <img src="{% static 'custom/img/default.png'  %}" alt="User Image" width="60px">
                                                                 {%endif%}
                                                                 <span class="users-list-name">{{f.fk_legajo_2}}</span>
-                                                                <span class="users-list-date">{{f.vinculo}}</span>
+                                                                <span class="users-list-date">{{f.vinculo_inverso}}</span>
                                                                 <span class="users-list-date"><button class="btn btn-danger btn-sm"
                                                                         onclick='deleteFamiliar("{{f.id}}")'
                                                                         type="submit">Eliminar</button></span>
@@ -264,13 +264,19 @@
                                             <div class="row my-3 pl-2">
                                                 1. DATOS PERSONALES
                                             </div>
+                                            <div class="col-sm-3 form-group">
+                                                {{form.medida_abrigo_renovado|as_crispy_field}}
+                                            </div>
+                                            <div class="col-sm-3 form-group">
+                                                {{form.medida_abrigo_primera_vez|as_crispy_field}}
+                                            </div>
                                             <div class="row pl-3">
                                                 <div class="col-sm-3 form-group">
                                                     <label>Guarda o cuidador principal</label>
                                                     <select name="fk_legajo_guarda" class="form-control custom-select" id="id_fk_legajo_GUARDA">
                                                         <option value=""></option>
                                                         {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                        <option value="{{object.fk_legajo_1.id}}" selected>{{object.fk_legajo_1}}</option>
+                                                        <option value="{{object.fk_legajo_guarda}}" selected>{{object.fk_legajo_guarda}}</option>
                                                         {% endif %}
                                                         {% for f in familia %}
                                                         <option value="{{f.fk_legajo_1.id}}">{{f.fk_legajo_1}}</option>
@@ -280,19 +286,23 @@
                                                         {% endfor %}
                                                       </select>
                                                 </div>
-                                                <div class="col-sm-3 form-group">
-                                                    <label>Vínculo</label>
-                                                    <input type="text" class="form-control" id="vinculoGUARDA" name="vinculoGUARDA" 
-                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                    value="{{object.vinculoGUARDA}}"
-                                                    {% endif %}
-                                                    readonly>
-                                                </div>
+                                                {% for f in familia %}
+                                                    {%if f.fk_legajo_1 == object.fk_legajo_guarda %}
+                                                        <div class="col-sm-3 form-group">
+                                                            <label>Vínculo</label>
+                                                            <input type="text" class="form-control" id="vinculoGUARDA" name="vinculoGUARDA" 
+                                                            {% if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                            value="{{f.vinculo}}"
+                                                            {% endif %}
+                                                            readonly>
+                                                        </div>
+                                                    {%endif%}
+                                                {% endfor %}
                                                 <div class="col-sm-3 form-group">
                                                     <label>Tipo de documento</label>
                                                     <input type="text" class="form-control" id="tipo_docGUARDA"
-                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                    value="{{object.fk_legajo_1.tipo_docGUARDA}}"
+                                                    {% if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                    value="{{object.fk_legajo_guarda.tipo_doc}}"
                                                     {% endif %}
                                                     readonly>
                                                 </div>
@@ -300,7 +310,7 @@
                                                     <label>Numero documento</label>
                                                     <input type="text" class="form-control" id="documentoGUARDA" 
                                                     {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                    value="{{object.fk_legajo_1.documento}}"
+                                                    value="{{object.fk_legajo_guarda.documento}}"
                                                     {% endif %}
                                                     readonly>
                                                 </div>
@@ -308,7 +318,7 @@
                                                     <label>Fecha Nacimiento</label>
                                                     <input type="text" class="form-control" id="fecha_nacimientoGUARDA" 
                                                     {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                    value="{{object.fk_legajo_1.fecha_nacimientoGUARDA}}"
+                                                    value="{{object.fk_legajo_guarda.fecha_nacimiento}}"
                                                     {% endif %}
                                                     readonly>
                                                 </div>
@@ -316,7 +326,7 @@
                                                     <label>Estado civil</label>
                                                     <input type="text" class="form-control" id="estado_civilG" 
                                                     {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                    value="{{object.fk_legajo_1.estado_civil}}"
+                                                    value="{{object.fk_legajo_guarda.estado_civil}}"
                                                     {% endif %}
                                                     readonly>
                                                 </div>
@@ -324,7 +334,7 @@
                                                     <label>Nacionalidad</label>
                                                     <input type="text" class="form-control" id="nacionalidadG" 
                                                     {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                    <!-- value="{{object.fk_legajo_1.nacionalidad}}" -->
+                                                    value="{{object.fk_legajo_guarda.nacionalidad}}"
                                                     {% endif %}
                                                     readonly>
                                                 </div>
@@ -332,7 +342,7 @@
                                                     <label>Telefono</label>
                                                     <input type="text" class="form-control" id="telefonoG" 
                                                     {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                    value="{{object.fk_legajo_1.fecha_nacimiento}}"
+                                                    value="{{object.fk_legajo_guarda.telefono}}"
                                                     {% endif %}
                                                     readonly>
                                                 </div>
@@ -340,7 +350,7 @@
                                                     <label>Calle</label>
                                                     <input type="text" class="form-control" id="calleG" 
                                                     {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                    value="{{object.fk_legajo_1.fecha_nacimiento}}"
+                                                    value="{{object.fk_legajo_guarda.calle}}"
                                                     {% endif %}
                                                     readonly>
                                                 </div>
@@ -348,7 +358,7 @@
                                                     <label>Altura</label>
                                                     <input type="text" class="form-control" id="alturaG" 
                                                     {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                    value="{{object.fk_legajo_1.fecha_nacimiento}}"
+                                                    value="{{object.fk_legajo_guarda.altura}}"
                                                     {% endif %}
                                                     readonly>
                                                 </div>
@@ -356,7 +366,7 @@
                                                     <label>Piso</label>
                                                     <input type="text" class="form-control" id="pisoG" 
                                                     {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                    value="{{object.fk_legajo_1.fecha_nacimiento}}"
+                                                    value="{{object.fk_legajo_guarda.piso}}"
                                                     {% endif %}
                                                     readonly>
                                                 </div>
@@ -364,7 +374,7 @@
                                                     <label>Circuito</label>
                                                     <input type="text" class="form-control" id="circuitoG" 
                                                     {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                    value="{{object.fk_legajo_1.fecha_nacimiento}}"
+                                                    value="{{object.fk_legajo_guarda.circuito}}"
                                                     {% endif %}
                                                     readonly>
                                                 </div>
@@ -372,7 +382,7 @@
                                                     <label>Barrio</label>
                                                     <input type="text" class="form-control" id="barrioG" 
                                                     {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                    value="{{object.fk_legajo_1.fecha_nacimiento}}"
+                                                    value="{{object.fk_legajo_guarda.barrio}}"
                                                     {% endif %}
                                                     readonly>
                                                 </div>
@@ -380,7 +390,7 @@
                                                     <label>Localidad</label>
                                                     <input type="text" class="form-control" id="localidadG" 
                                                     {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                    value="{{object.fk_legajo_1.fecha_nacimiento}}"
+                                                    value="{{object.fk_legajo_guarda.localidad}}"
                                                     {% endif %}
                                                     readonly>
                                                 </div>
@@ -429,24 +439,6 @@
                                             <div class="row my-3 pl-2">
                                                 4. EDUCACIÓN
                                             </div>
-                                            <div class="row pl-3">
-                                                <div class="col-sm-3 form-group">
-                                                    <label>Máximo nivel alcanzado</label>
-                                                    <input type="text" class="form-control" id="nivelG" 
-                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                    value="{{object.fk_legajo_1.fecha_nacimiento}}"
-                                                    {% endif %}
-                                                    readonly>
-                                                </div>
-                                                <div class="col-sm-3 form-group">
-                                                    <label>Estado</label>
-                                                    <input type="text" class="form-control" id="estadoG" 
-                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                    value="{{object.fk_legajo_1.fecha_nacimiento}}"
-                                                    {% endif %}
-                                                    readonly>
-                                                </div>
-                                            </div>
                                             <div class="row-pl-6">
                                                 <div class="col-sm-3">
                                                     <div class="form-group">
@@ -477,7 +469,7 @@
                                             <div class="row pl-3">
                                                 <div class="col-12 form-group">
                                                     <label>Planes sociales que recibe</label>
-                                                    {{form.planes_sociales_1| as_crispy_field}}
+                                                    {{form.planes_sociales_guarda| as_crispy_field}}
                                                 </div>
                                             </div>
                                         </div>
@@ -489,10 +481,6 @@
                                                 <div class="col-sm-4 form-group">
                                                     <label>¿Tiene trabajo actualmente?</label>
                                                     {{form.trabajo_actual_1| as_crispy_field}}
-                                                </div>
-                                                <div class="col-sm-4 form-group">
-                                                    <label>Ocupación</label>
-                                                    {{form.ocupacion_1| as_crispy_field}}
                                                 </div>
                                                 <div class="col-sm-4 form-group">
                                                     <label>Modo de contratación</label>

@@ -40,6 +40,7 @@ class CDIF_PreadmisionesForm (forms.ModelForm):
             'retomar_estudios_5': forms.CheckboxInput(),
             'aprender_oficio_5': forms.CheckboxInput(),
             'programa_Pilares_5': forms.CheckboxInput(),
+            'planes_sociales_guarda': forms.SelectMultiple(attrs={'class': 'select2 w-100', 'multiple': True}),
         }
         labels = {
             'fk_legajo_1':'',
