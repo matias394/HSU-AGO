@@ -76,7 +76,9 @@ class MILDDerivacionesBuscarListView(TemplateView, PermisosMixin):
                 "1000D  Consultante",
                 # "1000D  Observador",
             ]
-            if any(role in roles_permitidos for role in rol):
+            if self.request.user.is_superuser or any(
+                role in roles_permitidos for role in rol
+            ):
                 context["btn_agregar"] = True
             else:
                 context["btn_agregar"] = False
@@ -158,7 +160,9 @@ class MILDDerivacionesDetailView(PermisosMixin, DetailView):
             # "1000D  Consultante",
             # "1000D  Observador",
         ]
-        if any(role in roles_permitidos for role in rol):
+        if self.request.user.is_superuser or any(
+            role in roles_permitidos for role in rol
+        ):
             context["btn_aceptar"] = True
         else:
             context["btn_aceptar"] = False
@@ -171,7 +175,9 @@ class MILDDerivacionesDetailView(PermisosMixin, DetailView):
             # "1000D  Consultante",
             # "1000D  Observador",
         ]
-        if any(role in roles_permitidos_rechazar for role in rol):
+        if self.request.user.is_superuser or any(
+            role in roles_permitidos_rechazar for role in rol
+        ):
             context["btn_rechazar"] = True
         else:
             context["btn_rechazar"] = False
@@ -184,7 +190,9 @@ class MILDDerivacionesDetailView(PermisosMixin, DetailView):
             # "1000D  Consultante",
             # "1000D  Observador",
         ]
-        if any(role in roles_permitidos_eliminar_editar for role in rol):
+        if self.request.user.is_superuser or any(
+            role in roles_permitidos_eliminar_editar for role in rol
+        ):
             context["btn_eliminar_editar"] = True
         else:
             context["btn_eliminar_editar"] = False
@@ -213,13 +221,15 @@ class MILDDerivacionesRechazo(PermisosMixin, CreateView):
             "1000D  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
+        if not request.user.has_perm("Usuarios.programa_1000D"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -268,13 +278,15 @@ class MILDDerivacionesUpdateView(PermisosMixin, UpdateView):
             "1000D  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
+        if not request.user.has_perm("Usuarios.programa_1000D"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_initial(self):
@@ -331,13 +343,15 @@ class MILDPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
             "1000D  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
+        if not request.user.has_perm("Usuarios.programa_1000D"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -491,13 +505,15 @@ class MILDPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
             "1000D  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
+        if not request.user.has_perm("Usuarios.programa_1000D"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -644,7 +660,9 @@ class MILDPreAdmisionesDetailView(PermisosMixin, DetailView):
             # "1000D  Consultante",
             # "1000D  Observador",
         ]
-        if any(role in roles_permitidos for role in rol):
+        if self.request.user.is_superuser or any(
+            role in roles_permitidos for role in rol
+        ):
             context["btn_admitir"] = True
         else:
             context["btn_admitir"] = False
@@ -657,7 +675,7 @@ class MILDPreAdmisionesDetailView(PermisosMixin, DetailView):
             # "1000D  Consultante",
             # "1000D  Observador",
         ]
-        if any(role in roles_rechazo for role in rol):
+        if self.request.user.is_superuser or any(role in roles_rechazo for role in rol):
             context["btn_rechazar"] = True
         else:
             context["btn_rechazar"] = False
@@ -756,13 +774,15 @@ class MILDPreAdmisionesListView(PermisosMixin, ListView):
             "1000D  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
+        if not request.user.has_perm("Usuarios.programa_1000D"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -785,13 +805,15 @@ class MILDPreAdmisionesBuscarListView(PermisosMixin, TemplateView):
             "1000D  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
+        if not request.user.has_perm("Usuarios.programa_1000D"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
@@ -843,13 +865,15 @@ class MILDPreAdmisionesDeleteView(PermisosMixin, DeleteView):
             "1000D  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
+        if not request.user.has_perm("Usuarios.programa_1000D"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -904,13 +928,15 @@ class MILDIndiceIngresoCreateView(PermisosMixin, CreateView):
             "1000D  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
+        if not request.user.has_perm("Usuarios.programa_1000D"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1028,13 +1054,15 @@ class MILDIndiceIngresoUpdateView(PermisosMixin, UpdateView):
             "1000D  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
+        if not request.user.has_perm("Usuarios.programa_1000D"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1188,13 +1216,15 @@ class MILDIndiceIviCreateView(PermisosMixin, CreateView):
             "1000D  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
+        if not request.user.has_perm("Usuarios.programa_1000D"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1292,13 +1322,15 @@ class MILDIndiceIviUpdateView(PermisosMixin, UpdateView):
             "1000D  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
+        if not request.user.has_perm("Usuarios.programa_1000D"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1593,13 +1625,15 @@ class MILDAdmisionesListView(PermisosMixin, ListView):
             "1000D  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
+        if not request.user.has_perm("Usuarios.programa_1000D"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1701,7 +1735,9 @@ class MILDAsignadoAdmisionDetail(PermisosMixin, DetailView):
             # "1000D  Consultante",
             # "1000D  Observador",
         ]
-        if any(role in roles_inactivar for role in rol):
+        if self.request.user.is_superuser or any(
+            role in roles_inactivar for role in rol
+        ):
             context["btn_inactivar"] = True
         else:
             context["btn_inactivar"] = False
@@ -1793,13 +1829,15 @@ class MILDIntervencionesCreateView(PermisosMixin, CreateView):
             "1000D  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
+        if not request.user.has_perm("Usuarios.programa_1000D"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -1850,13 +1888,15 @@ class MILDIntervencionesUpdateView(PermisosMixin, UpdateView):
             "1000D  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
+        if not request.user.has_perm("Usuarios.programa_1000D"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -1905,13 +1945,15 @@ class MILDIntervencionesLegajosListView(PermisosMixin, DetailView):
             "1000D  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
+        if not request.user.has_perm("Usuarios.programa_1000D"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1963,13 +2005,15 @@ class MILDIntervencionesListView(PermisosMixin, ListView):
             "1000D  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
+        if not request.user.has_perm("Usuarios.programa_1000D"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -2015,13 +2059,15 @@ class MILDIntervencionesDeleteView(PermisosMixin, DeleteView):
             "1000D  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
+        if not request.user.has_perm("Usuarios.programa_1000D"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -2052,13 +2098,15 @@ class MILDAdmisionesBuscarListView(PermisosMixin, TemplateView):
             "1000D  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
+        if not request.user.has_perm("Usuarios.programa_1000D"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):

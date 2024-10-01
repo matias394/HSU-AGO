@@ -130,7 +130,9 @@ class PDVDerivacionesDetailView(PermisosMixin, DetailView):
             # "PDV  Consultante",
             # "PDV  Observador",
         ]
-        if any(role in roles_permitidos for role in rol):
+        if self.request.user.is_superuser or any(
+            role in roles_permitidos for role in rol
+        ):
             context["btn_aceptar"] = True
         else:
             context["btn_aceptar"] = False
@@ -143,7 +145,9 @@ class PDVDerivacionesDetailView(PermisosMixin, DetailView):
             # "PDV  Consultante",
             # "PDV  Observador",
         ]
-        if any(role in roles_permitidos_rechazar for role in rol):
+        if self.request.user.is_superuser or any(
+            role in roles_permitidos_rechazar for role in rol
+        ):
             context["btn_rechazar"] = True
         else:
             context["btn_rechazar"] = False
@@ -156,7 +160,9 @@ class PDVDerivacionesDetailView(PermisosMixin, DetailView):
             # "PDV  Consultante",
             # "PDV  Observador",
         ]
-        if any(role in roles_permitidos_eliminar_editar for role in rol):
+        if self.request.user.is_superuser or any(
+            role in roles_permitidos_eliminar_editar for role in rol
+        ):
             context["btn_eliminar_editar"] = True
         else:
             context["btn_eliminar_editar"] = False
@@ -185,13 +191,15 @@ class PDVDerivacionesRechazo(PermisosMixin, CreateView):
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -241,13 +249,15 @@ class PDVPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin)
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -393,13 +403,15 @@ class PDVPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin)
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -708,13 +720,15 @@ class PDVPreAdmisionesListView(PermisosMixin, ListView):
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -737,13 +751,15 @@ class PDVPreAdmisionesBuscarListView(PermisosMixin, TemplateView):
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
@@ -794,13 +810,15 @@ class PDVPreAdmisionesDeleteView(PermisosMixin, DeleteView):
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -857,13 +875,15 @@ class PDVIndiceIngresoCreateView(PermisosMixin, CreateView):
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -963,13 +983,15 @@ class PDVIndiceIngresoUpdateView(PermisosMixin, UpdateView):
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1125,13 +1147,15 @@ class PDVIndiceIviCreateView(PermisosMixin, CreateView):
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1233,13 +1257,15 @@ class PDVIndiceIviUpdateView(PermisosMixin, UpdateView):
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1452,13 +1478,15 @@ class PDVAdmisionesListView(PermisosMixin, ListView):
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1521,13 +1549,15 @@ class PDVVacantesAdmision(PermisosMixin, CreateView):
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -1605,13 +1635,15 @@ class PDVVacantesAdmisionCambio(PermisosMixin, CreateView):
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -1724,7 +1756,9 @@ class PDVAsignadoAdmisionDetail(PermisosMixin, DetailView):
             # "PDV  Consultante",
             # "PDV  Observador",
         ]
-        if any(role in roles_inactivar for role in rol):
+        if self.request.user.is_superuser or any(
+            role in roles_inactivar for role in rol
+        ):
             context["btn_inactivar"] = True
         else:
             context["btn_inactivar"] = False
@@ -1767,13 +1801,15 @@ class PDVInactivaAdmisionDetail(PermisosMixin, DetailView):
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1825,13 +1861,15 @@ class PDVVacantesListView(PermisosMixin, ListView):
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1911,13 +1949,15 @@ class PDVIntervencionesCreateView(PermisosMixin, CreateView):
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -1968,13 +2008,15 @@ class PDVIntervencionesUpdateView(PermisosMixin, UpdateView):
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -2023,13 +2065,15 @@ class PDVIntervencionesLegajosListView(PermisosMixin, DetailView):
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -2042,13 +2086,19 @@ class PDVIntervencionesLegajosListView(PermisosMixin, DetailView):
         ).last()
         preadmi = PDV_PreAdmision.objects.filter(pk=admi.fk_preadmi_id).first()
         criterio = PDV_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
-        observaciones = PDV_Foto_IVI.objects.filter(
-            clave=criterio.first().clave, tipo="Ingreso"
-        ).first()
+        if criterio:
+            observaciones = PDV_Foto_IVI.objects.filter(
+                clave=criterio.first().clave, tipo="Ingreso"
+            ).first()
+        else:
+            observaciones = ""
         criterio2 = PDV_IndiceIVI.objects.filter(fk_preadmi_id=preadmi, tipo="Ingreso")
-        observaciones2 = PDV_Foto_IVI.objects.filter(
-            clave=criterio2.last().clave, tipo="Ingreso"
-        ).first()
+        if criterio2:
+            observaciones2 = PDV_Foto_IVI.objects.filter(
+                clave=criterio2.last().clave, tipo="Ingreso"
+            ).first()
+        else:
+            observaciones2 = ""
 
         context["object"] = admi
         context["lastvo"] = lastVO
@@ -2080,13 +2130,15 @@ class PDVIntervencionesListView(PermisosMixin, ListView):
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -2132,13 +2184,15 @@ class PDVIntervencionesDeleteView(PermisosMixin, DeleteView):
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -2171,13 +2225,15 @@ class PDVAdmisionesBuscarListView(PermisosMixin, TemplateView):
             "PDV  Observador",
         ]
 
+        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
+        if not request.user.has_perm("Usuarios.programa_PDV"):
+            raise PermissionDenied()
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_1000D"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
