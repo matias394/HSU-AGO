@@ -265,10 +265,16 @@
                                                 1. DATOS PERSONALES
                                             </div>
                                             <div class="col-sm-3 form-group">
-                                                {{form.medida_abrigo_renovado|as_crispy_field}}
+                                                {{form.medida_abrigo_primera_vez|as_crispy_field}}
                                             </div>
                                             <div class="col-sm-3 form-group">
-                                                {{form.medida_abrigo_primera_vez|as_crispy_field}}
+                                                {{form.medida_abrigo_renovado|as_crispy_field}}
+                                            </div>
+                                            <div class="col-sm-6 form-group">
+                                                    {{form.observaciones_guarda|as_crispy_field}}
+                                            </div>
+                                            <div class="col-sm-6 form-group">
+                                                    {{form.dni_con_domicilio_san_miguel|as_crispy_field}}
                                             </div>
                                             <div class="row pl-3">
                                                 <div class="col-sm-3 form-group">
@@ -422,7 +428,10 @@
                                                 </div>
                                                 <div class="col-sm-3 form-group">
                                                     {{form.capacidades_reducidas|as_crispy_field}}
-                                                </div>
+                                                </div>         
+                                                <div class="col-sm-3 form-group">
+                                                    {{form.cual_capacidades|as_crispy_field}}
+                                                </div>         
                                             </div>
                                             
                                         </div>
