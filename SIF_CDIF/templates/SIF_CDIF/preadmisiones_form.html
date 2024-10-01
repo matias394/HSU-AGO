@@ -298,19 +298,19 @@
                                                             <label>Vínculo</label>
                                                             <input type="text" class="form-control" id="vinculoGUARDA" name="vinculoGUARDA" 
                                                             {% if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                            value="{{f.vinculo}}"
+                                                            value="{{f.vinculo_inverso}}"
                                                             {% endif %}
                                                             readonly>
                                                         </div>
                                                     {%endif%}
                                                 {% endfor %}
-                                                <!-- {% if request.resolver_match.url_name == "CDIF_preadmisiones_crear" %} -->
+                                                {% if request.resolver_match.url_name == "CDIF_preadmisiones_crear" %}
                                                 <div class="col-sm-3 form-group">
                                                     <label>Vínculo</label>
                                                     <input type="text" class="form-control" id="vinculoGUARDA" name="vinculoGUARDA" 
                                                     readonly>
                                                 </div>
-                                                <!-- {% endif %} -->
+                                                {% endif %}
                                                 <div class="col-sm-3 form-group">
                                                     <label>Tipo de documento</label>
                                                     <input type="text" class="form-control" id="tipo_docGUARDA"
