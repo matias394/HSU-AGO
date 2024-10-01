@@ -276,7 +276,7 @@
                                                     <select name="fk_legajo_guarda" class="form-control custom-select" id="id_fk_legajo_GUARDA">
                                                         <option value=""></option>
                                                         {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                        <option value="{{object.fk_legajo_guarda}}" selected>{{object.fk_legajo_guarda}}</option>
+                                                        <option value="{{object.fk_legajo_guarda.id}}" selected>{{object.fk_legajo_guarda}}</option>
                                                         {% endif %}
                                                         {% for f in familia %}
                                                         <option value="{{f.fk_legajo_1.id}}">{{f.fk_legajo_1}}</option>
