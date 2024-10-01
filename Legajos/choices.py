@@ -274,6 +274,12 @@ CHOICE_SINO = [
     ('True', 'SI'),
     ('False', 'NO'),
 ]
+CHOICE_SINOINSU = [
+    (None, ''),
+    ('True', 'SI'),
+    ('False', 'NO'),
+    ('Insuficiente', 'Insuficiente'),
+]
 
 CHOICE_ESTADO_CIVIL = [
     (None, ''),
