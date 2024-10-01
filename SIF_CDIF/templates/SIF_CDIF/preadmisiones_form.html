@@ -298,6 +298,13 @@
                                                         </div>
                                                     {%endif%}
                                                 {% endfor %}
+                                                {% if request.resolver_match.url_name == "CDIF_preadmisiones_crear" %}
+                                                <div class="col-sm-3 form-group">
+                                                    <label>Vínculo</label>
+                                                    <input type="text" class="form-control" id="vinculoGUARDA" name="vinculoGUARDA" 
+                                                    readonly>
+                                                </div>
+                                                {% endif %}
                                                 <div class="col-sm-3 form-group">
                                                     <label>Tipo de documento</label>
                                                     <input type="text" class="form-control" id="tipo_docGUARDA"
@@ -465,7 +472,6 @@
                                             </div>
                                             <div class="row pl-3">
                                                 <div class="col-12 form-group">
-                                                    <label>Planes sociales que recibe</label>
                                                     {{form.planes_sociales_guarda| as_crispy_field}}
                                                 </div>
                                             </div>
@@ -476,11 +482,9 @@
                                             </div>
                                             <div class="row pl-3">
                                                 <div class="col-sm-4 form-group">
-                                                    <label>¿Tiene trabajo actualmente?</label>
                                                     {{form.trabajo_actual_guarda| as_crispy_field}}
                                                 </div>
                                                 <div class="col-sm-4 form-group">
-                                                    <label>Modo de contratación</label>
                                                     {{form.modo_contrat_guarda| as_crispy_field}}
                                                 </div>
                                             </div>
@@ -1057,6 +1061,7 @@
         var seleccion = $(this).val();
         // Lógica para determinar el contenido del div basado en la selección
         {% for f in familia %}
+        console.log("{{f.fk_legajo_1.id}}")
         if (seleccion === '{{f.fk_legajo_1.id}}') {
             tipo_docGUARDA.value = '{{f.fk_legajo_1.tipo_doc}}';
             documentoGUARDA.value = '{{f.fk_legajo_1.documento}}';
@@ -1074,6 +1079,12 @@
         }
         {% endfor %}
         {% for f in familia_inversa %}
+        console.log("{{f.fk_legajo_2.fecha_nacimiento}}")
+        console.log("{{f.fk_legajo_2.estado_civil}}")
+        console.log("{{f.fk_legajo_2.telefono}}")
+        console.log("{{f.fk_legajo_2.calle}}")
+        console.log("{{f.fk_legajo_2.altura}}")
+        console.log("{{f.fk_legajo_2.piso}}")
         if (seleccion === '{{f.fk_legajo_2.id}}') {
             tipo_docGUARDA.value = '{{f.fk_legajo_2.tipo_doc}}';
             documentoGUARDA.value = '{{f.fk_legajo_2.documento}}';
