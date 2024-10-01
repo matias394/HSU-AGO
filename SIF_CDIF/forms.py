@@ -43,6 +43,10 @@ class CDIF_PreadmisionesForm (forms.ModelForm):
             'planes_sociales_guarda': forms.SelectMultiple(attrs={'class': 'select2 w-100', 'multiple': True}),
             'medida_abrigo_primera_vez': forms.CheckboxInput(),
             'medida_abrigo_renovado': forms.CheckboxInput(),
+            'leer_guarda': forms.CheckboxInput(),
+            'retomar_estudios_guarda': forms.CheckboxInput(),
+            'escribir_guarda': forms.CheckboxInput(),
+            'aprender_oficio_guarda': forms.CheckboxInput(),
         }
         labels = {
             'fk_legajo_1':'',
