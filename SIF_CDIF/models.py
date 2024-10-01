@@ -152,10 +152,10 @@ class CDIF_PreAdmision (models.Model):
     escribir_guarda = models.BooleanField(verbose_name='No sabe escribir.', null=True, blank=True)
     retomar_estudios_guarda = models.BooleanField(verbose_name='Quiere retomar estudios.', null=True, blank=True)
     aprender_oficio_guarda = models.BooleanField(verbose_name='Quiere aprender un oficio.', null=True, blank=True)
-    planes_sociales_guarda = models.ManyToManyField(PlanesSociales,null=True, blank=True)
-    trabajo_actual_guarda =  models.CharField(max_length=50, choices=CHOICE_SINO, null=True, blank=True)
+    planes_sociales_guarda = models.ManyToManyField(PlanesSociales,null=True, blank=True,verbose_name="Planes sociales que recibe")
+    trabajo_actual_guarda =  models.CharField(verbose_name="¿Tiene trabajo actualmente?",max_length=50, choices=CHOICE_SINO, null=True, blank=True)
     ocupacion_guarda = models.CharField(verbose_name='Ocupación.', max_length=100, null=True, blank=True)
-    modo_contrat_guarda =  models.CharField(max_length=150, choices=CHOICE_CONTRATACION, null=True, blank=True)
+    modo_contrat_guarda =  models.CharField(verbose_name="Modo de contratación",max_length=150, choices=CHOICE_CONTRATACION, null=True, blank=True)
     fk_legajo_guarda = models.ForeignKey(Legajos, related_name='fk_legajo_guarda', on_delete=models.PROTECT, null=True, blank=True)
    
 
