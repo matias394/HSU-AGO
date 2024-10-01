@@ -50,12 +50,13 @@ class SecretariasListView(PermisosMixin, ListView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -92,12 +93,13 @@ class SecretariasDetailView(PermisosMixin, DetailView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -121,12 +123,13 @@ class SecretariasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -150,12 +153,13 @@ class SecretariasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -179,12 +183,13 @@ class SecretariasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -212,12 +217,13 @@ class SubsecretariasListView(PermisosMixin, ListView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -256,12 +262,13 @@ class SubsecretariasDetailView(PermisosMixin, DetailView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -285,12 +292,13 @@ class SubsecretariasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -314,12 +322,13 @@ class SubsecretariasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -343,12 +352,13 @@ class SubsecretariasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -376,12 +386,13 @@ class OrganismosListView(PermisosMixin, ListView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -418,12 +429,13 @@ class OrganismosDetailView(PermisosMixin, DetailView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, *args, **kwargs):
@@ -456,12 +468,13 @@ class OrganismosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -485,12 +498,13 @@ class OrganismosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -514,12 +528,13 @@ class OrganismosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -548,12 +563,13 @@ class ProgramasListView(PermisosMixin, ListView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -597,12 +613,13 @@ class ProgramasDetailView(PermisosMixin, DetailView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -626,12 +643,13 @@ class ProgramasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -655,12 +673,13 @@ class ProgramasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -684,12 +703,13 @@ class ProgramasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -717,12 +737,13 @@ class PlanesSocialesListView(PermisosMixin, ListView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -761,12 +782,13 @@ class PlanesSocialesDetailView(PermisosMixin, DetailView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -790,12 +812,13 @@ class PlanesSocialesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -819,12 +842,13 @@ class PlanesSocialesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -848,12 +872,13 @@ class PlanesSocialesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -881,12 +906,13 @@ class AgentesExternosListView(PermisosMixin, ListView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -926,12 +952,13 @@ class AgentesExternosDetailView(PermisosMixin, DetailView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -955,12 +982,13 @@ class AgentesExternosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -984,12 +1012,13 @@ class AgentesExternosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_initial(self):
@@ -1026,12 +1055,13 @@ class AgentesExternosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1059,12 +1089,13 @@ class GruposDestinatariosListView(PermisosMixin, ListView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -1105,12 +1136,13 @@ class GruposDestinatariosDetailView(PermisosMixin, DetailView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1134,12 +1166,13 @@ class GruposDestinatariosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteVi
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1163,12 +1196,13 @@ class GruposDestinatariosCreateView(PermisosMixin, SuccessMessageMixin, CreateVi
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1192,12 +1226,13 @@ class GruposDestinatariosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateVi
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1225,12 +1260,13 @@ class CategoriaAlertasListView(PermisosMixin, ListView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -1265,12 +1301,13 @@ class CategoriaAlertasDetailView(PermisosMixin, DetailView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1294,12 +1331,13 @@ class CategoriaAlertasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView)
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1323,12 +1361,13 @@ class CategoriaAlertasCreateView(PermisosMixin, SuccessMessageMixin, CreateView)
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1352,12 +1391,13 @@ class CategoriaAlertasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView)
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1384,12 +1424,13 @@ class AlertasListView(PermisosMixin, ListView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -1424,12 +1465,13 @@ class AlertasDetailView(PermisosMixin, DetailView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1453,12 +1495,13 @@ class AlertasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1482,12 +1525,13 @@ class AlertasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1511,12 +1555,13 @@ class AlertasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1544,12 +1589,13 @@ class EquiposListView(PermisosMixin, ListView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -1588,12 +1634,13 @@ class EquiposDetailView(PermisosMixin, DetailView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1617,12 +1664,13 @@ class EquiposDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1646,12 +1694,13 @@ class EquiposCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -1684,12 +1733,13 @@ class EquiposUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -1726,12 +1776,13 @@ class AccionesListView(PermisosMixin, ListView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -1768,12 +1819,13 @@ class AccionesDetailView(PermisosMixin, DetailView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1797,12 +1849,13 @@ class AccionesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1826,12 +1879,13 @@ class AccionesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1855,12 +1909,13 @@ class AccionesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1888,12 +1943,13 @@ class CriteriosListView(PermisosMixin, ListView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -1933,12 +1989,13 @@ class CriteriosDetailView(PermisosMixin, DetailView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1962,12 +2019,13 @@ class CriteriosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -1991,12 +2049,13 @@ class CriteriosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -2020,12 +2079,13 @@ class CriteriosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -2053,12 +2113,13 @@ class IndicesListView(PermisosMixin, ListView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -2098,12 +2159,13 @@ class IndicesDetailView(PermisosMixin, DetailView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -2127,12 +2189,13 @@ class IndicesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -2229,12 +2292,13 @@ class IndicesCreateView(PermisosMixin, IndiceInline, CreateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -2277,12 +2341,13 @@ class IndicesUpdateView(PermisosMixin, IndiceInline, UpdateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -2327,12 +2392,13 @@ class VacantesListView(PermisosMixin, ListView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
@@ -2368,12 +2434,13 @@ class VacantesDetailView(PermisosMixin, DetailView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -2404,12 +2471,13 @@ class VacantesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -2433,12 +2501,13 @@ class VacantesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -2467,12 +2536,13 @@ class VacantesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -2526,12 +2596,13 @@ class SLEquiposListView(PermisosMixin, ListView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -2568,12 +2639,13 @@ class SLEquiposDetailView(PermisosMixin, DetailView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -2597,12 +2669,13 @@ class SLEquiposDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -2626,12 +2699,13 @@ class SLEquiposCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -2655,12 +2729,13 @@ class SLEquiposUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -2682,12 +2757,13 @@ class SLIndicesVulnerabilidadListView(PermisosMixin, ListView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
     # Funcion de busqueda
@@ -2724,12 +2800,13 @@ class SLIndicesVulnerabilidadDetailView(PermisosMixin, DetailView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -2753,12 +2830,13 @@ class SLIndicesVulnerabilidadDeleteView(PermisosMixin, SuccessMessageMixin, Dele
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -2782,12 +2860,13 @@ class SLIndicesVulnerabilidadCreateView(PermisosMixin, SuccessMessageMixin, Crea
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -2811,12 +2890,13 @@ class SLIndicesVulnerabilidadUpdateView(PermisosMixin, SuccessMessageMixin, Upda
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
-        if self.request.user.has_perm("Usuarios.programa_Configuracion"):
-            if any(
-                request.user.groups.filter(name=grupo).exists()
-                for grupo in permisos_a_verificar
-            ):
-                raise PermissionDenied()
+        if not request.user.has_perm("Usuarios.programa_Configuracion"):
+            raise PermissionDenied()
+        if any(
+            request.user.groups.filter(name=grupo).exists()
+            for grupo in permisos_a_verificar
+        ):
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
