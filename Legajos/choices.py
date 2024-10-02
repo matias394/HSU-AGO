@@ -268,7 +268,6 @@ CHOICE_INSTITUCIONES_EDUCATIVAS = [
     ('Opción 194', 'Opción 194'),
     ('Otra', 'Otra'),
 ]
-
 CHOICE_SINO = [
     (None, ''),
     ('True', 'SI'),
