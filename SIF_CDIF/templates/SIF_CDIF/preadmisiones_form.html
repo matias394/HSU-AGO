@@ -479,7 +479,7 @@
                                                     <label>Estado del nivel</label>
                                                     <input type="text" class="form-control" id="estado_nivelLegajo" 
                                                     {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                    value="{{object.fk_legajo_guarda.estado_nivel}}"
+                                                    value="{{dimension_educacion_datos.estado_nivel}}"
                                                     {% endif %}
                                                     readonly>
                                                 </div>
@@ -488,7 +488,7 @@
                                                     <label>Máximo nivel educativo alcanzado</label>
                                                     <input type="text" class="form-control" id="max_nivelLegajo" 
                                                     {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
-                                                    value="{{object.fk_legajo_guarda.max_nivel}}"
+                                                    value="{{dimension_educacion_datos.max_nivel}}"
                                                     {% endif %}
                                                     readonly>
                                                 </div>
@@ -1084,13 +1084,27 @@
 
 
     $('#id_fk_legajo_GUARDA').change(function() {
-
-        //var nivelG = document.getElementById("nivelG");
-        // Obtiene el valor seleccionado
         var seleccion = $(this).val();
-        // Lógica para determinar el contenido del div basado en la selección
+        const csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+        $.ajax({
+        type: 'POST',
+        url: "{% url 'CDIF_ajaxLegajoDimensionEducacion' %}",
+        data: {
+          'csrfmiddlewaretoken': csrf,
+          'id': seleccion,
+        },
+        success: (res) => {
+            var max_nivelLegajo = document.getElementById("max_nivelLegajo");
+            var estado_nivelLegajo = document.getElementById("estado_nivelLegajo");
+            max_nivelLegajo.value = res.max_nivel
+            estado_nivelLegajo.value = res.estado_nivel
+        },
+        error: (err) => {
+          console.log("Error: ", err)
+        }
+        })
+
         {% for f in familia %}
-        console.log("{{f.fk_legajo_1.id}}")
         if (seleccion === '{{f.fk_legajo_1.id}}') {
             tipo_docGUARDA.value = '{{f.fk_legajo_1.tipo_doc}}';
             documentoGUARDA.value = '{{f.fk_legajo_1.documento}}';
@@ -1108,12 +1122,6 @@
         }
         {% endfor %}
         {% for f in familia_inversa %}
-        console.log("{{f.fk_legajo_2.fecha_nacimiento}}")
-        console.log("{{f.fk_legajo_2.estado_civil}}")
-        console.log("{{f.fk_legajo_2.telefono}}")
-        console.log("{{f.fk_legajo_2.calle}}")
-        console.log("{{f.fk_legajo_2.altura}}")
-        console.log("{{f.fk_legajo_2.piso}}")
         if (seleccion === '{{f.fk_legajo_2.id}}') {
             tipo_docGUARDA.value = '{{f.fk_legajo_2.tipo_doc}}';
             documentoGUARDA.value = '{{f.fk_legajo_2.documento}}';

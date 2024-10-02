@@ -21,6 +21,7 @@ urlpatterns = [
     path('CDIF/preadmisiones/buscar', login_required(CDIFPreAdmisionesBuscarListView.as_view()), name='CDIF_preadmisiones_buscar'),
     path('CDIF/preadmisiones/eliminar/<pk>', login_required(CDIFPreAdmisionesDeleteView.as_view()), name='CDIF_preadmisiones_eliminar'),
     path('CDIF/preadmisiones/rechazar/<pk>', login_required(CDIFPreAdmisionesRechazarView.as_view()), name='CDIF_preadmisiones_rechazar'),
+    path('CDIF/preadmisiones/ajaxLegajoDimensionEducacion', login_required(CDIFajaxLegajoDimensionEducacionView.as_view()), name='CDIF_ajaxLegajoDimensionEducacion'),
     # IVI
     path('CDIF/criterios_ivi/crear', login_required(CDIFCriteriosIVICreateView.as_view()), name='CDIF_criterios_ivi_crear'),
     path('CDIF/indice_ivi/crear/<pk>', login_required(CDIFIndiceIviCreateView.as_view()), name='CDIF_indiceivi_crear'),
