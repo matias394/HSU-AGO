@@ -473,6 +473,26 @@
                                                         {{form.aprender_oficio_guarda| as_crispy_field}}
                                                     </div>
                                                 </div>
+
+
+                                                <div class="col-sm-3 form-group">
+                                                    <label>Estado del nivel</label>
+                                                    <input type="text" class="form-control" id="estado_nivelLegajo" 
+                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                    value="{{object.fk_legajo_guarda.estado_nivel}}"
+                                                    {% endif %}
+                                                    readonly>
+                                                </div>
+
+                                                <div class="col-sm-3 form-group">
+                                                    <label>Máximo nivel educativo alcanzado</label>
+                                                    <input type="text" class="form-control" id="max_nivelLegajo" 
+                                                    {%if request.resolver_match.url_name == "CDIF_preadmisiones_editar" %}
+                                                    value="{{object.fk_legajo_guarda.max_nivel}}"
+                                                    {% endif %}
+                                                    readonly>
+                                                </div>
+
                                             </div>
                                         </div>
                                         <div class="col-sm-12 mt-2">
