@@ -151,8 +151,15 @@ class NuevoLegajoFamiliarForm(forms.ModelForm):
         validators=[MinValueValidator(3000000), MaxValueValidator(100000000)],
         widget=forms.NumberInput(),
     )
-    max_nivel = forms.ChoiceField(choices=CHOICE_NIVEL_EDUCATIVO, required=False, label="Nivel educativo")
-    estado_nivel = forms.ChoiceField(choices=CHOICE_ESTADO_NIVEL_EDUCATIVO, required=False, label="Estado nivel educativo",)
+    max_nivel = forms.ChoiceField(
+        choices=CHOICE_NIVEL_EDUCATIVO, required=False, label="Nivel educativo"
+    )
+    estado_nivel = forms.ChoiceField(
+        choices=CHOICE_ESTADO_NIVEL_EDUCATIVO,
+        required=False,
+        label="Estado nivel educativo",
+    )
+
     class Meta:
         model = Legajos
         fields = [
@@ -170,6 +177,12 @@ class NuevoLegajoFamiliarForm(forms.ModelForm):
         widgets = {
             "fecha_nacimiento": forms.DateInput(
                 attrs={"type": "date"}, format="%Y-%m-%d"
+            ),
+            "estado_relacion": forms.Select(
+                attrs={"class": "form-control custom-select"}
+            ),
+            "cuidador_principal": forms.Select(
+                attrs={"class": "form-control custom-select"}
             ),
         }
 
