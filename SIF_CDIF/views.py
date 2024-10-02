@@ -508,6 +508,16 @@ class CDIFajaxLegajoDimensionEducacionView(PermisosMixin, DetailView):
             datosDelFklegajoGuarda_dict = model_to_dict(datosDelFklegajoGuarda)
     
         return JsonResponse(datosDelFklegajoGuarda_dict)
+class CDIFajaxLegajoDimensionTrabajoView(PermisosMixin, DetailView):
+    permission_required = "Usuarios.programa_CDIF"
+    model = DimensionTrabajo
+
+    def post(self, request, *args, **kwargs):
+        if request.POST:
+            datosDelFklegajoGuarda = DimensionTrabajo.objects.filter(fk_legajo=request.POST.get("id")).first()
+            datosDelFklegajoGuarda_dict = model_to_dict(datosDelFklegajoGuarda)
+    
+        return JsonResponse(datosDelFklegajoGuarda_dict)
 
 
 class CDIFPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin):
@@ -558,7 +568,8 @@ class CDIFPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
         )
 
         if(legajo.fk_legajo_id != None):
-            datosDelFklegajoGuarda = DimensionEducacion.objects.get(fk_legajo=legajo.fk_legajo_id)            
+            datosDelFklegajoGuarda = DimensionEducacion.objects.get(fk_legajo=legajo.fk_legajo_id)
+            datosDelFklegajoGuardaTrabajo = DimensionTrabajo.objects.get(fk_legajo=legajo.fk_legajo_id)                  
 
         context["pk"] = pk.fk_derivacion_id
         context["legajo"] = legajo
@@ -568,6 +579,7 @@ class CDIFPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
         context["cupos"] = cupos
         context["nuevo_grupo_familiar_form"] = NuevoLegajoFamiliarForm()
         context["dimension_educacion_datos"] = datosDelFklegajoGuarda
+        context["dimension_trabajo_datos"] = datosDelFklegajoGuardaTrabajo
         return context
 
     def crear_grupo_hogar(self, form: QueryDict):
