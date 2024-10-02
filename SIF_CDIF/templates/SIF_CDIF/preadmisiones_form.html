@@ -1090,7 +1090,6 @@
 
 
     $('#id_fk_legajo_GUARDA').change(function() {
-        debugger
         var seleccion = $(this).val();
         const csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value;
         $.ajax({
