@@ -1,4 +1,5 @@
 from django.forms import BaseModelForm
+from django.forms.models import model_to_dict
 from django.views.generic import (
     CreateView,
     ListView,
@@ -8,7 +9,7 @@ from django.views.generic import (
     TemplateView,
     FormView,
 )
-from Legajos.models import LegajosDerivaciones
+from django.http import JsonResponse
 from Legajos.forms import DerivacionesRechazoForm, LegajosDerivacionesForm
 from django.db.models import Q
 from .models import *
@@ -497,6 +498,17 @@ class CDIFPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
     def form_invalid(self, form):
         return super().form_invalid(form)
 
+class CDIFajaxLegajoDimensionEducacionView(PermisosMixin, DetailView):
+    permission_required = "Usuarios.programa_CDIF"
+    model = DimensionEducacion
+
+    def post(self, request, *args, **kwargs):
+        if request.POST:
+            datosDelFklegajoGuarda = DimensionEducacion.objects.filter(fk_legajo=request.POST.get("id")).first()
+            datosDelFklegajoGuarda_dict = model_to_dict(datosDelFklegajoGuarda)
+    
+        return JsonResponse(datosDelFklegajoGuarda_dict)
+
 
 class CDIFPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin):
     permission_required = "Usuarios.programa_CDIF"
@@ -545,6 +557,9 @@ class CDIFPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
             fk_vacante__fk_programa_id=settings.PROG_CDIF
         )
 
+        if(legajo.fk_legajo_id != None):
+            datosDelFklegajoGuarda = DimensionEducacion.objects.get(fk_legajo=legajo.fk_legajo_id)            
+
         context["pk"] = pk.fk_derivacion_id
         context["legajo"] = legajo
         context["familia"] = familia
@@ -552,6 +567,7 @@ class CDIFPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
         context["centros"] = centros
         context["cupos"] = cupos
         context["nuevo_grupo_familiar_form"] = NuevoLegajoFamiliarForm()
+        context["dimension_educacion_datos"] = datosDelFklegajoGuarda
         return context
 
     def crear_grupo_hogar(self, form: QueryDict):
