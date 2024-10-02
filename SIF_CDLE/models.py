@@ -1002,7 +1002,7 @@ class CDLE_Intervenciones(models.Model):
         blank=True,
         null=True,
     )
-    fecha = models.DateField(null=True, blank=True)
+    fecha = models.DateField(null=False, blank=False)
 
 
 class CDLE_Historial(models.Model):
