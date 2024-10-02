@@ -143,9 +143,17 @@ class LegajoGrupoFamiliarForm(forms.ModelForm):
 
 class NuevoLegajoFamiliarForm(forms.ModelForm):
     vinculo = forms.ChoiceField(choices=CHOICE_VINCULO_FAMILIAR, required=True)
-    estado_relacion = forms.ChoiceField(choices=CHOICE_ESTADO_RELACION, required=False)
+    estado_relacion = forms.ChoiceField(
+        choices=CHOICE_ESTADO_RELACION,
+        required=False,
+        widget=forms.Select(attrs={"class": "form-control custom-class"}),
+    )
     conviven = forms.ChoiceField(choices=CHOICE_SINO, required=False)
-    cuidador_principal = forms.ChoiceField(choices=CHOICE_SINO, required=False)
+    cuidador_principal = forms.ChoiceField(
+        choices=CHOICE_ESTADO_RELACION,
+        required=False,
+        widget=forms.Select(attrs={"class": "form-control custom-class"}),
+    )
     documento = forms.IntegerField(
         required=False,
         validators=[MinValueValidator(3000000), MaxValueValidator(100000000)],
@@ -177,12 +185,6 @@ class NuevoLegajoFamiliarForm(forms.ModelForm):
         widgets = {
             "fecha_nacimiento": forms.DateInput(
                 attrs={"type": "date"}, format="%Y-%m-%d"
-            ),
-            "estado_relacion": forms.Select(
-                attrs={"class": "form-control custom-select"}
-            ),
-            "cuidador_principal": forms.Select(
-                attrs={"class": "form-control custom-select"}
             ),
         }
 
