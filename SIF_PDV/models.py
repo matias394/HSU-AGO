@@ -258,7 +258,7 @@ class PDV_Intervenciones(models.Model):
     criterio_modificable = models.ForeignKey(Criterios_IVI, on_delete=models.PROTECT)
     accion = models.CharField(max_length=250, choices=CHOICE_ACCION_DESARROLLADA, null=False, blank=False)
     responsable = models.ManyToManyField(OpcionesResponsables)
-    impacto = models.CharField(max_length=250, choices=[('Trabajado','Trabajado'),('Revertido','Revertido')], null=False, blank=False)
+    impacto = models.CharField(max_length=250,  choices=[('Trabajado','Trabajado'),('Revertido','Revertido')], null=False, blank=False)
     detalle = models.CharField(max_length=350, null=True, blank=True, verbose_name='Observaciones')
     creado = models.DateField(auto_now_add=True, null=True, blank=True)
     modificado = models.DateField(auto_now=True, null=True, blank=True)
