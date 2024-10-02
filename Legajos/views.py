@@ -155,7 +155,7 @@ class LegajosDetailView(DetailView):
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Legajo  Administrador",
-            "Legajo  Equipo operativo",
+            # "Legajo  Equipo operativo",
             # "Legajo  Directivo",
             "Legajo  Equipo técnico",
             "Legajo  Consultante",
@@ -510,7 +510,7 @@ class LegajosCreateView(PermisosMixin, CreateView):
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Legajo  Administrador",
-            "Legajo  Equipo operativo",
+            # "Legajo  Equipo operativo",
             # "Legajo  Directivo",
             "Legajo  Equipo técnico",
             "Legajo  Consultante",
@@ -585,7 +585,7 @@ class LegajosUpdateView(PermisosMixin, UpdateView):
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "Legajo  Administrador",
-            "Legajo  Equipo operativo",
+            # "Legajo  Equipo operativo",
             # "Legajo  Directivo",
             "Legajo  Equipo técnico",
             "Legajo  Consultante",

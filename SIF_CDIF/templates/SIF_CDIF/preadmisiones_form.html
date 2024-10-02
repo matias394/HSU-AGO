@@ -1085,87 +1085,98 @@
         }
         {% endfor %}
     });
-
-
-
-
-    $('#id_fk_legajo_GUARDA').change(function() {
-        var seleccion = $(this).val();
-        const csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-        $.ajax({
-        type: 'POST',
-        url: "{% url 'CDIF_ajaxLegajoDimensionEducacion' %}",
-        data: {
-          'csrfmiddlewaretoken': csrf,
-          'id': seleccion,
-        },
-        success: (res) => {
-            var max_nivelLegajo = document.getElementById("max_nivelLegajo");
-            var estado_nivelLegajo = document.getElementById("estado_nivelLegajo");
-            max_nivelLegajo.value = res.max_nivel
-            estado_nivelLegajo.value = res.estado_nivel
-        },
-        error: (err) => {
-          console.log("Error: ", err)
-        }
-        })
-        $.ajax({
-        type: 'POST',
-        url: "{% url 'CDIF_ajaxLegajoDimensionTrabajo' %}",
-        data: {
-          'csrfmiddlewaretoken': csrf,
-          'id': seleccion,
-        },
-        success: (res) => {
-            var ocupacion = document.getElementById("ocupacionLegajo");
-            ocupacion.value = res.ocupacion
-        },
-        error: (err) => {
-          console.log("Error: ", err)
-        }
-        })
-
-        {% for f in familia %}
-        if (seleccion === '{{f.fk_legajo_1.id}}') {
-            tipo_docGUARDA.value = '{{f.fk_legajo_1.tipo_doc}}';
-            documentoGUARDA.value = '{{f.fk_legajo_1.documento}}';
-            vinculoGUARDA.value = '{{f.vinculo}}';
-            fecha_nacimientoGUARDA.value = '{{f.fk_legajo_1.fecha_nacimiento}}';
-            estado_civilG.value = '{{f.fk_legajo_1.estado_civil}}';
-            telefonoG.value = '{{f.fk_legajo_1.telefono}}';
-            calleG.value = '{{f.fk_legajo_1.calle}}';
-            alturaG.value = '{{f.fk_legajo_1.altura}}';
-            pisoG.value = '{{f.fk_legajo_1.piso}}';
-            circuitoG.value = '{{f.fk_legajo_1.circuito}}';
-            barrioG.value = '{{f.fk_legajo_1.barrio}}';
-            localidadG.value = '{{f.fk_legajo_1.localidad}}';
-            nacionalidadG.value = '{{f.fk_legajo_1.nacionalidad}}';
-        }
-        {% endfor %}
-        {% for f in familia_inversa %}
-        if (seleccion === '{{f.fk_legajo_2.id}}') {
-            tipo_docGUARDA.value = '{{f.fk_legajo_2.tipo_doc}}';
-            documentoGUARDA.value = '{{f.fk_legajo_2.documento}}';
-            vinculoGUARDA.value = '{{f.vinculo}}';
-            fecha_nacimientoGUARDA.value = '{{f.fk_legajo_2.fecha_nacimiento}}';
-            estado_civilG.value = '{{f.fk_legajo_2.estado_civil}}';
-            telefonoG.value = '{{f.fk_legajo_2.telefono}}';
-            calleG.value = '{{f.fk_legajo_2.calle}}';
-            alturaG.value = '{{f.fk_legajo_2.altura}}';
-            pisoG.value = '{{f.fk_legajo_2.piso}}';
-            circuitoG.value = '{{f.fk_legajo_2.circuito}}';
-            barrioG.value = '{{f.fk_legajo_2.barrio}}';
-            localidadG.value = '{{f.fk_legajo_2.localidad}}';
-            nacionalidadG.value = '{{f.fk_legajo_2.nacionalidad}}';
-        }
-        {% endfor %}
-        
-        //  nivelG.value = '{{educacion.max_nivel}}';
-        //  console.log( nivelG.value )
-
-    });
 });
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        $('#id_fk_legajo_GUARDA').change(function() {
+            var seleccion = $(this).val();
+            console.log("Seleccionado: ", seleccion); // Verifica el valor seleccionado
+    
+            const csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+            console.log("CSRF Token: ", csrf); // Verifica el CSRF token
+    
+            // Primera solicitud AJAX para dimension educativa
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'CDIF_ajaxLegajoDimensionEducacion' %}",
+                data: {
+                    'csrfmiddlewaretoken': csrf,
+                    'id': seleccion,
+                },
+                success: (res) => {
+                    console.log("Respuesta de Educacion: ", res); // Verifica la respuesta del servidor
+                    var max_nivelLegajo = document.getElementById("max_nivelLegajo");
+                    var estado_nivelLegajo = document.getElementById("estado_nivelLegajo");
+                    max_nivelLegajo.value = res.max_nivel;
+                    estado_nivelLegajo.value = res.estado_nivel;
+                },
+                error: (err) => {
+                    console.log("Error en Educacion: ", err); // Verifica si hay errores
+                }
+            });
+    
+            // Segunda solicitud AJAX para dimension trabajo
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'CDIF_ajaxLegajoDimensionTrabajo' %}",
+                data: {
+                    'csrfmiddlewaretoken': csrf,
+                    'id': seleccion,
+                },
+                success: (res) => {
+                    console.log("Respuesta de Trabajo: ", res); // Verifica la respuesta del servidor
+                    var ocupacion = document.getElementById("ocupacionLegajo");
+                    ocupacion.value = res.ocupacion;
+                },
+                error: (err) => {
+                    console.log("Error en Trabajo: ", err); // Verifica si hay errores
+                }
+            });
+    
+            // Verifica la selección y los datos relacionados en familia
+            {% for f in familia %}
+            if (seleccion === '{{f.fk_legajo_1.id}}') {
+                console.log("Encontrado en familia:", '{{f.fk_legajo_1.id}}');
+                tipo_docGUARDA.value = '{{f.fk_legajo_1.tipo_doc}}';
+                documentoGUARDA.value = '{{f.fk_legajo_1.documento}}';
+                vinculoGUARDA.value = '{{f.vinculo}}';
+                fecha_nacimientoGUARDA.value = '{{f.fk_legajo_1.fecha_nacimiento}}';
+                estado_civilG.value = '{{f.fk_legajo_1.estado_civil}}';
+                telefonoG.value = '{{f.fk_legajo_1.telefono}}';
+                calleG.value = '{{f.fk_legajo_1.calle}}';
+                alturaG.value = '{{f.fk_legajo_1.altura}}';
+                pisoG.value = '{{f.fk_legajo_1.piso}}';
+                circuitoG.value = '{{f.fk_legajo_1.circuito}}';
+                barrioG.value = '{{f.fk_legajo_1.barrio}}';
+                localidadG.value = '{{f.fk_legajo_1.localidad}}';
+                nacionalidadG.value = '{{f.fk_legajo_1.nacionalidad}}';
+            }
+            {% endfor %}
+    
+            // Verifica la selección y los datos relacionados en familia inversa
+            {% for f in familia_inversa %}
+            if (seleccion === '{{f.fk_legajo_2.id}}') {
+                console.log("Encontrado en familia inversa:", '{{f.fk_legajo_2.id}}');
+                tipo_docGUARDA.value = '{{f.fk_legajo_2.tipo_doc}}';
+                documentoGUARDA.value = '{{f.fk_legajo_2.documento}}';
+                vinculoGUARDA.value = '{{f.vinculo}}';
+                fecha_nacimientoGUARDA.value = '{{f.fk_legajo_2.fecha_nacimiento}}';
+                estado_civilG.value = '{{f.fk_legajo_2.estado_civil}}';
+                telefonoG.value = '{{f.fk_legajo_2.telefono}}';
+                calleG.value = '{{f.fk_legajo_2.calle}}';
+                alturaG.value = '{{f.fk_legajo_2.altura}}';
+                pisoG.value = '{{f.fk_legajo_2.piso}}';
+                circuitoG.value = '{{f.fk_legajo_2.circuito}}';
+                barrioG.value = '{{f.fk_legajo_2.barrio}}';
+                localidadG.value = '{{f.fk_legajo_2.localidad}}';
+                nacionalidadG.value = '{{f.fk_legajo_2.nacionalidad}}';
+            }
+            {% endfor %}
+        });
+    });    
+</script>
+
 {% comment %} SCRIPT DE GRUPO FAMILIAR {% endcomment %}
 <script>
   // Disable form submissions if there are invalid fields
