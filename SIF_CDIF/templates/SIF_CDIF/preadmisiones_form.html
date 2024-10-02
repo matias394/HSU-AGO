@@ -516,6 +516,12 @@
                                                 <div class="col-sm-4 form-group">
                                                     {{form.modo_contrat_guarda| as_crispy_field}}
                                                 </div>
+                                                <div class="col-sm-4 form-group">
+                                                    <label>Ocupación</label>
+                                                    <input type="text" class="form-control" id="ocupacionLegajo" 
+                                                    value="{{dimension_trabajo_datos.ocupacion}}"                                                  
+                                                         readonly>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1098,6 +1104,21 @@
             var estado_nivelLegajo = document.getElementById("estado_nivelLegajo");
             max_nivelLegajo.value = res.max_nivel
             estado_nivelLegajo.value = res.estado_nivel
+        },
+        error: (err) => {
+          console.log("Error: ", err)
+        }
+        })
+        $.ajax({
+        type: 'POST',
+        url: "{% url 'CDIF_ajaxLegajoDimensionTrabajo' %}",
+        data: {
+          'csrfmiddlewaretoken': csrf,
+          'id': seleccion,
+        },
+        success: (res) => {
+            var ocupacion = document.getElementById("ocupacionLegajo");
+            ocupacion.value = res.ocupacion
         },
         error: (err) => {
           console.log("Error: ", err)
