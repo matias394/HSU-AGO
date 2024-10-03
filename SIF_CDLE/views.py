@@ -531,7 +531,7 @@ class CDLEPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
     def get_context_data(self, **kwargs):
         if "conviven" in self.request.POST:
             self.crear_grupo_hogar(self.request.POST)
-            messages.success(self.request, "Familair agregado correctamente.")
+            messages.success(self.request, "Familiar agregado correctamente.")
         pk = CDLE_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
         context = super().get_context_data(**kwargs)
         legajo = LegajosDerivaciones.objects.filter(pk=pk.fk_derivacion_id).first()
