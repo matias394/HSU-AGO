@@ -855,9 +855,7 @@ class CreateGrupoFamiliar(View):
         fk_legajo_1 = request.GET.get("fk_legajo_1", None)
         fk_legajo_2 = request.GET.get("fk_legajo_2", None)
         vinculo = request.GET.get("vinculo", None)
-        estado_relacion = request.GET.get("estado_relacion", None)
         conviven = request.GET.get("conviven", None)
-        cuidador_principal = request.GET.get("cuidador_principal", None)
         obj = None
         vinculo_data = VINCULO_MAP.get(vinculo)
         nivel_educativo_enviado = request.GET.get("nivel_educativo", None)
@@ -870,9 +868,7 @@ class CreateGrupoFamiliar(View):
             fk_legajo_2_id=fk_legajo_2,
             vinculo=vinculo_data["vinculo"],
             vinculo_inverso=vinculo_data["vinculo_inverso"],
-            estado_relacion=estado_relacion,
             conviven=conviven,
-            cuidador_principal=cuidador_principal,
         )
         LegajoEnviado = DimensionEducacion.objects.get(fk_legajo=fk_legajo_2)
         if LegajoEnviado is not None:

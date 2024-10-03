@@ -44,6 +44,8 @@
                 <th>Nombre</th>
                 <th>Documento</th>
                 <th>Creado por</th>
+                <th>Area de acompañamiento</th>
+                <th>Acompañante asignado</th>
                 <th style="width: 19%" class="notexport">
                 </th>
               </tr>
@@ -56,6 +58,8 @@
                     <td class=""><a href="{% url 'legajos_ver' o.fk_derivacion.fk_legajo.id%}" title="Ver detalle de legajo">{{o.fk_derivacion.fk_legajo}}</a></td>
                     <td class=""> {{o.fk_derivacion.fk_legajo.tipo_doc}} {{o.fk_derivacion.fk_legajo.documento}}</td>
                     <td class="">{{o.creado_por}}</td>
+                    <td class="">{{o.areaacompanamiento}}</td>
+                    <td class="">{{o.acompaniante_asignado}}</td>
                     <td class="project-actions text-right">
                       <div class="btn-group" role="group">
                         {% if o.estado != 'Finalizada' %}
