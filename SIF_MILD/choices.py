@@ -259,6 +259,8 @@ CHOICE_RESPONSABLES=[
 ]
 
 CHOICE_ACCION_DESARROLLADA = [
+    ('Supervision', 'Supervision'),
+    ('Pre-supervisión', 'Pre-supervisión'),
     ('Articulación con salud: Aplicación de vacunas', 'Articulación con salud: Aplicación de vacunas'),
     ('Articulación con salud: Asistió a control pediátrico', 'Articulación con salud: Asistió a control pediátrico'),
     ('Articulación con salud: Realiza OEA', 'Articulación con salud: Realiza OEA'),

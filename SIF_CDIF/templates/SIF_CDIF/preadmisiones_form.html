@@ -271,9 +271,6 @@
                                             <div class="col-sm-6 form-group">
                                                     {{form.observaciones_guarda|as_crispy_field}}
                                             </div>
-                                            <div class="col-sm-6 form-group">
-                                                    {{form.dni_con_domicilio_san_miguel|as_crispy_field}}
-                                            </div>
                                             <div class="row pl-3">
                                                 <div class="col-sm-3 form-group">
                                                     <label>Guarda o cuidador principal</label>
@@ -405,6 +402,11 @@
                                                     {% endif %}
                                                     readonly>
                                                 </div>
+                                                <div class="col-sm-6 form-group">
+                                                    <div class="col-sm-6 form-group">
+                                                        {{form.dni_con_domicilio_san_miguel|as_crispy_field}}
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-12">
@@ -429,7 +431,10 @@
                                                 </div>         
                                                 <div class="col-sm-3 form-group">
                                                     {{form.cual_capacidades|as_crispy_field}}
-                                                </div>         
+                                                </div>
+                                                <div class="col-sm-3 form-group">
+                                                    {{form.centro_salud_referencia|as_crispy_field}}
+                                                </div>             
                                             </div>
                                             
                                         </div>
