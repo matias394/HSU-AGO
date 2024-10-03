@@ -196,9 +196,7 @@
                                         <th>Nombre</th>
                                         <th>Documento</th>
                                         <th>Vínculo</th>
-                                        <th>Estado Relación</th>
                                         <th class="text-center">Convive</th>
-                                        <th class="text-center">Cuidador Principal</th>
                                         <th class="text-center">Nivel educativo</th>
                                         <th class="text-center">Estado nivel educativo</th>
                                         <th class="text-right"></th>
@@ -1079,9 +1077,7 @@
                               <td>${r.nombre}</td>
                               <td>${r.documento}</td>
                               <td>{{nuevo_grupo_familiar_form.vinculo}}</td>
-                              <td>{{nuevo_grupo_familiar_form.estado_relacion}}</td>
                               <td class="text-center">{{nuevo_grupo_familiar_form.conviven}}</td>
-                              <td class="text-center">{{nuevo_grupo_familiar_form.cuidador_principal}}</td>
                               <td class="text-center">{{nuevo_grupo_familiar_form.max_nivel}}</td>
                               <td>{{nuevo_grupo_familiar_form.estado_nivel}}</td>
                               <td class="text-right">
@@ -1154,11 +1150,9 @@
     const addApellido = tdValues[1].innerHTML;
     const addDocumento = tdValues[2].innerHTML;
     const addParentesco = selectValues[0].value;
-    const addRelacion = selectValues[1].value;
-    const addConviven = selectValues[2].value;
-    const addCuidador = selectValues[3].value;
-    const addNivelEducativo = selectValues[4].value;
-    const addEstadoNivelEducativo = selectValues[5].value;
+    const addConviven = selectValues[1].value;
+    const addNivelEducativo = selectValues[2].value;
+    const addEstadoNivelEducativo = selectValues[3].value;
 
     // Validar que todos los campos select estén seleccionados
     var allFieldsSelected = true;
@@ -1179,9 +1173,7 @@
           'fk_legajo_1': '{{legajo.fk_legajo_id}}',
           'fk_legajo_2': pk,
           'vinculo': addParentesco,
-          'estado_relacion': addRelacion,
           'conviven': addConviven,
-          'cuidador_principal': addCuidador,
           'nivel_educativo': addNivelEducativo,
           'estado_nivel_educativo': addEstadoNivelEducativo,
         },

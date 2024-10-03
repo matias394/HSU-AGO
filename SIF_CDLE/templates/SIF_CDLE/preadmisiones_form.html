@@ -161,9 +161,7 @@
                           <th>Nombre</th>
                           <th>Documento</th>
                           <th>Vínculo</th>
-                          <th>Estado Relación</th>
                           <th class="text-center">Convive</th>
-                          <th class="text-center">Cuidador Principal</th>
                           <th class="text-right"></th>
                         </tr>
                       </thead>
@@ -812,9 +810,7 @@
                               <td>${r.nombre}</td>
                               <td>${r.documento}</td>
                               <td>{{nuevo_grupo_familiar_form.vinculo}}</td>
-                              <td>{{nuevo_grupo_familiar_form.estado_relacion}}</td>
                               <td class="text-center">{{nuevo_grupo_familiar_form.conviven}}</td>
-                              <td class="text-center">{{nuevo_grupo_familiar_form.cuidador_principal}}</td>
                               <td class="text-right">
                                   <button class="btn btn-primary btn-sm" id="btn_1" onclick="submitForms('id_tr${r.pk}','${r.pk}');" type="button">Agregar</button>
                               </td>
@@ -908,9 +904,7 @@
           'fk_legajo_1': '{{legajo.fk_legajo_id}}',
           'fk_legajo_2': pk,
           'vinculo': addParentesco,
-          'estado_relacion': addRelacion,
           'conviven': addConviven,
-          'cuidador_principal': addCuidador,
         },
         dataType: 'json',
         success: function (data) {
