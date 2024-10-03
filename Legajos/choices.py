@@ -400,9 +400,11 @@ CHOICE_TIPO_PISOS_VIVIENDA = [
 ]
 CHOICE_TIPO_CONSTRUCCION_VIVIENDA = [
     (None, ''),
-    ('Material', 'Material'),
-    ('Mixta (chapa y madera)', 'Mixta (chapa y madera)'),
-    ('Casilla (otros materiales)', 'Casilla (otros materiales)'),
+    ('Casilla de madera', 'Casilla de madera'),
+    ('Casa material/techo losa', 'Casa material/techo losa'),
+    ('Mixta', 'Mixta'),
+    ('Casa material/techo chapa', 'Casa material/techo chapa'),
+    ('Casilla de chapa', 'Casilla de chapa'),
     ('Otro', 'Otro'),
 ]
 
