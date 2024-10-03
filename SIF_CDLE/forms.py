@@ -251,7 +251,7 @@ class CDLE_IntervencionesForm (forms.ModelForm):
         widgets = {
             'detalle': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
             'responsable' : forms.SelectMultiple(attrs={'class': 'select2 w-100', 'multiple': True}),
-            'fecha': forms.DateInput(attrs={'type': 'date'}, format="%Y-%m-%d"),
+            'fecha': forms.DateInput(attrs={'type': 'date', 'required':True}, format="%Y-%m-%d"),
         }
         labels = {
             'criterio_modificable': 'Criterio modificable trabajado',

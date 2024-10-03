@@ -551,7 +551,7 @@ class SL_Equipos (models.Model):
         return reverse('slequipos_ver', kwargs={'pk': self.pk})
     
 class SL_IndicesVulnerabilidad (models.Model):
-    nombre = models.CharField(max_length=40, unique=True)
+    nombre = models.CharField(max_length=250, unique=True)
     puntaje = models.PositiveSmallIntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)], help_text='Permite valores entre 0 y 10.',)
     estado = models.BooleanField(default=True)
 

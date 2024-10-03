@@ -34,6 +34,7 @@ Intervenciones
           <thead>
             <tr>
               <th>Fecha</th>
+              <th>Fecha Cargada</th>
               {% comment %} <th>CDLE</th> {% endcomment %}
               <th>Usuario</th>
               <th>Legajo</th>
@@ -49,6 +50,7 @@ Intervenciones
             {% for i in intervenciones %}
             <tr>
               <td> {{ i.fecha|date:'d/m/Y' }} </td>
+              <td>{{i.creado|date:'d/m/Y'}}</td>
               {% comment %} <td>{{i.fk_admision.fk_preadmi.centro_postula}}</td> {% endcomment %}
               <td> {% if i.creado_por %}{{i.creado_por}}{% else %}{{i.modificado_por}}{% endif %} </td>
               <td>{{i.fk_admision.fk_preadmi.fk_legajo}}</td>
