@@ -650,7 +650,7 @@ class MILDPreAdmisionesDetailView(PermisosMixin, DetailView):
             .annotate(total=Sum("fk_criterios_ingreso__puntaje"))
             .order_by("-creado")
         )
-
+        print(resultado_ingreso)
         rol = obtener_rol(self.request)
         roles_permitidos = [
             "1000D  Administrador",
