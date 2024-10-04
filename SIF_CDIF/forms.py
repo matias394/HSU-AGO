@@ -47,6 +47,7 @@ class CDIF_PreadmisionesForm (forms.ModelForm):
             'retomar_estudios_guarda': forms.CheckboxInput(),
             'escribir_guarda': forms.CheckboxInput(),
             'aprender_oficio_guarda': forms.CheckboxInput(),
+            'observaciones_guarda': forms.Textarea(attrs={'class': 'form-control','rows': 3,}),
         }
         labels = {
             'fk_legajo_1':'',
