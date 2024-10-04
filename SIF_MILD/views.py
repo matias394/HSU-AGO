@@ -384,6 +384,7 @@ class MILDPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
         cuidador_principal = copy_form.get("cuidador_principal")
         max_nivel_send = copy_form.get("max_nivel")
         estado_nivel_send = copy_form.get("estado_nivel")
+
         # Crea el objeto Legajos
         try:
 

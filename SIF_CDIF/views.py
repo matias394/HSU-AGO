@@ -463,7 +463,7 @@ class CDIFPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
             )
 
         # Redireccionar a la misma página después de realizar la acción con éxito
-        # return HttpResponseRedirect(reverse('CDLE_preadmisiones_editar', args=[self.object.pk]))
+        # return HttpResponseRedirect(reverse('CDIF_preadmisiones_editar', args=[self.object.pk]))
 
     def form_valid(self, form):
         pk = self.kwargs["pk"]
@@ -498,25 +498,32 @@ class CDIFPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
     def form_invalid(self, form):
         return super().form_invalid(form)
 
+
 class CDIFajaxLegajoDimensionEducacionView(PermisosMixin, DetailView):
     permission_required = "Usuarios.programa_CDIF"
     model = DimensionEducacion
 
     def post(self, request, *args, **kwargs):
         if request.POST:
-            datosDelFklegajoGuarda = DimensionEducacion.objects.filter(fk_legajo=request.POST.get("id")).first()
+            datosDelFklegajoGuarda = DimensionEducacion.objects.filter(
+                fk_legajo=request.POST.get("id")
+            ).first()
             datosDelFklegajoGuarda_dict = model_to_dict(datosDelFklegajoGuarda)
-    
+
         return JsonResponse(datosDelFklegajoGuarda_dict)
+
+
 class CDIFajaxLegajoDimensionTrabajoView(PermisosMixin, DetailView):
     permission_required = "Usuarios.programa_CDIF"
     model = DimensionTrabajo
 
     def post(self, request, *args, **kwargs):
         if request.POST:
-            datosDelFklegajoGuarda = DimensionTrabajo.objects.filter(fk_legajo=request.POST.get("id")).first()
+            datosDelFklegajoGuarda = DimensionTrabajo.objects.filter(
+                fk_legajo=request.POST.get("id")
+            ).first()
             datosDelFklegajoGuarda_dict = model_to_dict(datosDelFklegajoGuarda)
-    
+
         return JsonResponse(datosDelFklegajoGuarda_dict)
 
 
@@ -567,9 +574,13 @@ class CDIFPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
             fk_vacante__fk_programa_id=settings.PROG_CDIF
         )
 
-        if(legajo.fk_legajo_id != None):
-            datosDelFklegajoGuarda = DimensionEducacion.objects.get(fk_legajo=legajo.fk_legajo_id)
-            datosDelFklegajoGuardaTrabajo = DimensionTrabajo.objects.get(fk_legajo=legajo.fk_legajo_id)                  
+        if legajo.fk_legajo_id != None:
+            datosDelFklegajoGuarda = DimensionEducacion.objects.get(
+                fk_legajo=legajo.fk_legajo_id
+            )
+            datosDelFklegajoGuardaTrabajo = DimensionTrabajo.objects.get(
+                fk_legajo=legajo.fk_legajo_id
+            )
 
         context["pk"] = pk.fk_derivacion_id
         context["legajo"] = legajo
