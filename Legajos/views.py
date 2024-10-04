@@ -706,6 +706,8 @@ class LegajosGrupoFamiliarCreateView(CreateView):
         cuidador_principal = form.cleaned_data["cuidador_principal"]
         max_nivel_send = form.cleaned_data["max_nivel"]
         estado_nivel_send = form.cleaned_data["estado_nivel"]
+        print(max_nivel_send)
+        print(estado_nivel_send)
 
         # Crea el objeto Legajos
         try:
@@ -740,6 +742,8 @@ class LegajosGrupoFamiliarCreateView(CreateView):
                 vinculo=vinculo_data["vinculo"],
                 vinculo_inverso=vinculo_data["vinculo_inverso"],
                 conviven=conviven,
+                max_nivel=max_nivel,
+                estado_nivel=estado_nivel,
                 estado_relacion=estado_relacion,
                 cuidador_principal=cuidador_principal,
             )

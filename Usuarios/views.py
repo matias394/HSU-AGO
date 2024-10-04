@@ -112,6 +112,8 @@ class UsuariosListView(PermisosMixin, ListView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
+        if not request.user.has_perm("Usuarios.programa_Administracion"):
+            raise PermissionDenied()
         if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
             raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
@@ -160,6 +162,8 @@ class UsuariosDetailView(UserPassesTestMixin, DetailView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
+        if not request.user.has_perm("Usuarios.programa_Administracion"):
+            raise PermissionDenied()
         if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
             raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
@@ -200,6 +204,8 @@ class UsuariosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
+        if not request.user.has_perm("Usuarios.programa_Administracion"):
+            raise PermissionDenied()
         if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
             raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
@@ -225,6 +231,8 @@ class UsuariosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
+        if not request.user.has_perm("Usuarios.programa_Administracion"):
+            raise PermissionDenied()
         if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
             raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
@@ -285,6 +293,8 @@ class UsuariosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
+        if not request.user.has_perm("Usuarios.programa_Administracion"):
+            raise PermissionDenied()
         if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
             raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
@@ -443,10 +453,12 @@ class GruposListView(PermisosMixin, ListView):
             "Usuarios.rol_operativo",
             "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Usuarios.rol_observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
+        if not request.user.has_perm("Usuarios.programa_Administracion"):
+            raise PermissionDenied()
         if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
             raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
@@ -478,10 +490,12 @@ class GruposDetailView(PermisosMixin, DetailView):
             "Usuarios.rol_operativo",
             "Usuarios.rol_tecnico",
             "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+            # "Usuarios.rol_observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
+        if not request.user.has_perm("Usuarios.programa_Administracion"):
+            raise PermissionDenied()
         if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
             raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
@@ -517,6 +531,8 @@ class GruposDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
+        if not request.user.has_perm("Usuarios.programa_Administracion"):
+            raise PermissionDenied()
         if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
             raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
@@ -543,6 +559,8 @@ class GruposCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
+        if not request.user.has_perm("Usuarios.programa_Administracion"):
+            raise PermissionDenied()
         if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
             raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
@@ -590,6 +608,8 @@ class GruposUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
+        if not request.user.has_perm("Usuarios.programa_Administracion"):
+            raise PermissionDenied()
         if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
             raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)

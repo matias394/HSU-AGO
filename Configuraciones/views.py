@@ -1656,7 +1656,7 @@ class EquiposDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            # "Configuración  Directivo",
+            "Configuración  Directivo",
             "Configuración  Equipo operativo",
             "Configuración  Equipo técnico",
             "Configuración  Consultante",
@@ -2753,7 +2753,7 @@ class SLIndicesVulnerabilidadListView(PermisosMixin, ListView):
             "Configuración  Equipo operativo",
             "Configuración  Equipo técnico",
             "Configuración  Consultante",
-            # "Configuración  Observador",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos
@@ -2796,7 +2796,7 @@ class SLIndicesVulnerabilidadDetailView(PermisosMixin, DetailView):
             "Configuración  Equipo operativo",
             "Configuración  Equipo técnico",
             "Configuración  Consultante",
-            # "Configuración  Observador",
+            "Configuración  Observador",
         ]
 
         # Verifica si el usuario tiene alguno de estos permisos

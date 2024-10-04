@@ -175,7 +175,7 @@ class CDIFDerivacionesDetailView(PermisosMixin, DetailView):
         roles_permitidos_rechazar = [
             "CDIF  Administrador",
             "CDIF  Directivo",
-            # "CDIF  Equipo operativo",
+            "CDIF  Equipo operativo",
             "CDIF  Equipo técnico",
             # "CDIF  Consultante",
             # "CDIF  Observador",
@@ -541,8 +541,8 @@ class CDIFPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
             # "CDIF  Directivo",
-            "CDIF  Equipo operativo",
-            "CDIF  Equipo técnico",
+            # "CDIF  Equipo operativo",
+            # "CDIF  Equipo técnico",
             "CDIF  Consultante",
             "CDIF  Observador",
         ]
@@ -1853,7 +1853,7 @@ class CDIFIntervencionesUpdateView(PermisosMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de permisos que no pueden entrar a la pagina
         permisos_a_verificar = [
-            "CDIF  Directivo",
+            # "CDIF  Directivo",
             "CDIF  Equipo operativo",
             "CDIF  Equipo técnico",
             "CDIF  Consultante",
