@@ -158,10 +158,10 @@
                                                     <th>Apellido</th>
                                                     <th>Nombre</th>
                                                     <th>Documento</th>
-                                                    <th>Vínculo</th>
-                                                    <th>Estado Relación</th>
+                                                    <th class="text-center">Vínculo</th>
                                                     <th class="text-center">Convive</th>
-                                                    <th class="text-center">Cuidador Principal</th>
+                                                    <th class="text-center">Nivel educativo</th>
+                                                    <th class="text-center">Estado nivel educativo</th>
                                                     <th class="text-right"></th>
                                                 </tr>
                                             </thead>
@@ -203,13 +203,13 @@
                                                     {{ form.vinculo|as_crispy_field }}
                                                 </div>
                                                 <div class="form-group col-sm-3">
-                                                    {{ form.estado_relacion|as_crispy_field }}
-                                                </div>
-                                                <div class="form-group col-sm-3">
                                                     {{ form.conviven|as_crispy_field }}
                                                 </div>
                                                 <div class="form-group col-sm-3">
-                                                    {{ form.cuidador_principal|as_crispy_field }}
+                                                    {{ form.max_nivel|as_crispy_field }}
+                                                </div>
+                                                <div class="form-group col-sm-3">
+                                                    {{ form.estado_nivel|as_crispy_field }}
                                                 </div>
                                                 <div class="form-group col-12 text-right">
                                                     <button type="submit" name="form_nuevo" id="form_nuevo"

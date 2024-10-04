@@ -704,6 +704,8 @@ class LegajosGrupoFamiliarCreateView(CreateView):
         conviven = form.cleaned_data["conviven"]
         estado_relacion = form.cleaned_data["estado_relacion"]
         cuidador_principal = form.cleaned_data["cuidador_principal"]
+        max_nivel_send = form.cleaned_data["max_nivel"]
+        estado_nivel_send = form.cleaned_data["estado_nivel"]
 
         # Crea el objeto Legajos
         try:
@@ -712,9 +714,14 @@ class LegajosGrupoFamiliarCreateView(CreateView):
             DimensionVivienda.objects.create(fk_legajo=nuevo_legajo)
             DimensionSalud.objects.create(fk_legajo=nuevo_legajo)
             DimensionEconomia.objects.create(fk_legajo=nuevo_legajo)
-            DimensionEducacion.objects.create(fk_legajo=nuevo_legajo)
+            DimensionEducacion.objects.create(
+                fk_legajo=nuevo_legajo,
+                max_nivel=max_nivel_send,
+                estado_nivel=estado_nivel_send,
+            )
             DimensionTrabajo.objects.create(fk_legajo=nuevo_legajo)
         except:
+            print(e)
             return messages.error(
                 self.request, "Verifique que no exista un legajo con ese DNI y NÚMERO."
             )

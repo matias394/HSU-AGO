@@ -289,6 +289,8 @@ class PDVPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin)
         conviven = copy_form.get("conviven")
         estado_relacion = copy_form.get("estado_relacion")
         cuidador_principal = copy_form.get("cuidador_principal")
+        max_nivel_send = copy_form.get("max_nivel")
+        estado_nivel_send = copy_form.get("estado_nivel")
 
         # Crea el objeto Legajos
         try:
@@ -306,7 +308,11 @@ class PDVPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin)
             DimensionVivienda.objects.create(fk_legajo=nuevo_legajo)
             DimensionSalud.objects.create(fk_legajo=nuevo_legajo)
             DimensionEconomia.objects.create(fk_legajo=nuevo_legajo)
-            DimensionEducacion.objects.create(fk_legajo=nuevo_legajo)
+            DimensionEducacion.objects.create(
+                fk_legajo=nuevo_legajo,
+                max_nivel=max_nivel_send,
+                estado_nivel=estado_nivel_send,
+            )
             DimensionTrabajo.objects.create(fk_legajo=nuevo_legajo)
         except Exception as e:
             print(e)
@@ -351,6 +357,9 @@ class PDVPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin)
             return messages.error(
                 self.request, "Verifique que no exista un legajo con ese DNI y NÚMERO."
             )
+
+        # Redireccionar a la misma página después de realizar la acción con éxito
+        # return HttpResponseRedirect(reverse('CDIF_preadmisiones_editar', args=[self.object.pk]))
 
     def form_valid(self, form):
         pk = self.kwargs["pk"]
