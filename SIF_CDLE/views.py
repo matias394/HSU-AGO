@@ -230,23 +230,25 @@ class CDLEDerivacionesRechazo(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDLE  Observador",
-            "CDLE  Consultante",
-            "CDLE  Equipo operativo",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDLE  Administrador",
+            "CDLE  Directivo",
+            # "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDLE
-        if not request.user.has_perm("Usuarios.programa_CDLE"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa CDLE
+        grupos_usuario = request.user.groups.filter(name__startswith="CDLE")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -285,8 +287,8 @@ class CDLEDerivacionesUpdateView(PermisosMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
             "CDLE  Directivo",
             # "CDLE  Equipo operativo",
             "CDLE  Equipo técnico",
@@ -294,16 +296,15 @@ class CDLEDerivacionesUpdateView(PermisosMixin, UpdateView):
             "CDLE  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDLE
-        if not request.user.has_perm("Usuarios.programa_CDLE"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa CDLE
+        grupos_usuario = request.user.groups.filter(name__startswith="CDLE")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_initial(self):
         initial = super().get_initial()
@@ -337,22 +338,25 @@ class CDLEPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDLE  Observador",
-            "CDLE  Consultante",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDLE
-        if not request.user.has_perm("Usuarios.programa_CDLE"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa CDLE
+        grupos_usuario = request.user.groups.filter(name__startswith="CDLE")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_form_kwargs(self):
 
@@ -512,25 +516,25 @@ class CDLEPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDLE  Directivo",
-            # "CDLE  Equipo operativo",
-            # "CDLE  Equipo técnico",
-            "CDLE  Consultante",
-            "CDLE  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDLE  Administrador",
+            # "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDLE
-        if not request.user.has_perm("Usuarios.programa_CDLE"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa CDLE
+        grupos_usuario = request.user.groups.filter(name__startswith="CDLE")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         if "conviven" in self.request.POST:
@@ -843,21 +847,25 @@ class CDLEPreAdmisionesListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDLE  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDLE
-        if not request.user.has_perm("Usuarios.programa_CDLE"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa CDLE
+        grupos_usuario = request.user.groups.filter(name__startswith="CDLE")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -910,25 +918,25 @@ class CDLEPreAdmisionesDeleteView(PermisosMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDLE  Directivo",
-            "CDLE  Equipo operativo",
-            "CDLE  Equipo técnico",
-            "CDLE  Consultante",
-            "CDLE  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDLE  Administrador",
+            # "CDLE  Directivo",
+            # "CDLE  Equipo operativo",
+            # "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDLE
-        if not request.user.has_perm("Usuarios.programa_CDLE"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa CDLE
+        grupos_usuario = request.user.groups.filter(name__startswith="CDLE")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         if self.object.estado != "Pendiente":
@@ -975,25 +983,24 @@ class CDLEIndiceIngresoCreateView(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "CDLE  Administrador",
-            # "CDLE  Directivo",
-            # "CDLE  Equipo operativo",
-            # "CDLE  Equipo técnico",
-            "CDLE  Consultante",
-            "CDLE  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDLE
-        if not request.user.has_perm("Usuarios.programa_CDLE"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa CDLE
+        grupos_usuario = request.user.groups.filter(name__startswith="CDLE")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -1084,25 +1091,24 @@ class CDLEIndiceIngresoUpdateView(PermisosMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "CDLE  Administrador",
-            "CDLE  Directivo",
-            "CDLE  Equipo operativo",
-            # "CDLE  Equipo técnico",
-            "CDLE  Consultante",
-            "CDLE  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDLE  Administrador",
+            # "CDLE  Directivo",
+            # "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDLE
-        if not request.user.has_perm("Usuarios.programa_CDLE"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa CDLE
+        grupos_usuario = request.user.groups.filter(name__startswith="CDLE")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -1249,25 +1255,24 @@ class CDLEIndiceIviCreateView(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "CDLE  Administrador",
-            # "CDLE  Directivo",
-            # "CDLE  Equipo operativo",
-            # "CDLE  Equipo técnico",
-            "CDLE  Consultante",
-            "CDLE  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDLE
-        if not request.user.has_perm("Usuarios.programa_CDLE"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa CDLE
+        grupos_usuario = request.user.groups.filter(name__startswith="CDLE")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -1356,25 +1361,24 @@ class CDLEIndiceIviUpdateView(PermisosMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "CDLE  Administrador",
-            "CDLE  Directivo",
-            "CDLE  Equipo operativo",
-            # "CDLE  Equipo técnico",
-            "CDLE  Consultante",
-            "CDLE  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDLE  Administrador",
+            # "CDLE  Directivo",
+            # "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDLE
-        if not request.user.has_perm("Usuarios.programa_CDLE"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa CDLE
+        grupos_usuario = request.user.groups.filter(name__startswith="CDLE")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -1636,21 +1640,25 @@ class CDLEAdmisionesListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDLE  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDLE
-        if not request.user.has_perm("Usuarios.programa_CDLE"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa CDLE
+        grupos_usuario = request.user.groups.filter(name__startswith="CDLE")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -1898,25 +1906,24 @@ class CDLEIntervencionesCreateView(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "CDLE  Administrador",
-            # "CDLE  Directivo",
-            # "CDLE  Equipo operativo",
-            # "CDLE  Equipo técnico",
-            "CDLE  Consultante",
-            "CDLE  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDLE
-        if not request.user.has_perm("Usuarios.programa_CDLE"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa CDLE
+        grupos_usuario = request.user.groups.filter(name__startswith="CDLE")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         form.instance.fk_admision_id = self.kwargs["pk"]
@@ -1958,25 +1965,24 @@ class CDLEIntervencionesUpdateView(PermisosMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "CDLE  Administrador",
-            "CDLE  Directivo",
-            "CDLE  Equipo operativo",
-            "CDLE  Equipo técnico",
-            "CDLE  Consultante",
-            "CDLE  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDLE  Administrador",
+            # "CDLE  Directivo",
+            # "CDLE  Equipo operativo",
+            # "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDLE
-        if not request.user.has_perm("Usuarios.programa_CDLE"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa CDLE
+        grupos_usuario = request.user.groups.filter(name__startswith="CDLE")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         pk = CDLE_Intervenciones.objects.filter(pk=self.kwargs["pk"]).first()
@@ -2019,21 +2025,25 @@ class CDLEIntervencionesLegajosListView(PermisosMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDLE  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDLE
-        if not request.user.has_perm("Usuarios.programa_CDLE"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa CDLE
+        grupos_usuario = request.user.groups.filter(name__startswith="CDLE")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -2083,21 +2093,25 @@ class CDLEIntervencionesListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDLE  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDLE
-        if not request.user.has_perm("Usuarios.programa_CDLE"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa CDLE
+        grupos_usuario = request.user.groups.filter(name__startswith="CDLE")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -2133,25 +2147,24 @@ class CDLEIntervencionesDeleteView(PermisosMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "CDLE  Administrador",
-            "CDLE  Directivo",
-            "CDLE  Equipo operativo",
-            "CDLE  Equipo técnico",
-            "CDLE  Consultante",
-            "CDLE  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDLE  Administrador",
+            # "CDLE  Directivo",
+            # "CDLE  Equipo operativo",
+            # "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDLE
-        if not request.user.has_perm("Usuarios.programa_CDLE"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa CDLE
+        grupos_usuario = request.user.groups.filter(name__startswith="CDLE")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
 
@@ -2178,21 +2191,25 @@ class CDLEAdmisionesBuscarListView(PermisosMixin, TemplateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDLE  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDLE
-        if not request.user.has_perm("Usuarios.programa_CDLE"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa CDLE
+        grupos_usuario = request.user.groups.filter(name__startswith="CDLE")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)

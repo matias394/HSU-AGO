@@ -212,25 +212,25 @@ class MILDDerivacionesRechazo(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "1000D  Directivo",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "1000D  Administrador",
+            "1000D  Directivo",
             # "1000D  Equipo operativo",
-            "1000D  Equipo operativo",
-            "1000D  Consultante",
-            "1000D  Observador",
+            "1000D  Equipo técnico",
+            # "1000D  Consultante",
+            # "1000D  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
-        if not request.user.has_perm("Usuarios.programa_1000D"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa 1000D
+        grupos_usuario = request.user.groups.filter(name__startswith="1000D")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -269,25 +269,25 @@ class MILDDerivacionesUpdateView(PermisosMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "1000D  Directivo",
-            "1000D  Equipo operativo",
-            "1000D  Equipo operativo",
-            "1000D  Consultante",
-            "1000D  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "1000D  Administrador",
+            # "1000D  Directivo",
+            # "1000D  Equipo operativo",
+            # "1000D  Equipo técnico",
+            # "1000D  Consultante",
+            # "1000D  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
-        if not request.user.has_perm("Usuarios.programa_1000D"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa 1000D
+        grupos_usuario = request.user.groups.filter(name__startswith="1000D")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_initial(self):
         initial = super().get_initial()
@@ -334,25 +334,25 @@ class MILDPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "1000D  Directivo",
-            # "1000D  Equipo operativo",
-            # "1000D  Equipo operativo",
-            "1000D  Consultante",
-            "1000D  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "1000D  Administrador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            "1000D  Equipo técnico",
+            # "1000D  Consultante",
+            # "1000D  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
-        if not request.user.has_perm("Usuarios.programa_1000D"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa 1000D
+        grupos_usuario = request.user.groups.filter(name__startswith="1000D")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         if "conviven" in self.request.POST:
@@ -497,25 +497,25 @@ class MILDPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "1000D  Directivo",
-            # "1000D  Equipo operativo",
-            # "1000D  Equipo operativo",
-            "1000D  Consultante",
-            "1000D  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "1000D  Administrador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            "1000D  Equipo técnico",
+            # "1000D  Consultante",
+            # "1000D  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
-        if not request.user.has_perm("Usuarios.programa_1000D"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa 1000D
+        grupos_usuario = request.user.groups.filter(name__startswith="1000D")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         if "conviven" in self.request.POST:
@@ -770,21 +770,25 @@ class MILDPreAdmisionesListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "1000D  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "1000D  Administrador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            "1000D  Equipo técnico",
+            "1000D  Consultante",
+            # "1000D  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
-        if not request.user.has_perm("Usuarios.programa_1000D"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa 1000D
+        grupos_usuario = request.user.groups.filter(name__startswith="1000D")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -801,21 +805,25 @@ class MILDPreAdmisionesBuscarListView(PermisosMixin, TemplateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "1000D  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "1000D  Administrador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            "1000D  Equipo técnico",
+            "1000D  Consultante",
+            # "1000D  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
-        if not request.user.has_perm("Usuarios.programa_1000D"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa 1000D
+        grupos_usuario = request.user.groups.filter(name__startswith="1000D")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
@@ -857,25 +865,25 @@ class MILDPreAdmisionesDeleteView(PermisosMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "1000D  Directivo",
-            "1000D  Equipo operativo",
-            "1000D  Equipo operativo",
-            "1000D  Consultante",
-            "1000D  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "1000D  Administrador",
+            # "1000D  Directivo",
+            # "1000D  Equipo operativo",
+            # "1000D  Equipo técnico",
+            # "1000D  Consultante",
+            # "1000D  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
-        if not request.user.has_perm("Usuarios.programa_1000D"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa 1000D
+        grupos_usuario = request.user.groups.filter(name__startswith="1000D")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         if self.object.estado != "Pendiente":
@@ -920,25 +928,25 @@ class MILDIndiceIngresoCreateView(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "1000D  Directivo",
-            # "1000D  Equipo operativo",
-            # "1000D  Equipo operativo",
-            "1000D  Consultante",
-            "1000D  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "1000D  Administrador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            "1000D  Equipo técnico",
+            # "1000D  Consultante",
+            # "1000D  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
-        if not request.user.has_perm("Usuarios.programa_1000D"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa 1000D
+        grupos_usuario = request.user.groups.filter(name__startswith="1000D")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -1046,25 +1054,25 @@ class MILDIndiceIngresoUpdateView(PermisosMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "1000D  Directivo",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "1000D  Administrador",
+            # "1000D  Directivo",
             "1000D  Equipo operativo",
-            # "1000D  Equipo operativo",
-            "1000D  Consultante",
-            "1000D  Observador",
+            # "1000D  Equipo técnico",
+            # "1000D  Consultante",
+            # "1000D  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
-        if not request.user.has_perm("Usuarios.programa_1000D"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa 1000D
+        grupos_usuario = request.user.groups.filter(name__startswith="1000D")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -1208,25 +1216,25 @@ class MILDIndiceIviCreateView(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "1000D  Directivo",
-            # "1000D  Equipo operativo",
-            # "1000D  Equipo operativo",
-            "1000D  Consultante",
-            "1000D  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "1000D  Administrador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            "1000D  Equipo técnico",
+            # "1000D  Consultante",
+            # "1000D  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
-        if not request.user.has_perm("Usuarios.programa_1000D"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa 1000D
+        grupos_usuario = request.user.groups.filter(name__startswith="1000D")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -1314,25 +1322,25 @@ class MILDIndiceIviUpdateView(PermisosMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "1000D  Directivo",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "1000D  Administrador",
+            # "1000D  Directivo",
             "1000D  Equipo operativo",
-            # "1000D  Equipo operativo",
-            "1000D  Consultante",
-            "1000D  Observador",
+            # "1000D  Equipo técnico",
+            # "1000D  Consultante",
+            # "1000D  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
-        if not request.user.has_perm("Usuarios.programa_1000D"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa 1000D
+        grupos_usuario = request.user.groups.filter(name__startswith="1000D")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -1621,21 +1629,25 @@ class MILDAdmisionesListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "1000D  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "1000D  Administrador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            "1000D  Equipo técnico",
+            "1000D  Consultante",
+            # "1000D  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
-        if not request.user.has_perm("Usuarios.programa_1000D"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa 1000D
+        grupos_usuario = request.user.groups.filter(name__startswith="1000D")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -1821,25 +1833,25 @@ class MILDIntervencionesCreateView(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "1000D  Directivo",
-            # "1000D  Equipo operativo",
-            # "1000D  Equipo operativo",
-            "1000D  Consultante",
-            "1000D  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "1000D  Administrador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            "1000D  Equipo técnico",
+            # "1000D  Consultante",
+            # "1000D  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
-        if not request.user.has_perm("Usuarios.programa_1000D"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa 1000D
+        grupos_usuario = request.user.groups.filter(name__startswith="1000D")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         form.instance.fk_admision_id = self.kwargs["pk"]
@@ -1880,25 +1892,25 @@ class MILDIntervencionesUpdateView(PermisosMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "1000D  Directivo",
-            "1000D  Equipo operativo",
-            "1000D  Equipo operativo",
-            "1000D  Consultante",
-            "1000D  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "1000D  Administrador",
+            # "1000D  Directivo",
+            # "1000D  Equipo operativo",
+            # "1000D  Equipo técnico",
+            # "1000D  Consultante",
+            # "1000D  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
-        if not request.user.has_perm("Usuarios.programa_1000D"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa 1000D
+        grupos_usuario = request.user.groups.filter(name__startswith="1000D")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         pk = MILD_Intervenciones.objects.filter(pk=self.kwargs["pk"]).first()
@@ -1941,21 +1953,25 @@ class MILDIntervencionesLegajosListView(PermisosMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "1000D  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "1000D  Administrador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            "1000D  Equipo técnico",
+            "1000D  Consultante",
+            # "1000D  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
-        if not request.user.has_perm("Usuarios.programa_1000D"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa 1000D
+        grupos_usuario = request.user.groups.filter(name__startswith="1000D")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -2001,21 +2017,25 @@ class MILDIntervencionesListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "1000D  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "1000D  Administrador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            "1000D  Equipo técnico",
+            "1000D  Consultante",
+            # "1000D  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
-        if not request.user.has_perm("Usuarios.programa_1000D"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa 1000D
+        grupos_usuario = request.user.groups.filter(name__startswith="1000D")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -2051,25 +2071,25 @@ class MILDIntervencionesDeleteView(PermisosMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "1000D  Directivo",
-            "1000D  Equipo operativo",
-            "1000D  Equipo operativo",
-            "1000D  Consultante",
-            "1000D  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "1000D  Administrador",
+            # "1000D  Directivo",
+            # "1000D  Equipo operativo",
+            # "1000D  Equipo técnico",
+            # "1000D  Consultante",
+            # "1000D  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
-        if not request.user.has_perm("Usuarios.programa_1000D"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa 1000D
+        grupos_usuario = request.user.groups.filter(name__startswith="1000D")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
 
@@ -2094,21 +2114,25 @@ class MILDAdmisionesBuscarListView(PermisosMixin, TemplateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "1000D  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "1000D  Administrador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            "1000D  Equipo técnico",
+            "1000D  Consultante",
+            # "1000D  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_1000D
-        if not request.user.has_perm("Usuarios.programa_1000D"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa 1000D
+        grupos_usuario = request.user.groups.filter(name__startswith="1000D")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)

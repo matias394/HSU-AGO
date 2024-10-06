@@ -152,25 +152,26 @@ class LegajosDetailView(DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Legajo  Administrador",
-            # "Legajo  Equipo operativo",
-            # "Legajo  Directivo",
-            "Legajo  Equipo técnico",
-            "Legajo  Consultante",
-            "Legajo  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Legajo  Administrador",
+            "Legajo  Directivo",
+            "Legajo  Equipo operativo",
+            # "Legajo  Equipo técnico",
+            # "Legajo  Consultante",
+            # "Legajo  Observador",
         ]
-        # Verificar si el usuario tiene el rol Usuarios.programa_Legajo
-        if not request.user.has_perm("Usuarios.programa_Legajo"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Legajo")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -427,25 +428,26 @@ class LegajosDeleteView(PermisosMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Legajo  Administrador",
-            "Legajo  Equipo operativo",
-            "Legajo  Directivo",
-            "Legajo  Equipo técnico",
-            "Legajo  Consultante",
-            "Legajo  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Legajo  Administrador",
+            # "Legajo  Directivo",
+            # "Legajo  Equipo operativo",
+            # "Legajo  Equipo técnico",
+            # "Legajo  Consultante",
+            # "Legajo  Observador",
         ]
-        # Verificar si el usuario tiene el rol Usuarios.programa_Legajo
-        if not request.user.has_perm("Usuarios.programa_Legajo"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Legajo")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -507,25 +509,26 @@ class LegajosCreateView(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Legajo  Administrador",
-            # "Legajo  Equipo operativo",
-            # "Legajo  Directivo",
-            "Legajo  Equipo técnico",
-            "Legajo  Consultante",
-            "Legajo  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Legajo  Administrador",
+            "Legajo  Directivo",
+            "Legajo  Equipo operativo",
+            # "Legajo  Equipo técnico",
+            # "Legajo  Consultante",
+            # "Legajo  Observador",
         ]
-        # Verificar si el usuario tiene el rol Usuarios.programa_Legajo
-        if not request.user.has_perm("Usuarios.programa_Legajo"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Legajo")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         print(form)
@@ -582,25 +585,26 @@ class LegajosUpdateView(PermisosMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Legajo  Administrador",
-            # "Legajo  Equipo operativo",
-            # "Legajo  Directivo",
-            "Legajo  Equipo técnico",
-            "Legajo  Consultante",
-            "Legajo  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Legajo  Administrador",
+            "Legajo  Directivo",
+            "Legajo  Equipo operativo",
+            # "Legajo  Equipo técnico",
+            # "Legajo  Consultante",
+            # "Legajo  Observador",
         ]
-        # Verificar si el usuario tiene el rol Usuarios.programa_Legajo
-        if not request.user.has_perm("Usuarios.programa_Legajo"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Legajo")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         legajo = form.save(commit=False)  # Guardamos sin persistir en la base de datos
@@ -646,25 +650,26 @@ class LegajosGrupoFamiliarCreateView(CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Legajo  Administrador",
-            "Legajo  Equipo operativo",
-            # "Legajo  Directivo",
-            "Legajo  Equipo técnico",
-            "Legajo  Consultante",
-            "Legajo  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Legajo  Administrador",
+            "Legajo  Directivo",
+            # "Legajo  Equipo operativo",
+            # "Legajo  Equipo técnico",
+            # "Legajo  Consultante",
+            # "Legajo  Observador",
         ]
-        # Verificar si el usuario tiene el rol Usuarios.programa_Legajo
-        if not request.user.has_perm("Usuarios.programa_Legajo"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Legajo")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -823,25 +828,26 @@ class LegajoGrupoFamiliarList(ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Legajo  Administrador",
-            "Legajo  Equipo operativo",
-            # "Legajo  Directivo",
-            "Legajo  Equipo técnico",
-            "Legajo  Consultante",
-            "Legajo  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Legajo  Administrador",
+            "Legajo  Directivo",
+            # "Legajo  Equipo operativo",
+            # "Legajo  Equipo técnico",
+            # "Legajo  Consultante",
+            # "Legajo  Observador",
         ]
-        # Verificar si el usuario tiene el rol Usuarios.programa_Legajo
-        if not request.user.has_perm("Usuarios.programa_Legajo"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Legajo")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -1031,25 +1037,26 @@ class LegajosDerivacionesCreateView(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Legajo  Equipo operativo",
-            # "Legajo  Directivo",
-            # "Legajo  Equipo técnico",
-            "Legajo  Consultante",
-            "Legajo  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Legajo  Administrador",
+            "Legajo  Directivo",
+            "Legajo  Equipo operativo",
+            "Legajo  Equipo técnico",
+            # "Legajo  Consultante",
+            # "Legajo  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_Legajo
-        if not request.user.has_perm("Usuarios.programa_Legajo"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Legajo")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
@@ -1099,25 +1106,26 @@ class LegajosDerivacionesUpdateView(PermisosMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "Legajo  Equipo operativo",
-            "Legajo  Directivo",
-            "Legajo  Equipo técnico",
-            "Legajo  Consultante",
-            "Legajo  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Legajo  Administrador",
+            # "Legajo  Directivo",
+            # "Legajo  Equipo operativo",
+            # "Legajo  Equipo técnico",
+            # "Legajo  Consultante",
+            # "Legajo  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_Legajo
-        if not request.user.has_perm("Usuarios.programa_Legajo"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Legajo")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -1171,25 +1179,26 @@ class LegajosDerivacionesDeleteView(PermisosMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Legajo  Administrador",
-            "Legajo  Equipo operativo",
-            "Legajo  Directivo",
-            "Legajo  Equipo técnico",
-            "Legajo  Consultante",
-            "Legajo  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Legajo  Administrador",
+            # "Legajo  Directivo",
+            # "Legajo  Equipo operativo",
+            # "Legajo  Equipo técnico",
+            # "Legajo  Consultante",
+            # "Legajo  Observador",
         ]
-        # Verificar si el usuario tiene el rol Usuarios.programa_Legajo
-        if not request.user.has_perm("Usuarios.programa_Legajo"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Legajo")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         if self.object.estado != "Pendiente":

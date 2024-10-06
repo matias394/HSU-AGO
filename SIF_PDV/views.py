@@ -182,25 +182,25 @@ class PDVDerivacionesRechazo(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "PDV  Directivo",
-            "PDV  Equipo operativo",
-            "PDV  Equipo técnico",
-            "PDV  Consultante",
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            "PDV  Directivo",
+            # "PDV  Equipo operativo",
+            # "PDV  Equipo técnico",
+            # "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -240,25 +240,25 @@ class PDVPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin)
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "PDV  Directivo",
-            "PDV  Equipo operativo",
-            "PDV  Equipo técnico",
-            "PDV  Consultante",
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            "PDV  Directivo",
+            # "PDV  Equipo operativo",
+            # "PDV  Equipo técnico",
+            # "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -403,25 +403,25 @@ class PDVPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin)
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "PDV  Directivo",
-            "PDV  Equipo operativo",
-            "PDV  Equipo técnico",
-            "PDV  Consultante",
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            # "PDV  Directivo",
+            # "PDV  Equipo operativo",
+            # "PDV  Equipo técnico",
+            # "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = PDV_PreAdmision.objects.filter(pk=self.kwargs["pk"]).first()
@@ -724,21 +724,25 @@ class PDVPreAdmisionesListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -755,21 +759,25 @@ class PDVPreAdmisionesBuscarListView(PermisosMixin, TemplateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
@@ -810,25 +818,25 @@ class PDVPreAdmisionesDeleteView(PermisosMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "PDV  Directivo",
-            "PDV  Equipo operativo",
-            "PDV  Equipo técnico",
-            "PDV  Consultante",
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            # "PDV  Directivo",
+            # "PDV  Equipo operativo",
+            # "PDV  Equipo técnico",
+            # "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         if self.object.estado != "En proceso":
@@ -875,25 +883,25 @@ class PDVIndiceIngresoCreateView(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "PDV  Directivo",
-            "PDV  Equipo operativo",
-            "PDV  Equipo técnico",
-            "PDV  Consultante",
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            "PDV  Directivo",
+            # "PDV  Equipo operativo",
+            # "PDV  Equipo técnico",
+            # "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -983,25 +991,25 @@ class PDVIndiceIngresoUpdateView(PermisosMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "PDV  Directivo",
-            "PDV  Equipo operativo",
-            "PDV  Equipo técnico",
-            "PDV  Consultante",
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            # "PDV  Directivo",
+            # "PDV  Equipo operativo",
+            # "PDV  Equipo técnico",
+            # "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -1147,25 +1155,25 @@ class PDVIndiceIviCreateView(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "PDV  Directivo",
-            "PDV  Equipo operativo",
-            "PDV  Equipo técnico",
-            "PDV  Consultante",
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            "PDV  Directivo",
+            # "PDV  Equipo operativo",
+            # "PDV  Equipo técnico",
+            # "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -1257,25 +1265,25 @@ class PDVIndiceIviUpdateView(PermisosMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "PDV  Directivo",
-            "PDV  Equipo operativo",
-            "PDV  Equipo técnico",
-            "PDV  Consultante",
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            # "PDV  Directivo",
+            # "PDV  Equipo operativo",
+            # "PDV  Equipo técnico",
+            # "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -1482,21 +1490,25 @@ class PDVAdmisionesListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -1549,25 +1561,25 @@ class PDVVacantesAdmision(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "PDV  Directivo",
-            "PDV  Equipo operativo",
-            "PDV  Equipo técnico",
-            "PDV  Consultante",
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            "PDV  Directivo",
+            # "PDV  Equipo operativo",
+            # "PDV  Equipo técnico",
+            # "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         self.object = form.save()
@@ -1635,25 +1647,25 @@ class PDVVacantesAdmisionCambio(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "PDV  Directivo",
-            "PDV  Equipo operativo",
-            "PDV  Equipo técnico",
-            "PDV  Consultante",
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            # "PDV  Directivo",
+            # "PDV  Equipo operativo",
+            # "PDV  Equipo técnico",
+            # "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         # if form.cleaned_data['fecha_egreso'] == None:
@@ -1801,25 +1813,25 @@ class PDVInactivaAdmisionDetail(PermisosMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "PDV  Directivo",
-            "PDV  Equipo operativo",
-            "PDV  Equipo técnico",
-            "PDV  Consultante",
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            "PDV  Directivo",
+            # "PDV  Equipo operativo",
+            # "PDV  Equipo técnico",
+            # "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -1865,21 +1877,25 @@ class PDVVacantesListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -1949,25 +1965,25 @@ class PDVIntervencionesCreateView(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "PDV  Directivo",
-            "PDV  Equipo operativo",
-            # "PDV  Equipo técnico",
-            "PDV  Consultante",
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            "PDV  Directivo",
+            # "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            # "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         form.instance.fk_admision_id = self.kwargs["pk"]
@@ -2008,25 +2024,25 @@ class PDVIntervencionesUpdateView(PermisosMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "PDV  Directivo",
-            "PDV  Equipo operativo",
-            "PDV  Equipo técnico",
-            "PDV  Consultante",
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            # "PDV  Directivo",
+            # "PDV  Equipo operativo",
+            # "PDV  Equipo técnico",
+            # "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         pk = PDV_Intervenciones.objects.filter(pk=self.kwargs["pk"]).first()
@@ -2069,21 +2085,25 @@ class PDVIntervencionesLegajosListView(PermisosMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -2134,21 +2154,25 @@ class PDVIntervencionesListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -2184,25 +2208,25 @@ class PDVIntervencionesDeleteView(PermisosMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "PDV  Directivo",
-            "PDV  Equipo operativo",
-            "PDV  Equipo técnico",
-            "PDV  Consultante",
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            # "PDV  Directivo",
+            # "PDV  Equipo operativo",
+            # "PDV  Equipo técnico",
+            # "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
 
@@ -2229,21 +2253,25 @@ class PDVAdmisionesBuscarListView(PermisosMixin, TemplateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "PDV  Observador",
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "PDV  Administrador",
+            "PDV  Directivo",
+            "PDV  Equipo operativo",
+            "PDV  Equipo técnico",
+            "PDV  Consultante",
+            # "PDV  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_PDV
-        if not request.user.has_perm("Usuarios.programa_PDV"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa PDV
+        grupos_usuario = request.user.groups.filter(name__startswith="PDV")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
