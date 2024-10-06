@@ -102,21 +102,26 @@ class UsuariosListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Administración  Administrador",
+            "Administración  Directivo",
+            # "Administración  Equipo operativo",
+            # "Administración  Equipo técnico",
+            # "Administración  Consultante",
+            "Administración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Administracion"):
-            raise PermissionDenied()
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Administración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     # Funcion de busqueda
     def get_queryset(self):
@@ -143,7 +148,7 @@ class UsuariosListView(PermisosMixin, ListView):
         return object_list
 
 
-class UsuariosDetailView(UserPassesTestMixin, DetailView):
+class UsuariosDetailView(DetailView):
     permission_required = "Usuarios.programa_Administracion"
     model = Usuarios
     template_name = "Usuarios/usuarios_detail.html"
@@ -152,35 +157,43 @@ class UsuariosDetailView(UserPassesTestMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Administración  Administrador",
+            "Administración  Directivo",
+            # "Administración  Equipo operativo",
+            # "Administración  Equipo técnico",
+            # "Administración  Consultante",
+            "Administración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Administracion"):
-            raise PermissionDenied()
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Administración")
 
-    def test_func(self):
-        # accede a la vista de detalle si es admin o si es el mismo usuario
-        if self.request.user.is_authenticated:
-            usuario_actual = self.request.user.id
-            usuario_solicitado = int(self.kwargs["pk"])
-            if (
-                (usuario_actual == usuario_solicitado)
-                or self.request.user.has_perm("Usuarios.rol_admin")
-                or self.request.user.has_perm("auth_user.view_user")
-            ):
-                return True
-        else:
-            return False
+        # Verificar si el usuario tiene el permiso 'Usuarios.programa_Administracion'
+        if request.user.has_perm("Usuarios.programa_Administracion"):
+
+            # Verificar si el usuario pertenece a alguno de los grupos autorizados
+            if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+                return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
+
+    # def test_func(self):
+    #    # accede a la vista de detalle si es admin o si es el mismo usuario
+    #    if self.request.user.is_authenticated:
+    #        usuario_actual = self.request.user.id
+    #        usuario_solicitado = int(self.kwargs["pk"])
+    #        if (
+    #            (usuario_actual == usuario_solicitado)
+    #            or self.request.user.has_perm("Usuarios.rol_admin")
+    #            or self.request.user.has_perm("auth_user.view_user")
+    #        ):
+    #            return True
+    #    else:
+    #        return False
 
 
 class UsuariosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
@@ -194,21 +207,26 @@ class UsuariosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Administración  Administrador",
+            # "Administración  Directivo",
+            # "Administración  Equipo operativo",
+            # "Administración  Equipo técnico",
+            # "Administración  Consultante",
+            # "Administración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Administracion"):
-            raise PermissionDenied()
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Administración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class UsuariosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
@@ -221,21 +239,26 @@ class UsuariosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Administración  Administrador",
+            "Administración  Directivo",
+            # "Administración  Equipo operativo",
+            # "Administración  Equipo técnico",
+            # "Administración  Consultante",
+            # "Administración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Administracion"):
-            raise PermissionDenied()
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Administración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         dni = form.cleaned_data["dni"]
@@ -283,21 +306,26 @@ class UsuariosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Administración  Administrador",
+            "Administración  Directivo",
+            # "Administración  Equipo operativo",
+            # "Administración  Equipo técnico",
+            # "Administración  Consultante",
+            # "Administración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Administracion"):
-            raise PermissionDenied()
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Administración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         dni = form.cleaned_data["dni"]
@@ -447,21 +475,26 @@ class GruposListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Administración  Administrador",
+            "Administración  Directivo",
+            # "Administración  Equipo operativo",
+            # "Administración  Equipo técnico",
+            # "Administración  Consultante",
+            "Administración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Administracion"):
-            raise PermissionDenied()
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Administración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     # Funcion de busqueda
     def get_queryset(self):
@@ -484,21 +517,26 @@ class GruposDetailView(PermisosMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            # "Usuarios.rol_observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Administración  Administrador",
+            "Administración  Directivo",
+            # "Administración  Equipo operativo",
+            # "Administración  Equipo técnico",
+            # "Administración  Consultante",
+            "Administración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Administracion"):
-            raise PermissionDenied()
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Administración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     # def get_context_data(self, *args, **kwargs):
     #      context = super(GruposDetailView, self).get_context_data(**kwargs)
@@ -521,21 +559,26 @@ class GruposDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Administración  Administrador",
+            # "Administración  Directivo",
+            # "Administración  Equipo operativo",
+            # "Administración  Equipo técnico",
+            # "Administración  Consultante",
+            # "Administración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Administracion"):
-            raise PermissionDenied()
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Administración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class GruposCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
@@ -549,21 +592,26 @@ class GruposCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Administración  Administrador",
+            # "Administración  Directivo",
+            # "Administración  Equipo operativo",
+            # "Administración  Equipo técnico",
+            # "Administración  Consultante",
+            # "Administración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Administracion"):
-            raise PermissionDenied()
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Administración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         if form.is_valid():
@@ -598,21 +646,26 @@ class GruposUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "Usuarios.rol_directivo",
-            "Usuarios.rol_operativo",
-            "Usuarios.rol_tecnico",
-            "Usuarios.rol_consultante",
-            "Usuarios.rol_observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Administración  Administrador",
+            # "Administración  Directivo",
+            # "Administración  Equipo operativo",
+            # "Administración  Equipo técnico",
+            # "Administración  Consultante",
+            # "Administración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Administracion"):
-            raise PermissionDenied()
-        if any(request.user.has_perm(permiso) for permiso in permisos_a_verificar):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Administración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         if form.is_valid():

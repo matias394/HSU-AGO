@@ -18,19 +18,12 @@
 <div class="row">
     <!-- botones -->
     <div class="col-12 my-3 mx-2 d-print-none">
-        {% if request.user.id == object.id %}
-        {%elif perms.Usuarios.rol_admin%}
             <a href="{% url 'usuarios_editar' object.usuario.id %}" class="btn btn-primary mr-1">Editar</a>
-            <a href="{% url 'cambiar_password' %}" class="btn btn-secondary mr-1">Cambiar Contraseña</a>
+            {% comment %}<a href="{% url 'cambiar_password' %}" class="btn btn-secondary mr-1">Cambiar Contraseña</a>{% endcomment %}
             <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
-        {%if perms.Usuarios.rol_admin%}
-            <a href="{% url 'grupos_eliminar' object.id%}" class="btn btn-danger mr-1">Eliminar</a>
-        {%endif%}
-        {% elif perms.Usuarios.rol_admin %}
-            <a href="{% url 'usuarios_editar'  object.usuario.id %}" class="btn btn-primary mr-1">Editar</a>        
-            <a href="{% url 'password_reset' object.usuario_id %}" class="btn btn-secondary mr-1"> Resetear Contraseña</a>
+            <a href="{% url 'grupos_eliminar' object.id%}" class="btn btn-danger mr-1">Eliminar</a>   
+            {% comment %}<a href="{% url 'password_reset' object.usuario_id %}" class="btn btn-secondary mr-1"> Resetear Contraseña</a>{% endcomment %}
             {% comment %}<a href="{% url 'usuarios_eliminar' object.id %}" class="btn btn-danger mr-1">Eliminar</a>{% endcomment %}
-        {% endif %}
     </div>
     <!-- ./botones -->
 </div>
@@ -152,14 +145,11 @@
         </div>
     </div>
 </div>
-{% if perms.Usuarios.rol_admin %}
 <div class="row mt-4 d-print-none">
     <div class="col-12 mx-2">
       <a href="{% url 'usuarios_listar'%}" class="btn btn-secondary">Volver</a>
     </div>
   </div>
-  {% endif %}
-
 {% endblock content %}
 
 

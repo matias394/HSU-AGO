@@ -40,24 +40,26 @@ class SecretariasListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     # Funcion de busqueda
 
@@ -83,24 +85,26 @@ class SecretariasDetailView(PermisosMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class SecretariasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
@@ -113,24 +117,26 @@ class SecretariasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class SecretariasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
@@ -143,24 +149,26 @@ class SecretariasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class SecretariasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
@@ -173,24 +181,26 @@ class SecretariasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 # endregion
@@ -207,24 +217,26 @@ class SubsecretariasListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     # Funcion de busqueda
 
@@ -282,24 +294,26 @@ class SubsecretariasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class SubsecretariasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
@@ -312,24 +326,26 @@ class SubsecretariasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class SubsecretariasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
@@ -342,24 +358,26 @@ class SubsecretariasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 # endregion
@@ -376,24 +394,26 @@ class OrganismosListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     # Funcion de busqueda
 
@@ -419,24 +439,26 @@ class OrganismosDetailView(PermisosMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, *args, **kwargs):
         # El pk que pasas a la URL
@@ -458,24 +480,26 @@ class OrganismosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class OrganismosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
@@ -488,24 +512,26 @@ class OrganismosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class OrganismosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
@@ -518,24 +544,26 @@ class OrganismosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 # endregion
@@ -553,24 +581,26 @@ class ProgramasListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     # Funcion de busqueda
 
@@ -603,24 +633,26 @@ class ProgramasDetailView(PermisosMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class ProgramasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
@@ -633,24 +665,26 @@ class ProgramasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class ProgramasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
@@ -663,24 +697,26 @@ class ProgramasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class ProgramasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
@@ -693,24 +729,26 @@ class ProgramasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 # endregion
@@ -727,24 +765,26 @@ class PlanesSocialesListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     # Funcion de busqueda
 
@@ -772,24 +812,26 @@ class PlanesSocialesDetailView(PermisosMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class PlanesSocialesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
@@ -802,24 +844,26 @@ class PlanesSocialesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class PlanesSocialesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
@@ -832,24 +876,26 @@ class PlanesSocialesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class PlanesSocialesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
@@ -862,24 +908,26 @@ class PlanesSocialesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 # endregion
@@ -896,24 +944,26 @@ class AgentesExternosListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     # Funcion de busqueda
 
@@ -942,24 +992,26 @@ class AgentesExternosDetailView(PermisosMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class AgentesExternosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
@@ -972,24 +1024,26 @@ class AgentesExternosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class AgentesExternosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
@@ -1002,24 +1056,26 @@ class AgentesExternosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_initial(self):
         """
@@ -1045,24 +1101,26 @@ class AgentesExternosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 # endregion
@@ -1079,24 +1137,26 @@ class GruposDestinatariosListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     # Funcion de busqueda
 
@@ -1126,24 +1186,26 @@ class GruposDestinatariosDetailView(PermisosMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class GruposDestinatariosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
@@ -1156,24 +1218,26 @@ class GruposDestinatariosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteVi
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class GruposDestinatariosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
@@ -1186,24 +1250,26 @@ class GruposDestinatariosCreateView(PermisosMixin, SuccessMessageMixin, CreateVi
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class GruposDestinatariosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
@@ -1216,24 +1282,26 @@ class GruposDestinatariosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateVi
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 # endregion
@@ -1250,24 +1318,26 @@ class CategoriaAlertasListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     # Funcion de busqueda
 
@@ -1291,24 +1361,26 @@ class CategoriaAlertasDetailView(PermisosMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class CategoriaAlertasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
@@ -1321,24 +1393,26 @@ class CategoriaAlertasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView)
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            # "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class CategoriaAlertasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
@@ -1351,24 +1425,26 @@ class CategoriaAlertasCreateView(PermisosMixin, SuccessMessageMixin, CreateView)
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            # "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class CategoriaAlertasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
@@ -1381,24 +1457,26 @@ class CategoriaAlertasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView)
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            # "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 # endregion
@@ -1414,24 +1492,26 @@ class AlertasListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     # Funcion de busqueda
 
@@ -1455,24 +1535,26 @@ class AlertasDetailView(PermisosMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class AlertasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
@@ -1485,24 +1567,26 @@ class AlertasDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            # "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class AlertasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
@@ -1515,24 +1599,26 @@ class AlertasCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class AlertasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
@@ -1545,24 +1631,26 @@ class AlertasUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            # "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 # endregion
@@ -1579,24 +1667,26 @@ class EquiposListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     # Funcion de busqueda
 
@@ -1624,24 +1714,26 @@ class EquiposDetailView(PermisosMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class EquiposDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
@@ -1654,24 +1746,26 @@ class EquiposDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            # "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class EquiposCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
@@ -1684,24 +1778,26 @@ class EquiposCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            # "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
@@ -1723,24 +1819,26 @@ class EquiposUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            # "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         """If the form is valid, save the associated model."""
@@ -1766,24 +1864,26 @@ class AccionesListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     # Funcion de busqueda
 
@@ -1809,24 +1909,26 @@ class AccionesDetailView(PermisosMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class AccionesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
@@ -1839,24 +1941,26 @@ class AccionesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class AccionesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
@@ -1869,24 +1973,26 @@ class AccionesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class AccionesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
@@ -1899,24 +2005,26 @@ class AccionesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 # endregion
@@ -1933,24 +2041,26 @@ class CriteriosListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     # Funcion de busqueda
 
@@ -1979,24 +2089,26 @@ class CriteriosDetailView(PermisosMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class CriteriosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
@@ -2009,24 +2121,26 @@ class CriteriosDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class CriteriosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
@@ -2039,24 +2153,26 @@ class CriteriosCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class CriteriosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
@@ -2069,24 +2185,26 @@ class CriteriosUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 # endregion
@@ -2103,24 +2221,26 @@ class IndicesListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     # Funcion de busqueda
 
@@ -2149,24 +2269,26 @@ class IndicesDetailView(PermisosMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class IndicesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
@@ -2179,24 +2301,26 @@ class IndicesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class IndiceInline:
@@ -2282,24 +2406,26 @@ class IndicesCreateView(PermisosMixin, IndiceInline, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         ctx = super(IndicesCreateView, self).get_context_data(**kwargs)
@@ -2331,24 +2457,26 @@ class IndicesUpdateView(PermisosMixin, IndiceInline, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         ctx = super(IndicesUpdateView, self).get_context_data(**kwargs)
@@ -2382,24 +2510,26 @@ class VacantesListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_queryset(self):
         query = self.request.GET.get("busqueda")
@@ -2424,24 +2554,26 @@ class VacantesDetailView(PermisosMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -2461,24 +2593,26 @@ class VacantesDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
             "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class VacantesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
@@ -2491,24 +2625,26 @@ class VacantesCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -2526,24 +2662,26 @@ class VacantesUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -2586,24 +2724,26 @@ class SLEquiposListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     # Funcion de busqueda
 
@@ -2629,24 +2769,26 @@ class SLEquiposDetailView(PermisosMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            # "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class SLEquiposDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
@@ -2659,24 +2801,26 @@ class SLEquiposDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            # "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class SLEquiposCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
@@ -2689,24 +2833,26 @@ class SLEquiposCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class SLEquiposUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
@@ -2719,24 +2865,26 @@ class SLEquiposUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class SLIndicesVulnerabilidadListView(PermisosMixin, ListView):
@@ -2747,24 +2895,26 @@ class SLIndicesVulnerabilidadListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     # Funcion de busqueda
 
@@ -2790,24 +2940,26 @@ class SLIndicesVulnerabilidadDetailView(PermisosMixin, DetailView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class SLIndicesVulnerabilidadDeleteView(PermisosMixin, SuccessMessageMixin, DeleteView):
@@ -2820,24 +2972,26 @@ class SLIndicesVulnerabilidadDeleteView(PermisosMixin, SuccessMessageMixin, Dele
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            # "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class SLIndicesVulnerabilidadCreateView(PermisosMixin, SuccessMessageMixin, CreateView):
@@ -2850,24 +3004,26 @@ class SLIndicesVulnerabilidadCreateView(PermisosMixin, SuccessMessageMixin, Crea
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            # "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 class SLIndicesVulnerabilidadUpdateView(PermisosMixin, SuccessMessageMixin, UpdateView):
@@ -2880,24 +3036,26 @@ class SLIndicesVulnerabilidadUpdateView(PermisosMixin, SuccessMessageMixin, Upda
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "Configuración  Directivo",
-            "Configuración  Equipo operativo",
-            "Configuración  Equipo técnico",
-            "Configuración  Consultante",
-            "Configuración  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "Configuración  Administrador",
+            # "Configuración  Directivo",
+            # "Configuración  Equipo operativo",
+            # "Configuración  Equipo técnico",
+            # "Configuración  Consultante",
+            # "Configuración  Observador",
         ]
 
-        # Verifica si el usuario tiene alguno de estos permisos
-        if not request.user.has_perm("Usuarios.programa_Configuracion"):
-            raise PermissionDenied()
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="Configuración")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
 
 # endregion

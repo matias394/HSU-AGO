@@ -220,23 +220,26 @@ class CDIFDerivacionesRechazo(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDIF  Observador",
-            "CDIF  Consultante",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDIF  Administrador",
+            "CDIF  Directivo",
             # "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDIF
-        if not request.user.has_perm("Usuarios.programa_CDIF"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="CDIF")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -275,25 +278,26 @@ class CDIFDerivacionesUpdateView(PermisosMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDIF  Directivo",
-            "CDIF  Equipo operativo",
-            "CDIF  Equipo técnico",
-            "CDIF  Consultante",
-            "CDIF  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDIF  Administrador",
+            # "CDIF  Directivo",
+            # "CDIF  Equipo operativo",
+            # "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDIF
-        if not request.user.has_perm("Usuarios.programa_CDIF"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="CDIF")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_initial(self):
         initial = super().get_initial()
@@ -340,22 +344,26 @@ class CDIFPreAdmisionesCreateView(PermisosMixin, CreateView, SuccessMessageMixin
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDIF  Observador",
-            "CDIF  Consultante",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDIF  Administrador",
+            "CDIF  Directivo",
+            "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDIF
-        if not request.user.has_perm("Usuarios.programa_CDIF"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="CDIF")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         if "conviven" in self.request.POST:
@@ -538,25 +546,26 @@ class CDIFPreAdmisionesUpdateView(PermisosMixin, UpdateView, SuccessMessageMixin
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "CDIF  Directivo",
-            # "CDIF  Equipo operativo",
-            # "CDIF  Equipo técnico",
-            "CDIF  Consultante",
-            "CDIF  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDIF  Administrador",
+            "CDIF  Directivo",
+            "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDIF
-        if not request.user.has_perm("Usuarios.programa_CDIF"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="CDIF")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         if "conviven" in self.request.POST:
@@ -870,21 +879,26 @@ class CDIFPreAdmisionesListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDIF  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDIF  Administrador",
+            "CDIF  Directivo",
+            "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDIF
-        if not request.user.has_perm("Usuarios.programa_CDIF"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="CDIF")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -937,25 +951,26 @@ class CDIFPreAdmisionesDeleteView(PermisosMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDIF  Directivo",
-            "CDIF  Equipo operativo",
-            "CDIF  Equipo técnico",
-            "CDIF  Consultante",
-            "CDIF  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDIF  Administrador",
+            # "CDIF  Directivo",
+            # "CDIF  Equipo operativo",
+            # "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDIF
-        if not request.user.has_perm("Usuarios.programa_CDIF"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="CDIF")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         if self.object.estado != "Pendiente":
@@ -991,23 +1006,26 @@ class CDIFPreAdmisionesRechazarView(PermisosMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDIF  Equipo operativo",
-            "CDIF  Consultante",
-            "CDIF  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDIF  Administrador",
+            "CDIF  Directivo",
+            # "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDIF
-        if not request.user.has_perm("Usuarios.programa_CDIF"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="CDIF")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         if self.object.estado == "Rechazado":
@@ -1044,22 +1062,26 @@ class CDIFIndiceIviCreateView(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDIF  Observador",
-            "CDIF  Consultante",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDIF  Administrador",
+            "CDIF  Directivo",
+            "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDIF
-        if not request.user.has_perm("Usuarios.programa_CDIF"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="CDIF")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -1146,25 +1168,26 @@ class CDIFIndiceIviUpdateView(PermisosMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDIF  Directivo",
-            # "CDIF  Equipo operativo",
-            # "CDIF  Equipo técnico",
-            "CDIF  Consultante",
-            "CDIF  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDIF  Administrador",
+            # "CDIF  Directivo",
+            "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDIF
-        if not request.user.has_perm("Usuarios.programa_CDIF"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="CDIF")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         pk = self.kwargs["pk"]
@@ -1339,21 +1362,26 @@ class CDIFAdmisionesListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDIF  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDIF  Administrador",
+            "CDIF  Directivo",
+            "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDIF
-        if not request.user.has_perm("Usuarios.programa_CDIF"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="CDIF")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -1406,22 +1434,26 @@ class CDIFVacantesAdmision(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDIF  Observador",
-            "CDIF  Consultante",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDIF  Administrador",
+            "CDIF  Directivo",
+            "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDIF
-        if not request.user.has_perm("Usuarios.programa_CDIF"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="CDIF")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         self.object = form.save()
@@ -1491,25 +1523,26 @@ class CDIFVacantesAdmisionCambio(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDIF  Directivo",
-            # "CDIF  Equipo operativo",
-            "CDIF  Equipo técnico",
-            "CDIF  Consultante",
-            "CDIF  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDIF  Administrador",
+            # "CDIF  Directivo",
+            "CDIF  Equipo operativo",
+            # "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDIF
-        if not request.user.has_perm("Usuarios.programa_CDIF"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="CDIF")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         # if form.cleaned_data['fecha_egreso'] == None:
@@ -1705,21 +1738,26 @@ class CDIFVacantesListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDIF  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDIF  Administrador",
+            "CDIF  Directivo",
+            "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDIF
-        if not request.user.has_perm("Usuarios.programa_CDIF"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="CDIF")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -1793,23 +1831,26 @@ class CDIFIntervencionesCreateView(PermisosMixin, CreateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDIF  Observador",
-            "CDIF  Consultante",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDIF  Administrador",
+            "CDIF  Directivo",
             "CDIF  Equipo operativo",
+            # "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDIF
-        if not request.user.has_perm("Usuarios.programa_CDIF"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="CDIF")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         form.instance.fk_admision_id = self.kwargs["pk"]
@@ -1851,25 +1892,26 @@ class CDIFIntervencionesUpdateView(PermisosMixin, UpdateView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            # "CDIF  Directivo",
-            "CDIF  Equipo operativo",
-            "CDIF  Equipo técnico",
-            "CDIF  Consultante",
-            "CDIF  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDIF  Administrador",
+            "CDIF  Directivo",
+            # "CDIF  Equipo operativo",
+            # "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDIF
-        if not request.user.has_perm("Usuarios.programa_CDIF"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="CDIF")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
         pk = CDIF_Intervenciones.objects.filter(pk=self.kwargs["pk"]).first()
@@ -1959,21 +2001,26 @@ class CDIFIntervencionesListView(PermisosMixin, ListView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDIF  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDIF  Administrador",
+            "CDIF  Directivo",
+            "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDIF
-        if not request.user.has_perm("Usuarios.programa_CDIF"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="CDIF")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -2009,25 +2056,26 @@ class CDIFIntervencionesDeleteView(PermisosMixin, DeleteView):
         # Permitir que los superusuarios siempre tengan acceso
         if request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        # Lista de permisos que no pueden entrar a la pagina
-        permisos_a_verificar = [
-            "CDIF  Directivo",
-            "CDIF  Equipo operativo",
-            "CDIF  Equipo técnico",
-            "CDIF  Consultante",
-            "CDIF  Observador",
+
+        # Lista de grupos autorizados que permiten el acceso
+        grupos_autorizados = [
+            "CDIF  Administrador",
+            # "CDIF  Directivo",
+            # "CDIF  Equipo operativo",
+            # "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
         ]
 
-        # Verificar si el usuario tiene el rol Usuarios.programa_CDIF
-        if not request.user.has_perm("Usuarios.programa_CDIF"):
-            raise PermissionDenied()
-        # Verifica si el usuario tiene alguno de estos permisos
-        if any(
-            request.user.groups.filter(name=grupo).exists()
-            for grupo in permisos_a_verificar
-        ):
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+        # Obtener los grupos del usuario que pertenecen al programa Administración
+        grupos_usuario = request.user.groups.filter(name__startswith="CDIF")
+
+        # Verificar si el usuario pertenece a alguno de los grupos autorizados
+        if any(grupo.name in grupos_autorizados for grupo in grupos_usuario):
+            return super().dispatch(request, *args, **kwargs)
+
+        # Si no pertenece a un grupo autorizado, denegar el acceso
+        raise PermissionDenied()
 
     def form_valid(self, form):
 
