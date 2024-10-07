@@ -225,7 +225,7 @@ class CDIFDerivacionesRechazo(PermisosMixin, CreateView):
         grupos_autorizados = [
             "CDIF  Administrador",
             "CDIF  Directivo",
-            # "CDIF  Equipo operativo",
+            "CDIF  Equipo operativo",
             "CDIF  Equipo técnico",
             # "CDIF  Consultante",
             # "CDIF  Observador",
