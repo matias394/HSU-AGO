@@ -1491,6 +1491,50 @@ class MILDPreAdmisiones3DetailView(PermisosMixin, DetailView):
             .order_by("-creado")
         )
 
+        rol = obtener_rol(self.request)
+        roles_admitir = [
+            "1000D  Administrador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            "1000D  Equipo técnico",
+            # "1000D  Consultante",
+            # "1000D  Observador",
+        ]
+        if self.request.user.is_superuser or any(role in roles_admitir for role in rol):
+            context["btn_admitir"] = True
+        else:
+            context["btn_admitir"] = False
+
+        roles_rechazar = [
+            "1000D  Administrador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            "1000D  Equipo técnico",
+            # "1000D  Consultante",
+            # "1000D  Observador",
+        ]
+        if self.request.user.is_superuser or any(
+            role in roles_rechazar for role in rol
+        ):
+            context["btn_rechazar"] = True
+        else:
+            context["btn_rechazar"] = False
+
+        roles_lista_espera = [
+            "1000D  Administrador",
+            "1000D  Directivo",
+            "1000D  Equipo operativo",
+            "1000D  Equipo técnico",
+            # "1000D  Consultante",
+            # "1000D  Observador",
+        ]
+        if self.request.user.is_superuser or any(
+            role in roles_lista_espera for role in rol
+        ):
+            context["btn_lista_espera"] = True
+        else:
+            context["btn_lista_espera"] = False
+
         context["ivi"] = ivi
         context["ingreso"] = ingreso
         context["legajo"] = legajo
