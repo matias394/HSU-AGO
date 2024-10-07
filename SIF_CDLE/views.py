@@ -197,7 +197,7 @@ class CDLEDerivacionesDetailView(PermisosMixin, DetailView):
         else:
             context["btn_rechazar"] = False
 
-        roles_permitidos_eliminar_editar = [
+        roles_permitidos_eliminar = [
             "CDLE  Administrador",
             # "CDLE  Directivo",
             # "CDLE  Equipo operativo",
@@ -206,11 +206,26 @@ class CDLEDerivacionesDetailView(PermisosMixin, DetailView):
             # "CDLE  Observador",
         ]
         if self.request.user.is_superuser or any(
-            role in roles_permitidos_eliminar_editar for role in rol
+            role in roles_permitidos_eliminar for role in rol
         ):
-            context["btn_eliminar_editar"] = True
+            context["btn_eliminar"] = True
         else:
-            context["btn_eliminar_editar"] = False
+            context["btn_eliminar"] = False
+
+        roles_permitidos_editar = [
+            "CDLE  Administrador",
+            "CDLE  Directivo",
+            "CDLE  Equipo operativo",
+            "CDLE  Equipo técnico",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
+        ]
+        if self.request.user.is_superuser or any(
+            role in roles_permitidos_editar for role in rol
+        ):
+            context["btn_editar"] = True
+        else:
+            context["btn_editar"] = False
 
         context["pk"] = pk
         context["ivi"] = ivi
