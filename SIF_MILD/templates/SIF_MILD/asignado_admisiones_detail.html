@@ -27,9 +27,9 @@ Admisiones
   <div class="col-12 my-3 mx-2 d-print-none">
     {% if object.estado != "Inactiva" %}
     <a href="{% url 'MILD_intervenciones_legajos_listar' object.id %}" class="btn btn-primary mr-1">Ver intervenciones</a>
-    <button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#cambiarAcompananteModal">
+    {% if btn_cambiar_acompaniante %}<button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#cambiarAcompananteModal">
         Cambiar acompañante
-    </button>
+    </button>{% endif %}
     {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
     {% if object.estado != "Inactiva"  and btn_inactivar %}

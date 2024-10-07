@@ -156,7 +156,7 @@ class MILDDerivacionesDetailView(PermisosMixin, DetailView):
             "1000D  Administrador",
             "1000D  Directivo",
             # "1000D  Equipo operativo",
-            "1000D  Equipo operativo",
+            "1000D  Equipo técnico",
             # "1000D  Consultante",
             # "1000D  Observador",
         ]
@@ -171,7 +171,7 @@ class MILDDerivacionesDetailView(PermisosMixin, DetailView):
             "1000D  Administrador",
             "1000D  Directivo",
             # "1000D  Equipo operativo",
-            "1000D  Equipo operativo",
+            "1000D  Equipo técnico",
             # "1000D  Consultante",
             # "1000D  Observador",
         ]
@@ -186,7 +186,7 @@ class MILDDerivacionesDetailView(PermisosMixin, DetailView):
             "1000D  Administrador",
             # "1000D  Directivo",
             # "1000D  Equipo operativo",
-            # "1000D  Equipo operativo",
+            # "1000D  Equipo técnico",
             # "1000D  Consultante",
             # "1000D  Observador",
         ]
@@ -657,7 +657,7 @@ class MILDPreAdmisionesDetailView(PermisosMixin, DetailView):
             "1000D  Administrador",
             "1000D  Directivo",
             "1000D  Equipo operativo",
-            "1000D  Equipo operativo",
+            "1000D  Equipo técnico",
             # "1000D  Consultante",
             # "1000D  Observador",
         ]
@@ -671,8 +671,8 @@ class MILDPreAdmisionesDetailView(PermisosMixin, DetailView):
         roles_rechazo = [
             "1000D  Administrador",
             "1000D  Directivo",
-            # "1000D  Equipo operativo",
             "1000D  Equipo operativo",
+            "1000D  Equipo técnico",
             # "1000D  Consultante",
             # "1000D  Observador",
         ]
@@ -1058,8 +1058,8 @@ class MILDIndiceIngresoUpdateView(PermisosMixin, UpdateView):
         grupos_autorizados = [
             "1000D  Administrador",
             # "1000D  Directivo",
-            "1000D  Equipo operativo",
-            # "1000D  Equipo técnico",
+            # "1000D  Equipo operativo",
+            "1000D  Equipo técnico",
             # "1000D  Consultante",
             # "1000D  Observador",
         ]
@@ -1744,7 +1744,7 @@ class MILDAsignadoAdmisionDetail(PermisosMixin, DetailView):
             "1000D  Administrador",
             "1000D  Directivo",
             "1000D  Equipo operativo",
-            # "1000D  Equipo operativo",
+            # "1000D  Equipo técnico",
             # "1000D  Consultante",
             # "1000D  Observador",
         ]
@@ -1754,6 +1754,21 @@ class MILDAsignadoAdmisionDetail(PermisosMixin, DetailView):
             context["btn_inactivar"] = True
         else:
             context["btn_inactivar"] = False
+
+        roles_cambiar_acompaniante = [
+            "1000D  Administrador",
+            "1000D  Directivo",
+            # "1000D  Equipo operativo",
+            "1000D  Equipo técnico",
+            # "1000D  Consultante",
+            # "1000D  Observador",
+        ]
+        if self.request.user.is_superuser or any(
+            role in roles_cambiar_acompaniante for role in rol
+        ):
+            context["btn_cambiar_acompaniante"] = True
+        else:
+            context["btn_cambiar_acompaniante"] = False
 
         context["acompaniantes_tecnico"] = CHOICE_EQUIPO_TECNICO
         context["acompaniantes_asignado"] = CHOICE_ACOMPANANTES

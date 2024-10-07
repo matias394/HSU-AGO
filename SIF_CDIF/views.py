@@ -727,7 +727,7 @@ class CDIFPreAdmisionesDetailView(PermisosMixin, DetailView):
         )
 
         rol = obtener_rol(self.request)
-        roles_permitidos = [
+        roles_admitir = [
             "CDIF  Administrador",
             "CDIF  Directivo",
             "CDIF  Equipo operativo",
@@ -735,9 +735,7 @@ class CDIFPreAdmisionesDetailView(PermisosMixin, DetailView):
             # "CDIF  Consultante",
             # "CDIF  Observador",
         ]
-        if self.request.user.is_superuser or any(
-            role in roles_permitidos for role in rol
-        ):
+        if self.request.user.is_superuser or any(role in roles_admitir for role in rol):
             context["btn_admitir"] = True
         else:
             context["btn_admitir"] = False
@@ -754,6 +752,21 @@ class CDIFPreAdmisionesDetailView(PermisosMixin, DetailView):
             context["btn_rechazar"] = True
         else:
             context["btn_rechazar"] = False
+
+        roles_lista_espera = [
+            "CDIF  Administrador",
+            "CDIF  Directivo",
+            "CDIF  Equipo operativo",
+            "CDIF  Equipo técnico",
+            # "CDIF  Consultante",
+            # "CDIF  Observador",
+        ]
+        if self.request.user.is_superuser or any(
+            role in roles_lista_espera for role in rol
+        ):
+            context["btn_lista_espera"] = True
+        else:
+            context["btn_lista_espera"] = False
 
         context["ivi"] = ivi
         context["resultado"] = resultado
@@ -1011,7 +1024,7 @@ class CDIFPreAdmisionesRechazarView(PermisosMixin, DeleteView):
         grupos_autorizados = [
             "CDIF  Administrador",
             "CDIF  Directivo",
-            # "CDIF  Equipo operativo",
+            "CDIF  Equipo operativo",
             "CDIF  Equipo técnico",
             # "CDIF  Consultante",
             # "CDIF  Observador",

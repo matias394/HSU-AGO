@@ -289,11 +289,12 @@ class CDLEDerivacionesUpdateView(PermisosMixin, UpdateView):
             return super().dispatch(request, *args, **kwargs)
         # Lista de grupos autorizados que permiten el acceso
         grupos_autorizados = [
-            "CDLE  Directivo",
-            # "CDLE  Equipo operativo",
+            "CDLE  Administrador",
+            # "CDLE  Directivo",
+            "CDLE  Equipo operativo",
             "CDLE  Equipo técnico",
-            "CDLE  Consultante",
-            "CDLE  Observador",
+            # "CDLE  Consultante",
+            # "CDLE  Observador",
         ]
 
         # Obtener los grupos del usuario que pertenecen al programa CDLE
