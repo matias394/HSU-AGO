@@ -37,15 +37,15 @@ Pre-admisiones
       {% if object.admitido == 'NO' and object.ivi == 'SI' %}
       <form method="post" action="{% url 'MILD_preadmisiones_ver3' object.id %}" id="admitirForm" class="d-inline">
         {% csrf_token %}
-        <button type="submit" name="admitir" class="btn btn-primary mr-1" form="admitirForm">Admitir</button>
+        {% if btn_admitir %}<button type="submit" name="admitir" class="btn btn-primary mr-1" form="admitirForm">Admitir</button>{% endif %}
       </form>
       <form method="post" class="d-inline">
         {% csrf_token %}
-        <button type="submit" name="listaespera" class="btn btn-primary mr-1" >Lista de espera</button>
+        {% if btn_lista_espera %}<button type="submit" name="listaespera" class="btn btn-primary mr-1" >Lista de espera</button>{% endif %}
       </form>
-    <a class="btn btn-danger mr-1" data-toggle="modal" data-target="#rechazar">
+      {% if btn_rechazar %}<a class="btn btn-danger mr-1" data-toggle="modal" data-target="#rechazar">
       Rechazar
-    </a>
+    </a>{% endif %}
       {% endif %}
     <a href="" class="btn btn-secondary mr-1 print">Imprimir</a>
   </div>
